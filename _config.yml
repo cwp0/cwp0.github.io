@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: cwp0
 subtitle: ''
 description: ''
 keywords:
-author: ChenWenpeng
+author: cwp0
 language: en
 timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://blog.cwp0.me
+url: http://example.com
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -97,12 +97,12 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: butterfly
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/cwp0/cwp0.github.io.git   # 部署的仓库地址
+  repo: git@github.com:cwp0/cwp0.github.io.git   #仓库地址
   branch: master  # 默认使用 master 分支(Github现在改名为main分支)
   message: Update Hexo Static Content # 你可以自定义此次部署更新的说明说明
