@@ -478,7 +478,7 @@ facebook_comments:
   user_id: # optional
   pageSize: 10 # The number of comments to show
   order_by: social # social/time/reverse_time
-  lang: zh_TW # Language en_US/zh_CN/zh_TW and so on
+  lang: zh_CN # Language en_US/zh_CN/zh_TW and so on
 
 # Twikoo
 # https://github.com/imaegoo/twikoo
@@ -620,7 +620,7 @@ site_verification:
    toc_color: "#00c4b6"
    blockquote_padding_color: "#9f9f9f"
    blockquote_background_color: "#9f9f9f"
-   scrollbar_color: "#9f9f9f"
+   scrollbar_color: "#41938b"
    meta_theme_color_light: "ffffff"
    meta_theme_color_dark: "#0d0d0d"
 
