@@ -3,7 +3,7 @@
 # --------------------------------------
 
 nav:
-  logo: https://github.com/cwp0/mystyle/blob/master/%E5%A4%B4%E5%83%8F.JPG?raw=true
+  logo: /img/assets/头像.JPG
   display_title: true
   fixed: true # fixed navigation bar
 
@@ -16,6 +16,7 @@ menu:
  List||fas fa-list:
    Music: /music/ || fas fa-music
    Movie: /movies/ || fas fa-video
+   Picture: /pictures/ || fas fa-image
  Link: /link/ || fas fa-link
  About: /about/ || fas fa-heart
 
@@ -35,33 +36,34 @@ code_word_wrap: false
 social:
  fab fa-github: https://github.com/cwp0 || Github || '#9F9F9F'
  fas fa-envelope: mailto:wenpengchen@njust.edu.cn || Email || '9F9F9F'
+ fa-brands fa-qq: /img/alipay.JPG || QQ || '#9F9F9F'
 
 # Image (圖片設置)
 # --------------------------------------
 
 # Favicon（網站圖標）
-favicon: https://github.com/cwp0/mystyle/blob/master/%E5%A4%B4%E5%83%8F.JPG?raw=true
+favicon: /img/assets/头像.JPG
 
 # Avatar (頭像)
 avatar:
-  img: https://github.com/cwp0/mystyle/blob/master/%E5%A4%B4%E5%83%8F.JPG?raw=true
+  img: /img/assets/头像.JPG
   effect: false
 
 # Disable all banner image
 disable_top_img: false
 
 # The banner image of home page
-index_img: https://github.com/cwp0/mystyle/blob/master/wallpaper/%E5%A4%9C%E5%85%B0.jpg?raw=true # 夜兰
+index_img: /img/assets/雷电将军.jpg
 
 # If the banner of page not setting, it will show the top_img
-default_top_img: https://github.com/cwp0/mystyle/blob/master/wallpaper/%E6%97%85%E8%A1%8C%E8%80%85.jpg?raw=true # 旅行者
+default_top_img: /img/top_img/久岐忍.jpg
 
 # The banner image of archive page
-archive_img: https://github.com/cwp0/mystyle/blob/master/wallpaper/%E5%87%9D%E5%85%89.jpg?raw=true # 凝光
+archive_img: /img/top_img/久岐忍3.jpg
 
 # If the banner of tag page not setting, it will show the top_img
 # note: tag page, not tags page (子標籤頁面的 top_img)
-tag_img:
+tag_img: /img/top_img/久岐忍.jpg
 
 # The banner image of tag page
 # format:
@@ -70,7 +72,7 @@ tag_per_img:
 
 # If the banner of category page not setting, it will show the top_img
 # note: category page, not categories page (子分类页面的 top_img)
-category_img:
+category_img: /img/top_img/久岐忍.jpg
 
 # The banner image of category page
 # format:
@@ -87,7 +89,7 @@ cover:
   position: both
   # When cover is not set, the default cover is displayed (當沒有設置cover時，默認的封面顯示)
   default_cover:
-  # - https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg
+   - /img/cover/久岐忍.jpg
 
 # Replace Broken Images (替換無法顯示的圖片)
 error_img:
@@ -315,10 +317,10 @@ darkmode:
   # autoChangeMode: 1  Following System Settings, if the system doesn't support dark mode, it will switch dark mode between 6 pm to 6 am
   # autoChangeMode: 2  Switch dark mode between 6 pm to 6 am
   # autoChangeMode: false
-  autoChangeMode: false
+  autoChangeMode: 1
   # Set the light mode time. The value is between 0 and 24. If not set, the default value is 6 and 18
-  start: # 8
-  end: # 22
+  start: 0 # 8
+  end: 0 # 22
 
 # show scroll percent in scroll-to-top button
 rightside_scroll_percent: true
@@ -355,13 +357,17 @@ katex:
 
 # Algolia search
 algolia_search:
-  enable: false
+  enable: true
   hits:
-    per_page: 6
+    per_page: 10
+  labels:
+    input_placeholder: Search for Posts
+    hits_empty: "抱歉! 没有找到任何搜索结果: ${query}"
+    hits_stats: "找到${hits}条结果（用时${time} ms）"
 
 # Local search
 local_search:
-  enable: false
+  enable: true
   # Preload the search data when the page loads.
   preload: false
   # Show top n results per article, show all results by setting to -1
@@ -391,7 +397,7 @@ addThis:
 # https://github.com/overtrue/share.js
 sharejs:
   enable: true
-  sites: facebook,twitter,wechat,weibo,qq
+  sites: facebook,twitter,wechat,weibo,qq,google,linkedin,douban
 
 # AddToAny
 # https://www.addtoany.com/
@@ -405,12 +411,12 @@ addtoany:
 comments:
   # Up to two comments system, the first will be shown as default
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
-  use: Valine,Disqus
+  use: Valine, Disqus
   text: true # Display the comment name next to the button
   # lazyload: The comment system will be load when comment element enters the browser's viewport.
   # If you set it to true, the comment count will be invalid
   lazyload: true
-  count: false # Display comment count in post's top_img
+  count: true # Display comment count in post's top_img
   card_post_count: false # Display comment count in Home Page
 
 # disqus
@@ -445,13 +451,22 @@ gitalk:
 # valine
 # https://valine.js.org
 valine:
-  appId: # leancloud application app id
-  appKey: # leancloud application app key
-  avatar: monsterid # gravatar style https://valine.js.org/#/avatar
+  appId: nfRxTBEmIAeb6gP2K0LOdLqw-gzGzoHsz # leancloud application app id
+  appKey: vmeDN8k58dVdPv5Yz7NEkvSN # leancloud application app key
+  #查询下面的网站，选择评论的适合出现的图像 https://valine.js.org/#/avatar
+  avatar: monsterid # gravatar style
+  #你的对应的服务器的地址，就在appid那一页的下面
   serverURLs: # This configuration is suitable for domestic custom domain name users, overseas version will be automatically detected (no need to manually fill in)
+  #评论系统的背景
   bg: # valine background
+  #是否允许游客评论
   visitor: false
+  #评论区显示的文字
+  placeholder: 想及时联系博主，请点击右侧的在线聊天或者给博主发邮件喔～
+  #每一页最大的评论数量
+  pageSize: 6
   option:
+  enableQQ: true # Unstable avatar link
 
 # waline - A simple comment system with backend support fork from Valine
 # https://waline.js.org/
@@ -545,8 +560,8 @@ daovoice:
 # crisp
 # https://crisp.chat/en/
 crisp:
-  enable: false
-  website_id:
+  enable: true
+  website_id: 19701af9-3bff-41b9-919e-742aca557e36
 
 # messenger
 # https://developers.facebook.com/docs/messenger-platform/discovery/facebook-chat-plugin/
@@ -640,10 +655,10 @@ tag_ui: # 留空或 index
 # Website Background (設置網站背景)
 # can set it to color or image (可設置圖片 或者 顔色)
 # The formal of image: url(http://xxxxxx.com/xxx.jpg)
-background: url(https://github.com/cwp0/mystyle/blob/master/WebBackGround/%E4%BC%98%E8%8F%883.jpeg)
+background:  url(/img/background/樱花2.jpg)
 
 # Footer Background
-footer_bg: grey
+footer_bg: transparent
 
 # Add mask to header or footer (为 header 或 footer 添加黑色半透遮罩)
 mask:
@@ -670,7 +685,7 @@ activate_power_mode:
 # canvas_ribbon (靜止彩帶背景)
 # See: https://github.com/hustcc/ribbon.js
 canvas_ribbon:
-  enable: true
+  enable: false
   size: 150
   alpha: 0.6
   zIndex: -1
@@ -747,7 +762,7 @@ hr_icon:
 
 # the subtitle on homepage (主頁subtitle)
 subtitle:
-  enable: false
+  enable: true
   # Typewriter Effect (打字效果)
   effect: true
   # Customize typed.js (配置typed.js)
@@ -759,9 +774,10 @@ subtitle:
   # source: 2  調用一句網（簡體） https://yijuzhan.com/
   # source: 3  調用今日詩詞（簡體） https://www.jinrishici.com/
   # subtitle 會先顯示 source , 再顯示 sub 的內容
-  source: false
+  source: 3
   # 如果關閉打字效果，subtitle 只會顯示 sub 的第一行文字
   sub:
+    - 感受世界
 
 # Loading Animation (加載動畫)
 preloader:
@@ -776,7 +792,7 @@ preloader:
 # wordcount (字數統計)
 # see https://butterfly.js.org/posts/ceeb73f/#字數統計
 wordcount:
-  enable: false
+  enable: true
   post_wordcount: true
   min2read: true
   total_wordcount: true
@@ -905,6 +921,8 @@ inject:
   # - <link rel="stylesheet" href="/xxx.css">
   bottom:
   # - <script src="xxxx"></script>
+  # 樱花飘落效果
+   - <script async src="https://npm.elemecdn.com/tzy-blog/lib/js/other/sakura.js"></script>
 
 # CDN
 # Don't modify the following settings unless you know how they work
@@ -942,7 +960,7 @@ CDN:
   # gitalk:
   # gitalk_css:
   # blueimp_md5:
-  # valine:
+   valine: /js/Valine.min.js
   # disqusjs:
   # disqusjs_css:
   # twikoo:

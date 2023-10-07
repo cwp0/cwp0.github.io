@@ -1,12 +1,13 @@
 ---
 title: Hello World
+tags:
+  - hexo
+  - 教程
+categories:
+  - hexo
+abbrlink: 16107
 date: 2018-01-05 00:00:00
-updated: 2023-9-14 00:10:00
-tags: 
-    - hexo
-    - 教程
-categories: 
-    - hexo
+updated: 2023-09-14 00:10:00
 keywords:
 description:
 top_img:

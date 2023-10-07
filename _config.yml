@@ -4,7 +4,7 @@
 
 # Site
 title: cwp0
-subtitle: ''
+subtitle: '感受世界...'
 description: ''
 keywords:
 author: cwp0
@@ -13,8 +13,8 @@ timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
-permalink: :year/:month/:day/:title/
+url: 'https://cwp0.github.io'
+permalink: posts/:abbrlink.html
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
@@ -106,3 +106,24 @@ deploy:
   repo: git@github.com:cwp0/cwp0.github.io.git   #仓库地址
   branch: master  # 默认使用 master 分支(Github现在改名为main分支)
   message: Update Hexo Static Content # 你可以自定义此次部署更新的说明说明
+
+search:
+  path: search.xml
+  field: post
+  content: true
+
+algolia:
+  appId: "YNCOX66CR4"
+  apiKey: "5c661928f53edb93f42b2f41a467cbfb"
+  adminApiKey: "d812191a99c8de5d922d7c1874bfdb7e"
+  chunkSize: 5000
+  indexName: "cwp0_github_io"
+  fields:
+    - content:strip:truncate,0,500
+    - excerpt:strip
+    - gallery
+    - permalink
+    - photos
+    - slug
+    - tags
+    - title

@@ -1,11 +1,12 @@
 ---
 title: test
+tags:
+  - 测试
+categories:
+  - 测试类
+abbrlink: 63534
 date: 2018-01-05 00:00:00
 updated:
-tags: 
-    - 测试
-categories: 
-    - 测试类
 keywords:
 description:
 top_img:
