@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>MARL</title>
+      <link href="/posts/17763.html"/>
+      <url>/posts/17763.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 多智能体强化学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 多智能体强化学习 </tag>
+            
+            <tag> 算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>强化学习</title>
       <link href="/posts/17762.html"/>
       <url>/posts/17762.html</url>
@@ -20,9 +47,9 @@
       
         <tags>
             
-            <tag> 强化学习 </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> 强化学习 </tag>
             
         </tags>
       
