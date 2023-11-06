@@ -8,10 +8,12 @@
       <link href="/posts/17763.html"/>
       <url>/posts/17763.html</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<blockquote><p>由于我的科研方向是<code>多智能体强化学习</code>，且由于研一忙于课程和一些开源项目，导致我对一些科研方面的算法理解不够充分。刚好，最近一次和东大的联合组会轮到我讲了，借此深度理解一下这些算法。</p></blockquote><blockquote><p>在这篇笔记中，我会总结我的直系学长推荐我先看的多智能体强化学习知乎专栏内容，然后再总结我导师之前发给我让我看的论文。相关链接我会放在下面。</p></blockquote><p>知乎专栏：<a href="https://www.zhihu.com/column/c_1061939147282915328">https://www.zhihu.com/column/c_1061939147282915328</a></p><blockquote><p>相关内容其实看知乎专栏更加详细，而且由于我的博客网页现在没有配置数学公式的插件，所以暂时不在上面进行记录了。且由于最近科研任务重，没时间配置谷歌百度等搜索引擎的收录相关，所以这个博客网站在浏览器是搜索不到的，暂时停更哈哈哈哈。有时间再搞吧！最近的笔记会记在我们实验室的服务器的笔记系统里面，以后有时间再挪过来。。。就酱。</p></blockquote>]]></content>
       
       
       <categories>
+          
+          <category> 强化学习 </category>
           
           <category> 多智能体强化学习 </category>
           
@@ -19,6 +21,8 @@
       
       
         <tags>
+            
+            <tag> 强化学习 </tag>
             
             <tag> 多智能体强化学习 </tag>
             
@@ -47,9 +51,9 @@
       
         <tags>
             
-            <tag> 算法 </tag>
-            
             <tag> 强化学习 </tag>
+            
+            <tag> 算法 </tag>
             
         </tags>
       
@@ -105,11 +109,11 @@
       
         <tags>
             
-            <tag> 教程 </tag>
-            
             <tag> k8s </tag>
             
             <tag> Kubernetes </tag>
+            
+            <tag> 教程 </tag>
             
         </tags>
       
@@ -134,11 +138,11 @@
       
         <tags>
             
-            <tag> 教程 </tag>
-            
             <tag> k8s </tag>
             
             <tag> Kubernetes </tag>
+            
+            <tag> 教程 </tag>
             
         </tags>
       
@@ -163,9 +167,9 @@
       
         <tags>
             
-            <tag> hexo </tag>
-            
             <tag> 教程 </tag>
+            
+            <tag> hexo </tag>
             
         </tags>
       
