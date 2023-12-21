@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>RNN/LSTM/GRU/GCN</title>
+      <link href="/posts/17765.html"/>
+      <url>/posts/17765.html</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>最近对强化学习算法和预测结合有些想法，阅读了下面两篇文章对之有了大致认识。</p></blockquote><blockquote><p>参考：<a href="https://zhuanlan.zhihu.com/p/587276701">https://zhuanlan.zhihu.com/p/587276701</a><br>参考：<a href="https://zhuanlan.zhihu.com/p/605750441">https://zhuanlan.zhihu.com/p/605750441</a></p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>MARL</title>
       <link href="/posts/17763.html"/>
       <url>/posts/17763.html</url>
