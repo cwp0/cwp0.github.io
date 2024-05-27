@@ -5,12 +5,28 @@
     
     <entry>
       <title>Java后端面经</title>
-      <link href="/posts/52823.html"/>
-      <url>/posts/52823.html</url>
+      <link href="/posts/17766.html"/>
+      <url>/posts/17766.html</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>this is a test file.</p>]]></content>
       
       
+      <categories>
+          
+          <category> Java </category>
+          
+          <category> 面经 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> 面经 </tag>
+            
+        </tags>
       
     </entry>
     
