@@ -1,4 +1,11 @@
 /node_modules
 /.deploy_git
 /public
+/source/image
+/source/pictures
+/themes
 
+db.json
+package.json
+package-lock.json
+yarn.lock
