@@ -10,10 +10,10 @@ keywords:
 description: Java后端面经
 abbrlink: 17766
 date: 2024-05-27 19:58:53
-updated: 2024-06-11 22:06:23
-top_img: https://s2.loli.net/2024/05/27/Rq3jowUDsv9nT71.png
+updated: 2024-06-13 16:16:23
+top_img: https://s2.loli.net/2024/05/27/ytcdAHzliRquNM2.png
 comments:
-cover: https://s2.loli.net/2024/05/27/QygHftOujrEodTW.png
+cover: https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png
 toc:
 toc_number:
 toc_style_simple:
@@ -30,8 +30,8 @@ aside:
 abcjs:
 ---
 
-> 准备在这篇文章中，先详细分析简历中可能会被问到的问题，然后总结一下 Java基础、网络、操作系统、数据库等内容的精简答案，最后再回顾一下每次面试的面经。
-> 本文参考 JavaGuide 
+> 准备在这篇文章中，先详细分析简历中可能会被问到的问题，然后总结一下 Java基础的精简答案，最后再回顾一下每次面试的面经。
+> 本文参考 [JavaGuide](https://javaguide.cn/)
 
 ## 简历相关
 
@@ -39,7 +39,7 @@ abcjs:
 
 面试官您好，我叫陈温鹏，就读于南京理工大学软件工程专业，学位是学硕，这次应聘的是 **Java后端开发岗位**。
 
-我呢，研一的时候积极参加开源社区建设，先参加了Casbin社区一个线上实习，担任社区维护者，日常工作会解决社区 issue，跟踪解决用户需求，修bug以及完善相关文档；然后在研一暑假三个月时间中了一个中科院和 casbin 社区联合举办的一个开源项目，主要的工作是完善社区整个大前端系统，包括 web，移动端功能完善，以及为社区开发了一款支持通用2FA的移动端app。除此之外，我还参与过国家电网经济研究院的一个项目。 这几段项目实习经历锻炼了我文档阅读、编写的能力，并在代码规范、开发流程等技能上获得提升。
+我呢，研一的时候积极参加开源社区建设，先参加了Casbin社区一个线上实习，担任社区维护者，日常工作会解决社区 issue，跟踪解决用户需求，修bug以及完善相关文档；然后在研一暑假三个月时间中了一个中科院和 Casbin 社区联合举办的一个开源项目，主要的工作是完善社区整个大前端系统，包括 web，移动端功能完善，以及为社区开发了一款支持通用2FA的移动端app。除此之外，我还参与过国家电网经济研究院的一个项目。 这几段项目实习经历锻炼了我文档阅读、编写的能力，并在代码规范、开发流程等技能上获得提升。
 
 然后我呢，我评价觉得自己是一个学习能力很强的人，可以比较快速的学习并适应新的环境和技术栈。 最后感谢 xxx 给我这次面试机会，我也十分希望能进入 xxx ，与公司共同成长进步！
 
@@ -71,25 +71,25 @@ Casdoor单点登录系统⼤前端项⽬包括ios、flutter、uinapp、⼩程序
 3. 临时加上的开发casdoor-app诉求，对标Google Authenticator
 
 **技术细节**
-1. 在flutter-sdk中通过截取session中的url和callbackURLscheme判断其中是否有"weixin"字段，如果有，则进行微信第三方原生授权登录；
+1. 在flutter-sdk中通过截取`session`中的`url`和`callbackURLscheme`判断其中是否有"weixin"字段，如果有，则进行微信第三方原生授权登录；
 
-    - 使用WKWebView替换原本的ASWebAuthenticationSession，对ios认证部分进行重写，以支持对每个跳转的链接进行监听；
-    - 使用rb脚本文件自动化配置微信SDK导入后xcode中xcodeproj文件的相关配置；
+    - 使用`WKWebView`替换原本的`ASWebAuthenticationSession`，对ios认证部分进行重写，以支持对每个跳转的链接进行监听；
+    - 使用rb脚本文件自动化配置微信SDK导入后xcode中`xcodeproj`文件的相关配置；
 
-    - 接入xcframework的微信SDK，使用obj-c重写原本的swift代码，以使用微信SDK；
+    - 接入`xcframework`的微信SDK，使用obj-c重写原本的swift代码，以使用微信SDK；
 
-接下来根据微信SDK开发文档进行配置即可。由于配置微信SDK需要苹果开发者账号以配置universal Link，需付费几百美元，所以最终代码并未实际测试。
+接下来根据微信SDK开发文档进行配置即可。由于配置微信SDK需要苹果开发者账号以配置`universal Link`，需付费几百美元，所以最终代码并未实际测试。
 
 2. 分为两部分
     1. casdoor-unity-example
         - 在github上开源的一个小游戏ValleyOfCubes_Unity3D (方块之谷)的基础上，演示如何使用casdoor RESTful API进行web SSO(Single Sign On) 登录；
         - 以C#为开发语言，调用casdoor-dotnet-sdk进行web SSO 登录；
-        - 在casdoor服务端配置好应用的ClientCode和ClientSecret后，在Unity3D中向服务端发送认证请求(CilentCode等)，解析返回的token，就可以得到用户信息，也可以使用session保存token等信息。
+        - 在casdoor服务端配置好应用的`clientCode`和`clientSecret`后，在Unity3D中向服务端发送认证请求(`cilentCode`等)，解析返回的`token`，就可以得到用户信息，也可以使用`session`保存`token`等信息。
         - 认证过程中还使用到了unity-webview这个由格力公司一个团队开发的小组件，因为它是开源免费的。
     2. casdoor-react-native-sdk、example
         - 以react-native作为框架，使用casdoor RESTful API进行web SSO 登录；
         - react-native与JS不同的点在于在JS中，使用sessionStorage保存临时的session，主要是针对web端的，是同步的；react-native中与之类似的一个组件叫AsyncStorage，虽然功能大致相同，但却是异步的，导致不能共用一个sdk，所以就着手写了一个react-native sdk。
-        - sdk采用PKCE(Proof Key for Code Exchange, 代码交换的证明密钥)这种更安全的方式获取token。PKCE是⼀种⽤于增强OAuth 2.0授权码流程安全性的协议扩展。这种协议使得在客户端不需要 clientSecret 就能获取到 token ，它依赖的是 code_challenge 和 code_verifier 。
+        - sdk采用PKCE(Proof Key for Code Exchange, 代码交换的证明密钥)这种更安全的方式获取token。PKCE是⼀种⽤于增强OAuth 2.0授权码流程安全性的协议扩展。这种协议使得在客户端不需要 clientSecret 就能获取到 token ，它依赖的是 `code_challenge` 和 `code_verifier` 。
 3. casdoor-app 采用react-native框架，在授权登录功能上使用了react-native-sdk。
     - casdoor-app使用开源的totp-generator作为TOTP(Time-based One Time Passwords)码生成器，默认使用SHA-256(Secure Hash Algorithm-256)哈希算法，也可以支持SHA384、SHA512等其他多种哈希算法。
     - casdoor-app支持输入密钥和扫码生成OTP，目前已完成核心功能开发。
@@ -99,8 +99,18 @@ Casdoor单点登录系统⼤前端项⽬包括ios、flutter、uinapp、⼩程序
 **总结**
 参加开源活动对我的锻炼是非常大的，我觉得虽然每个小例子和sdk涉及相关知识都没那么难，但是他难就难在你从没接触过，要在短时间内学习，并将之应用。在短时间内学习掌握一种领域的知识，我觉得这才是我参与开源项目收获最大的经验。
 
-### OAuth 2.0原理
+### 单点登录SSO原理
+单点登录(Single Sign-On, SSO)是一种身份验证的解决方案，它允许用户在多个应用间共享身份信息，也就是说，用户只需要登录一次，就可以在多个系统或者应用之间无缝访问。这大大提高了用户体验和安全性。
 
+在企业发展初期，涉及的系统不多，可能只需要一个系统就可以满足业务需求，用户只需要用账号密码登录这个系统就可以完成验证。但是随着企业发展，业务也变得越来越多，随之演变越来越多的子系统，用户每进一个系统都可能需要登录一次，才能进行相关操作。为了解决这类问题，就产生了单点登录，也就是在一个多系统共存的环境下，用户只要在任何一个系统登录以后，就不用在其他系统再次登录，就可以得到其他所有系统的信任。
+
+流程：
+1. 用户访问app系统，而app需要登录，假设这个时候用户没用登录，则系统会触发一个302的重定向请求，转到CAS server，也就是SSO登录系统。 SSO系统发现当前用户没用登录app，就弹出用户登录页面，用户在这个页面填写用户名和密码，那么SSO系统就会进行一个验证，验证成功以后，把登录状态写入到SSO的`session`里面，浏览器也会写入SSO域下的`cookie`。 SSO系统登录完成以后，系统会生成一个ST(Service Ticket)，然后跳转到app系统，同时把ST作为参数传递给app系统。app系统拿到ST以后，从后台向SSO发送请求，验证ST是否有效。 验证通过以后，app系统把登录状态写入到`session`中，并设置app域下的`cookie`，这样，跨域的单点登录就完成了。后面在访问app系统的时候，app就是一个登录状态。
+2. 此时当用户访问app2系统，app2系统没有登录会跳转到SSO，由于SSO在访问app系统的时候已经是登录态了，所以不需要重新登录验证，也就是不用输入账号密码。这个时候SSO也会生成一个ST，浏览器会跳转到app2系统，把ST作为参数传递给app2。 app2拿到ST以后，后台访问SSO验证ST是否有效，如果验证成功，那么app2会把登录状态写入到`session`，并在app2的域下写入一个`cookie`。这样，app2系统不需要再走登录流程，就已经是一个登录状态了。SSO、app、app2不同域，它们之间的`session`不共享，也没有任何问题。
+
+SSO的具体实现因为技术栈不同会有所不同，比如OAuth2.0和OpenID Connect经常被用作于实现SSO的标准协议，
+
+### OAuth 2.0原理
 https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2
 
 OAuth2.0是一个授权框架，使应用程序(如Github)能够获得对 HTTP 服务上的用户帐户的有限访问权限。它的工作原理是将用户身份验证委托给托管用户帐户的服务，并授权第三方应用程序访问该用户帐户。 OAuth 2 为 Web 和桌面应用程序以及移动设备提供授权流程。
@@ -125,8 +135,6 @@ OAuth2.0是一个授权框架，使应用程序(如Github)能够获得对 HTTP �
 1. 授权码(`Authorization Code`)：与服务器端应用程序一起使用。
 2. 客户端凭证(`Client Credentials`)：与具有 API 访问权限的应用程序一起使用。
 3. 设备代码(`Device Code`)：用于缺少浏览器或有输入限制的设备。
-
-
 
 ### Casbin Casdoor 介绍
 > Casbin是一个强大的访问控制库，用于实现权限管理和访问控制的功能。它使用基于策略(Policy-Based)的访问控制模型，支持各种访问控制模型(如 ACL、RBAC、ABAC 等)，并提供了丰富的功能和灵活的配置选项，使开发者可以轻松地实现精细化的权限管理。 
@@ -256,10 +264,7 @@ react、Antd、Flask、mongodb
 
 通过强调这些亮点和难点，可以展示你在该项目中的成就和技术深度，突出你在异步编程、高性能数据库访问和复杂逻辑处理方面的经验和能力。
 
-## Java
-
------------------
-### ✅基础
+## Java基础
 
 ### Java和C++的区别
 Java 和 C++ 都是面向对象的语言，都支持封装、继承和多态，但还是有很多不同的地方：
@@ -407,16 +412,58 @@ protected void finalize() throws Throwable { }
 ```
 
 ### 单例模式
-```
+- 饿汉式：饿汉式单例模式在类加载时就完成实例化，线程安全，简单但可能会造成资源浪费。
+- 懒汉式：懒汉式单例模式在第一次调用 `getInstance` 方法时创建实例，线程不安全，需要额外处理同步。
+- 线程安全的懒汉式
+  - 同步方法：在 `getInstance` 方法上加 `synchronized` 关键字，保证线程安全，但是效率低。
+  - 双重检查锁定：在 `getInstance` 方法内部进行双重检查，保证只有第一次调用时才会加锁，提高效率。
+- 静态内部类：利用静态内部类来实现懒加载和线程安全。
+- 枚举：枚举实现单例模式是最简洁、安全的实现方式，可以防止反射和序列化攻击。
+
+
+```java
+// 饿汉式
 public class Singleton {
-    // 详见：https://javaguide.cn/java/concurrent/java-concurrent-questions-02.html#%E5%A6%82%E4%BD%95%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E5%BA%8F
+    private static final Singleton instance = new Singleton();
+    private Singleton() {}
+    public static Singleton getInstance() {
+        return instance;
+    }
+}
+
+// 懒汉式
+public class Singleton {
+    private static Singleton instance;
+    private Singleton() {}
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+
+// 线程安全的懒汉式-同步方法
+public class Singleton {
+    private static Singleton instance;
+    private Singleton() {}
+    public static synchronized Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+
+// 线程安全的懒汉式-双重检查锁定
+public class Singleton {
     // 单例模式中用于保存实例的字段，被声明为volatile，确保对该变量的写入操作会立即反映到所有线程中，这样可以防止可能发生的指令重排序问题。
     private volatile static Singleton uniqueInstance;
     // 私有的构造方法确保该类不能在外部被初始化，只能通过getUniqueInstance()方法获取实例
     private Singleton() {
     }
     // 双重检查锁定的机制，实现对外提供的获取单例实例的方法。
-    public static Singleton getUniqueInstance() {
+    public static Singleton getInstance() {
         // 第一层检查：首先检查 uniqueInstance 是否为 null。如果不是 null，意味着实例已经被创建，则直接返回这个实例。
         if (uniqueInstance == null) {
             // 类对象加锁，表示进入同步代码前要获得 Singleton类 的锁
@@ -431,9 +478,33 @@ public class Singleton {
         return uniqueInstance;
     }
     public static void main(String[] args) {
-        System.out.println(getUniqueInstance());
+        System.out.println(getInstance());
     }
 
+}
+
+// 静态内部类
+public class Singleton {
+    private Singleton() {}
+    private static class SingletonHolder {
+        private static final Singleton INSTANCE = new Singleton();
+    }
+    public static Singleton getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+}
+
+// 枚举
+public enum Singleton {
+    // 注意 上面不是 class 是 enum
+    INSTANCE;
+    public void someMethod() {
+        // do something
+    }
+    public static void main(String[] args) {
+        Singelton singleton = Singleton.INSTANCE;
+        singleton.someMethod();
+    }
 }
 ```
 
@@ -540,8 +611,7 @@ Java中“+”和“+=” 实际上是通过 `StringBuilder` 调用 `append()` �
 
 Java 中最常用的语法糖主要有**switch语句**、**自动拆装箱**、**for-each循环**、**try-with-resources** 语法、**lambda 表达式**等。
 
------------------
-### ✅集合
+## Java集合
 
 ### List/Set/Queue/Map区别
 - List: 存储的元素是有序的、可重复的。
@@ -878,8 +948,8 @@ PriorityQueue 中元素出队顺序是与优先级相关的，即总是优先级
 - `Timer/TimerTask` 基于单线程，只能按照任务的执行顺序依次执行，如果某个任务执行时间过长，会影响其他任务的执行。
 - `DelayQueue` 支持动态添加/移除任务，`Timer/TimerTask` 只能在创建时指定任务。
 
------------------
-### ✅并发
+
+## Java并发
 
 ### 进程/线程/协程
 https://blog.csdn.net/m0_60505735/article/details/131047046
@@ -1364,7 +1434,7 @@ JVM 调度程序通过平台线程(载体线程)来管理虚拟线程，一个�
 不适用于计算密集型任务： 虚拟线程适用于 I/O 密集型任务，但不适用于计算密集型任务，因为密集型计算始终需要 CPU 资源作为支持。
 依赖于语言或库的支持： 协程需要编程语言或库提供支持。不是所有编程语言都原生支持协程。比如 Java 实现的虚拟线程。
 
-### IO✅
+## IO
 
 IO(`Input/Output`)即输入/输出，数据输入到计算机内存的过程即输入，反之输出到外部存储(比如数据库，文件，远程主机)的过程即输出。
 
@@ -1406,7 +1476,7 @@ Java 分为字符流和字节流是为了更好地处理不同类型的数据、
 
 
 
-### JVM✅
+## JVM
 ### 内存区域
 Java内存区域通常被划分为多个部分，每个部分在Java应用程序运行时发挥不同的作用。
 
@@ -1458,8 +1528,8 @@ Java内存区域划分的目的是为了提高性能和管理复杂性。程序�
 ### 对象的内存布局
 对象在内存中的布局可以分为 3 块区域: 
 - 对象头(`Header`): 
-  - 标记字段（`Mark Word`）：用于存储对象自身的运行时数据， 如哈希码（HashCode）、GC 分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等等。
-  - 类型指针（`Klass Word`）：对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。
+  - 标记字段(`Mark Word`)：用于存储对象自身的运行时数据， 如哈希码(HashCode)、GC 分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等等。
+  - 类型指针(`Klass Word`)：对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。
 - 实例数据(`Instance Data`): 对象真正存储的有效信息，也是在程序中所定义的各种类型的字段内容。
 - 对齐填充(`Padding`): 不是必然存在的，也没有什么特别的含义，仅仅起占位作用。
 
@@ -1556,7 +1626,7 @@ Java中的引用类型主要分为强引用、软引用、弱引用和虚引用�
 虚拟机可以(不是必然)对满足上述 3 个条件的无用类进行回收
 
 ### 类的生命周期
-加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Using）和卸载（Unloading）。
+加载(Loading)、验证(Verification)、准备(Preparation)、解析(Resolution)、初始化(Initialization)、使用(Using)和卸载(Unloading)。
 
 其中验证、准备、解析 3 部分统称为连接。
 
@@ -1582,193 +1652,45 @@ Java中的引用类型主要分为强引用、软引用、弱引用和虚引用�
    - 如验证该类要使用的其他类、方法是否存在。
 
 **准备**
+连接的第二步，准备阶段是正式为类变量分配内存并设置类变量初始值的阶段，这些内存都将在方法区(Java 7 之前分配在永久代，Java 8 之后移动到堆中)中分配。
+- 进行内存分配的仅包括类变量(被`static`修饰)而不包括实例变量。实例变量会在对象实例化时随着对象一块分配在 Java 堆中。
+- 初始值是数据类型的默认值，如 0、null 等。
 
+**解析**
+解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程。主要包括类或接口、字段、类方法、接口方法、方法类型等。
 
+**初始化**
+初始化阶段是执行初始化方法 `<clinit>()`方法的过程，是类加载的最后一步，这一步 JVM 才开始真正执行类中定义的 Java 程序代码(字节码)。
 
+### 类卸载
+卸载类即该类的 `Class` 对象被 GC。
 
+卸载类需要满足 3 个要求:
+- 该类的所有的实例对象都已被 GC，也就是说堆不存在该类的实例对象。
+- 该类没有在其他任何地方被引用
+- 该类的类加载器的实例已被 GC
 
+在 JVM 生命周期内，由 JVM 自带的类加载器加载的类(如`BootstrapClassLoader`, `ExtClassLoader`, `AppClassLoader` )是不会被卸载的。但是由我们自定义的类加载器加载的类是可能被卸载的。
 
-## 网络
-### http 和 https
-**基本概念**
-- http: 是一个客户端和服务器端请求和应答的标准(TCP)，用于从 WWW 服务器传输超文本到本地浏览器的超文本传输协议。
-- https:是以安全为目标的 HTTP 通道，即 HTTP 下 加入 SSL 层进行加密。其作用是：建立一个信息安全通道，来确保数据的传输，确保网站的真实性。
+### 类加载器
+类加载器是一个负责加载类的对象。每个 Java 类都有一个引用指向加载它的 `ClassLoader`。数组类不是通过 `ClassLoader` 创建的(数组类没有对应的二进制字节流)，是由 JVM 直接生成的。
 
-**http 和 https 的区别及优缺点？**
-- http 是超文本传输协议，信息是明文传输，HTTPS 协议要比 http 协议`安全`，https 是具有安全性的 ssl 加密传输协议，可防止数据在传输过程中被窃取、改变，确保数据的完整性(当然这种安全性并非绝对的，对于更深入的 Web 安全问题，此处暂且不表)。
-- http 协议的`默认端口`为 80，https 的默认端口为 443。
-- http 的连接很简单，是无状态的。https 握手阶段比较`费时`，会使页面加载时间延长 50%，增加 10%~20%的耗电。
-- https `缓存`不如 http 高效，会增加数据开销。
-- Https 协议需要 ca 证书，费用较高，功能越强大的`证书费`用越高。
-- SSL 证书需要绑定 `域名`。
+> 类加载器的主要作用就是加载 Java 类的字节码( .class 文件)到 JVM 中(在内存中生成一个代表该类的 Class 对象)。
 
-**https 协议的工作原理**
-客户端在使用 HTTPS 方式与 Web 服务器通信时有以下几个步骤：
-1. 客户端使用 https url 访问服务器，则要求 web 服务器`建立 ssl 链接`。
-2. web 服务器接收到客户端的请求之后，会`将网站的证书(证书中包含了公钥)，传输给客户端`。
-3. 客户端和 web 服务器端开始`协商 SSL 链接的安全等级`，也就是加密等级。
-4. 客户端浏览器通过双方协商一致的安全等级，`建立会话密钥`，然后通过网站的公钥来加密会话密钥，并传送给网站。
-5. web 服务器`通过自己的私钥解密出会话密钥`。
-6. web 服务器`通过会话密钥加密与客户端之间的通信`。
+JVM内置三个重要的类加载器：
+`BootstrapClassLoader`(启动类加载器)：最顶层的加载类，由 C++实现，通常表示为 `null`，并且没有父级，主要用来加载 JDK 内部的核心类库。
+`ExtensionClassLoader`(扩展类加载器)：主要负责加载 `%JRE_HOME%/lib/ext` 目录下的 jar 包和类以及被 `java.ext.dirs` 系统变量所指定的路径下的所有类。
+`AppClassLoader`(应用程序类加载器)：面向用户的加载器，负责加载当前应用 `classpath` 下的所有 jar 包和类。
 
-### TCP、UDP区别
-二者都是常见的传输层协议。
-- **TCP(Transmission Control Protocol，传输控制协议 )**：提供 **面向连接** 的，**可靠** 的数据传输服务。
-- **UDP(User Datagram Protocol，用户数据协议)**：提供 **无连接** 的，**尽最大努力** 的数据传输服务(不保证数据传输的可靠性)，简单高效。
+### 双亲委派模型
+双亲委派模型是一种类加载器的层次结构，每个类加载器都有一个父类加载器。当一个类加载器收到加载类的请求时，它会先将请求委派给父类加载器，直到最顶层的类加载器。只有当父类加载器无法加载该类时，子类加载器才会尝试加载。
 
->TCP与UDP区别总结：
-> 1、TCP面向连接(如打电话要先拨号建立连接);UDP是无连接的，即发送数据之前不需要建立连接
-> 2、TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保证可靠交付
-> 3、TCP面向字节流，实际上是TCP把数据看成一连串无结构的字节流;UDP是面向报文的
-> UDP没有拥塞控制，因此网络出现拥塞不会使源主机的发送速率降低(对实时应用很有用，如IP电话，实时视频会议等)
-> 4、每一条TCP连接只能是点到点的;UDP支持一对一，一对多，多对一和多对多的交互通信
-> 5、TCP首部开销20字节;UDP的首部开销小，只有8个字节
-> 6、TCP的逻辑通信信道是全双工的可靠信道，UDP则是不可靠信道
->
-> 原文链接：https://blog.csdn.net/Li_Ning_/article/details/52117463
+**优点**
+双亲委派模型保证了 Java 程序的稳定运行，可以避免类的重复加载(JVM 区分不同类的方式不仅仅根据类名，相同的类文件被不同的类加载器加载产生的是两个不同的类)，也保证了 Java 的核心 API 不被篡改。
 
-### TCP/UDP应用场景
-https://blog.csdn.net/qq_44273429/article/details/131375961
-
-由于TCP提供了可靠的、有序的数据传输，它适用于以下场景：
-- 文件传输：TCP的可靠性和有序性确保了文件在传输过程中不会丢失和损坏，并按正确的顺序接收。
-- 网页浏览：TCP可靠地传输网页内容，确保网页的准确显示。
-- 电子邮件传输：TCP保证电子邮件的传输不会出现丢失或乱序的情况。
-- 远程登录：TCP提供了稳定的连接，适合远程登录操作。
-- 数据库管理系统：TCP确保了数据库的一致性和完整性，防止数据丢失和损坏。
-
-由于UDP具有低延迟和高效性的特点，它适用于以下场景：
-- 视频流和音频流传输：由于UDP的低延迟，它常用于视频流和音频流的实时传输，如在线直播、视频会议等。
-- 实时游戏：UDP的快速传输和低延迟使其成为在线游戏中常用的协议，可以实现实时的游戏数据传输。
-- DNS(域名系统)：UDP广泛用于域名系统中，用于域名解析和查询。
-- 实时传感器数据：UDP适用于需要快速传输实时传感器数据的场景，如工业自动化、物联网等
-
-### 三次握手四次挥手
-建立一个 TCP 连接需要“三次握手”，缺一不可：
-- 一次握手:客户端发送带有 SYN(SEQ=x) 标志的数据包 -> 服务端，然后客户端进入 SYN_SEND 状态，等待服务端的确认；
-- 二次握手:服务端发送带有 SYN+ACK(SEQ=y,ACK=x+1) 标志的数据包 –> 客户端,然后服务端进入 SYN_RECV 状态；
-- 三次握手:客户端发送带有 ACK(ACK=y+1) 标志的数据包 –> 服务端，然后客户端和服务端都进入ESTABLISHED 状态，完成 TCP 三次握手。
-
-当建立了 3 次握手之后，客户端和服务端就可以传输数据啦！
-
-断开一个 TCP 连接则需要“四次挥手”，缺一不可：
-- 第一次挥手：客户端发送一个 FIN(SEQ=x) 标志的数据包->服务端，用来关闭客户端到服务端的数据传送。然后客户端进入 FIN-WAIT-1 状态。
-- 第二次挥手：服务端收到这个 FIN(SEQ=X) 标志的数据包，它发送一个 ACK (ACK=x+1)标志的数据包->客户端 。然后服务端进入 CLOSE-WAIT 状态，客户端进入 FIN-WAIT-2 状态。
-- 第三次挥手：服务端发送一个 FIN (SEQ=y)标志的数据包->客户端，请求关闭连接，然后服务端进入 LAST-ACK 状态。
-- 第四次挥手：客户端发送 ACK (ACK=y+1)标志的数据包->服务端，然后客户端进入TIME-WAIT状态，服务端在收到 ACK (ACK=y+1)标志的数据包后进入 CLOSE 状态。此时如果客户端等待 2MSL 后依然没有收到回复，就证明服务端已正常关闭，随后客户端也可以关闭连接了。
-
-只要四次挥手没有结束，客户端和服务端就可以继续传输数据！
-
-### OSI七层模型
-https://javaguide.cn/cs-basics/network/other-network-questions.html#%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E6%A8%A1%E5%9E%8B
-https://learn.skyofit.com/archives/1313
-
-- 应用层、为计算机提供服务
-- 表示层、数据处理(编码、解码、加密解密、压缩解压缩)
-- 会话层、管理(建立、维护、重连)应用程序之间的会话
-- 传输层、为两台主机进程之间的通信提供通用的数据传输服务
-- 网络层、路由和寻址(决定数据在网络中的游走路径)
-- 数据链路层、帧编码和误差纠正控制
-- 物理层、透明地传送比特流传输
-
-### TCP/IP四层模型
-
-1. 应用层
-2. 传输层
-3. 网络层
-4. 网络接口层
-
-
-
-
-
-
-## 操作系统
-
-
-## MySQL
-MySQL 是一种关系型数据库
-### 事务
-
-我们设想一个场景，这个场景中我们需要插入多条相关联的数据到数据库，不幸的是，这个过程可能会遇到下面这些问题：数据库中途突然因为某些原因挂掉了。客户端突然因为网络原因连接不上数据库了。并发访问数据库时，多个线程同时写入数据库，覆盖了彼此的更改。……上面的任何一个问题都可能会导致数据的不一致性。为了保证数据的一致性，系统必须能够处理这些问题。事务就是我们抽象出来简化这些问题的首选机制。
-
-事务是逻辑上的一组操作，要么都执行，要么都不执行。
-
-### 事务的四大特性
-- 原子性(Atomicity)：事务是一个不可分割的工作单位，事务中的操作要么全部成功，要么全部失败回滚。
-- 一致性(Consistency)：事务执行前后，数据库的完整性约束没有被破坏。
-- 隔离性(Isolation)：多个事务并发执行时，一个事务的执行不应影响其他事务的执行。
-- 持久性(Durability)：事务成功结束后，对数据库的修改是永久的，即使数据库发生故障也不应该丢失。
-
-### 索引
-索引是一种用于快速查询和检索数据的数据结构，其本质可以看成是一种排序好的数据结构。索引底层数据结构存在很多种类型，常见的索引结构有: B 树， B+树 和 Hash、红黑树。在 MySQL 中，无论是 Innodb 还是 MyIsam，都使用了 B+树作为索引结构。
-
-优点：使用索引可以大大加快数据的检索速度(大大减少检索的数据量), 减少 IO 次数，这也是创建索引的最主要的原因。通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性。
-缺点：创建索引和维护索引需要耗费许多时间。当对表中的数据进行增删改的时候，如果数据有索引，那么索引也需要动态的修改，会降低 SQL 执行效率。索引需要使用物理文件存储，也会耗费一定空间。
-
-### MySQL存储引擎
-存储引擎是数据库底层的软件组件，不同的存储引擎提供不同的存储机制、索引技巧、锁定水平以及查询处理方式。MySQL 支持多种存储引擎，常见的存储引擎有 InnoDB、MyISAM、Memory、CSV、Archive、Blackhole、NDB、Merge、Federated、Example 等。
-
-默认存储引擎是 InnoDB，它是 MySQL 5.5.5 版本之后的默认存储引擎。InnoDB 存储引擎支持事务、行级锁、外键等特性，适合于事务处理和多用户并发的应用。MyISAM 存储引擎不支持事务和行级锁，但它提供了全文索引的功能，适合于查询频繁的应用。
-
-### MySQL存储引擎架构
-MySQL 存储引擎采用的是 插件式架构 ，支持多种存储引擎，我们甚至可以为不同的数据库表设置不同的存储引擎以适应不同场景的需要。存储引擎是基于表的，而不是数据库。
-
-### MySQL 锁机制
-锁是一种常见的并发事务的控制方式。
-
-### 表级锁/行级锁
-MyISAM 仅仅支持表级锁(table-level locking)，一锁就锁整张表，这在并发写的情况下性非常差。
-
-InnoDB 不光支持表级锁(table-level locking)，还支持行级锁(row-level locking)，默认为行级锁。行级锁的粒度更小，仅对相关的记录上锁即可(对一行或者多行记录加锁)，所以对于并发写入操作来说， InnoDB 的性能更高。
-
-表级锁和行级锁对比：
-- 表级锁： MySQL 中锁定粒度最大的一种锁(全局锁除外)，是针对非索引字段加的锁，对当前操作的整张表加锁，实现简单，资源消耗也比较少，加锁快，不会出现死锁。不过，触发锁冲突的概率最高，高并发下效率极低。表级锁和存储引擎无关，MyISAM 和 InnoDB 引擎都支持表级锁。
-- 行级锁： MySQL 中锁定粒度最小的一种锁，是 针对索引字段加的锁 ，只针对当前操作的行记录进行加锁。 行级锁能大大减少数据库操作的冲突。其加锁粒度最小，并发度高，但加锁的开销也最大，加锁慢，会出现死锁。行级锁和存储引擎有关，是在存储引擎层面实现的。
-
-
-## Redis
-
-Redisopen in new window (REmote DIctionary Server)是一个基于 C 语言开发的开源 NoSQL 数据库(BSD 许可)。与传统数据库不同的是，Redis 的数据是保存在内存中的(内存数据库，支持持久化)，因此读写速度非常快，被广泛应用于分布式缓存方向。并且，Redis 存储的是 KV 键值对数据。
-
-### 基本数据类型
-Redis 中比较常见的数据类型有下面这些：
-- 5 种基础数据类型：String(字符串)、List(列表)、Set(集合)、Hash(散列)、Zset(有序集合)。
-- 3 种特殊数据类型：HyperLogLog(基数统计)、Bitmap (位图)、Geospatial (地理位置)。
-
-除了上面提到的之外，还有一些其他的比如 Bloom filter(布隆过滤器)open in new window、Bitfield(位域)。
-
-### Redis持久化
-使用缓存的时候，我们经常需要对内存中的数据进行持久化也就是将内存中的数据写入到硬盘中。大部分原因是为了之后重用数据(比如重启机器、机器故障之后恢复数据)，或者是为了做数据同步(比如 Redis 集群的主从节点通过 RDB 文件同步数据)。Redis 不同于 Memcached 的很重要一点就是，Redis 支持持久化，而且支持 3 种持久化方式:
-- 快照(snapshotting，RDB)
-- 只追加文件(append-only file, AOF)
-- RDB 和 AOF 的混合持久化(Redis 4.0 新增)
-
-
-### 缓存穿透
-缓存穿透说简单点就是大量请求的 key 是不合理的，根本不存在于缓存中，也不存在于数据库中 。这就导致这些请求直接到了数据库上，根本没有经过缓存这一层，对数据库造成了巨大的压力，可能直接就被这么多请求弄宕机了。
-
-### 缓存击穿
-缓存击穿中，请求的 key 对应的是 热点数据 ，该数据 存在于数据库中，但不存在于缓存中(通常是因为缓存中的那份数据已经过期) 。这就可能会导致瞬时大量的请求直接打到了数据库上，对数据库造成了巨大的压力，可能直接就被这么多请求弄宕机了。
-
-### 缓存雪崩
-缓存在同一时间大面积的失效，导致大量的请求都直接落到了数据库上，对数据库造成了巨大的压力。 这就好比雪崩一样，摧枯拉朽之势，数据库的压力可想而知，可能直接就被这么多请求弄宕机了。
-
-
-
-
-## spring boot/cloud ???
-
-
-## Linux
-
-
-
-## 其他
-
+如果需要打破双亲委派模型，需要自定义类加载器，并重写 `loadClass` 方法。
 
 
 ## 面经
-
 
 
