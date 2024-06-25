@@ -10,7 +10,7 @@ keywords:
 description: Java后端面经
 abbrlink: 17766
 date: 2024-05-27 19:58:53
-updated: 2024-06-13 19:22:23
+updated: 2024-06-25 16:46:23
 top_img: https://s2.loli.net/2024/05/27/ytcdAHzliRquNM2.png
 comments:
 cover: https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png
@@ -192,9 +192,13 @@ OAuth2.0是一个授权框架，使应用程序(如Github)能够获得对 HTTP �
 - 对数据进行智能诊断分析
 
 **技术细节**
-
 react、Antd、Flask、mongodb
 
+**我的职责**
+在项目中，负责实现各项重要指标的计算、以及对各指标进行灵活的增删改查，实现数据的存取以及前端展示等功能。
+
+### 为什么使用mongodb
+mongodb是一个非关系型数据库，采用文档存储模型，数据以BSON格式存储。项目中，需要导入或者导出 Excel 表格，一个 Excel文件正好可以对应mongodb中的一个文档，这样可以方便地将 Excel 中的数据导入到 mongodb 中。
 
 ### 江南布衣实习
 在公司实习期间，我担任网络工程师实习生，主要负责以下工作：
