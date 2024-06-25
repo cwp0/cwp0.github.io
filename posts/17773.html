@@ -1,0 +1,649 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>面经汇总 | cwp0</title><meta name="author" content="cwp0"><meta name="copyright" content="cwp0"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="面经汇总">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面经汇总">
+<meta property="og:url" content="https://cwp0.github.io/posts/17773.html">
+<meta property="og:site_name" content="cwp0">
+<meta property="og:description" content="面经汇总">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2024/06/25/Jfpxsi8HXMwbC29.png">
+<meta property="article:published_time" content="2024-06-25T11:52:15.000Z">
+<meta property="article:modified_time" content="2024-06-25T11:52:15.000Z">
+<meta property="article:author" content="cwp0">
+<meta property="article:tag" content="面经">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/06/25/Jfpxsi8HXMwbC29.png"><link rel="shortcut icon" href="/img/assets/%E5%A4%B4%E5%83%8F.JPG"><link rel="canonical" href="https://cwp0.github.io/posts/17773.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: {"appId":"YNCOX66CR4","apiKey":"5c661928f53edb93f42b2f41a467cbfb","indexName":"cwp0_github_io","hits":{"per_page":10},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":66,"languages":{"author":"Author: cwp0","link":"Link: ","source":"Source: cwp0","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '面经汇总',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-25 19:52:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/assets/%E5%A4%B4%E5%83%8F.JPG" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://s2.loli.net/2024/06/25/2VJc4rMTXeSqD7K.png')"><nav id="nav"><span id="blog-info"><a href="/" title="cwp0"><img class="site-icon" src="/img/assets/%E5%A4%B4%E5%83%8F.JPG"/><span class="site-name">cwp0</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">面经汇总</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-06-25T11:52:15.000Z" title="Created 2024-06-25 19:52:15">2024-06-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-06-25T11:52:15.000Z" title="Updated 2024-06-25 19:52:15">2024-06-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>9min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="面经汇总"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="腾讯-WXG-移动客户端开发-实习"><a href="#腾讯-WXG-移动客户端开发-实习" class="headerlink" title="腾讯 WXG - 移动客户端开发 实习"></a>腾讯 WXG - 移动客户端开发 实习</h3><p>基础微信&amp;视频号团队<br>2024&#x2F;3&#x2F;19 40多分钟 一面</p>
+<ul>
+<li>自我介绍</li>
+<li>研究生成绩、本科生成绩</li>
+<li>研究生主要专业课</li>
+<li>Java - 强引用 弱引用</li>
+<li>Java - 垃圾回收机制</li>
+<li>TCP连接如何保成可靠性</li>
+<li>HTTP状态码</li>
+<li>拷打实习、项目</li>
+<li>你的开源线上实习主要都做的啥？</li>
+<li>你在开源实习过程中遇到的最难的是什么？</li>
+<li>你的单点登录系统大前端项目中 主要都做了什么东西？</li>
+<li>手撕代码<ul>
+<li>给定一个字符串 s，你可以通过在字符串前面添加字符将其转换为回文串。找到并返回可以用这种方式转换的最短回文串。</li>
+</ul>
+</li>
+<li>意向城市是上海，组内基本都在广州，这个你有什么问题吗？</li>
+<li>为什么会想要投移动客户端开发？</li>
+<li>除了在实习项目中，你还在有通过其他途径了解到移动客户端开发吗？</li>
+<li>反问：<ul>
+<li>面试官您觉得我的表现如何？</li>
+<li>组内日常工作？</li>
+</ul>
+</li>
+</ul>
+<h3 id="淘天集团-天猫技术部前端-实习"><a href="#淘天集团-天猫技术部前端-实习" class="headerlink" title="淘天集团 - 天猫技术部前端 实习"></a>淘天集团 - 天猫技术部前端 实习</h3><p>2024&#x2F;3&#x2F;26 14:00  70多分钟。。感觉好难。。。</p>
+<ul>
+<li>面试官介绍部门、自我介绍</li>
+<li>自己自我介绍</li>
+<li>RN和React的区别</li>
+<li>单点登录SSO原理</li>
+<li>PKCE</li>
+<li>Flutter RN区别，如何实现跨平台的</li>
+<li>项目中使用了unity，具体做了什么？</li>
+<li>具体讲2FA是什么</li>
+<li>sdk实现的原理过程是什么</li>
+<li>原型和原型链</li>
+<li>事件循环机制</li>
+<li>react 钩子hooks</li>
+<li>JS 函数是类吗？函数与类的区别在哪？</li>
+<li>反问：<ul>
+<li>前端知识很零散很杂，对此您有何看法？</li>
+</ul>
+</li>
+</ul>
+<h3 id="淘天集团-闲鱼技术部前端-实习"><a href="#淘天集团-闲鱼技术部前端-实习" class="headerlink" title="淘天集团 - 闲鱼技术部前端 实习"></a>淘天集团 - 闲鱼技术部前端 实习</h3><p>2024&#x2F;3&#x2F;26 19:00 40多分钟</p>
+<ul>
+<li>为什么想要走前端的这条路？对前端看法是怎么样的？</li>
+<li>Casbin线上实习做了什么</li>
+<li>以RN sdk为例子，讲一下sdk的工作流程，具体做了啥？</li>
+<li>大前端系统做了什么</li>
+<li>国家电网项目做了什么？</li>
+<li>JS this指针</li>
+<li>JS Promise函数</li>
+<li>JS ES6新特性有哪些</li>
+<li>JS 变量作用域</li>
+</ul>
+<h3 id="淘天集团-闲鱼技术部移动端开发-实习"><a href="#淘天集团-闲鱼技术部移动端开发-实习" class="headerlink" title="淘天集团 - 闲鱼技术部移动端开发 实习"></a>淘天集团 - 闲鱼技术部移动端开发 实习</h3><p>2024&#x2F;4&#x2F;1 16:00 20多分钟。。。 太菜了。。。多练啊。。。练习时长两天半还敢出来混啊卧槽了。</p>
+<ul>
+<li>自我介绍</li>
+<li>为什么想要走移动端开发这种道路。</li>
+<li>Casbin是做什么的？</li>
+<li>RN的原理</li>
+<li>单点登录SSO原理</li>
+<li>我看你简历上很多移动端开发的经历，可以讲讲吗？</li>
+<li>有学过什么计算机专业相关的专业课吗？</li>
+<li>常用的数据结构有什么？</li>
+<li>哈希表的结构</li>
+<li>排序算法的复杂度</li>
+<li>给一个数组，和一个数字，返回这个数字所在的index，有什么方法，复杂度是什么？</li>
+<li>给一个排好序的数组，且里面有很多重复的元素，这个时候如何返回一个指定数字的index？</li>
+<li>反问：<ul>
+<li>移动端开发如何去学习？</li>
+<li>移动客户端开发有什么学习的一些网站吗？</li>
+</ul>
+</li>
+</ul>
+<h3 id="腾讯-移动客户端开发-实习"><a href="#腾讯-移动客户端开发-实习" class="headerlink" title="腾讯 - 移动客户端开发 实习"></a>腾讯 - 移动客户端开发 实习</h3><p>2024&#x2F;4&#x2F;2 19:00 60多分钟</p>
+<ul>
+<li>自我介绍</li>
+<li>印象最深刻的实习或者项目</li>
+<li>TCP、UDP区别</li>
+<li>TCP三次握手、四次挥手</li>
+<li>Java堆和栈区别</li>
+<li>进程线程区别</li>
+<li>OSI七层模型</li>
+<li>死锁</li>
+<li>常见Linux线程间的通信方式</li>
+<li>HTTP状态码</li>
+<li>Java为什么会堆栈溢出</li>
+<li>C++多态</li>
+<li>C++是面向过程的语言吗？</li>
+<li>i++和++i的区别</li>
+<li>302状态码是什么？</li>
+<li>Java同步关键字</li>
+<li>操作系统的虚拟内存</li>
+<li>成员变量和全局变量都存在哪里？</li>
+<li>Java最基础的类是什么类，有哪些方法？</li>
+<li>Java异常机制</li>
+<li>从增加删除元素的角度说数组和链表的区别</li>
+<li>分别向链表数组中插入元素的复杂度</li>
+<li>用户态和内核态</li>
+<li>手撕两道题：<ul>
+<li>单例模式，如何保证一个类只创建一次</li>
+<li>不含重复字符的最长子串的长度</li>
+</ul>
+</li>
+<li>反问：<ul>
+<li>移动客户端开发的学习路线是什么</li>
+</ul>
+</li>
+</ul>
+<h3 id="携程-移动客户端开发iOS-Android"><a href="#携程-移动客户端开发iOS-Android" class="headerlink" title="携程 - 移动客户端开发iOS&#x2F;Android"></a>携程 - 移动客户端开发iOS&#x2F;Android</h3><p>2024&#x2F;4&#x2F;11 18:00 40分钟</p>
+<ul>
+<li>你在大前端项目里主要做了什么？</li>
+<li>react的原理</li>
+<li>Dom树</li>
+<li>js的闭包</li>
+<li>js的原型&amp;原型链</li>
+<li>C++的三大特性</li>
+<li>手撕两道题<ul>
+<li>有序链表合并</li>
+<li>二叉树前序遍历，然后转为数组</li>
+</ul>
+</li>
+<li>反问：<ul>
+<li>前端学习路线</li>
+<li>工作城市</li>
+</ul>
+</li>
+</ul>
+<p>其实后面面试官说，你做的项目跟我们现在做的很契合，然后第二天下午打了个电话没接到，应该是二面。后面假期过后就给我进人才池了，有点亏。。。</p>
+<h3 id="腾讯金融科技-测试开发工程师"><a href="#腾讯金融科技-测试开发工程师" class="headerlink" title="腾讯金融科技 - 测试开发工程师"></a>腾讯金融科技 - 测试开发工程师</h3><p>2024&#x2F;4&#x2F;19 17:00 40 分钟</p>
+<ul>
+<li>自我介绍</li>
+<li>你最近认为做的最有难度最好的一次项目经历。</li>
+<li>开源项目</li>
+<li>你在开源实习和项目中使用的技术栈是什么，你学到了什么？</li>
+<li>国家电网项目</li>
+<li>手撕代码<ul>
+<li>最长重复子串</li>
+</ul>
+</li>
+<li>数据库</li>
+<li>Linux 系统</li>
+<li>反问：<ul>
+<li>测开的学习路线</li>
+<li>工作地点和时间，加班多吗？</li>
+</ul>
+</li>
+</ul>
+<h3 id="美团到店-后端开发工程师-实习生"><a href="#美团到店-后端开发工程师-实习生" class="headerlink" title="美团到店 - 后端开发工程师 - 实习生"></a>美团到店 - 后端开发工程师 - 实习生</h3><p>2024&#x2F;4&#x2F;24 14:00 一个小时</p>
+<ul>
+<li>面试流程、部门介绍</li>
+<li>自我介绍</li>
+<li>项目介绍</li>
+<li>2FA</li>
+<li>TOTP</li>
+<li>OTP</li>
+<li>PKCE</li>
+<li>Java 如何实现高并发</li>
+<li>高并发会出现什么问题，Java如何解决的？</li>
+<li>上下文切换开销</li>
+<li>Java虚拟机内存</li>
+<li>HashMap底层、java7和java8有什么改进</li>
+<li>ConcurrentHashMap如何实现多进程，java7和java8有什么改进</li>
+<li>Java有哪些锁。</li>
+<li>乐观锁悲观锁</li>
+<li>进程、线程区别</li>
+<li>mysql</li>
+<li>redis</li>
+<li>TCP、UDP区别</li>
+<li>三次握手四次挥手</li>
+<li>手撕代码： 二选一<ul>
+<li>反转部分链表</li>
+<li>旋转数组后查找元素</li>
+</ul>
+</li>
+<li>反问：<ul>
+<li>部门寻找实习生的标准是什么样的？</li>
+<li>实习生日常工作时间</li>
+</ul>
+</li>
+</ul>
+<h3 id="美团核心-软件开发工程师-前端-移动端方向-实习"><a href="#美团核心-软件开发工程师-前端-移动端方向-实习" class="headerlink" title="美团核心 - 软件开发工程师-前端&amp;移动端方向 实习"></a>美团核心 - 软件开发工程师-前端&amp;移动端方向 实习</h3><p>2024&#x2F;5&#x2F;15 19:00</p>
+<ul>
+<li>自我介绍</li>
+<li>介绍开源项目主要的工作</li>
+<li>在父元素中调整子元素位置你用哪种方式用的多</li>
+<li>position和display</li>
+<li>css 让如何让元素居中</li>
+<li>直接开始手撕：<ul>
+<li>实现二分查找，然后将while循环改成递归。</li>
+</ul>
+</li>
+<li>反问：<ul>
+<li>组内用了什么技术</li>
+<li>美团app用了什么框架？</li>
+</ul>
+</li>
+</ul>
+<h3 id="荣耀-通用软件开发工程师-实习"><a href="#荣耀-通用软件开发工程师-实习" class="headerlink" title="荣耀 - 通用软件开发工程师 - 实习"></a>荣耀 - 通用软件开发工程师 - 实习</h3><p>2024&#x2F;5&#x2F;21 16:30</p>
+<ul>
+<li>自我介绍</li>
+<li>开源项目介绍演示</li>
+<li>你还会点前端？会点前端挺好的</li>
+<li>讲讲国家电网项目</li>
+<li>Java中你用过哪些集合 介绍一下</li>
+<li>HashMap为什么不支持高并发</li>
+<li>有一个要执行的东西，丢到异步线程执行，执行完获取结果。如何实现？</li>
+<li>在开发中有遇到过高并发嘛？</li>
+<li>redis中有哪几种数据类型</li>
+<li>手撕：<ul>
+<li>LRU缓存，面试官口述，我没太听懂，之前也没做过这题，然后没撕出来。。。 到最后才跟我讲这是leetcode146，还说回去后好好看看。。</li>
+</ul>
+</li>
+</ul>
+<h3 id="阿里国际-测试开发工程师-实习"><a href="#阿里国际-测试开发工程师-实习" class="headerlink" title="阿里国际 - 测试开发工程师 - 实习"></a>阿里国际 - 测试开发工程师 - 实习</h3><p>2024&#x2F;5&#x2F;22 11:00 40min</p>
+<ul>
+<li>部门介绍</li>
+<li>自我介绍</li>
+<li>开源项目是做什么？</li>
+<li>国家电网项目是做什么的？数据量多少？如何智能？</li>
+<li>TCP和UDP原理及区别</li>
+<li>如何将UDP变为TCP那样可靠</li>
+<li>用户态和和内核态</li>
+<li>数据库的事务</li>
+<li>反问：<ul>
+<li>测开学习路线</li>
+<li>面试的是测开，但是问的时候都没怎么问？</li>
+</ul>
+</li>
+</ul>
+<h3 id="饿了么-测开实习-一面"><a href="#饿了么-测开实习-一面" class="headerlink" title="饿了么 - 测开实习 - 一面"></a>饿了么 - 测开实习 - 一面</h3><p>2024&#x2F;6&#x2F;12 15:00 50 多分钟</p>
+<ul>
+<li>自我介绍</li>
+<li>我看你本科不是计算机的，为啥想走计算机这条道路</li>
+<li>介绍一下你所工作的开源社区</li>
+<li>印象最深的一个项目，难点与亮点</li>
+<li>国家电网项目，数据结构如何设计的</li>
+<li>mysql 两张表联合查询</li>
+<li>mysql 事务</li>
+<li>浏览器输入一个 url 发生了什么？</li>
+<li>http&#x2F;https区别</li>
+<li>SSL 加密了解过吗？</li>
+<li>Java 数据类型</li>
+<li>手撕：<ul>
+<li>Java 单例模式</li>
+<li>删除链表的一个节点</li>
+</ul>
+</li>
+<li>对于上述删除链表节点的题，围绕这个点做功能测试如何设计测试用例？</li>
+<li>饿了么外面搜索框功能测试，你该测试什么内容？</li>
+<li>对于现在大模型盛行的时代，你是如何看待大模型的？有用到过没？谈谈你的理解。</li>
+<li>反问：<ul>
+<li>最快什么时候入职</li>
+</ul>
+</li>
+</ul>
+<h3 id="阿里国际-测试开发工程师-实习-1"><a href="#阿里国际-测试开发工程师-实习-1" class="headerlink" title="阿里国际 - 测试开发工程师 - 实习"></a>阿里国际 - 测试开发工程师 - 实习</h3><p>2024&#x2F;6&#x2F;17，15:00 电话面，20 多分钟</p>
+<ul>
+<li>为什么会选择测开这个岗位</li>
+<li>你对测开具体哪个部分感兴趣？</li>
+<li>自我介绍</li>
+<li>你在开源项目中印象最深的一个项目</li>
+<li>国家电网项目介绍</li>
+<li>学生生涯过程中遇到的一些挫折和应对策略</li>
+<li>电商满减优惠券测试用例设计</li>
+<li>反问：<ul>
+<li>如果面试通过的话最快入职时间</li>
+<li>一面二面间隔多久</li>
+</ul>
+</li>
+</ul>
+<h3 id="网易互娱-游戏研发工程师-实习"><a href="#网易互娱-游戏研发工程师-实习" class="headerlink" title="网易互娱 - 游戏研发工程师 - 实习"></a>网易互娱 - 游戏研发工程师 - 实习</h3><p>2024&#x2F;6&#x2F;25 55 min</p>
+<ul>
+<li>自我介绍</li>
+<li>开源实习&#x2F;开源项目介绍</li>
+<li>国家电网项目介绍</li>
+<li>HashMap底层</li>
+<li>HashMap线程安全吗？线程安全用什么？</li>
+<li>ArrayList底层，线程安全吗？线程安全用什么？</li>
+<li>死锁的产生，如何避免？</li>
+<li>线程池的作用</li>
+<li>内存池了解过吗？内存池如何解决内存碎片化问题？</li>
+<li>LRU了解过吗？用什么数据结构实现 LRU？</li>
+<li>如何保证线程安全？</li>
+<li>Java 垃圾回收机制</li>
+<li>Java设计模式用过吗？</li>
+<li>C++、Python语言使用过吗？</li>
+<li>C++常用数据结构</li>
+<li>C++ lambda 表达式用过吗？</li>
+<li>Python内存模型</li>
+<li>浏览器输入URL到展示的过程</li>
+<li>TCP&#x2F;UDP 区别</li>
+<li>TCP 属于哪一层的协议？</li>
+<li>应用层协议有哪些？</li>
+<li>我怎么感觉你研究生什么都没做？有什么科研成果吗？</li>
+<li>具体讲讲小论文的创新点</li>
+<li>TCP 如何保证连接可靠性</li>
+<li>TCP 的丢包问题如何解决？只有重传机制吗？</li>
+<li>多个客户端访问一个服务端，如何实现？</li>
+<li>看过Redis源码吗？</li>
+<li>Redis主要是做什么的？</li>
+<li>如果要你自己实现一个缓存，你会怎么做？</li>
+<li>处理上限为 100 的接口，突然 10000 个请求过来了，怎么办？</li>
+<li>A*算法了解过吗？</li>
+<li>为什么要应聘游戏研发这个岗位</li>
+<li>玩过哪些游戏？如何设计出一个游戏？</li>
+<li>反问：<ul>
+<li>会给实习生分配什么样的工作？竟然说这不是你该考虑的事情。。。。还建议我如果走游戏研发的话要多学学C++。。。完犊子喽。</li>
+<li>前面 40 分钟都是一个面试官问，到后面我才知道原来有俩面试官。。。第二个面试官有点凶神恶煞的。。</li>
+</ul>
+</li>
+</ul>
+<h3 id="饿了么-测试开发实习生-二面"><a href="#饿了么-测试开发实习生-二面" class="headerlink" title="饿了么- 测试开发实习生 - 二面"></a>饿了么- 测试开发实习生 - 二面</h3><p>2024&#x2F;6&#x2F;25 14:00 一个小时</p>
+<ul>
+<li>手撕代码：<ul>
+<li>写一个实现rm -rf path 命令功能的函数</li>
+</ul>
+</li>
+<li>针对上面写的函数，写测试用例</li>
+<li>上面函数在Linux 系统下使用会有什么问题？</li>
+<li>Linux用过吗</li>
+<li>给1000 万个整形数据，使用哪种排序算法找到前 1000 个大的数字。</li>
+<li>支部宝转账测试用例</li>
+<li>针对于转账的高并发情况，在系统层面如何优化？</li>
+<li>数据库事务了解吗？</li>
+<li>你刚说转账是一系列操作，具体指？</li>
+<li>数据库索引了解吗？有什么优缺点</li>
+<li>Java反射</li>
+<li>Java中除了空指针异常，还有有哪些异常？</li>
+<li>自我介绍</li>
+<li>挑一个项目或者实习介绍一下你的工作内容及成就</li>
+<li>你的项目中有用Java写的没？</li>
+<li>迄今为止遇到过得最大困难是什么？怎么解决的？</li>
+<li>我看你本科专业不是计算机的，还是保研的，保研不是都保本专业吗，为什么想转专业？</li>
+<li>本科专业排名</li>
+<li>跨度很大，有系统的学习过相关课程和编程语言吗？</li>
+<li>转专业后学习过程中，有遇到过困难吗？</li>
+<li>研究生研究方向？</li>
+<li>项目和科研不太相关，这是怎么回事？</li>
+<li>智力题：<ul>
+<li>8个外形一样的球，其中有一个偏重，求如何只使用两次测量就找到重的球。</li>
+</ul>
+</li>
+<li>谈谈未来职业规划以及为什么要做测开？为什么不选算法岗和开发岗。</li>
+<li>反问：<ul>
+<li>测试开发系统学习路线</li>
+<li>最快什么时候入职</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://cwp0.github.io">cwp0</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://cwp0.github.io/posts/17773.html">https://cwp0.github.io/posts/17773.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/06/25/Jfpxsi8HXMwbC29.png" data-sites="facebook,twitter,wechat,weibo,qq,google,linkedin,douban"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> Donate</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.JPG" target="_blank"><img class="post-qr-code-img" src="/img/wechat.JPG" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.JPG" target="_blank"><img class="post-qr-code-img" src="/img/alipay.JPG" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/17772.html" title="手撕相关"><img class="cover" src="https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">手撕相关</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/posts/17766.html" title="Java后端面经"><img class="cover" src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-27</div><div class="title">Java后端面经</div></div></a></div><div><a href="/posts/17767.html" title="前端&amp;移动端面经"><img class="cover" src="https://s2.loli.net/2024/05/27/QygHftOujrEodTW.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-27</div><div class="title">前端&amp;移动端面经</div></div></a></div><div><a href="/posts/17772.html" title="手撕相关"><img class="cover" src="https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-13</div><div class="title">手撕相关</div></div></a></div><div><a href="/posts/17771.html" title="框架等面经"><img class="cover" src="https://s2.loli.net/2024/06/12/tSWPZr1EQH6XRAm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-12</div><div class="title">框架等面经</div></div></a></div><div><a href="/posts/17768.html" title="测开面经"><img class="cover" src="https://s2.loli.net/2024/05/27/drCF3NnMKboz1AQ.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-27</div><div class="title">测开面经</div></div></a></div><div><a href="/posts/17770.html" title="计算机基础"><img class="cover" src="https://s2.loli.net/2024/06/12/WHlmQVSb9NM8oXe.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-12</div><div class="title">计算机基础</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment"> Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/assets/%E5%A4%B4%E5%83%8F.JPG" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">cwp0</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cwp0"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/cwp0" target="_blank" title="Github"><i class="fab fa-github" style="color: #9F9F9F;"></i></a><a class="social-icon" href="mailto:wenpengchen@njust.edu.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: 9F9F9F;"></i></a><a class="social-icon" href="/img/alipay.JPG" target="_blank" title="QQ"><i class="fa-brands fa-qq" style="color: #9F9F9F;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This site is under construction...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%85%BE%E8%AE%AF-WXG-%E7%A7%BB%E5%8A%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BC%80%E5%8F%91-%E5%AE%9E%E4%B9%A0"><span class="toc-text">腾讯 WXG - 移动客户端开发 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%98%E5%A4%A9%E9%9B%86%E5%9B%A2-%E5%A4%A9%E7%8C%AB%E6%8A%80%E6%9C%AF%E9%83%A8%E5%89%8D%E7%AB%AF-%E5%AE%9E%E4%B9%A0"><span class="toc-text">淘天集团 - 天猫技术部前端 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%98%E5%A4%A9%E9%9B%86%E5%9B%A2-%E9%97%B2%E9%B1%BC%E6%8A%80%E6%9C%AF%E9%83%A8%E5%89%8D%E7%AB%AF-%E5%AE%9E%E4%B9%A0"><span class="toc-text">淘天集团 - 闲鱼技术部前端 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%98%E5%A4%A9%E9%9B%86%E5%9B%A2-%E9%97%B2%E9%B1%BC%E6%8A%80%E6%9C%AF%E9%83%A8%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%BC%80%E5%8F%91-%E5%AE%9E%E4%B9%A0"><span class="toc-text">淘天集团 - 闲鱼技术部移动端开发 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%85%BE%E8%AE%AF-%E7%A7%BB%E5%8A%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BC%80%E5%8F%91-%E5%AE%9E%E4%B9%A0"><span class="toc-text">腾讯 - 移动客户端开发 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%BA%E7%A8%8B-%E7%A7%BB%E5%8A%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BC%80%E5%8F%91iOS-Android"><span class="toc-text">携程 - 移动客户端开发iOS&#x2F;Android</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%85%BE%E8%AE%AF%E9%87%91%E8%9E%8D%E7%A7%91%E6%8A%80-%E6%B5%8B%E8%AF%95%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88"><span class="toc-text">腾讯金融科技 - 测试开发工程师</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BE%8E%E5%9B%A2%E5%88%B0%E5%BA%97-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-%E5%AE%9E%E4%B9%A0%E7%94%9F"><span class="toc-text">美团到店 - 后端开发工程师 - 实习生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BE%8E%E5%9B%A2%E6%A0%B8%E5%BF%83-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-%E5%89%8D%E7%AB%AF-%E7%A7%BB%E5%8A%A8%E7%AB%AF%E6%96%B9%E5%90%91-%E5%AE%9E%E4%B9%A0"><span class="toc-text">美团核心 - 软件开发工程师-前端&amp;移动端方向 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8D%A3%E8%80%80-%E9%80%9A%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-%E5%AE%9E%E4%B9%A0"><span class="toc-text">荣耀 - 通用软件开发工程师 - 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BF%E9%87%8C%E5%9B%BD%E9%99%85-%E6%B5%8B%E8%AF%95%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-%E5%AE%9E%E4%B9%A0"><span class="toc-text">阿里国际 - 测试开发工程师 - 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A5%BF%E4%BA%86%E4%B9%88-%E6%B5%8B%E5%BC%80%E5%AE%9E%E4%B9%A0-%E4%B8%80%E9%9D%A2"><span class="toc-text">饿了么 - 测开实习 - 一面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BF%E9%87%8C%E5%9B%BD%E9%99%85-%E6%B5%8B%E8%AF%95%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-%E5%AE%9E%E4%B9%A0-1"><span class="toc-text">阿里国际 - 测试开发工程师 - 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E6%98%93%E4%BA%92%E5%A8%B1-%E6%B8%B8%E6%88%8F%E7%A0%94%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88-%E5%AE%9E%E4%B9%A0"><span class="toc-text">网易互娱 - 游戏研发工程师 - 实习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A5%BF%E4%BA%86%E4%B9%88-%E6%B5%8B%E8%AF%95%E5%BC%80%E5%8F%91%E5%AE%9E%E4%B9%A0%E7%94%9F-%E4%BA%8C%E9%9D%A2"><span class="toc-text">饿了么- 测试开发实习生 - 二面</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/17773.html" title="面经汇总"><img src="https://s2.loli.net/2024/06/25/Jfpxsi8HXMwbC29.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="面经汇总"/></a><div class="content"><a class="title" href="/posts/17773.html" title="面经汇总">面经汇总</a><time datetime="2024-06-25T11:52:15.000Z" title="Created 2024-06-25 19:52:15">2024-06-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17772.html" title="手撕相关"><img src="https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="手撕相关"/></a><div class="content"><a class="title" href="/posts/17772.html" title="手撕相关">手撕相关</a><time datetime="2024-06-13T08:18:26.000Z" title="Created 2024-06-13 16:18:26">2024-06-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17771.html" title="框架等面经"><img src="https://s2.loli.net/2024/06/12/tSWPZr1EQH6XRAm.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="框架等面经"/></a><div class="content"><a class="title" href="/posts/17771.html" title="框架等面经">框架等面经</a><time datetime="2024-06-12T14:49:36.000Z" title="Created 2024-06-12 22:49:36">2024-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17769.html" title="数据库"><img src="https://s2.loli.net/2024/06/12/cKiSbvguBp27oq8.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数据库"/></a><div class="content"><a class="title" href="/posts/17769.html" title="数据库">数据库</a><time datetime="2024-06-12T14:47:36.000Z" title="Created 2024-06-12 22:47:36">2024-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17770.html" title="计算机基础"><img src="https://s2.loli.net/2024/06/12/WHlmQVSb9NM8oXe.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="计算机基础"/></a><div class="content"><a class="title" href="/posts/17770.html" title="计算机基础">计算机基础</a><time datetime="2024-06-12T14:47:24.000Z" title="Created 2024-06-12 22:47:24">2024-06-12</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024  <i id="heartbeat" class="fa fas fa-heartbeat"></i> cwp0</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Switch Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="chat-btn" type="button" title="Chat"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addModeChange('mermaid', runMermaid)
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nfRxTBEmIAeb6gP2K0LOdLqw-gzGzoHsz',
+      appKey: 'vmeDN8k58dVdPv5Yz7NEkvSN',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      tagMeta: ["博主", "小伙伴", "访客"],
+      master: ['fb5b8162294f5bda9321f095ee3a5857', '8c0fcea8917ddba8e86ee8a88c2a15a9'],
+      friends:  [],
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine()
+  else getScript('/js/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async src="https://npm.elemecdn.com/tzy-blog/lib/js/other/sakura.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(() => {
+  window.$crisp = [];
+  window.CRISP_WEBSITE_ID = "19701af9-3bff-41b9-919e-742aca557e36";
+  (function () {
+    d = document;
+    s = d.createElement("script");
+    s.src = "https://client.crisp.chat/l.js";
+    s.async = 1;
+    d.getElementsByTagName("head")[0].appendChild(s);
+  })();
+  $crisp.push(["safe", true])
+
+  const isChatBtn = true
+  const isChatHideShow = true
+
+  if (isChatBtn) {
+    const open = () => {
+      $crisp.push(["do", "chat:show"])
+      $crisp.push(["do", "chat:open"])
+    }
+
+    const close = () => {
+      $crisp.push(["do", "chat:hide"])
+    }
+
+    close()
+    $crisp.push(["on", "chat:closed", function() {
+      close()
+    }])
+
+    window.chatBtnFn = () => {
+      $crisp.is("chat:visible") ? close() : open()
+    }
+  } else if (isChatHideShow) {
+    window.chatBtn = {
+      hide: () => {
+        $crisp.push(["do", "chat:hide"])
+      },
+      show: () => {
+        $crisp.push(["do", "chat:show"])
+      }
+    }
+  }
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="algolia-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="search-wrap"><div id="algolia-search-input"></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-info"><div class="algolia-stats"></div><div class="algolia-poweredBy"></div></div></div></div></div><div id="search-mask"></div><script src="https://cdn.jsdelivr.net/npm/algoliasearch/dist/algoliasearch-lite.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instantsearch.js/dist/instantsearch.production.min.js"></script><script src="/js/search/algolia.js"></script></div></div></body></html>
