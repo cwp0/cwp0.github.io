@@ -10,7 +10,7 @@ description: 多智能体强化学习的算法和思路总结
 abbrlink: 17765
 date: 2023-12-21 19:51:33
 updated: 2023-12-21 19:51:33
-top_img: https://s2.loli.net/2024/02/06/U5SXRYACVolptGM.png
+top_img: https://s2.loli.net/2024/06/27/Z8pDimra7ugnHkv.png
 comments:
 cover: https://s2.loli.net/2024/02/06/3uoiqZOIw6CPygm.png
 toc:
