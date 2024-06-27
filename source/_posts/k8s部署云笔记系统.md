@@ -1,7 +1,6 @@
 ---
 title: k8s部署云笔记系统
 tags:
-  - k8s
   - Kubernetes
   - 教程
 categories:
