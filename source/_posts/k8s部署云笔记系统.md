@@ -505,7 +505,7 @@ kubectl create -f note-nginx.yaml -n note
 
 ![pod](../image/k8s部署云笔记系统/5.png)
 
-访问（连校园网，关梯子）：
+访问(连校园网，关梯子)：
 
 http://192.10.84.209:33395/cloudNote/
 账号：姓名小写拼音

@@ -39,7 +39,7 @@ abcjs:
 
 由此诞生了RNN。
 
-循环神经网络（Recurrent Neural Network, RNN）是一类以序列（sequence）数据为输入，在序列的演进方向进行递归（recursion）且所有节点（循环单元）按链式连接的递归神经网络。
+循环神经网络(Recurrent Neural Network, RNN)是一类以序列(sequence)数据为输入，在序列的演进方向进行递归(recursion)且所有节点(循环单元)按链式连接的递归神经网络。
 
 ![img_1.png](..%2Fimage%2FRNN-LSTM-GRU-GCN%2Fimg_1.png)
 
@@ -61,7 +61,7 @@ W 上一次隐藏层的值作为这一次输入的权重 权重矩阵
 
 ## 长短期记忆网络LSTM
 
-长短期记忆（Long short-term memory, LSTM）是一种特殊的RNN，主要是为了解决长序列训练过程中的梯度消失和梯度爆炸问题。简单来说，就是相比普通的RNN，LSTM能够在更长的序列中有更好的表现。
+长短期记忆(Long short-term memory, LSTM)是一种特殊的RNN，主要是为了解决长序列训练过程中的梯度消失和梯度爆炸问题。简单来说，就是相比普通的RNN，LSTM能够在更长的序列中有更好的表现。
 
 ![img_3.png](..%2Fimage%2FRNN-LSTM-GRU-GCN%2Fimg_3.png)
 (左：RNN，右：LSTM)

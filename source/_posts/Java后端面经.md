@@ -712,37 +712,37 @@ Java 设计模式是一种在软件开发中常用的解决特定问题的通用
   - 观察者模式：观察者模式定义对象间的一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并被自动更新。
 
 ### JDK中用到哪些设计模式
-1. **单例模式（Singleton Pattern）**
+1. **单例模式(Singleton Pattern)**
     - **`java.lang.Runtime#getRuntime()`**：`Runtime`类确保只有一个实例存在，并提供了一个全局访问点。
     - **`java.awt.Desktop#getDesktop()`**：`Desktop`类也是一个单例模式的实现。
-2. **工厂模式（Factory Pattern）**
+2. **工厂模式(Factory Pattern)**
     - **`java.util.Calendar#getInstance()`**：根据不同的参数，返回不同的`Calendar`子类实例。
     - **`java.sql.DriverManager#getConnection()`**：根据提供的URL、用户名和密码返回不同类型的数据库连接。
-3. **抽象工厂模式（Abstract Factory Pattern）**
+3. **抽象工厂模式(Abstract Factory Pattern)**
     - **`javax.xml.parsers.DocumentBuilderFactory`**：用于创建不同类型的XML解析器。
     - **`javax.xml.transform.TransformerFactory`**：用于创建不同类型的XML转换器。
-4. **建造者模式（Builder Pattern）**
+4. **建造者模式(Builder Pattern)**
     - **`java.lang.StringBuilder`** 和 **`java.lang.StringBuffer`**：用于构建字符串。
     - **`java.nio.ByteBuffer`**：用于构建字节缓冲区。
-5. **原型模式（Prototype Pattern）**
+5. **原型模式(Prototype Pattern)**
     - **`java.lang.Object#clone()`**：所有实现了`Cloneable`接口的类都可以使用`clone`方法来复制对象。
-6. **适配器模式（Adapter Pattern）**
+6. **适配器模式(Adapter Pattern)**
     - **`java.util.Arrays#asList()`**：将数组转换为`List`。
     - **`java.io.InputStreamReader`** 和 **`java.io.OutputStreamWriter`**：将字节流转换为字符流。
-7. **装饰器模式（Decorator Pattern）**
+7. **装饰器模式(Decorator Pattern)**
     - **`java.io.BufferedInputStream`** 和 **`java.io.BufferedOutputStream`**：为现有的输入/输出流添加额外的功能。
     - **`java.util.Collections#synchronizedList()`**、`#unmodifiableList()`**：为现有的集合添加额外的行为。
-8. **观察者模式（Observer Pattern）**
+8. **观察者模式(Observer Pattern)**
     - **`java.util.Observer`** 和 **`java.util.Observable`**：用于实现观察者模式。
     - **`javax.swing.event.EventListenerList`**：用于管理事件监听器。
-9. **策略模式（Strategy Pattern）**
+9. **策略模式(Strategy Pattern)**
     - **`java.util.Comparator`**：用于定义比较两个对象的策略。
     - **`javax.swing.text.Document#insertString()`**：不同的插入策略。
-10. **责任链模式（Chain of Responsibility Pattern）**
+10. **责任链模式(Chain of Responsibility Pattern)**
     - **`java.util.logging.Logger#log()`**：通过不同的`Handler`处理日志记录请求。
-11. **状态模式（State Pattern）**
+11. **状态模式(State Pattern)**
     - **`javax.swing.JComponent#paint(Graphics)`**：通过状态模式来管理组件的绘制状态。
-12. **模板方法模式（Template Method Pattern）**
+12. **模板方法模式(Template Method Pattern)**
     - **`java.util.AbstractList`**、`java.util.AbstractSet`**：这些抽象类定义了集合的一些模板方法，具体的子类来实现具体的方法。
 
 这些设计模式的使用，使得JDK在设计和实现上更加灵活、可扩展且易于维护。这些模式不仅仅是代码结构的规范，它们还体现了面向对象设计的基本原则，如单一职责原则、开闭原则和依赖倒置原则。
@@ -898,7 +898,7 @@ https://blog.csdn.net/cy973071263/article/details/122543826
 特性：
 - 节点是红色或黑色
 - 根是黑色
-- 叶子节点（外部节点，空节点）都是黑色，这里的叶子节点指的是最底层的空节点（外部节点），null节点才是叶子节点，null节点的父节点在红黑树里不将其看作叶子节点
+- 叶子节点(外部节点，空节点)都是黑色，这里的叶子节点指的是最底层的空节点(外部节点)，null节点才是叶子节点，null节点的父节点在红黑树里不将其看作叶子节点
 - 红色节点的子节点都是黑色
 - 红色节点的父节点都是黑色
 - 从根节点到叶子节点的所有路径上不能有 2 个连续的红色节点
@@ -1147,23 +1147,23 @@ https://blog.csdn.net/weixin_49199646/article/details/109210547
 综上，线程创建和销毁的代价低、上下文切换速度快、对系统资源占用小、对CPU的使用效率高，因此一般情况下优先选择线程进行高并发编程；但线程组的所有线程共用一个进程的内存空间，安全稳定性相对较差，若其中一个线程发生崩溃，可能会使整个进程，因此对安全稳定性要求较高时，需要优先选择进程进行高并发编程。
 
 ### 进程间的通信方式
-进程间通信（Inter-Process Communication, IPC）是指在操作系统中不同进程之间传递数据或信息的机制。常见的进程间通信方式有多种，每种方式都有其独特的应用场景和优缺点。以下是一些主要的进程间通信方式：
-1. **管道（Pipes）**：
-    - **匿名管道（Anonymous Pipes）**：主要用于有亲缘关系的进程之间的通信，如父子进程。数据以字节流的形式在进程间传递。
-    - **命名管道（Named Pipes）**：支持在无亲缘关系的进程之间进行通信。命名管道存在于文件系统中，可以被不同的进程打开和使用。
-2. **消息队列（Message Queues）**：
+进程间通信(Inter-Process Communication, IPC)是指在操作系统中不同进程之间传递数据或信息的机制。常见的进程间通信方式有多种，每种方式都有其独特的应用场景和优缺点。以下是一些主要的进程间通信方式：
+1. **管道(Pipes)**：
+    - **匿名管道(Anonymous Pipes)**：主要用于有亲缘关系的进程之间的通信，如父子进程。数据以字节流的形式在进程间传递。
+    - **命名管道(Named Pipes)**：支持在无亲缘关系的进程之间进行通信。命名管道存在于文件系统中，可以被不同的进程打开和使用。
+2. **消息队列(Message Queues)**：
     - 允许进程通过发送和接收消息进行通信。消息队列提供了一种在进程间传递数据的有序方式，可以实现异步通信。
-3. **共享内存（Shared Memory）**：
+3. **共享内存(Shared Memory)**：
     - 进程共享一段内存空间，进程可以直接读写这段共享内存中的数据。共享内存是最快的一种通信方式，因为数据不需要在进程间复制，但需要额外的同步机制来避免并发访问问题。
-4. **信号量（Semaphores）**：
+4. **信号量(Semaphores)**：
     - 用于控制多个进程对共享资源的访问，通过信号量可以实现进程间的同步和互斥。
-5. **信号（Signals）**：
+5. **信号(Signals)**：
     - 信号是一种有限的异步通知机制，用于通知进程某个事件的发生。进程可以捕捉和处理信号，从而实现简单的通信和控制。
-6. **套接字（Sockets）**：
+6. **套接字(Sockets)**：
     - 套接字不仅支持同一台计算机上进程间的通信，也支持分布式网络中不同计算机上的进程间通信。常用于网络编程中。
-7. **文件系统（File System）**：
+7. **文件系统(File System)**：
     - 进程可以通过读写共享的文件进行通信。这种方式简单但效率较低，适用于需要持久化存储的场景。
-8. **内存映射文件（Memory-Mapped Files）**：
+8. **内存映射文件(Memory-Mapped Files)**：
     - 通过将文件映射到进程的地址空间，实现文件内容的共享和通信。与共享内存类似，但数据的持久化由文件系统提供。
 
 ### 线程间的通信方式
@@ -1171,23 +1171,23 @@ https://blog.csdn.net/weixin_49199646/article/details/109210547
 1. **共享内存**：
     - **全局变量**：所有线程都可以访问和修改同一个全局变量。
     - **静态变量**：静态变量在进程的生命周期内只初始化一次，所有线程共享。
-2. **互斥锁（Mutex）**：
+2. **互斥锁(Mutex)**：
     - 用于防止多个线程同时访问共享资源，从而避免数据竞争。
-3. **读写锁（RWLock）**：
+3. **读写锁(RWLock)**：
     - 允许多个线程同时读数据，但在写数据时需要独占锁，确保写操作的安全性。
-4. **信号量（Semaphore）**：
+4. **信号量(Semaphore)**：
     - 主要用于限制对共享资源的访问数量，可以控制同时访问资源的线程数。
-5. **条件变量（Condition Variable）**：
+5. **条件变量(Condition Variable)**：
     - 用于线程之间的等待通知机制，一个线程可以等待一个条件变量，而另一个线程可以通知该条件变量改变状态，从而唤醒等待的线程。
-6. **事件（Event）**：
+6. **事件(Event)**：
     - 线程可以等待一个事件，直到另一个线程设置该事件，从而实现线程之间的同步。
-7. **队列（Queue）**：
+7. **队列(Queue)**：
     - 线程安全的队列，常用于生产者-消费者模型，一个线程放入数据，另一个线程取出数据。
-8. **管道（Pipe）**：
+8. **管道(Pipe)**：
     - 用于线程之间的数据传输，常见于一些操作系统提供的进程间通信机制中。
-9. **消息队列（Message Queue）**：
+9. **消息队列(Message Queue)**：
     - 一种线程安全的队列，专门用于在多个线程之间传递消息。
-10. **信号（Signal）**：
+10. **信号(Signal)**：
     - 一种用于通知线程某个事件发生的机制，通常用在异步事件处理。
 
 ### Semaphore
