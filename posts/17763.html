@@ -190,7 +190,7 @@
 <p>在这篇笔记中，我会总结我的直系学长推荐我先看的多智能体强化学习知乎专栏内容，然后如果有时间，再总结我导师之前发给我让我看的论文。相关链接我会放在下面。</p>
 </blockquote>
 <p>知乎专栏：<a target="_blank" rel="noopener" href="https://www.zhihu.com/column/c_1061939147282915328">https://www.zhihu.com/column/c_1061939147282915328</a></p>
-<h2 id="基础知识与博弈"><a href="#基础知识与博弈" class="headerlink" title="基础知识与博弈"></a>基础知识与博弈</h2><h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>在多智能体系统中，每个智能体通过与环境进行交互获取奖励值（reward）来学习改善自己的策略，从而获得该环境下最优策略的过程就多智能体强化学习。</p>
+<h2 id="基础知识与博弈"><a href="#基础知识与博弈" class="headerlink" title="基础知识与博弈"></a>基础知识与博弈</h2><h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>在多智能体系统中，每个智能体通过与环境进行交互获取奖励值(reward)来学习改善自己的策略，从而获得该环境下最优策略的过程就多智能体强化学习。</p>
 <p>在单智能体强化学习中，智能体所在的环境是稳定不变的，但是在多智能体强化学习中，环境是复杂的、动态的，因此给学习过程带来很大的困难。</p>
 <ol>
 <li>维度爆炸：在单体强化学习中，需要存储状态值函数或动作-状态值函数。在多体强化学习中，状态空间变大，联结动作空间随智能体数量指数增长，维度非常大，计算复杂。</li>
@@ -215,7 +215,7 @@
 <ol>
 <li>在第5步中需要不断求解一个线性规划，这将造成学习速度的降低，增加计算时间。</li>
 <li>为了求解第5步，智能体i需要知道所有智能体的动作空间，这个在分布式系统中将无法满足。</li>
-<li>只满足收敛性，不满足合理性。Minimax-Q算法能够找到多智能体强化学习的纳什均衡策略，但是假设对手使用的不是纳什均衡策略，而是一个较差的策略，则当前智能体并不能根据对手的策略学习到一个更优的策略。该算法无法让智能体根据对手的策略来调节优化自己的策略，而只能找到随机博弈的纳什均衡策略。这是由于Minimax-Q算法是一个对手独立算法（opponent-independent algorithm），不论对手策略是怎么样的，都收敛到该博弈的纳什均衡策略。就算对手采用一个非常弱的策略，当前智能体也不能学习到一个比纳什均衡策略更好的策略。</li>
+<li>只满足收敛性，不满足合理性。Minimax-Q算法能够找到多智能体强化学习的纳什均衡策略，但是假设对手使用的不是纳什均衡策略，而是一个较差的策略，则当前智能体并不能根据对手的策略学习到一个更优的策略。该算法无法让智能体根据对手的策略来调节优化自己的策略，而只能找到随机博弈的纳什均衡策略。这是由于Minimax-Q算法是一个对手独立算法(opponent-independent algorithm)，不论对手策略是怎么样的，都收敛到该博弈的纳什均衡策略。就算对手采用一个非常弱的策略，当前智能体也不能学习到一个比纳什均衡策略更好的策略。</li>
 </ol>
 <h2 id="Nash-Q-Learning"><a href="#Nash-Q-Learning" class="headerlink" title="Nash Q-Learning"></a>Nash Q-Learning</h2><p>论文：<a target="_blank" rel="noopener" href="https://www.jmlr.org/papers/volume4/temp/hu03a.pdf">Nash Q-learning for general-sum stochastic games</a></p>
 <p>Nash Q-Learning算法是将Minimax-Q算法<code>从零和博弈扩展到多人一般和博弈</code>的算法。在Minimax-Q算法中需要通过Minimax线性规划求解阶段博弈的纳什均衡点，拓展到<code>Nash Q-Learning算法就是使用二次规划求解纳什均衡点</code>。Nash Q-Learning算法在合作性均衡或对抗性均衡的环境中能够收敛到纳什均衡点，其收敛性条件是，在每一个状态s的阶段博弈中，都能够找到一个全局最优点或者鞍点，只有满足这个条件，Nash Q-Learning算法才能够收敛。与Minimax-Q算法相同，Nash Q-Learning算法求解二次规划的过程也非常耗时，降低了算法的学习速度。</p>
@@ -223,7 +223,7 @@
 <p><img src="/../image/MARL/img_3.png" alt="img_3.png"></p>
 <p>该算法需要观测其他所有智能体的动作ai与奖励值ri。并且与Minimax-Q算法一样，只满足收敛性，不满足合理性。只能收敛到纳什均衡策略，不能根据其他智能体的策略来优化调剂自身的策略。</p>
 <h2 id="Friend-or-Foe-Q-Learning"><a href="#Friend-or-Foe-Q-Learning" class="headerlink" title="Friend-or-Foe Q-Learning"></a>Friend-or-Foe Q-Learning</h2><p>论文：<a target="_blank" rel="noopener" href="https://www.researchgate.net/profile/Michael-Littman/publication/2933305_Friend-or-Foe_Q-learning_in_General-Sum_Games/links/54b66cb80cf24eb34f6d19dc/Friend-or-Foe-Q-learning-in-General-Sum-Games.pdf">Friend-or-foe Q-learning in general-sum games</a></p>
-<p>Friend-or-Foe Q-Learning（FFQ）算法也是从Minimax-Q算法拓展而来。为了能够处理一般和博弈，FFQ算法对一个智能体i，将其他所有智能体分为两组，一组为i的friend帮助i一起最大化其奖励回报，另一组为i的foe对抗i并降低i的奖励回报，因此对每个智能体而言都有两组。这样一个n智能体的一般和博弈就转化为了一个两智能体的零和博弈。</p>
+<p>Friend-or-Foe Q-Learning(FFQ)算法也是从Minimax-Q算法拓展而来。为了能够处理一般和博弈，FFQ算法对一个智能体i，将其他所有智能体分为两组，一组为i的friend帮助i一起最大化其奖励回报，另一组为i的foe对抗i并降低i的奖励回报，因此对每个智能体而言都有两组。这样一个n智能体的一般和博弈就转化为了一个两智能体的零和博弈。</p>
 <p>其纳什均衡策略求解方法如下所示：</p>
 <p><img src="/../image/MARL/img_4.png" alt="img_4.png"></p>
 <p>算法流程如下：</p>
@@ -256,30 +256,30 @@
 <ol>
 <li>集中式训练，分布式执行：训练时采用集中式学习训练critic与actor，使用时actor只用知道局部信息就能运行。critic需要其他智能体的策略信息，本文给了一种估计其他智能体策略的方法，能够只用知道其他智能体的观测与动作。</li>
 <li>改进了经验回放记录的数据。为了能够适用于动态环境，每一条信息由(x, x’, a1,…, an, r1,…, rn)组成，X &#x3D; (o1,…, on)。表示每个智能体的观测。</li>
-<li>利用策略集合效果优化（policy ensemble）：对每个智能体学习多个策略，改进时利用所有策略的整体效果进行优化。以提高算法的稳定性以及鲁棒性。</li>
+<li>利用策略集合效果优化(policy ensemble)：对每个智能体学习多个策略，改进时利用所有策略的整体效果进行优化。以提高算法的稳定性以及鲁棒性。</li>
 </ol>
-<h3 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h3><h4 id="DQN"><a href="#DQN" class="headerlink" title="DQN"></a>DQN</h4><p>深度Q网络（deep Q-network）<br><img src="/../image/MARL/img_9.png" alt="img_9.png"></p>
-<h4 id="SPG"><a href="#SPG" class="headerlink" title="SPG"></a>SPG</h4><p>随机策略梯度（stochastic policy gradient）</p>
+<h3 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h3><h4 id="DQN"><a href="#DQN" class="headerlink" title="DQN"></a>DQN</h4><p>深度Q网络(deep Q-network)<br><img src="/../image/MARL/img_9.png" alt="img_9.png"></p>
+<h4 id="SPG"><a href="#SPG" class="headerlink" title="SPG"></a>SPG</h4><p>随机策略梯度(stochastic policy gradient)</p>
 <p><img src="/../image/MARL/img_10.png" alt="img_10.png"></p>
-<h4 id="DPG"><a href="#DPG" class="headerlink" title="DPG"></a>DPG</h4><p>确定性策略梯度（deterministic policy gradient）</p>
+<h4 id="DPG"><a href="#DPG" class="headerlink" title="DPG"></a>DPG</h4><p>确定性策略梯度(deterministic policy gradient)</p>
 <p><img src="/../image/MARL/img_11.png" alt="img_11.png"></p>
-<h3 id="MADDPG-1"><a href="#MADDPG-1" class="headerlink" title="MADDPG"></a>MADDPG</h3><h4 id="多智能体AC设计"><a href="#多智能体AC设计" class="headerlink" title="多智能体AC设计"></a>多智能体AC设计</h4><p>MADDPG集中式的学习，分布式的应用。因此允许使用一些额外的信息（全局信息）进行学习，只要在应用的时候使用局部信息进行决策就行。这点就是Q-learning的一个不足之处，Q-learning在学习与应用时必须采用相同的信息。所以这里MADDPG对传统的AC算法进行了一个改进，Critic扩展为可以利用其他智能体的策略进行学习，这点的进一步改进就是每个智能体对其他智能体的策略进行一个函数逼近。<br><img src="/../image/MARL/img_12.png" alt="img_12.png"><br><img src="/../image/MARL/img_13.png" alt="img_13.png"></p>
+<h3 id="MADDPG-1"><a href="#MADDPG-1" class="headerlink" title="MADDPG"></a>MADDPG</h3><h4 id="多智能体AC设计"><a href="#多智能体AC设计" class="headerlink" title="多智能体AC设计"></a>多智能体AC设计</h4><p>MADDPG集中式的学习，分布式的应用。因此允许使用一些额外的信息(全局信息)进行学习，只要在应用的时候使用局部信息进行决策就行。这点就是Q-learning的一个不足之处，Q-learning在学习与应用时必须采用相同的信息。所以这里MADDPG对传统的AC算法进行了一个改进，Critic扩展为可以利用其他智能体的策略进行学习，这点的进一步改进就是每个智能体对其他智能体的策略进行一个函数逼近。<br><img src="/../image/MARL/img_12.png" alt="img_12.png"><br><img src="/../image/MARL/img_13.png" alt="img_13.png"></p>
 <h4 id="估计其他智能体策略"><a href="#估计其他智能体策略" class="headerlink" title="估计其他智能体策略"></a>估计其他智能体策略</h4><p><img src="/../image/MARL/img_14.png" alt="img_14.png"></p>
 <h4 id="策略集合优化"><a href="#策略集合优化" class="headerlink" title="策略集合优化"></a>策略集合优化</h4><p><img src="/../image/MARL/img_15.png" alt="img_15.png"></p>
 <h3 id="相关PPT"><a href="#相关PPT" class="headerlink" title="相关PPT"></a>相关PPT</h3><p><img src="/../image/MARL/img_16.png" alt="img_16.png"><br><img src="/../image/MARL/img_17.png" alt="img_17.png"><br><img src="/../image/MARL/img_18.png" alt="img_18.png"><br><img src="/../image/MARL/img_19.png" alt="img_19.png"><br><img src="/../image/MARL/img_20.png" alt="img_20.png"></p>
 <h2 id="IQL"><a href="#IQL" class="headerlink" title="IQL"></a>IQL</h2><p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1511.08779">Multiagent Cooperation and Competition with Deep Reinforcement Learning</a></p>
 <p>Independent Q-Learning</p>
-<p>本文讲的是介绍如何将DQN用到Multi-agent问题中，并表示最直接的方法就是，智能体把其他智能体喝环境看作整体，每个智能体之间的决策相互独立（用原文的话说就是each agent is controlled by an independent Deep Q-Network）。</p>
+<p>本文讲的是介绍如何将DQN用到Multi-agent问题中，并表示最直接的方法就是，智能体把其他智能体喝环境看作整体，每个智能体之间的决策相互独立(用原文的话说就是each agent is controlled by an independent Deep Q-Network)。</p>
 <p>IQL发现，两个智能体都独立采用DQN，在不修改除了reward外的任何参数、细节，agent都能取得不错的成绩。这说明IQL可以作为多智能体强化学习的baseline。</p>
-<p>IQL（independent Q-learning）算法非常简单暴力地给每个智能体执行一个Deep-Q-learning算法。IQL把单智能体Deep-Q-learning算法直接应用在多智能体学习领域，各个智能体是各自为政的。<code>这是此类算法的一个极端。</code></p>
+<p>IQL(independent Q-learning)算法非常简单暴力地给每个智能体执行一个Deep-Q-learning算法。IQL把单智能体Deep-Q-learning算法直接应用在多智能体学习领域，各个智能体是各自为政的。<code>这是此类算法的一个极端。</code></p>
 <p>其他没啥要讲的。。。</p>
 <p><img src="/../image/MARL/img_21.png" alt="img_21.png"></p>
 <h2 id="COMA"><a href="#COMA" class="headerlink" title="COMA"></a>COMA</h2><p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1705.08926">Counterfactual Multi-Agent Policy Gradients</a></p>
-<p>COMA (counterfactual multi-agent) 使用一个集中式的critic网络计算优势函数A，统一给Agenti计算对应的actioni分别去执行。所谓CTDE（central training decentralize execution）。COMA是把Actor-critic单智能体算法直接应用在多智能体学习领域，各个智能体按照集中的critic网络指令行事，它们是完全协作关系。<code>这是此类算法的另一个极端。</code><br><img src="/../image/MARL/img_23.png" alt="img_23.png"></p>
+<p>COMA (counterfactual multi-agent) 使用一个集中式的critic网络计算优势函数A，统一给Agenti计算对应的actioni分别去执行。所谓CTDE(central training decentralize execution)。COMA是把Actor-critic单智能体算法直接应用在多智能体学习领域，各个智能体按照集中的critic网络指令行事，它们是完全协作关系。<code>这是此类算法的另一个极端。</code><br><img src="/../image/MARL/img_23.png" alt="img_23.png"></p>
 <p>多智能体强化学习算法必然都是在IQL和COMA两个算法之间做平衡。Agent既不能完全独立行事，也不能完全按中心节点指令行事。</p>
 <p>那么这些算法都在解决什么问题呢？</p>
-<p>只要模型共享Qtot值函数，团队奖励值ri有可能仅仅是某几个智能体获得的，其它智能体并没有做贡献但缺获得了奖励值ri。这就是所谓多智能体信用分配（credit assignment）问题。</p>
-<p>在COMA算法中，为了解决多智能体信用分配问题，提出了优势函数A（遍历Agenti动作空间μi里的所有动作，而保持其它Agent的动作空间μ–不变，计算每个Agenti的参数值），用来计算反事实基线（counterfactual baseline）。</p>
+<p>只要模型共享Qtot值函数，团队奖励值ri有可能仅仅是某几个智能体获得的，其它智能体并没有做贡献但缺获得了奖励值ri。这就是所谓多智能体信用分配(credit assignment)问题。</p>
+<p>在COMA算法中，为了解决多智能体信用分配问题，提出了优势函数A(遍历Agenti动作空间μi里的所有动作，而保持其它Agent的动作空间μ–不变，计算每个Agenti的参数值)，用来计算反事实基线(counterfactual baseline)。</p>
 <p><img src="/../image/MARL/img_24.png" alt="img_24.png"></p>
 <p>这个思想来自difference reward。difference reward的思想是：保持其他智能体的联合动作不动，把当前智能体的action替换为一个default action，检查值函数Q是否有变化，如果没有，代表当前智能体的action是无贡献的action，因为奖励r不是当前智能体的action获得的。但是difference reward思想有个问题，default action选谁？？？无法选择！！！为了解决这个问题，COMA定义了优势函数A，解决了多智能体信用分配问题。如果仔细看算法的A函数公式，它其实就是AC算法中常用的优势函数A在多智能体领域的扩展而已。</p>
 <p><img src="/../image/MARL/img_25.png" alt="img_25.png"></p>
@@ -287,7 +287,7 @@
 <p>COMA算法具体框架如下图所示：<br><img src="/../image/MARL/img_22.png" alt="img_22.png"></p>
 <p>网络架构：<br><img src="/../image/MARL/img_26.png" alt="img_26.png"></p>
 <h2 id="VDN"><a href="#VDN" class="headerlink" title="VDN"></a>VDN</h2><p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.05296">Value-Decomposition Networks For Cooperative Multi-Agent Learning</a></p>
-<p>VDN（Value-Decomposition Networks）算法是一种用于多智能体强化学习（MARL）的算法。它旨在解决多智能体系统中合作与竞争的问题，其中各个智能体需要同时考虑个体利益与整体目标。</p>
+<p>VDN(Value-Decomposition Networks)算法是一种用于多智能体强化学习(MARL)的算法。它旨在解决多智能体系统中合作与竞争的问题，其中各个智能体需要同时考虑个体利益与整体目标。</p>
 <p>VDN算是大名鼎鼎的QMIX算法的前身。VDN算法假定：<code>Qtot是每个智能体的Qi的算术加和。对于智能体Agenti来说，它只用最大化Qtot函数的子项Qi函数即可。</code>如下图：<br>左边是IQL，右边是VDN<br><img src="/../image/MARL/img_27.png" alt="img_27.png"></p>
 <p>作者假定如下等式成立：<br><img src="/../image/MARL/img_29.png" alt="img_29.png"></p>
 <p>h表示序列观察，a表示序列动作。 注意到，上述分解满足一个很好的性质，即对左边的联合 Q function 进行 操作，等价于对右边每一个局部 Q function 分别进行 。这样可以保证训练完毕后去中心化执行时，即使整个系统只基于局部观察进行决策，其策略也是与基于全局观察进行决策是一致的。</p>
@@ -306,19 +306,19 @@
 <li>接上一条，QMIX设计一个神经网络来整合每个智能体的局部值函数而得到联合动作值函数，VDN是直接求和。 </li>
 <li>每个智能体的局部值函数只需要自己的局部观测，因此整个系统在执行时是一个分布式的，通过局部值函数，选出累积期望奖励最大的动作执行。 </li>
 <li>算法使联合动作值函数与每个局部值函数的单调性相同，因此对局部值函数取最大动作也就是使联合动作值函数最大。 </li>
-<li>算法针对的模型是一个分布式多智能体部分可观马尔可夫决策过程（Dec-POMDP）。</li>
+<li>算法针对的模型是一个分布式多智能体部分可观马尔可夫决策过程(Dec-POMDP)。</li>
 </ol>
 <h3 id="背景知识-1"><a href="#背景知识-1" class="headerlink" title="背景知识"></a>背景知识</h3><h4 id="MARL核心问题"><a href="#MARL核心问题" class="headerlink" title="MARL核心问题"></a>MARL核心问题</h4><p>在多智能体强化学习中一个关键的问题就是如何学习联合动作值函数，因为该函数的参数会随着智能体数量的增多而成指数增长，<code>如果动作值函数的输入空间过大，则很难拟合出一个合适函数来表示真实的联合动作值函数</code>。另一个问题就是学得了联合动作值函数后，<code>如何通过联合值函数提取出一个优秀的分布式的策略</code>。这其实是单智能体强化学习拓展到MARL的核心问题。</p>
-<h4 id="Dec-POMDP"><a href="#Dec-POMDP" class="headerlink" title="Dec-POMDP"></a>Dec-POMDP</h4><p>Dec-POMDP指的是分布式部分可观察马尔可夫决策过程（Decentralized Partially Observable Markov Decision Process）。在 Dec-POMDP 中，有多个智能体同时存在，并且每个智能体只能观察到局部的环境信息，而不能直接获取全局状态。此外，每个智能体的动作会影响整个系统的演变。<br><img src="/../image/MARL/img_32.png" alt="img_32.png"></p>
-<h4 id="IQL-1"><a href="#IQL-1" class="headerlink" title="IQL"></a>IQL</h4><p>IQL（independent Q-learning）就是非常暴力的给每个智能体执行一个Q-learning算法，因为共享环境，并且环境随着每个智能体策略、状态发生改变，对每个智能体来说，环境是动态不稳定的，因此这个算法也无法收敛，但是在部分应用中也具有较好的效果。</p>
+<h4 id="Dec-POMDP"><a href="#Dec-POMDP" class="headerlink" title="Dec-POMDP"></a>Dec-POMDP</h4><p>Dec-POMDP指的是分布式部分可观察马尔可夫决策过程(Decentralized Partially Observable Markov Decision Process)。在 Dec-POMDP 中，有多个智能体同时存在，并且每个智能体只能观察到局部的环境信息，而不能直接获取全局状态。此外，每个智能体的动作会影响整个系统的演变。<br><img src="/../image/MARL/img_32.png" alt="img_32.png"></p>
+<h4 id="IQL-1"><a href="#IQL-1" class="headerlink" title="IQL"></a>IQL</h4><p>IQL(independent Q-learning)就是非常暴力的给每个智能体执行一个Q-learning算法，因为共享环境，并且环境随着每个智能体策略、状态发生改变，对每个智能体来说，环境是动态不稳定的，因此这个算法也无法收敛，但是在部分应用中也具有较好的效果。</p>
 <h4 id="VDN-1"><a href="#VDN-1" class="headerlink" title="VDN"></a>VDN</h4><p>如前介绍：<br><img src="/../image/MARL/img_33.png" alt="img_33.png"></p>
-<h4 id="DRQN"><a href="#DRQN" class="headerlink" title="DRQN"></a>DRQN</h4><p>DRQN是一个用来处理POMDP（部分可观马尔可夫决策过程）的一个算法，其采用LSTM替换DQN卷基层后的一个全连接层，来达到能够记忆历史状态的作用，因此可以在部分可观的情况下提高算法性能。由于QMIX解决的是多智能体的POMDP问题，因此每个智能体采用的是DRQN算法。</p>
+<h4 id="DRQN"><a href="#DRQN" class="headerlink" title="DRQN"></a>DRQN</h4><p>DRQN是一个用来处理POMDP(部分可观马尔可夫决策过程)的一个算法，其采用LSTM替换DQN卷基层后的一个全连接层，来达到能够记忆历史状态的作用，因此可以在部分可观的情况下提高算法性能。由于QMIX解决的是多智能体的POMDP问题，因此每个智能体采用的是DRQN算法。</p>
 <h3 id="QMIX-1"><a href="#QMIX-1" class="headerlink" title="QMIX"></a>QMIX</h3><p>QMIX是在VDN上的一种拓展，由于VDN只是将每个智能体的局部动作值函数求和相加得到联合动作值函数，虽然满足联合值函数与局部值函数单调性相同的可以进行分布化策略的条件，但是其没有在学习时利用状态信息以及没有采用非线性方式对单智能体局部值函数进行整合，使得VDN算法还有很大的提升空间。QMIX就是采用一个混合网络对单智能体局部值函数进行合并，并在训练学习过程中加入全局状态信息辅助，来提高算法性能。</p>
-<p>QMIX约束条件：<br><img src="/../image/MARL/img_34.png" alt="img_34.png"><br>也就是总Q关于每个agent的偏导都必须是正的。也就是，对于每个agent来说，追求自身收益的最大化是没有错误的（都对全局有不小于0的贡献）。</p>
+<p>QMIX约束条件：<br><img src="/../image/MARL/img_34.png" alt="img_34.png"><br>也就是总Q关于每个agent的偏导都必须是正的。也就是，对于每个agent来说，追求自身收益的最大化是没有错误的(都对全局有不小于0的贡献)。</p>
 <p>具体网络结构如下：<br><img src="/../image/MARL/img_35.png" alt="img_35.png"></p>
 <p>图(c)表示每个智能体采用一个DRQN来拟合自身的Q值函数得到Qi(τi,ai; θi)，DRQN循环输入当前的观测oi,t，以及上一时刻的动作ai,t-1来得到Q值。</p>
 <p>图(b)表示混合网络的结构。其输入为每个DRQN网络的输出。为了满足上述的单调性约束，混合网络的所有权值都是非负数，对偏移量不做限制，这样就可以确保满足单调性约束。</p>
-<p>为了能够更多的利用到系统的状态信息st ，采用一种超网络（hypernetwork），将状态st作为输入，输出为混合网络的权值及偏移量。为了保证权值的非负性，采用一个线性网络以及绝对值激活函数保证输出不为负数。对偏移量采用同样方式但没有非负性的约束，混合网络最后一层的偏移量通过两层网络以及ReLU激活函数得到非线性映射网络。由于状态信息st是通过超网络混合到Qtot中的，而不是仅仅作为混合网络的输入项，这样带来的一个好处是，如果作为输入项则st的系数均为正，这样则无法充分利用状态信息来提高系统性能，相当于舍弃了一半的信息量。</p>
+<p>为了能够更多的利用到系统的状态信息st ，采用一种超网络(hypernetwork)，将状态st作为输入，输出为混合网络的权值及偏移量。为了保证权值的非负性，采用一个线性网络以及绝对值激活函数保证输出不为负数。对偏移量采用同样方式但没有非负性的约束，混合网络最后一层的偏移量通过两层网络以及ReLU激活函数得到非线性映射网络。由于状态信息st是通过超网络混合到Qtot中的，而不是仅仅作为混合网络的输入项，这样带来的一个好处是，如果作为输入项则st的系数均为正，这样则无法充分利用状态信息来提高系统性能，相当于舍弃了一半的信息量。</p>
 <p>QMIX的Loss：<br><img src="/../image/MARL/img_36.png" alt="img_36.png"></p>
 <p>更新用到了传统的DQN的思想，其中b表示从经验记忆中采样的样本数量，<br><img src="/../image/MARL/img_37.png" alt="img_37.png"></p>
 <p>由于满足上文的单调性约束，对Qtot进行argmax 操作的计算量就不在是随智能体数量呈指数增长了，而是随智能体数量线性增长，极大的提高了算法效率。</p>
@@ -336,17 +336,17 @@
 <li>联合 V 网络</li>
 </ol>
 <p>整体的Loss如下：<br><img src="/../image/MARL/img_39.png" alt="img_39.png"><br><img src="/../image/MARL/img_40.png" alt="img_40.png"></p>
-<h3 id="TRAN-alt"><a href="#TRAN-alt" class="headerlink" title="TRAN-alt"></a>TRAN-alt</h3><p>QTRAN-alt 是针对 QTRAN（Q-function Transfer）算法的一个改进版本，旨在解决原始 QTRAN 在处理非零约束时的问题。</p>
+<h3 id="TRAN-alt"><a href="#TRAN-alt" class="headerlink" title="TRAN-alt"></a>TRAN-alt</h3><p>QTRAN-alt 是针对 QTRAN(Q-function Transfer)算法的一个改进版本，旨在解决原始 QTRAN 在处理非零约束时的问题。</p>
 <p>作者认为约束：<br><img src="/../image/MARL/img_42.png" alt="img_42.png"></p>
-<p>在原始 QTRAN 算法中，对于非零动作的约束（对应公式中的第二个约束），可能会过于松弛，导致算法难以准确地拟合联合 Q 函数。这是因为在训练数据中的数据很少，大部分的数据都可能满足第二个约束。</p>
-<p>为了解决这个问题，QTRAN-alt 提出了一个新的定理，将原始约束中的第二个约束替换为一个更强的约束。这个新的约束使得算法能够更准确地拟合联合 Q 函数，从而提升了算法的性能和训练效果。<br><img src="/../image/MARL/img_43.png" alt="img_43.png"><br>这个约束更多的聚焦于非0的训练数据（这一部分数据占训练初期训练集的大部分）。为了满足这一约束，需要把上面列出的第三个损失函数替换为：</p>
+<p>在原始 QTRAN 算法中，对于非零动作的约束(对应公式中的第二个约束)，可能会过于松弛，导致算法难以准确地拟合联合 Q 函数。这是因为在训练数据中的数据很少，大部分的数据都可能满足第二个约束。</p>
+<p>为了解决这个问题，QTRAN-alt 提出了一个新的定理，将原始约束中的第二个约束替换为一个更强的约束。这个新的约束使得算法能够更准确地拟合联合 Q 函数，从而提升了算法的性能和训练效果。<br><img src="/../image/MARL/img_43.png" alt="img_43.png"><br>这个约束更多的聚焦于非0的训练数据(这一部分数据占训练初期训练集的大部分)。为了满足这一约束，需要把上面列出的第三个损失函数替换为：</p>
 <p><img src="/../image/MARL/img_44.png" alt="img_44.png"></p>
 <p>具体来说，QTRAN-alt 对于非零动作的约束更加严格，以提高算法的性能。这种改进使得 QTRAN-alt 在处理合作问题中的分工与协作时表现更为优越。</p>
 <p>算法流程：<br><img src="/../image/MARL/img.png" alt="img.png"></p>
 <h2 id="MFMARL"><a href="#MFMARL" class="headerlink" title="MFMARL"></a>MFMARL</h2><p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1802.05438v4">Mean Field Multi-Agent Reinforcement Learning</a></p>
 <p>平均场多智能体强化学习</p>
 <p><code>MFMARL主要致力于极大规模的多智能体强化学习问题，解决大规模智能体之间的交互及计算困难。</code>由于多智能体强化学习问题不仅有环境交互问题，还有智能体之间的动态影响，因此为了得到最优策略，每个智能体都需要考察其他智能体的动作及状态得到联合动作值函数。由于状态空间跟动作空间随着智能体数量的增多而迅速扩大，这给计算以及探索带来了非常大的困难。</p>
-<p>MFMARL算法借用了平均场论（Mean Field Theory，MFT）的思想，其对多智能体系统给出了一个近似假设：对某个智能体，其他所有智能体对其产生的作用可以用一个均值替代。这样就就将一个智能体与其邻居智能体之间的相互作用简化为两个智能体之间的相互作用（该智能体与其所有邻居的均值）。这样极大地简化了智能体数量带来的模型空间的增大。应用平均场论后，学习在两个智能体之间是相互促进的：单个智能体的最优策略的学习是基于智能体群体的动态；同时，集体的动态也根据个体的策略进行更新。</p>
+<p>MFMARL算法借用了平均场论(Mean Field Theory，MFT)的思想，其对多智能体系统给出了一个近似假设：对某个智能体，其他所有智能体对其产生的作用可以用一个均值替代。这样就就将一个智能体与其邻居智能体之间的相互作用简化为两个智能体之间的相互作用(该智能体与其所有邻居的均值)。这样极大地简化了智能体数量带来的模型空间的增大。应用平均场论后，学习在两个智能体之间是相互促进的：单个智能体的最优策略的学习是基于智能体群体的动态；同时，集体的动态也根据个体的策略进行更新。</p>
 <p>下面具体介绍算法细节，其结合平均场论得出两个主要算法MF-Q与MF-AC，是对Q-learning以及AC算法的改进，并且在理论上给出了收敛性证明，能够收敛到纳什均衡点。该算法可以应用于竞争环境或合作环境，并且每个智能体不知道环境的模型以及奖励模型，但是能够观察邻居智能体的动作及奖励。每个智能体有自己的奖励值。</p>
 <h3 id="背景知识-2"><a href="#背景知识-2" class="headerlink" title="背景知识"></a>背景知识</h3><h4 id="随机博弈"><a href="#随机博弈" class="headerlink" title="随机博弈"></a>随机博弈</h4><p><img src="/../image/MARL/img_45.png" alt="img_45.png"></p>
 <h4 id="Nash-Q"><a href="#Nash-Q" class="headerlink" title="Nash-Q"></a>Nash-Q</h4><p><img src="/../image/MARL/img_46.png" alt="img_46.png"></p>
