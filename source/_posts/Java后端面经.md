@@ -924,47 +924,6 @@ JDK1.7及之前版本的`HashMap`在多线程环境下扩容操作可能存在�
 > 不同的线程可能在不同的时间片获得 CPU 执行的机会，当前线程 1 执行完哈希冲突判断后，由于时间片耗尽挂起。线程 2 先完成了插入操作。
 > 随后，线程 1 获得时间片，由于之前已经进行过 `hash` 碰撞的判断，所有此时会直接进行插入，这就导致线程 2 插入的数据被线程 1 覆盖了。
 
-### 遍历HashMap
-七种
-```java
-HashMap<Integer, String> map = new HashMap<>();
-// ForEach EntrySet
-for (Map.Entry<Integer, String> entry : map.entrySet()) {
-    System.out.println(entry.getKey() + ":" + entry.getValue());
-}
-// ForEach KeySet
-for (Integer key : map.keySet()) {
-    System.out.println(key + ":" + map.get(key));
-}
-// 迭代器EntrySet
-Iterator<Map.Entry<Integer, String>> iterator = map.entrySet().iterator();
-while (iterator.hasNext()) {
-    Map.Entry<Integer, String> entry = iterator.next();
-    System.out.println(entry.getKey() + ":" + entry.getValue());
-}
-// 迭代器KeySet
-Iterator<Integer> iterator = map.keySet().iterator();
-while (iterator.hasNext()) {
-    Integer key = iterator.next();
-    System.out.println(key + ":" + map.get(key));
-}
-// Lambda
-map.forEach((key, value) -> {
-    System.out.println(key);
-    System.out.println(value);
-});
-// Streams API 单线程
-map.entrySet().stream().forEach(entry -> {
-    System.out.println(entry.getKey());
-    System.out.println(entry.getValue());
-});
-// Streams API 多线程
-map.entrySet().parallelStream().forEach(entry -> {
-    System.out.println(entry.getKey());
-    System.out.println(entry.getValue());
-});
-```
-
 ### ConcurrentHashMap/Hashtable区别
 - 底层：JDK1.7的`ConcurrentHashMap`采用**分段的数组+链表** 实现，JDK1.8跟 `HashMap` 1.8结构一样，**数组+链表/红黑二叉树** 。`Hashtable` 是**数组+链表** 实现。
 - 实现线程安全的方式：
