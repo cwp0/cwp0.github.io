@@ -41,7 +41,7 @@ abcjs:
 
 我呢，研一的时候有过一段开源经历(Casbin社区一个线上实习)，担任社区维护者，日常工作会负责处理社区日常issue，跟踪解决用户需求，修复bug及完善文档等；然后在研一暑假期间中选了中科院和 Casbin 社区联合举办的一个开源项目，主要的工作是完善社区整个大前端系统，包括 web，移动端功能完善，以及为社区开发了一款支持通用2FA的移动端app。除此之外，我还参与过国网经济研究院的一个项目，以及自己做过两个Java前后端项目。这几段项目实习经历锻炼了我文档阅读、编写的能力，并在代码规范、开发流程等技能上获得提升。
 
-然后我呢，我评价觉得自己是一个学习能力很强的人，可以比较快速的学习并适应新的环境和技术栈。 
+然后我呢，我评价觉得自己是一个学习能力很强的人，本科成绩前5%，获得过国家奖学金，辅修了英语双学位，硕士期间也获得过学业一等奖学金，可以比较快速的学习并适应新的环境和技术栈。 
 
 最后感谢 xxx 给我这次面试机会，我也十分希望能进入 xxx ，与公司共同成长进步！
 
@@ -274,7 +274,7 @@ HOTP (HMAC-Based One-Time Password) 是一种基于事件的 OTP(一次性密码
 3. 用户手动时间同步：如果用户的设备时间与标准时间偏差较大，应用程序可以提醒用户手动调整时间，或者提供一键同步时间的功能。
 4. 使用服务器端生成并发送 TOTP：由服务器生成 TOTP 并通过短信或电子邮件发送给用户。这样即使用户设备时间不准确，用户仍然可以收到正确的 TOTP。
 
-#### 开源经历中遇到的困难及解决方案
+#### 开源经历中遇到的困难及解决方案✅
 开发Casdoor Authenticator App过程中遇到一些困难。这包括以下几个方面的困难：
 1. 跨平台兼容性：由于应用需要同时支持iOS和Android平台，需要确保代码能够在这两个平台上顺畅运行，如何处理不同平台的差异成为一个重要问题。
 2. 登录：需要登录到Casdoor这个SSO系统。如何登录是一个问题。
@@ -336,6 +336,30 @@ HOTP (HMAC-Based One-Time Password) 是一种基于事件的 OTP(一次性密码
    - 缺点: 读写速度相对较慢，不适合分布式部署。
 
 如果是生产环境且需要分布式支持，Redis通常是最佳选择。如果只是开发环境或小规模应用，内存或文件存储可能就足够了。
+
+#### Casdoor SSO系统存了什么表，根据RBAC说
+Casdoor 是一个基于 OAuth2 和 RBAC(Role-Based Access Control)实现的 SSO(Single Sign-On)系统。根据 RBAC 模型，Casdoor 主要存储与用户认证和授权相关的数据表，这些表通常包括以下几类：
+
+1. 用户相关表(User-related tables)
+   - 用户表(User table)：存储用户的基本信息，如用户名、密码(通常加密存储)、邮箱、电话号码等。
+   - 第三方账户表(Third-party account table)：如果 Casdoor 集成了第三方 OAuth 提供商(如 GitHub、Google)，可能会存储用户的第三方账户信息。
+2. 角色相关表(Role-related tables)
+   - 角色表(Role table)：存储系统中的角色信息，例如管理员、普通用户等。每个角色包含一组权限。
+   - 用户-角色关联表(User-Role association table)：映射用户与其对应的角色，帮助系统确定用户的访问级别和权限。
+3. 权限相关表(Permission-related tables)
+   - 权限表(Permission table)：定义系统中的权限项，每个权限项对应一组操作(如读、写、执行)。
+   - 角色-权限关联表(Role-Permission association table)：将角色与权限绑定，确保不同角色拥有特定的权限集。
+4. 组织机构相关表(Organization-related tables)
+   - 组织表(Organization table)：存储组织或团队信息，支持多租户的场景下，用户可以属于不同的组织。
+   - 用户-组织关联表(User-Organization association table)：用户和组织之间的关联关系，用于多组织管理。
+5. 资源相关表(Resource-related tables)
+   - 资源表(Resource table)：存储受保护的资源，如应用、API、文件等，权限管理可以细化到具体资源的访问控制。
+6. 审计和日志表(Audit and logging tables)
+   - 审计表(Audit table)：记录用户的操作日志，帮助系统管理员审计访问情况。
+   - 登录历史表(Login history table)：记录用户的登录历史，包括登录时间、IP 地址、设备信息等。
+
+Casdoor 的数据模型围绕用户、角色、权限以及资源等核心实体构建，符合 RBAC 的基本原则。
+
 
 #### expo框架
 Expo 是一个基于 React Native 的开发框架，它提供了一整套开发工具和服务，旨在简化跨平台移动应用的开发过程。Expo 让开发者无需设置复杂的开发环境，也不需要直接接触原生代码，就能快速构建和部署 iOS 和 Android 应用。
@@ -447,15 +471,17 @@ Casdoor单点登录系统⼤前端项⽬包括ios、flutter、uinapp、⼩程序
 > 3. 在秒杀业务中，采用乐观锁解决库存超卖问题；使用Redisson分布式锁解决集群模式下的一人一单问题；使用Stream消息队列实现异步秒杀优化，将业务接口的平均响应时间由250ms优化至110ms。
 > 4. 使用Redis各种数据结构实现点赞排行榜(ZSet)、附近商户(GEO)、每日签到(BitMap)等功能。
 
-1. 用Redis存储token、验证码，解决集群的session共享问题；通过ThreadLocal配合拦截器进行token校验，优化鉴权逻辑。
+#### 1
+用Redis存储token、验证码，解决集群的session共享问题；通过ThreadLocal配合拦截器进行token校验，优化鉴权逻辑。
    - 在分布式集群环境中，多个服务节点可能处理同一用户的请求。然而多个Tomcat服务器并不共享session存储空间，Redis作为集中式的存储，可以确保各个节点都能访问到相同session数据。在Redis中，将用户token作为key，用户信息作为value存储，实现session共享。前端将token存放入`authorization`头部，后端通过拦截器校验token，将头部中的token与Redis中的token进行比对，实现用户身份验证。
    - `ThreadLocal` 是一个线程内部的数据存储类，可以在每个线程中创建一个变量副本，各个线程之间的数据互不干扰。可以使用 `get()` 和 `set()` 来修改或者获取默认值，这样可以实现线程之间的信息共享。将用户信息存储在`ThreadLocal`中，通过拦截器获取用户信息，实现鉴权逻辑。
-2. 针对商铺查询，采用旁路缓存模式解决缓存与数据库双写一致性问题，并解决缓存查询中出现的缓存穿透、缓存雪崩、缓存击穿问题。
+#### 2
+针对商铺查询，采用旁路缓存模式解决缓存与数据库双写一致性问题，并解决缓存查询中出现的缓存穿透、缓存雪崩、缓存击穿问题。
    - 旁路缓存模式适合读请求比较多的场景，该模式下服务端需要同时维系 db 和 cache，并且是以 db 的结果为准。
    - 采用缓存空对象的方式来解决缓存穿透问题。
    - 给不同的key设置的过期时间添加随机值，解决缓存雪崩问题。
    - 互斥锁/分布式锁：使用SETNX命令 + 设置过期时间作为互斥锁来解决缓存击穿问题。确保了数据的一致性，但是性能会收到一定影响。逻辑过期时间：在原有数据基础上添加一个过期时间字段。通过对比当前时间和逻辑过期时间，判断缓存是否过期。当缓存过期时，先使用过期的旧数据，然后再异步更新缓存。
-3. 
+#### 3
    - 在秒杀业务中，采用乐观锁解决库存超卖问题；
      - 采用CAS方法实现乐观锁，即将库存本身作为版本号，每次更新库存时，先查询当前版本号，然后更新库存时带上版本号，如果版本号一致，则更新成功，否则更新失败。
    - 使用Redisson分布式锁解决集群模式下的一人一单问题；
@@ -463,7 +489,8 @@ Casdoor单点登录系统⼤前端项⽬包括ios、flutter、uinapp、⼩程序
      - 使用Redisson中的分布式锁：1. 创建锁对象`getLock()` 2. `tryLock()`方法获取锁 3. `unlock()`方法释放锁
    - 使用Stream消息队列实现异步秒杀优化，将业务接口的平均响应时间由250ms优化至110ms。
      - 异步秒杀的核心是减库存和创建订单这种耗时多的分离出来，单独安排一个线程去执行，这样可以提高接口的响应速度。
-4. 使用Redis各种数据结构实现点赞排行榜(ZSet)、附近商户(GEO)、每日签到(BitMap)等功能。
+#### 4
+使用Redis各种数据结构实现点赞排行榜(ZSet)、附近商户(GEO)、每日签到(BitMap)等功能。
    - 点赞排行榜：使用ZSet有序集合存储点赞数，将用户id作为key，将点赞时刻的时间戳作为score，根据点赞时间实现排行榜。
    - 附近商户：使用GEO地理位置数据结构存储商户的经纬度信息，根据用户经纬度，将商户按照距离用户的距离进行排序，实现附近商户功能。
    - 每日签到：使用BitMap位图存储用户签到信息，将用户id和当前年月作为key，将签到日期作为offset，用户签到时将对应offset位置的bit设置为1，实现每日签到功能。
@@ -497,7 +524,7 @@ Casdoor单点登录系统⼤前端项⽬包括ios、flutter、uinapp、⼩程序
 
 1. 根据id查询优惠卷信息
 2. 秒杀是否开始
-3. 判断秒杀库存是否足够(Lua脚本)
+3. 判断秒杀库存是否足够(Lua脚本，确保操作原子性)
 4. 校验是否是一人一单(Lua脚本)
 5. 扣减库存(Lua脚本)，并将当前用户id存入优惠券的set集合中
 6. 将优惠券id、用户id和订单id放入Stream消息队列中，将减库存和创建订单这种耗时多的分离出来，单独安排一个线程去执行，实现异步下单。
@@ -677,6 +704,8 @@ Casdoor单点登录系统⼤前端项⽬包括ios、flutter、uinapp、⼩程序
 缓存雪崩是缓存在同一时间大面积的失效或者是Redis宕机，导致大量的请求都直接落到了数据库上，对数据库造成了巨大的压力。 这就好比雪崩一样，摧枯拉朽之势，数据库的压力可想而知，可能直接就被这么多请求弄宕机了。
 
 缓存服务宕机也会导致缓存雪崩现象，导致所有的请求都落到了数据库上。
+
+当有网络波动的时候，请求进行重试也可能会导致缓存雪崩。
 
 **举例**
 数据库中的大量数据在同一时间过期，这个时候突然有大量的请求需要访问这些过期的数据。这就导致大量的请求直接落到数据库上，对数据库造成了巨大的压力。
@@ -858,6 +887,12 @@ WebSocket 的常见应用场景：视频弹幕、实时消息推送、实时游�
 - WebSocket 通信数据格式比较轻量，用于协议控制的数据包头部相对较小，而 HTTP 通信每次都要携带完整的头部，网络开销较大。
 - WebSocket 支持扩展，可以自定义协议，HTTP 不支持扩展。
 
+#### 为什么采用WebSocket而不是Socket实现用户催单
+主要是因为 WebSocket 在实时通信方面比 HTTP 更加高效和适合。
+- 实时性需求：催单和来单提醒都要求信息能够及时送达。如果使用传统的 HTTP 请求，服务端需要周期性地轮询客户端，客户端才能接收到新信息。这样会产生延迟，不能保证实时性。而 WebSocket 是一个全双工通信协议，一旦连接建立，服务端可以随时主动向客户端推送消息，保证消息能够即时到达。
+- 减少带宽和资源消耗：HTTP 是无状态的协议，每次请求都要重新建立连接、发送头信息等，开销较大。如果使用 HTTP 轮询，客户端需要频繁发起请求，服务器也需要频繁处理这些请求，造成大量的资源浪费。而 WebSocket 只需要一次握手，连接建立后可以持续通信，减少了不必要的连接开销和网络带宽消耗。
+- 扩展性和响应速度：对于高并发、实时性要求高的场景，WebSocket 由于减少了频繁的请求建立和解析，能提供更好的扩展性和更快的响应速度。这对于外卖平台在高峰期的负载管理也非常重要。
+
 #### WebSocket工作流程
 1. 客户端向服务器发起一个 HTTP 请求，请求头中包含 `Upgrade: websocket` 和 `Sec-WebSocket-Key`等字段，表示要求升级协议为 WebSocket。
 2. 服务器收到请求后，会进行协议升级，如果支持 WebSocket 协议，将回复`HTTP 101`状态码，响应头中包含`Upgrade: websocket`和`Sec-WebSocket-Accept:xxx`等字段，表示升级成功。
@@ -1022,6 +1057,33 @@ Java 和 C++ 都是面向对象的语言，都支持封装、继承和多态，�
 - 默认值：成员变量包装类型不赋值就是 `null` ，而基本类型有默认值且不是 `null`。
 - 比较方式：对于基本数据类型来说，`==` 比较的是值。对于包装数据类型来说，`==` 比较的是对象的内存地址。所有整型包装类对象之间值的比较，全部使用 `equals()` 方法。
 
+### 基本数据类型/引用类型区别
+1. **存储位置**：
+   - **基本类型**：直接在栈(stack)内存中分配空间，存储的是实际的值，因此访问速度较快。
+   - **引用类型**：在栈中存储对象的引用(地址)，而实际的数据存储在堆(heap)内存中。引用类型包括类、接口、数组等。
+2. **内存开销**：
+   - **基本类型**：占用固定的内存空间，例如`int`为4字节，`float`为4字节。
+   - **引用类型**：因为包含了对象的引用和对象本身，占用的内存相对更大，且每个对象的内存大小不固定。
+3. **默认值**：
+   - **基本类型**：各类型都有默认值，如`int`的默认值是0，`boolean`的默认值是`false`。
+   - **引用类型**：默认值为`null`，表示没有指向任何对象。
+4. **数据操作**：
+   - **基本类型**：存储的是值本身，直接对值进行操作。
+   - **引用类型**：引用类型存储的是对象的地址，通过该地址可以访问和操作对象的成员变量和方法。
+5. **传值方式**：
+   - **基本类型**：在方法调用中传递的是值的副本，不会影响原变量。
+   - **引用类型**：传递的是对象的引用，方法中对对象的操作会影响原对象。
+6. **线程安全性**：
+   - **基本类型**：因为其值不可变且存储在栈中，一般是线程安全的。
+   - **引用类型**：堆内存中的对象需要考虑线程安全问题，因为多个线程可能共享同一对象。
+
+### 为什么char不能存储全部的中文
+1. 字符集范围限制：Java中的 `char` 类型使用16位Unicode编码，最多只能表示65536个字符。虽然中文字符大部分可以通过基本的Unicode平面(即 `\u0000` 到 `\uFFFF`)表示，但并不是所有的中文字符都在这个范围内。
+2. 汉字数量大：中文字符的数量远远超过65536个，尤其是一些冷僻字和扩展字符集(例如扩展A、B、C、D区的汉字)，这些字符超出了 `char` 类型所能表示的范围。
+3. UTF-16编码和代理对(Surrogate Pair)：为了表示超出基本多语言平面(BMP)范围的字符，Java使用UTF-16编码中的“代理对”机制。通过代理对，可以用两个 `char` 来表示一个字符。这种方法允许编码更多的字符，但每个代理对仍然需要两个 `char`，这意味着不能直接用一个 `char` 存储所有中文字符。
+
+`char`类型本身无法存储所有中文字符，因为它只能表示基本多语言平面(BMP)中的字符，而更多的中文字符(如扩展区的字符)需要用UTF-16的代理对(由两个 `char` 组成)表示。如果要处理所有中文字符，应该使用 `String` 类型，它能够存储一个或多个 `char`(包括代理对)并正确处理所有Unicode字符。
+
 ### 包装类的缓存机制
 Java 基本数据类型的包装类型的大部分都用到了缓存机制来提升性能。`Byte`、`Short`、`Integer`、`Long` 这 4 种包装类默认创建了数值 [-128，127] 的相应类型的缓存数据，`Character` 创建了数值在 [0,127] 范围的缓存数据，`Boolean` 直接返回 `True` or `False`。
 
@@ -1049,12 +1111,144 @@ int n = i;   //拆箱
 
 静态变量是被 `static` 关键字修饰的变量。它可以被类的所有实例共享，无论一个类创建了多少个对象，它们都共享同一份静态变量。也就是说，即使创建多个对象，静态变量只会被分配一次内存，这样可以节省内存。
 
+### 封装/继承/多态
+在Java中，封装、继承和多态是面向对象编程的三个核心特性。它们帮助开发者更好地组织代码，提高代码的可重用性、可维护性和可扩展性。以下是这三个概念的简要介绍：
+
+### 封装
+封装是指将对象的状态(属性)和行为(方法)绑定在一起，并隐藏对象的内部实现细节，只暴露必要的接口(方法)。通过封装，程序员可以控制对对象数据的访问和修改，从而实现数据保护和安全性。
+
+**实现封装的关键点：**
+- **私有化成员变量**：使用`private`访问修饰符将类的成员变量隐藏。
+- **提供公有的访问方法**：使用`public`访问修饰符提供公共的getter和setter方法来访问和修改私有变量。
+
+```java
+public class Person {
+    // 私有成员变量
+    private String name;
+    private int age;
+
+    // 公有的getter方法
+    public String getName() {
+        return name;
+    }
+
+    // 公有的setter方法
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // 公有的getter方法
+    public int getAge() {
+        return age;
+    }
+
+    // 公有的setter方法
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+```
+
+#### 继承
+继承是指一个类可以继承另一个类的属性和方法，从而实现代码的复用。Java通过`extends`关键字来实现继承。子类继承父类后，可以直接使用父类的方法和变量，当然也可以重写(Override)父类的方法，或者添加新的方法和属性。
+
+**继承的关键点：**
+- 子类继承父类，自动拥有父类的成员变量和方法(除了`private`成员)。
+- 子类可以重写父类的方法来实现自己的版本。
+- Java支持单继承，一个类只能继承一个直接父类。
+
+```java
+class Animal {
+    void speak() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void speak() {
+        System.out.println("Dog barks");
+    }
+}
+```
+
+#### 多态
+多态是指一个对象可以表现为多种类型。具体来说，子类对象可以赋值给父类的引用变量，调用方法时会根据对象的实际类型来执行相应的方法。多态可以通过**方法重写**和**方法重载**来实现。
+
+**多态的关键点：**
+- 方法重写：子类重新实现父类的方法，父类引用指向子类对象时，调用的是子类的重写方法。
+- 方法重载：在同一个类中，方法名相同，但参数不同(可以是参数类型、个数或顺序不同)，通过参数来区分不同的方法版本。
+
+```java
+class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Bark");
+    }
+}
+
+class Cat extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Meow");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Animal myAnimal = new Animal();  // Animal对象
+        Animal myDog = new Dog();        // Dog对象，但引用类型是Animal
+        Animal myCat = new Cat();        // Cat对象，但引用类型是Animal
+
+        myAnimal.sound();  // 输出 "Animal sound"
+        myDog.sound();     // 输出 "Bark"
+        myCat.sound();     // 输出 "Meow"
+    }
+}
+```
+
+**总结：**
+- **封装**通过隐藏对象的内部实现细节，提供安全和接口访问。
+- **继承**通过父类共享属性和方法来实现代码复用，并能在子类中进一步扩展或修改。
+- **多态**使得同一个方法调用可以有不同的表现形式(不同的子类实现)。
+
+这些特性使得Java面向对象的设计更加灵活和强大。
+
 ### 重载和重写
 - 重载就是同名的方法能够根据输入数据的不同，做出不同的处理。重载发生在同一个类中(或者父类和子类之间)，方法名必须相同，参数类型不同、个数不同、顺序不同，方法返回值和访问修饰符可以不同。
 - 重写发生在运行期，是子类对父类的允许访问的方法的实现过程进行重新编写。
   - 方法名、参数列表必须相同，子类方法返回值类型应比父类方法返回值类型更小或相等，抛出的异常范围小于等于父类，访问修饰符范围大于等于父类。
   - 如果父类方法访问修饰符为 private/final/static 则子类就不能重写该方法，但是被 static 修饰的方法能够被再次声明。
   - 构造方法无法被重写
+
+### Java多态实现方式
+在Java中，多态的实现方式主要有以下几种：
+
+1. **方法重载(Overloading)**
+   - 实现方式：在同一个类中，方法名相同但参数列表不同。
+   - 多态类型：**编译时多态**。
+   - 说明：编译器在编译时根据参数列表的不同决定调用哪个方法，因此属于编译时多态。
+
+2. **方法重写(Overriding)**
+   - 实现方式：子类重写父类的某个方法，即在子类中定义了与父类中方法签名相同的方法。
+   - 多态类型：**运行时多态**。
+   - 说明：在程序运行过程中，通过父类引用调用子类的实现，具体调用哪个方法在运行时动态绑定。
+
+3. **接口实现**
+   - 实现方式：类实现接口并定义接口中声明的方法。
+   - 多态类型：**运行时多态**。
+   - 说明：接口多态是通过子类实现接口方法的具体实现来完成的。调用时，通过接口引用调用实现类的具体方法，也属于运行时多态。
+
+- **编译时多态**：方法重载。
+- **运行时多态**：方法重写、接口实现。
+
+运行时多态是Java中更常用的多态形式，通常用于父类或接口的引用指向子类实例，从而实现灵活的调用。
 
 ### 面向对象和面向过程区别
 两者的主要区别在于解决问题的方式不同：
@@ -1073,6 +1267,8 @@ https://learn.skyofit.com/archives/351
 - 抽象类允许有成员变量，接口中只允许有常量(默认是`public static final`类型)。
 - 抽象类中的抽象方法可以有访问修饰符(可以是`public`、`protected`、`private`)，接口中的抽象方法默认是`public`类型。
 - 抽象类可以有 `main` 方法，接口中不能有 `main` 方法。
+
+接口只能继承接口，接口不能继承抽象类和普通类；抽象类也可以继承接口；抽象类单继承，接口多继承。
 
 ### 堆和栈的区别
 https://blog.csdn.net/qq_44944221/article/details/126692973
@@ -1125,103 +1321,6 @@ public final void wait() throws InterruptedException
 
 // 实例被垃圾回收器回收的时候触发的操作
 protected void finalize() throws Throwable { }
-```
-
-### 单例模式
-- 饿汉式：饿汉式单例模式在类加载时就完成实例化，线程安全，简单但可能会造成资源浪费。
-- 懒汉式：懒汉式单例模式在第一次调用 `getInstance` 方法时创建实例，线程不安全，需要额外处理同步。
-- 线程安全的懒汉式
-  - 同步方法：在 `getInstance` 方法上加 `synchronized` 关键字，保证线程安全，但是效率低。
-  - 双重检查锁定：在 `getInstance` 方法内部进行双重检查，保证只有第一次调用时才会加锁，提高效率。
-- 静态内部类：利用静态内部类来实现懒加载和线程安全。
-- 枚举：枚举实现单例模式是最简洁、安全的实现方式，可以防止反射和序列化攻击。
-
-
-```java
-// 饿汉式
-public class Singleton {
-    private static final Singleton instance = new Singleton();
-    private Singleton() {}
-    public static Singleton getInstance() {
-        return instance;
-    }
-}
-
-// 懒汉式
-public class Singleton {
-    private static Singleton instance;
-    private Singleton() {}
-    public static Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
-    }
-}
-
-// 线程安全的懒汉式-同步方法
-public class Singleton {
-    private static Singleton instance;
-    private Singleton() {}
-    public static synchronized Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
-    }
-}
-
-// 线程安全的懒汉式-双重检查锁定
-public class Singleton {
-    // 单例模式中用于保存实例的字段，被声明为volatile，确保对该变量的写入操作会立即反映到所有线程中，这样可以防止可能发生的指令重排序问题。
-    private volatile static Singleton uniqueInstance;
-    // 私有的构造方法确保该类不能在外部被初始化，只能通过getUniqueInstance()方法获取实例
-    private Singleton() {
-    }
-    // 双重检查锁定的机制，实现对外提供的获取单例实例的方法。
-    public static Singleton getInstance() {
-        // 第一层检查：首先检查 uniqueInstance 是否为 null。如果不是 null，意味着实例已经被创建，则直接返回这个实例。
-        if (uniqueInstance == null) {
-            // 类对象加锁，表示进入同步代码前要获得 Singleton类 的锁
-            synchronized (Singleton.class) {
-                // 第二层检查：在同步代码块内再次检查 uniqueInstance 是否为 null。
-                // 这种双重检查是为了在等待锁的线程获取到锁后再次确认实例是否已经被创建，因为在等待锁的过程中可能有其他线程已经创建了实例。
-                if (uniqueInstance == null) {
-                    uniqueInstance = new Singleton();
-                }
-            }
-        }
-        return uniqueInstance;
-    }
-    public static void main(String[] args) {
-        System.out.println(getInstance());
-    }
-
-}
-
-// 静态内部类
-public class Singleton {
-    private Singleton() {}
-    private static class SingletonHolder {
-        private static final Singleton INSTANCE = new Singleton();
-    }
-    public static Singleton getInstance() {
-        return SingletonHolder.INSTANCE;
-    }
-}
-
-// 枚举
-public enum Singleton {
-    // 注意 上面不是 class 是 enum
-    INSTANCE;
-    public void someMethod() {
-        // do something
-    }
-    public static void main(String[] args) {
-        Singelton singleton = Singleton.INSTANCE;
-        singleton.someMethod();
-    }
-}
 ```
 
 ### 形参&实参
@@ -1282,10 +1381,59 @@ Java中“+”和“+=” 实际上是通过 `StringBuilder` 调用 `append()` �
 `Exception`： 程序本身可以处理的异常，可以通过 `catch` 来进行捕获。
 
 ### Checked/Unchecked异常
-- 受检查异常(`Checked Exception`)，在编译过程中，若受检查异常没有被 `catch` 或者 `throws` 关键字处理的话，就没法通过编译。
+### 运行时异常/非运行时异常
+- 受检查异常(`Checked Exception`)/非运行时异常：在编译过程中，若受检查异常没有被 `catch` 或者 `throws` 关键字处理的话，就没法通过编译。
   - 除了 `RuntimeException` 及其子类以外，其他的 `Exception` 类及其子类都属于受检查异常。常见的受检查异常有：`ClassNotFoundException`、`FileNotFoundException`、`SQLException` 等。
-- 不受检查异常(`Unchecked Exception`)，在编译过程中，即使不处理也可以正常通过编译。
+- 不受检查异常(`Unchecked Exception`)/运行时异常(`RuntimeException`)：在编译过程中，即使不处理也可以正常通过编译。
   - `RuntimeException` 及其子类属于不受检查异常。常见的不受检查异常有：`NullPointerException`、`ArrayIndexOutOfBoundsException`、`IllegalArgumentException` 等。
+
+### 如何自定义异常
+可以通过继承`Exception`或`RuntimeException`来创建自己的异常类。自定义异常可以帮助你在特定场景下捕获错误并提供更有意义的错误信息。
+
+**自定义非运行时异常**
+自定义**非运行时异常**(Checked Exception)，需要继承`Exception`类：
+```java
+public class MyCheckedException extends Exception {
+    public MyCheckedException(String message) {
+        super(message);  // 调用父类的构造函数
+    }
+}
+```
+使用示例：
+```java
+public class Test {
+    public static void main(String[] args) {
+        try {
+            throw new MyCheckedException("This is a custom checked exception.");
+        } catch (MyCheckedException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+```
+
+**自定义运行时异常**
+自定义**运行时异常**(Unchecked Exception)，需要继承`RuntimeException`类：
+```java
+public class MyRuntimeException extends RuntimeException {
+    public MyRuntimeException(String message) {
+        super(message);
+    }
+}
+```
+使用示例：
+```java
+public class Test {
+    public static void main(String[] args) {
+        throw new MyRuntimeException("This is a custom runtime exception.");
+    }
+}
+```
+
+**自定义异常的一些注意事项**
+- 构造函数：通常你会在自定义异常中定义一个带有错误消息的构造函数，这样在抛出异常时可以提供详细的错误信息。
+- Serializable：如果自定义异常需要在分布式系统中传输(如通过网络或存储到文件中)，考虑让异常类实现`Serializable`接口。
+- 语义化：设计自定义异常时，确保异常的名字和类型能够清楚地表达出错误的语义，使得代码更具可读性和可维护性。
 
 ### try-catch-finally
 `try`：用于捕获异常。其后可接零个或多个 `catch` 块，如果没有 `catch` 块，则必须跟一个 `finally` 块。
@@ -1407,6 +1555,103 @@ Java 设计模式是一种在软件开发中常用的解决特定问题的通用
     - `java.util.AbstractList`、`java.util.AbstractSet`：这些抽象类定义了集合的一些模板方法，具体的子类来实现具体的方法。
 
 这些设计模式的使用，使得JDK在设计和实现上更加灵活、可扩展且易于维护。这些模式不仅仅是代码结构的规范，它们还体现了面向对象设计的基本原则，如单一职责原则、开闭原则和依赖倒置原则。
+
+### 单例模式
+- 饿汉式：饿汉式单例模式在类加载时就完成实例化，线程安全，简单但可能会造成资源浪费。
+- 懒汉式：懒汉式单例模式在第一次调用 `getInstance` 方法时创建实例，线程不安全，需要额外处理同步。
+- 线程安全的懒汉式
+   - 同步方法：在 `getInstance` 方法上加 `synchronized` 关键字，保证线程安全，但是效率低。
+   - 双重检查锁定：在 `getInstance` 方法内部进行双重检查，保证只有第一次调用时才会加锁，提高效率。
+- 静态内部类：利用静态内部类来实现懒加载和线程安全。
+- 枚举：枚举实现单例模式是最简洁、安全的实现方式，可以防止反射和序列化攻击。
+
+
+```java
+// 饿汉式
+public class Singleton {
+    private static final Singleton instance = new Singleton();
+    private Singleton() {}
+    public static Singleton getInstance() {
+        return instance;
+    }
+}
+
+// 懒汉式
+public class Singleton {
+    private static Singleton instance;
+    private Singleton() {}
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+
+// 线程安全的懒汉式-同步方法
+public class Singleton {
+    private static Singleton instance;
+    private Singleton() {}
+    public static synchronized Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+
+// 线程安全的懒汉式-双重检查锁定
+public class Singleton {
+    // 单例模式中用于保存实例的字段，被声明为volatile，确保对该变量的写入操作会立即反映到所有线程中，这样可以防止可能发生的指令重排序问题。
+    private volatile static Singleton uniqueInstance;
+    // 私有的构造方法确保该类不能在外部被初始化，只能通过getUniqueInstance()方法获取实例
+    private Singleton() {
+    }
+    // 双重检查锁定的机制，实现对外提供的获取单例实例的方法。
+    public static Singleton getInstance() {
+        // 第一层检查：首先检查 uniqueInstance 是否为 null。如果不是 null，意味着实例已经被创建，则直接返回这个实例。
+        if (uniqueInstance == null) {
+            // 类对象加锁，表示进入同步代码前要获得 Singleton类 的锁
+            synchronized (Singleton.class) {
+                // 第二层检查：在同步代码块内再次检查 uniqueInstance 是否为 null。
+                // 这种双重检查是为了在等待锁的线程获取到锁后再次确认实例是否已经被创建，因为在等待锁的过程中可能有其他线程已经创建了实例。
+                if (uniqueInstance == null) {
+                    uniqueInstance = new Singleton();
+                }
+            }
+        }
+        return uniqueInstance;
+    }
+    public static void main(String[] args) {
+        System.out.println(getInstance());
+    }
+
+}
+
+// 静态内部类
+public class Singleton {
+    private Singleton() {}
+    private static class SingletonHolder {
+        private static final Singleton INSTANCE = new Singleton();
+    }
+    public static Singleton getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+}
+
+// 枚举
+public enum Singleton {
+    // 注意 上面不是 class 是 enum
+    INSTANCE;
+    public void someMethod() {
+        // do something
+    }
+    public static void main(String[] args) {
+        Singelton singleton = Singleton.INSTANCE;
+        singleton.someMethod();
+    }
+}
+```
 
 ### 内存溢出/内存泄露区别
 - 内存溢出(Memory Overflow)：内存溢出是指程序尝试使用超过其可用内存量的情况。这通常会导致程序崩溃或产生意外行为。内存溢出可以发生在堆栈或堆内存中。
@@ -2617,6 +2862,40 @@ pool.invoke(new RecursiveTask<Void>() {
 - 使用`execute()`时，未捕获异常导致线程终止，线程池创建新线程替代；
 - 使用`ExecutorService.submit()`时，异常被封装在`Future`中，线程继续复用。
 
+#### 线程池工作流程的公平性/非公平性
+
+**公平**与**非公平**主要是指任务调度的策略，尤其在高并发场景下会对性能和任务处理的公平性产生影响。
+
+- 公平模式：公平模式下，任务的执行顺序严格按照任务到达队列的顺序（FIFO，先入先出）处理。
+- 特点：
+  1. **严格顺序**：线程池从队列中按任务到达的时间顺序分配任务。
+  2. **公平性高**：每个任务被执行的机会均等，避免“饿死”现象（某些任务长期得不到执行）。
+  3. **性能稍低**：在公平模式下，需要更多的机制保证顺序性，可能导致额外的上下文切换和调度开销。
+- 适用场景：
+  - 对任务顺序有严格要求的场景：如交易处理、日志写入等。
+  - 对实时性要求不高的场景：如批量任务处理、非实时系统等。
+
+- 非公平模式：非公平模式下，线程池允许任务插队，优先将任务分配给空闲线程，而不完全按照任务的到达顺序。
+- 特点：
+  1. **性能更高**：线程池直接寻找可用线程执行任务，而无需严格排队，从而减少了调度开销。
+  2. **可能出现不公平**：有些任务可能会长时间得不到执行（即可能发生“饿死”现象）。
+  3. **灵活性强**：调度机制更加自由，适合高并发、对顺序要求不严格的场景。
+- 适用场景
+- 高吞吐量场景：如 Web 服务器请求处理、实时数据处理等。
+- 对任务顺序要求不高的场景：如异步任务处理、分布式系统中的并行计算等。
+
+Java 中的 `ThreadPoolExecutor` 默认采用非公平策略，除非使用自定义的任务队列或线程工厂。
+1. **公平性控制**：线程池调度中并没有直接的公平模式控制，但可以通过配合锁（如 `ReentrantLock` 的公平模式）或自定义任务队列来实现类似的公平性。
+2. **锁的公平与非公平**：`ReentrantLock` 提供了明确的公平模式选择：
+   - 公平锁：先等待的线程先获得锁。
+   - 非公平锁：当前线程尝试直接获得锁，如果失败再进入队列。
+3. **任务队列选择**：
+   - **FIFO 队列**（如 `LinkedBlockingQueue`）：天然具备公平性。
+   - **优先级队列**（如 `PriorityBlockingQueue`）：通过自定义排序规则，可以实现不同的公平或非公平策略。
+
+**总结**
+公平模式注重顺序，适合对任务调度有明确规则要求的场景；非公平模式更注重效率，在高并发情况下能够提高资源利用率。实际使用时需根据业务需求权衡选择合适的模式。
+
 #### 如何设定线程池大小
 > 注意，这里的线程池大小指的是最大线程数(`maximumPoolSize`)。
 
@@ -3205,14 +3484,14 @@ Java应用使用的内存不仅仅包括堆内存，还可能涉及以下几个�
 内存溢出(OutOfMemory，简称OOM)和GC频繁问题通常是由内存管理不当或资源消耗过大引发的。
 
 **常见OOM类型：**
-- **`java.lang.OutOfMemoryError: Java heap space`**：堆内存溢出，通常由于对象过多或长时间未被释放。
-- **`java.lang.OutOfMemoryError: PermGen space`**(JDK 8以前)或 **`java.lang.OutOfMemoryError: Metaspace`**(JDK 8及以后)：通常由类加载过多、动态代理生成类过多等引起。
-- **`java.lang.OutOfMemoryError: GC overhead limit exceeded`**：通常是GC频繁发生，且每次回收的内存不足，表明应用内存压力较大。
+- `java.lang.OutOfMemoryError: Java heap space`：堆内存溢出，通常由于对象过多或长时间未被释放。
+- `java.lang.OutOfMemoryError: PermGen space`(JDK 8以前)或 `java.lang.OutOfMemoryError: Metaspace`(JDK 8及以后)：通常由类加载过多、动态代理生成类过多等引起。
+- `java.lang.OutOfMemoryError: GC overhead limit exceeded`：通常是GC频繁发生，且每次回收的内存不足，表明应用内存压力较大。
 
 **排查OOM异常的方法：**
-- **查看堆转储文件(Heap Dump)**：
+- 查看堆转储文件(Heap Dump)：
   使用`-XX:+HeapDumpOnOutOfMemoryError`参数启动Java应用，当发生OOM时自动生成Heap Dump文件。可以使用工具如MAT(Memory Analyzer Tool)分析堆内存中对象的分布，查看是否有内存泄漏或者某类对象占用了大量内存。
-- **分析代码中的内存泄漏**：
+- 分析代码中的内存泄漏：
   检查是否存在对对象的错误持有(如静态集合长时间持有对象引用)，或者对象生命周期不当管理，导致垃圾回收器无法及时回收内存。
 
 排查GC频繁的问题：GC(垃圾回收)频繁，通常意味着Java应用的内存回收压力较大。
@@ -3249,6 +3528,20 @@ Java应用使用的内存不仅仅包括堆内存，还可能涉及以下几个�
 - 调整JVM参数：通过调整JVM参数来优化内存和GC的表现。例如：
   - `-XX:+UseStringDeduplication`：减少重复字符串的内存占用(仅在G1 GC下有效)。
   - `-XX:+UseCompressedOops`：在64位JVM中压缩对象指针，减少内存占用。
+
+### 什么操作会触发堆的初始化
+堆的初始化主要依赖于JVM的启动和对象的动态创建，通常这些操作会在程序的初始阶段就发生。
+
+1. **JVM启动时初始化堆**：
+   - 当Java程序启动时，JVM会根据启动参数(如 `-Xmx` 和 `-Xms`)为堆分配内存空间。JVM使用默认堆大小或者根据指定的堆大小来初始化堆。
+   - `-Xms`：设置初始堆大小。
+   - `-Xmx`：设置堆的最大大小。
+2. **第一次创建对象时**：
+   - 在程序运行时，当你第一次使用 `new` 操作符创建对象时，堆空间会被分配并初始化。堆是用来存储动态分配的对象的，所以当你实例化一个对象(如 `new MyClass()`)时，堆会分配内存空间来存储该对象。
+3. **类加载时触发静态字段初始化**：
+   - Java中类的静态字段如果是对象引用(例如 `static MyClass obj = new MyClass();`)，则会在类加载时触发堆的初始化。类加载的过程中，JVM会为这些静态字段分配堆空间。
+4. **垃圾回收触发时**：
+   - 虽然垃圾回收本身并不会直接初始化堆，但它会影响堆的管理。例如，当堆中的对象被回收时，JVM会根据当前的内存需求可能触发堆的扩展或收缩。垃圾回收可能会清理堆中不再使用的对象，从而影响堆的内存分配。
 
 ### Java的各种变量存放在哪里
 1. 栈：
@@ -3488,7 +3781,7 @@ Java中的引用类型主要分为强引用、软引用、弱引用和虚引用�
 
 其中验证、准备、解析 3 部分统称为连接。
 
-### 类加载过程
+### 类加载过程✅
 分三步：加载、连接(验证、准备、解析)、初始化。
 
 **加载**
@@ -3623,21 +3916,21 @@ Java 分为字符流和字节流是为了更好地处理不同类型的数据、
 这种方式减少了线程的阻塞时间，并能高效处理大量的并发请求。
 
 ### select/poll/epoll
-`select`、`poll` 和 `epoll` 是三种用于多路复用 I/O（I/O multiplexing）的机制，用于处理多个文件描述符（file descriptors, FD），使得应用程序可以同时监控多个 I/O事件（如读写操作）。这三者的主要区别在于它们的性能、支持的文件描述符数量和底层数据结构。
+`select`、`poll` 和 `epoll` 是三种用于多路复用 I/O(I/O multiplexing)的机制，用于处理多个文件描述符(file descriptors, FD)，使得应用程序可以同时监控多个 I/O事件(如读写操作)。这三者的主要区别在于它们的性能、支持的文件描述符数量和底层数据结构。
 
 #### select
 `select` 是最早的 I/O 多路复用机制，使用起来较为简单，但存在性能问题。
 
 **数据结构**
-- `select` 的核心数据结构是**三个位图（bitmask）**，每个位图用来存储不同的文件描述符集合：
+- `select` 的核心数据结构是**三个位图(bitmask)**，每个位图用来存储不同的文件描述符集合：
    - `fd_set readfds`: 监控是否可以读取数据。
    - `fd_set writefds`: 监控是否可以写入数据。
-   - `fd_set exceptfds`: 监控异常情况（如带外数据）。
+   - `fd_set exceptfds`: 监控异常情况(如带外数据)。
 
 `fd_set` 本质上是一个固定大小的数组，其中每一位表示一个文件描述符的状态。文件描述符的最大值由宏 `FD_SETSIZE` 定义，一般是 1024 个。
 
 **工作流程**
-1. 应用程序通过设置 `fd_set` 中感兴趣的文件描述符（`FD_SET(fd, &readfds)` 等）来指定要监控的文件描述符。
+1. 应用程序通过设置 `fd_set` 中感兴趣的文件描述符(`FD_SET(fd, &readfds)` 等)来指定要监控的文件描述符。
 2. 调用 `select` 函数，内核会在**所有文件描述符上轮询**，查看哪些文件描述符有事件发生。
 3. 当 `select` 返回时，应用程序需要手动遍历所有文件描述符来判断哪个文件描述符已准备好。
 
