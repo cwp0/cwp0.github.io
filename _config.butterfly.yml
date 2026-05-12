@@ -3,7 +3,7 @@
 # --------------------------------------
 
 nav:
-  logo: /img/assets/头像.JPG
+  logo: /img/assets/头像.png
   display_title: true
   fixed: true # fixed navigation bar
 
@@ -42,11 +42,11 @@ social:
 # --------------------------------------
 
 # Favicon（網站圖標）
-favicon: /img/assets/头像.JPG
+favicon: /img/assets/头像.png
 
 # Avatar (頭像)
 avatar:
-  img: /img/assets/头像.JPG
+  img: /img/assets/头像.png
   effect: false
 
 # Disable all banner image
