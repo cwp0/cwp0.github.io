@@ -1,0 +1,1745 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>测开面经 | cwp0</title><meta name="author" content="cwp0"><meta name="copyright" content="cwp0"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="测开面经">
+<meta property="og:type" content="article">
+<meta property="og:title" content="测开面经">
+<meta property="og:url" content="https://cwp0.github.io/posts/17768.html">
+<meta property="og:site_name" content="cwp0">
+<meta property="og:description" content="测开面经">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/drCF3NnMKboz1AQ.png">
+<meta property="article:published_time" content="2024-05-27T12:15:34.000Z">
+<meta property="article:modified_time" content="2024-06-25T08:47:53.000Z">
+<meta property="article:author" content="cwp0">
+<meta property="article:tag" content="面经">
+<meta property="article:tag" content="测试开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/05/27/drCF3NnMKboz1AQ.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "测开面经",
+  "url": "https://cwp0.github.io/posts/17768.html",
+  "image": "https://s2.loli.net/2024/05/27/drCF3NnMKboz1AQ.png",
+  "datePublished": "2024-05-27T12:15:34.000Z",
+  "dateModified": "2024-06-25T08:47:53.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "cwp0",
+      "url": "https://cwp0.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/assets/%E5%A4%B4%E5%83%8F.png"><link rel="canonical" href="https://cwp0.github.io/posts/17768.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":66,"languages":{"author":"Author: cwp0","link":"Link: ","source":"Source: cwp0","info":"Copyright belongs to the author. For commercial use, please contact the author for authorization. For non-commercial use, please indicate the source."}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '测开面经',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/url(/img/background/%E6%A8%B1%E8%8A%B12.jpg));"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://s2.loli.net/2024/05/27/BLZiDeVdQokmptg.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/assets/%E5%A4%B4%E5%83%8F.png" alt="Logo"><span class="site-name">cwp0</span></a><a class="nav-page-title" href="/"><span class="site-name">测开面经</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">测开面经</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-05-27T12:15:34.000Z" title="Created 2024-05-27 20:15:34">2024-05-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-06-25T08:47:53.000Z" title="Updated 2024-06-25 16:47:53">2024-06-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">14.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>42mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2024-06-25 16:47:53&quot;}" hidden></div><blockquote>
+<p>注：下面内容一部分来自于我舍友的博客</p>
+</blockquote>
+<h3 id="测开自我介绍"><a href="#测开自我介绍" class="headerlink" title="测开自我介绍"></a>测开自我介绍</h3><p>面试官您好，我叫陈温鹏，就读于南京理工大学软件工程专业，学位是学硕，这次应聘的是 测试开发岗位。</p>
+<p>我呢，研一的时候积极参加开源社区建设，先参加了Casbin社区一个线上实习，担任社区维护者，日常工作会解决社区 issue，跟踪解决用户需求，修bug以及完善相关文档；然后在研一暑假三个月时间中了一个中科院和 casbin 社区联合举办的一个开源项目，主要的工作是完善社区整个大前端系统，包括 web，移动端功能完善，以及为社区开发了一款支持通用2FA的移动端app。除此之外，我还参与过国家电网经济研究院的一个项目。 这几段项目实习经历锻炼了我文档阅读、编写的能力，并在代码规范、开发流程等技能上获得提升。</p>
+<p>其实在开源项目也做过关于测试相关的工作，也激发了我对测试开发的兴趣，所以就应聘了测试开发这个岗位。</p>
+<p>然后我呢，我评价觉得自己是一个学习能力很强的人，可以比较快速的学习并适应新的环境和技术栈。 最后感谢 饿了么 给我这次面试机会，我也十分希望能进入 饿了么 ，与公司共同成长进步！</p>
+<h3 id="为什么选择测开"><a href="#为什么选择测开" class="headerlink" title="为什么选择测开"></a>为什么选择测开</h3><p>之前在社区的一个开发经历让我对软件质量和稳定性产生了兴趣，认为测试开发是保证软件质量的重要环节。我认为测试开发不仅仅是为了找到软件中的bug，更是为了确保软件在各种场景下都能稳定运行，从而提升用户体验。这其实是软件开发中非常重要的一环。</p>
+<blockquote>
+<p>需要与开发人员紧密合作，及时沟通和反馈，确保开发进度和质量。</p>
+</blockquote>
+<h3 id="做过哪些关于测开的工作"><a href="#做过哪些关于测开的工作" class="headerlink" title="做过哪些关于测开的工作"></a>做过哪些关于测开的工作</h3><p>之前负责给社区写一个适配器。</p>
+<p>Casbin是一个灵活强大的权限访问控制库，PyCasbin 是 Python 版本的，广泛用于管理应用程序中的权限。为了更好地集成数据库操作，PyCasbin 提供了一些适配器，其中包括异步 <code>SQLAlchemy</code> 适配器。这种适配器允许在异步环境中使用 <code>SQLAlchemy</code> 作为持久化层，管理 Casbin 的策略存储。</p>
+<p>主要工作：</p>
+<ul>
+<li>适配器实现：编写了SQLAlchemy适配器，使得Casbin可以使用SQLAlchemy进行权限管理存储。</li>
+<li>测试覆盖：编写了全面的测试用例，覆盖了适配器的所有主要功能，包括政策的添加、删除、更新和过滤。</li>
+</ul>
+<p>技术细节</p>
+<ul>
+<li>测试框架：使用了<code>unittest</code>库，并扩展了<code>IsolatedAsyncioTestCase</code>来测试异步功能。 </li>
+<li>测试用例设计：这个适配器需要在异步环境下持久管理 Casbin 策略，所以需要对策略的增删改查、保存、以及策略过滤查找等进行测试。测试用例保证了覆盖基本功能测试。<ul>
+<li>测试添加一个策略，添加多个策略</li>
+<li>测试删除一个策略，删除多个策略，删除经过过滤的策略</li>
+<li>测试更新一个策略，测试更新多个策略。</li>
+</ul>
+</li>
+</ul>
+<p>还有就是我在社区中自己做的每个 sdk，其中都使用 Github workflow进行持续集成和部署，然后也可以编写一些这种自动化脚本。</p>
+<h3 id="测试类型分类"><a href="#测试类型分类" class="headerlink" title="测试类型分类"></a>测试类型分类</h3><ul>
+<li>单元测试(Unit Testing)<ul>
+<li>定义：对软件中的最小可测试单元进行验证，通常是函数或方法。</li>
+<li>目的：确保每个单元独立工作正确。</li>
+</ul>
+</li>
+<li>集成测试(Integration Testing)<ul>
+<li>定义：在单元测试的基础上，测试多个单元组合在一起后的功能。</li>
+<li>目的：确保模块之间的交互正确。</li>
+</ul>
+</li>
+<li>系统测试(System Testing)<ul>
+<li>定义：在一个完整的系统环境中进行测试。</li>
+<li>目的：验证整个系统是否满足需求。</li>
+</ul>
+</li>
+<li>验收测试(Acceptance Testing)<ul>
+<li>定义：由客户或终端用户进行，确认系统满足业务需求。</li>
+<li>目的：确保软件的最终产品符合预期用途。</li>
+</ul>
+</li>
+</ul>
+<h3 id="测试方法分类"><a href="#测试方法分类" class="headerlink" title="测试方法分类"></a>测试方法分类</h3><ul>
+<li>黑盒测试：测试者不需要了解内部代码结构，只测试输入和输出。<ul>
+<li>技术：等价类划分、边界值分析、决策表。</li>
+<li>优点：基于功能需求，容易理解和实施。</li>
+<li>缺点：无法覆盖内部实现细节。</li>
+</ul>
+</li>
+<li>白盒测试：测试者需要了解内部代码结构，根据代码逻辑进行测试。软件代码改变，测试用例也需要改变。<ul>
+<li>技术：语句覆盖、分支覆盖、路径覆盖。</li>
+<li>优点：可以发现代码中的隐含错误和缺陷。</li>
+<li>缺点：需要较高的技术知识，测试维护成本高。</li>
+</ul>
+</li>
+<li>灰盒测试：结合黑盒和白盒测试，测试者了解部分内部结构。<ul>
+<li>技术：使用部分代码知识进行测试，如数据库图表。</li>
+<li>优点：平衡内部和外部测试，能够发现更多缺陷。</li>
+<li>缺点：复杂度高，需要更多的时间和资源。</li>
+</ul>
+</li>
+</ul>
+<h3 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h3><p>描述输入实际值和预期输出行为或者结果的文档，同时也标识了测试过程结果与约束</p>
+<h3 id="测试用例的设计方法"><a href="#测试用例的设计方法" class="headerlink" title="测试用例的设计方法"></a>测试用例的设计方法</h3><p>测试用例设计方法是软件测试中的关键环节，旨在确保全面覆盖软件的各个功能和可能的缺陷。以下是一些常见的测试用例设计方法：</p>
+<ol>
+<li>等价类划分(Equivalence Partitioning)<ul>
+<li>定义：将输入域划分为若干等价类，每个等价类中的数据被认为是等价的，选取一个代表进行测试。</li>
+<li>目的：减少测试用例数量，同时覆盖所有可能的输入。</li>
+<li>应用：输入字段长度、有效值范围。</li>
+<li>例子：如果输入年龄在1-100之间有效，可以划分为有效等价类(1-100)和无效等价类(小于1，大于100)。</li>
+</ul>
+</li>
+<li>边界值分析(Boundary Value Analysis)<ul>
+<li>定义：关注输入值的边界，选择边界值及其附近的值进行测试。</li>
+<li>目的：发现边界值上的缺陷，因为边界往往是错误集中发生的地方。</li>
+<li>应用：最大值、最小值、边界值上下的值。</li>
+<li>例子：对于输入年龄在1-100之间的情况，测试值可以是0、1、2、99、100、101。</li>
+</ul>
+</li>
+<li>决策表(Decision Table)<ul>
+<li>定义：列出所有可能的输入条件及其对应的输出，形成一个表格，用于逻辑分析。</li>
+<li>目的：确保所有逻辑路径都得到测试。</li>
+<li>应用：复杂的业务逻辑、多条件判断。</li>
+<li>例子：银行贷款审批系统，可以根据申请人的收入、信用评分、贷款金额等条件，生成决策表来测试不同组合的结果。</li>
+</ul>
+</li>
+<li>状态转换图(State Transition Diagram)<ul>
+<li>定义：根据系统状态和事件，描述状态之间的转换关系。</li>
+<li>目的：验证系统在不同状态下的行为，确保状态转换正确。</li>
+<li>应用：工作流系统、状态机。</li>
+<li>例子：在线购物系统的订单状态，可以从“新订单”到“处理中”，再到“已发货”或“已取消”。</li>
+</ul>
+</li>
+<li>因果图(Cause-Effect Graphing)<ul>
+<li>定义：根据输入条件(原因)和系统响应(结果)，绘制因果关系图，生成测试用例。</li>
+<li>目的：确保所有可能的输入组合都被测试。</li>
+<li>应用：复杂系统的逻辑测试。</li>
+<li>例子：电梯控制系统的输入条件如楼层选择、开关门按钮，可以使用因果图设计测试用例。</li>
+</ul>
+</li>
+<li>场景测试(Scenario Testing)<ul>
+<li>定义：基于用户的实际使用场景，设计真实的操作流程来进行测试。</li>
+<li>目的：确保系统在实际使用中的正确性和用户体验。</li>
+<li>应用：用户故事、用例。</li>
+<li>例子：在线银行系统中，用户从登录到转账的整个操作流程。</li>
+</ul>
+</li>
+<li>探索性测试(Exploratory Testing)<ul>
+<li>定义：没有预先定义的测试用例，测试人员在探索系统过程中，根据发现动态设计和执行测试。</li>
+<li>目的：发现意外的缺陷和问题，特别是那些传统测试用例未覆盖的部分。</li>
+<li>应用：新功能、快速反馈。</li>
+<li>例子：新上线的功能模块，通过不同用户角色和操作路径进行随机测试。</li>
+</ul>
+</li>
+<li>使用基于模型的测试(Model-Based Testing)<ul>
+<li>定义：利用系统的模型(如状态机、流程图)来生成测试用例。</li>
+<li>目的：自动生成测试用例，确保系统行为符合模型。</li>
+<li>应用：复杂系统的行为测试。</li>
+<li>例子：ATM机操作流程模型，用于生成取款、查询余额等操作的测试用例。</li>
+</ul>
+</li>
+</ol>
+<p>这些测试用例设计方法可以帮助测试人员全面和系统地覆盖被测试软件的功能和可能的缺陷，从而提高测试效率和测试质量。</p>
+<h3 id="测试生命周期"><a href="#测试生命周期" class="headerlink" title="测试生命周期"></a>测试生命周期</h3><ol>
+<li>测试计划(Test Planning)<ul>
+<li>定义：制定测试策略、范围、资源和时间表。</li>
+<li>输出：测试计划文档。</li>
+</ul>
+</li>
+<li>测试设计(Test Design)<ul>
+<li>定义：设计测试用例和测试脚本。</li>
+<li>输出：测试用例文档、测试脚本。</li>
+</ul>
+</li>
+<li>测试执行(Test Execution)<ul>
+<li>定义：执行测试用例，记录测试结果和缺陷。</li>
+<li>输出：测试执行记录、缺陷报告。</li>
+</ul>
+</li>
+<li>测试评估(Test Evaluation) <ul>
+<li>定义：评估测试结果，确保所有缺陷已修复和验证。</li>
+<li>输出：测试报告、缺陷状态报告。</li>
+</ul>
+</li>
+<li>测试闭合(Test Closure)<ul>
+<li>定义：结束测试活动，归档测试文档和数据。</li>
+<li>输出：测试总结报告、测试文档归档。</li>
+</ul>
+</li>
+</ol>
+<h3 id="如何理解测试开发中的开发"><a href="#如何理解测试开发中的开发" class="headerlink" title="如何理解测试开发中的开发"></a>如何理解测试开发中的开发</h3><ul>
+<li>编写测试用例： 测试开发人员编写测试用例来验证软件系统的不同功能。这些测试用例可以是单元测试、集成测试、端到端测试等，覆盖不同层次和方面的功能和行为。</li>
+<li>编写自动化测试脚本： 测试开发人员使用编程语言(如Java、Python、JavaScript等)编写自动化测试脚本，用于执行测试用例并检查系统的响应和行为。这些脚本通常使用测试框架(如<code>JUnit</code>、<code>TestNG</code>、<code>Selenium</code>等)来组织和运行测试。</li>
+<li>开发测试工具和框架： 测试开发人员开发测试工具和框架，用于简化测试过程、提高测试效率和覆盖率。这些工具和框架可以包括测试数据生成工具、模拟器、Mock对象、测试管理系统等。</li>
+<li>维护测试代码： 随着软件系统的演变和变化，测试代码也需要不断更新和维护。测试开发人员负责确保测试代码的可靠性、稳定性和可维护性，以及及时更新测试代码以反映系统的变化。</li>
+<li>参与持续集成和持续部署： 测试开发人员参与持续集成和持续部署流程，确保每次代码提交或部署后都运行自动化测试，并及时发现和解决问题。</li>
+</ul>
+<h3 id="如何使用测试保证一个模块的质量"><a href="#如何使用测试保证一个模块的质量" class="headerlink" title="如何使用测试保证一个模块的质量"></a>如何使用测试保证一个模块的质量</h3><p>为了保证一个模块的质量，需要制定全面的测试策略，覆盖不同类型的测试，从多个方面验证模块的功能、性能、安全性和可靠性。以下是具体步骤和方法：</p>
+<ol>
+<li>需求分析<ul>
+<li>目标：明确模块的功能、性能和安全需求。</li>
+<li>方法：与产品经理、开发人员和相关利益方沟通，阅读需求文档。</li>
+</ul>
+</li>
+<li>制定测试计划<ul>
+<li>内容：定义测试范围、测试目标、测试资源、测试环境、测试时间表。</li>
+<li>文档：编写测试计划文档，列出测试策略和测试用例。</li>
+</ul>
+</li>
+<li>测试用例设计<ul>
+<li>功能测试用例<ul>
+<li>等价类划分：将输入域划分为若干等价类，选取代表进行测试。</li>
+<li>边界值分析：选择输入值的边界和附近值进行测试。</li>
+<li>决策表：列出所有可能的输入条件及其对应的输出。</li>
+<li>状态转换图：描述系统状态和事件之间的转换关系。</li>
+</ul>
+</li>
+<li>非功能测试用例<ul>
+<li>性能测试：设计负载测试和压力测试用例，验证模块在不同负载下的响应时间和吞吐量。</li>
+<li>安全测试：设计安全漏洞测试用例，如SQL注入、XSS、CSRF等。</li>
+<li>兼容性测试：设计跨平台和跨浏览器测试用例，验证模块在不同环境下的表现。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>搭建测试环境<ul>
+<li>硬件和软件环境：配置与生产环境类似的测试环境。</li>
+<li>测试数据：准备多样化的测试数据，覆盖正常、异常和边界情况。</li>
+</ul>
+</li>
+<li>执行测试用例<ul>
+<li>手动测试：按照测试用例手动执行测试，记录测试结果。</li>
+<li>自动化测试：使用自动化测试工具执行回归测试、性能测试等。</li>
+</ul>
+</li>
+<li>缺陷报告和跟踪<ul>
+<li>报告缺陷：使用缺陷跟踪工具(如JIRA)记录发现的缺陷，描述缺陷的复现步骤、严重性和优先级。</li>
+<li>跟踪缺陷：与开发团队合作，确保缺陷得到及时修复和验证。</li>
+</ul>
+</li>
+<li>测试评估和报告<ul>
+<li>分析测试结果<ul>
+<li>测试覆盖率：分析测试用例覆盖率，确保关键功能和边界情况得到充分测试。</li>
+<li>缺陷分析：分析缺陷分布和严重性，评估模块质量。</li>
+</ul>
+</li>
+<li>编写测试报告<ul>
+<li>内容：包括测试摘要、测试结果、缺陷统计、测试评估和改进建议。</li>
+<li>分享报告：与团队和相关利益方分享测试报告，讨论测试结果和改进措施。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>执行回归测试<ul>
+<li>目的：在缺陷修复后，重新测试相关功能，确保修复不影响其他部分。</li>
+<li>工具：使用自动化测试工具，如Selenium、JUnit、pytest，快速执行回归测试。</li>
+</ul>
+</li>
+<li>验收测试<ul>
+<li>定义：根据需求文档和测试计划，定义模块验收标准。</li>
+<li>执行：与客户或终端用户一起进行验收测试，确认模块满足业务需求。</li>
+</ul>
+</li>
+<li>测试闭合<ul>
+<li>总结测试过程：分析测试的成功和失败，提炼经验教训。</li>
+<li>归档测试文档：保存测试计划、测试用例、测试报告、缺陷报告等文档，以备将来参考。</li>
+</ul>
+</li>
+</ol>
+<p>通过上述步骤，全面和系统地进行测试，可以有效保证模块的质量，确保其功能正确、性能优良、安全可靠。</p>
+<h3 id="针对优酷视频-从系统层面如何进行测试"><a href="#针对优酷视频-从系统层面如何进行测试" class="headerlink" title="针对优酷视频 从系统层面如何进行测试"></a>针对优酷视频 从系统层面如何进行测试</h3><p>对优酷视频(或其他视频播放应用)进行系统层面的测试可以从多个方面入手，包括功能测试、性能测试、兼容性测试、安全测试等。以下是每个测试类型的详细说明：</p>
+<ul>
+<li>功能测试<ul>
+<li>基础功能测试：<ul>
+<li>播放功能：检查视频的播放、暂停、快进、快退、音量控制、全屏切换等功能是否正常。</li>
+<li>搜索功能：测试搜索栏输入关键词后是否能准确返回相关视频。</li>
+<li>下载功能：检查视频下载功能，确保下载后的视频可以正常播放。</li>
+<li>账户管理：注册、登录、修改密码、找回密码等功能的测试。</li>
+</ul>
+</li>
+<li>高级功能测试：<ul>
+<li>推荐系统：测试推荐的视频是否符合用户的观看历史和偏好。</li>
+<li>字幕和语言选择：检查是否能正常选择和切换字幕及语言。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>性能测试<ul>
+<li>加载时间测试：<ul>
+<li>启动时间：测试应用从启动到首页加载完成所需的时间。</li>
+<li>视频加载时间：测试点击播放视频后视频开始播放所需的时间。</li>
+</ul>
+</li>
+<li>流畅度测试：<ul>
+<li>播放流畅度：测试视频播放过程中是否有卡顿、缓冲等现象。</li>
+<li>响应速度：测试用户操作(如暂停、快进等)后的响应时间。</li>
+</ul>
+</li>
+<li>资源占用测试：<ul>
+<li>CPU和内存使用率：测试播放不同分辨率的视频时CPU和内存的使用情况。</li>
+<li>网络带宽占用：测试视频播放过程中网络带宽的占用情况。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>兼容性测试<ul>
+<li>操作系统兼容性：在不同版本的操作系统(如Windows、macOS、iOS、Android)上测试应用的运行情况。</li>
+<li>设备兼容性：在不同型号的手机、平板、电脑等设备上测试应用的表现。</li>
+<li>浏览器兼容性：优酷视频有网页版，需要在不同浏览器(如Chrome、Firefox、Safari、Edge)上测试。</li>
+</ul>
+</li>
+<li>安全测试<ul>
+<li>数据传输安全：检查视频播放、账户登录等过程中是否使用了安全的传输协议(如HTTPS)。</li>
+<li>隐私保护：确保用户的个人信息(如账号、密码、观看历史等)不会被泄露或滥用。</li>
+<li>漏洞扫描：使用自动化工具扫描应用的安全漏洞，并进行人工验证。</li>
+</ul>
+</li>
+<li>自动化测试<ul>
+<li>脚本编写：编写自动化测试脚本，对上述功能进行自动化测试，减少人工操作的工作量。</li>
+<li>持续集成：将自动化测试脚本集成到CI&#x2F;CD流水线中，确保每次代码变更后都能进行全面的测试。</li>
+</ul>
+</li>
+<li>用户体验测试<ul>
+<li>界面设计：检查界面的布局、按钮的位置、字体的大小等是否符合用户习惯和视觉美学。</li>
+<li>交互体验：测试用户在使用过程中是否能顺畅地完成各项操作，是否有困惑或不便之处。</li>
+</ul>
+</li>
+</ul>
+<p>通过以上多个方面的测试，可以全面保障优酷视频在各个层面的质量和用户体验。</p>
+<h3 id="如何测试一个Java项目？"><a href="#如何测试一个Java项目？" class="headerlink" title="如何测试一个Java项目？"></a>如何测试一个Java项目？</h3><ul>
+<li>单元测试： 编写单元测试来测试项目中的各个模块、类和方法。使用 JUnit 或 TestNG 等单元测试框架来编写测试用例，并确保覆盖尽可能多的代码路径和边界情况。</li>
+<li>集成测试： 编写集成测试来测试项目中不同模块之间的交互。这可以包括测试数据库访问、外部 API 调用、消息队列等。使用 JUnit、Mockito 等工具来模拟外部依赖，并编写集成测试用例。</li>
+<li>性能测试： 对项目进行性能测试，评估其在不同负载下的性能表现。使用 JMeter、Gatling 等性能测试工具来模拟大量用户请求，并监控系统的响应时间、吞吐量等指标。</li>
+<li>持续集成和持续部署： 将测试集成到持续集成和持续部署流程中，确保每次代码提交或部署后都运行测试，并及时发现和修复问题。</li>
+</ul>
+<h3 id="如何判断所写接口功能正常？"><a href="#如何判断所写接口功能正常？" class="headerlink" title="如何判断所写接口功能正常？"></a>如何判断所写接口功能正常？</h3><ul>
+<li>功能测试： 确保接口按照预期工作。这包括发送各种有效和无效的输入数据，并验证接口的响应是否符合预期。例如，如果接口是一个登录接口，你可以测试使用正确的用户名和密码进行登录是否成功，以及使用错误的凭据时是否会得到适当的错误消息。</li>
+<li>性能测试： 检查接口的性能，包括响应时间、吞吐量等指标。确保接口在负载增加时仍然能够正常工作，并且性能不会严重下降。</li>
+<li>安全测试： 确保接口受到适当的安全保护，例如输入验证、防止SQL注入、XSS攻击等。</li>
+<li>兼容性测试： 确保接口在不同的浏览器、操作系统和设备上都能正常工作。</li>
+</ul>
+<h3 id="怎么构造无用测试用例？"><a href="#怎么构造无用测试用例？" class="headerlink" title="怎么构造无用测试用例？"></a>怎么构造无用测试用例？</h3><ul>
+<li>随机数据： 使用随机生成的数据作为输入。这些数据可能不符合业务逻辑或实际情况，从而导致测试用例的无用性。</li>
+<li>非法输入： 提供完全不合法的输入数据。例如，如果一个字段要求输入数字，你可以提供字母字符或特殊字符。</li>
+<li>重复数据： 重复使用相同的数据进行测试，而不关注不同数据情况下的行为。这样做可能会错过一些潜在的问题。</li>
+</ul>
+<h3 id="如何感知线上项目出现问题"><a href="#如何感知线上项目出现问题" class="headerlink" title="如何感知线上项目出现问题"></a>如何感知线上项目出现问题</h3><p>日志监控： 实时监控系统的日志以捕获异常情况和错误信息。通过设置适当的日志级别和使用日志聚合工具，可以帮助发现潜在的问题。<br>性能监控： 监控系统的性能指标，如响应时间、吞吐量、CPU 使用率、内存使用率等。突然的性能下降可能是系统出现问题的迹象。<br>自动化测试： 编写自动化测试用例，定期运行以确保系统的功能和性能符合预期。自动化测试可以在每次部署后运行，帮助发现新的问题。</p>
+<h3 id="小红书购物搜索框设计测试用例"><a href="#小红书购物搜索框设计测试用例" class="headerlink" title="小红书购物搜索框设计测试用例"></a>小红书购物搜索框设计测试用例</h3><p>测试用例名称：搜索框输入有效关键词</p>
+<ul>
+<li>输入：在搜索框中输入有效的商品关键词，例如“连衣裙”。</li>
+<li>操作：点击搜索按钮或按下回车键。</li>
+<li>预期结果：搜索结果页面显示与输入关键词相关的商品列表。</li>
+</ul>
+<p>测试用例名称：搜索框输入无效关键词</p>
+<ul>
+<li>输入：在搜索框中输入无效的商品关键词，例如“@@@”。</li>
+<li>操作：点击搜索按钮或按下回车键。</li>
+<li>预期结果：搜索结果页面提示“未找到相关商品”。</li>
+</ul>
+<p>测试用例名称：搜索框输入空关键词</p>
+<ul>
+<li>输入：在搜索框中不输入任何内容。</li>
+<li>操作：点击搜索按钮或按下回车键。</li>
+<li>预期结果：搜索结果页面显示全部商品列表。</li>
+</ul>
+<p>测试用例名称：搜索框联想功能</p>
+<ul>
+<li>输入：在搜索框中输入部分关键词，例如“连衣”。</li>
+<li>操作：等待几秒钟，观察搜索框下方是否出现联想词。</li>
+<li>预期结果：搜索框下方显示与输入关键词相关的联想词列表。</li>
+</ul>
+<p>测试用例名称：搜索框输入并选择联想词</p>
+<ul>
+<li>输入：在搜索框中输入部分关键词，例如“连衣”。</li>
+<li>操作：从联想词列表中选择一个词，例如“连衣裙”。</li>
+<li>预期结果：搜索框中显示选择的联想词，并跳转到与该词相关的搜索结果页面。</li>
+</ul>
+<p>测试用例名称：搜索框清空功能</p>
+<ul>
+<li>输入：在搜索框中输入关键词，例如“连衣裙”。</li>
+<li>操作：点击搜索框右侧的清空按钮。</li>
+<li>预期结果：搜索框中的文本被清空，搜索框恢复为空状态。</li>
+</ul>
+<h3 id="登录设计测试样例"><a href="#登录设计测试样例" class="headerlink" title="登录设计测试样例"></a>登录设计测试样例</h3><p>测试用例名称：输入有效的用户名和密码登录</p>
+<ul>
+<li>输入：有效的用户名和密码。</li>
+<li>操作：在登录页面输入用户名和密码，点击登录按钮。</li>
+<li>预期结果：成功登录，跳转到用户的个人资料页面或首页。</li>
+</ul>
+<p>测试用例名称：输入无效的用户名和密码登录</p>
+<ul>
+<li>输入：无效的用户名和密码。</li>
+<li>操作：在登录页面输入错误的用户名和密码，点击登录按钮。</li>
+<li>预期结果：登录失败，提示用户名或密码错误的错误信息。</li>
+</ul>
+<p>测试用例名称：输入不存在的用户名登录</p>
+<ul>
+<li>输入：不存在的用户名和有效密码。</li>
+<li>操作：在登录页面输入不存在的用户名和有效密码，点击登录按钮。</li>
+<li>预期结果：登录失败，提示用户名不存在的错误信息。</li>
+</ul>
+<p>测试用例名称：输入正确的用户名和空密码登录</p>
+<ul>
+<li>输入：有效的用户名和空密码。</li>
+<li>操作：在登录页面输入正确的用户名和空密码，点击登录按钮。</li>
+<li>预期结果：登录失败，提示密码不能为空的错误信息。</li>
+</ul>
+<p>测试用例名称：输入空用户名和正确密码登录</p>
+<ul>
+<li>输入：空用户名和有效的密码。</li>
+<li>操作：在登录页面输入空用户名和正确的密码，点击登录按钮。</li>
+<li>预期结果：登录失败，提示用户名不能为空的错误信息。</li>
+</ul>
+<p>测试用例名称：输入特殊字符的用户名和密码登录</p>
+<ul>
+<li>输入：包含特殊字符的用户名和密码。</li>
+<li>操作：在登录页面输入包含特殊字符的用户名和密码，点击登录按钮。</li>
+<li>预期结果：登录失败，提示用户名或密码格式不正确的错误信息。</li>
+</ul>
+<p>测试用例名称：记住登录状态</p>
+<ul>
+<li>输入：有效的用户名和密码。</li>
+<li>操作：在登录页面勾选“记住我”选项后登录。</li>
+<li>预期结果：成功登录后，关闭浏览器再次打开时，应自动保持登录状态，无需重新输入用户名和密码。</li>
+</ul>
+<p>测试用例名称：登录页链接验证</p>
+<ul>
+<li>输入：无。</li>
+<li>操作：检查登录页面上的链接。</li>
+<li>预期结果：登录页面应包含“忘记密码”、“注册账号”等相关链接，确保用户可以方便地进行其他操作。</li>
+</ul>
+<p>测试用例名称：跳转到登录页面</p>
+<ul>
+<li>输入：未登录状态。</li>
+<li>操作：尝试访问需要登录权限的页面。</li>
+<li>预期结果：跳转到登录页面，并在登录成功后自动跳回原页面。</li>
+</ul>
+<p>测试用例名称：登录界面的响应速度</p>
+<ul>
+<li>输入：无。</li>
+<li>操作：在不同网络环境下打开登录页面。</li>
+<li>预期结果：登录页面应该在合理的时间内加载完成，不应该出现过长的加载时间。</li>
+</ul>
+<h3 id="微信发送文件的测试用例"><a href="#微信发送文件的测试用例" class="headerlink" title="微信发送文件的测试用例"></a>微信发送文件的测试用例</h3><p>功能测试</p>
+<ul>
+<li>正常发送文件</li>
+<li>发送支持的文件类型</li>
+</ul>
+<p>边界值测试</p>
+<ul>
+<li>发送最大允许大小的文件</li>
+<li>发送超过最大允许大小的文件</li>
+</ul>
+<p>异常情况测试</p>
+<ul>
+<li>发送空文件</li>
+<li>发送损坏文件</li>
+<li>网络中断后重新发送</li>
+</ul>
+<p>性能测试</p>
+<ul>
+<li>同时发送多个文件</li>
+<li>选择一个接近最大允许大小的文件</li>
+</ul>
+<p>用户体验测试</p>
+<ul>
+<li>发送文件时的用户提示</li>
+<li>文件发送记录</li>
+</ul>
+<p>安全性测试</p>
+<ul>
+<li>发送包含敏感信息的文件</li>
+<li>病毒文件检测</li>
+</ul>
+<p>跨平台测试</p>
+<h3 id="微信发送红包的测试用例"><a href="#微信发送红包的测试用例" class="headerlink" title="微信发送红包的测试用例"></a>微信发送红包的测试用例</h3><ul>
+<li><p>功能测试<br>正常发送红包<br>发送拼手气红包<br>发送定向红包</p>
+</li>
+<li><p>边界值测试<br>发送最低和最高金额的红包<br>发送超过最高金额的红包</p>
+</li>
+<li><p>异常情况测试<br>余额不足时发送红包<br>网络中断后重新发送<br>取消发送红包</p>
+</li>
+<li><p>安全性测试<br>多测领取红包<br>红包过期<br>未实名验证用户发送红包<br>单方删除好友后发送红包</p>
+</li>
+</ul>
+<p>用户体验测试</p>
+<p>跨平台测试</p>
+<p>性能测试</p>
+<ul>
+<li>高频发送红包</li>
+<li>大规模红包领取(拼手气红包)</li>
+</ul>
+<h3 id="电影订票功能的测试样例"><a href="#电影订票功能的测试样例" class="headerlink" title="电影订票功能的测试样例"></a>电影订票功能的测试样例</h3><p>功能测试</p>
+<ul>
+<li>检查电影本身的信息和电影院(不同的电影院)、场次(不同的场次)、座位信息(已售出和可售状态)是否显示正确</li>
+<li>验证不同支付方式是否可用</li>
+<li>验证电子票是否包含必要信息、是否能通过扫描进入影院</li>
+</ul>
+<p>边界和异常情况测试</p>
+<ul>
+<li>无效的账户或者账户余额不足进行支付</li>
+<li>用户选择座位但未完成支付，座位在一定时间后能否自动释放</li>
+</ul>
+<p>性能测试</p>
+<ul>
+<li>系统负载测试：高并发访问</li>
+<li>正常负载和高负载下的响应时间是否正常</li>
+</ul>
+<p>兼容性测试</p>
+<h3 id="电商满减优惠券测试用例设计"><a href="#电商满减优惠券测试用例设计" class="headerlink" title="电商满减优惠券测试用例设计"></a>电商满减优惠券测试用例设计</h3><p>设计电商满减优惠券的测试用例需要考虑各种场景，包括正常情况、边界情况和异常情况。以下是一些详细的测试用例设计：</p>
+<ul>
+<li><p>正常情况</p>
+<ul>
+<li>优惠券满减条件满足<ul>
+<li>用例描述：用户购物车金额为150元，使用满100减20元优惠券。</li>
+<li>预期结果：最终支付金额为130元。</li>
+</ul>
+</li>
+<li>优惠券满减条件满足多张<ul>
+<li>用例描述：用户购物车金额为250元，使用两张满100减20元优惠券。</li>
+<li>预期结果：最终支付金额为210元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>边界情况 </p>
+<ul>
+<li>刚好满足满减条件<ul>
+<li>用例描述：用户购物车金额为100元，使用满100减20元优惠券。</li>
+<li>预期结果：最终支付金额为80元。</li>
+</ul>
+</li>
+<li>差一分钱满足满减条件<ul>
+<li>用例描述：用户购物车金额为99.99元，使用满100减20元优惠券。</li>
+<li>预期结果：不能使用优惠券，最终支付金额为99.99元。</li>
+</ul>
+</li>
+<li>超过满减条件1分钱<ul>
+<li>用例描述：用户购物车金额为100.01元，使用满100减20元优惠券。</li>
+<li>预期结果：最终支付金额为80.01元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>异常情况</p>
+<ul>
+<li>优惠券已过期<ul>
+<li>用例描述：用户尝试使用一张已过期的满100减20元优惠券。</li>
+<li>预期结果：提示优惠券无效，不能使用，最终支付金额为原金额。</li>
+</ul>
+</li>
+<li>优惠券不适用商品<ul>
+<li>用例描述：用户购物车内商品不在优惠券适用范围，购物车金额为150元，使用满100减20元优惠券。</li>
+<li>预期结果：提示优惠券不适用，不能使用，最终支付金额为150元。</li>
+</ul>
+</li>
+<li>优惠券已被使用<ul>
+<li>用例描述：用户尝试使用一张已被使用过的满100减20元优惠券。</li>
+<li>预期结果：提示优惠券已被使用，不能再次使用，最终支付金额为原金额。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>多重优惠情况</p>
+<ul>
+<li>叠加优惠券<ul>
+<li>用例描述：用户购物车金额为300元，使用一张满200减50元优惠券和一张满100减20元优惠券。</li>
+<li>预期结果：先使用满200减50元优惠券，金额变为250元，再使用满100减20元优惠券，最终支付金额为230元。</li>
+</ul>
+</li>
+<li>不同优惠券叠加使用规则<ul>
+<li>用例描述：用户购物车金额为300元，使用一张满200减50元优惠券和一张全场9折优惠券。</li>
+<li>预期结果：先使用满200减50元优惠券，金额变为250元，再使用9折优惠券，最终支付金额为225元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>优惠券优先级情况</p>
+<ul>
+<li>有多张优惠券可用<ul>
+<li>用例描述：用户购物车金额为200元，有满100减20元优惠券和满150减30元优惠券。</li>
+<li>预期结果：系统自动选择满150减30元优惠券，最终支付金额为170元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>无法使用优惠券的情况</p>
+<ul>
+<li>购物车金额不足<ul>
+<li>用例描述：用户购物车金额为50元，使用满100减20元优惠券。</li>
+<li>预期结果：不能使用优惠券，最终支付金额为50元。</li>
+</ul>
+</li>
+<li>优惠券被取消<ul>
+<li>用例描述：用户尝试使用被商家取消的优惠券。</li>
+<li>预期结果：提示优惠券无效，不能使用，最终支付金额为原金额。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>这些测试用例涵盖了常见的优惠券使用场景，可以帮助全面测试电商平台的满减优惠券功能，确保系统能够正确处理各种情况下的优惠券使用。</p>
+<h3 id="外卖优惠券测试用例设计"><a href="#外卖优惠券测试用例设计" class="headerlink" title="外卖优惠券测试用例设计"></a>外卖优惠券测试用例设计</h3><p>设计外卖平台的满减优惠券测试用例需要考虑各种场景，包括正常情况、边界情况和异常情况。以下是一些详细的测试用例设计：</p>
+<ul>
+<li><p>正常情况</p>
+<ul>
+<li>优惠券满减条件满足<ul>
+<li>用例描述：用户订单金额为60元，使用满50减10元优惠券。</li>
+<li>预期结果：最终支付金额为50元。</li>
+</ul>
+</li>
+<li>优惠券满减条件满足多张<ul>
+<li>用例描述：用户订单金额为120元，使用两张满50减10元优惠券。</li>
+<li>预期结果：最终支付金额为100元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>边界情况</p>
+<ul>
+<li>刚好满足满减条件<ul>
+<li>用例描述：用户订单金额为50元，使用满50减10元优惠券。</li>
+<li>预期结果：最终支付金额为40元。</li>
+</ul>
+</li>
+<li>差一分钱满足满减条件<ul>
+<li>用例描述：用户订单金额为49.99元，使用满50减10元优惠券。</li>
+<li>预期结果：不能使用优惠券，最终支付金额为49.99元。</li>
+</ul>
+</li>
+<li>超过满减条件1分钱<ul>
+<li>用例描述：用户订单金额为50.01元，使用满50减10元优惠券。</li>
+<li>预期结果：最终支付金额为40.01元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>异常情况</p>
+<ul>
+<li>优惠券已过期<ul>
+<li>用例描述：用户尝试使用一张已过期的满50减10元优惠券。</li>
+<li>预期结果：提示优惠券无效，不能使用，最终支付金额为原金额。</li>
+</ul>
+</li>
+<li>优惠券不适用餐厅<ul>
+<li>用例描述：用户订单来自不适用优惠券的餐厅，订单金额为60元，使用满50减10元优惠券。</li>
+<li>预期结果：提示优惠券不适用，不能使用，最终支付金额为60元。</li>
+</ul>
+</li>
+<li>优惠券已被使用<ul>
+<li>用例描述：用户尝试使用一张已被使用过的满50减10元优惠券。</li>
+<li>预期结果：提示优惠券已被使用，不能再次使用，最终支付金额为原金额。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>多重优惠情况</p>
+<ul>
+<li>叠加优惠券<ul>
+<li>用例描述：用户订单金额为100元，使用一张满80减20元优惠券和一张满50减10元优惠券。</li>
+<li>预期结果：先使用满80减20元优惠券，金额变为80元，再使用满50减10元优惠券，最终支付金额为70元。</li>
+</ul>
+</li>
+<li>不同优惠券叠加使用规则<ul>
+<li>用例描述：用户订单金额为100元，使用一张满80减20元优惠券和一张全场9折优惠券。</li>
+<li>预期结果：先使用满80减20元优惠券，金额变为80元，再使用9折优惠券，最终支付金额为72元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>优惠券优先级情况</p>
+<ul>
+<li>有多张优惠券可用<ul>
+<li>用例描述：用户订单金额为100元，有满50减10元优惠券和满80减20元优惠券。</li>
+<li>预期结果：系统自动选择满80减20元优惠券，最终支付金额为80元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>无法使用优惠券的情况</p>
+<ul>
+<li>订单金额不足<ul>
+<li>用例描述：用户订单金额为30元，使用满50减10元优惠券。</li>
+<li>预期结果：不能使用优惠券，最终支付金额为30元。</li>
+</ul>
+</li>
+<li>优惠券被取消<ul>
+<li>用例描述：用户尝试使用被商家取消的优惠券。</li>
+<li>预期结果：提示优惠券无效，不能使用，最终支付金额为原金额。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>特殊情况</p>
+<ul>
+<li>优惠券部分使用<ul>
+<li>用例描述：用户订单金额为55元，使用满50减10元优惠券，同时使用余额支付(5元)。</li>
+<li>预期结果：订单金额55元，使用优惠券后支付45元，再用余额支付5元，最终支付金额为40元。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>这些测试用例涵盖了常见的优惠券使用场景，可以帮助全面测试外卖平台的满减优惠券功能，确保系统能够正确处理各种情况下的优惠券使用。</p>
+<h3 id="tiktok点到商品详情页变白了，怎么排查"><a href="#tiktok点到商品详情页变白了，怎么排查" class="headerlink" title="tiktok点到商品详情页变白了，怎么排查"></a>tiktok点到商品详情页变白了，怎么排查</h3><p>当 TikTok 的商品详情页出现白屏问题时，可以从测试的角度进行以下排查：</p>
+<ol>
+<li><p><strong>环境确认</strong>：</p>
+<ul>
+<li>确认当前设备、网络状况、操作系统版本和应用版本。可能因为版本不兼容或网络不稳定，导致页面加载异常。</li>
+<li>了解白屏是否为设备特定问题，或在不同设备、不同网络环境下重现。</li>
+</ul>
+</li>
+<li><p><strong>日志分析</strong>：</p>
+<ul>
+<li>尝试获取应用的日志信息，看是否有明显的报错信息（如 404、500 错误或网络请求超时）。</li>
+<li>关注是否有 JS 脚本错误、资源文件加载失败等提示，有助于定位问题。</li>
+</ul>
+</li>
+<li><p><strong>前端资源加载</strong>：</p>
+<ul>
+<li>检查资源是否正常加载，包括图片、CSS、JS 文件等，某些资源的加载失败可能导致白屏。</li>
+<li>查看是否有某些资源文件阻塞了页面的渲染。</li>
+</ul>
+</li>
+<li><p><strong>网络请求检查</strong>：</p>
+<ul>
+<li>使用代理工具（如 Charles、Fiddler）查看是否有关键的 API 请求未成功返回（如商品详情的 API 返回了空数据或错误状态）。</li>
+<li>若有必要，分析接口返回的数据是否符合预期格式和内容。</li>
+</ul>
+</li>
+<li><p><strong>重现步骤</strong>：</p>
+<ul>
+<li>记录出现白屏前的操作步骤，确认是否与特定的操作流程相关。</li>
+<li>从不同入口（如搜索、推荐等）进入商品详情页，看看是否每种情况都出现白屏。</li>
+</ul>
+</li>
+<li><p><strong>缓存清理</strong>：</p>
+<ul>
+<li>清除应用缓存数据或卸载重装，排查是否是缓存引起的白屏问题。</li>
+<li>有时旧缓存与新版本不兼容，导致页面无法正常渲染。</li>
+</ul>
+</li>
+<li><p><strong>A&#x2F;B 测试及灰度发布</strong>：</p>
+<ul>
+<li>如果有 A&#x2F;B 测试或灰度发布功能，查看白屏问题是否仅在特定用户群体中出现。</li>
+<li>通过对比测试情况，判断是否因为新功能或配置引起白屏。</li>
+</ul>
+</li>
+<li><p><strong>降级操作</strong>：</p>
+<ul>
+<li>如果可以切换到老版本，验证问题是否仅在新版本存在，这样可以确认是新功能或代码导致的问题。</li>
+</ul>
+</li>
+</ol>
+<p>通过以上步骤，应该能从多个角度检查白屏的原因，然后与开发团队沟通解决方案。</p>
+<h3 id="tiktok详情页场景测试"><a href="#tiktok详情页场景测试" class="headerlink" title="tiktok详情页场景测试"></a>tiktok详情页场景测试</h3><p>要对 TikTok 的详情页场景进行测试，可以按照以下步骤进行详细的测试方案设计，以确保功能完整性、用户体验流畅性和性能稳定性：</p>
+<ol>
+<li><p>功能测试：确保所有功能模块工作正常，测试用例包括：</p>
+<ul>
+<li><strong>视频播放</strong>：点击视频后，确认视频是否能正常播放、暂停、快进、快退等操作。</li>
+<li><strong>视频描述</strong>：检查视频描述是否准确显示，支持折叠和展开操作。</li>
+<li><strong>用户信息</strong>：点击用户头像或用户名，确认是否能进入用户主页。</li>
+<li><strong>点赞、评论、分享</strong>：检查点赞、评论、分享功能是否正常，确保用户能够成功进行操作并显示正确的计数。</li>
+<li><strong>关注功能</strong>：点击关注按钮，确认能正确关注和取消关注，关注状态实时更新。</li>
+<li><strong>评论区互动</strong>：评论的加载、展开、收起功能是否正常，评论点赞、回复等功能是否流畅。</li>
+</ul>
+</li>
+<li><p>UI测试：确保页面设计和交互效果符合设计规范，包括：</p>
+<ul>
+<li><strong>布局</strong>：确认页面元素是否按照设计要求布局，没有重叠、错位问题。</li>
+<li><strong>动态效果</strong>：如动画、切换等交互效果是否顺滑。</li>
+<li><strong>适配性</strong>：在不同的分辨率和设备（安卓、iOS）上测试详情页，确保界面显示正常。</li>
+</ul>
+</li>
+<li><p>用户体验测试：确保操作体验流畅、易于理解：</p>
+<ul>
+<li><strong>加载速度</strong>：视频、评论加载速度是否符合预期，是否有延迟或卡顿。</li>
+<li><strong>流畅度</strong>：操作后页面反应是否及时，避免延迟。</li>
+<li><strong>易用性</strong>：功能的点击和滑动操作是否符合直觉，用户是否能顺利找到关键操作位置。</li>
+</ul>
+</li>
+<li><p>性能测试：在高并发情况下确保详情页性能稳定，包括：</p>
+<ul>
+<li><strong>高并发测试</strong>：模拟多用户访问详情页，查看页面加载和视频播放是否出现卡顿或崩溃。</li>
+<li><strong>内存和CPU使用</strong>：监控内存和CPU的使用情况，确保不会因详情页操作导致资源占用过高。</li>
+<li><strong>耗电情况</strong>：测试在不同设备下的耗电情况，特别是在低电量设备上的耗电优化。</li>
+</ul>
+</li>
+<li><p>边界测试：测试特殊情况下的表现，包括：</p>
+<ul>
+<li><strong>无网络或弱网</strong>：断网或弱网情况下，视频能否加载出占位图并提供重试提示，评论区是否有相应提示。</li>
+<li><strong>低电量模式</strong>：在设备低电量模式下测试视频播放和加载，确保能优化加载速度和能耗。</li>
+<li><strong>异常数据</strong>：模拟异常数据输入，如超长描述、用户昵称特殊字符，确保系统的兼容性和稳定性。</li>
+</ul>
+</li>
+<li><p>安全性测试：确保用户数据和隐私保护措施：</p>
+<ul>
+<li><strong>隐私保护</strong>：检查用户数据保护，避免泄露敏感信息（如用户信息泄露）。</li>
+<li><strong>防止恶意操作</strong>：模拟恶意点赞、评论等操作，确保系统对异常行为的处理能力。</li>
+</ul>
+</li>
+</ol>
+<p>通过上述场景测试，确保 TikTok 详情页的功能、性能和用户体验都达到预期标准，有助于为用户提供流畅、可靠的使用体验。</p>
+<h3 id="针对于抖音购物，如何进行测试"><a href="#针对于抖音购物，如何进行测试" class="headerlink" title="针对于抖音购物，如何进行测试"></a>针对于抖音购物，如何进行测试</h3><p>针对抖音的购物功能进行测试，主要可以从功能测试、性能测试、安全测试、用户体验测试和兼容性测试等几个方面入手。以下是一些具体的测试方法和内容：</p>
+<ol>
+<li><p>功能测试</p>
+<ul>
+<li><strong>核心流程</strong>：确保购物流程的各个环节正常运作，包括浏览商品、加入购物车、结算、支付、订单生成、物流跟踪等。每个环节都需要详细测试。</li>
+<li><strong>支付方式</strong>：测试支持的支付方式（如支付宝、微信支付、银行卡等）是否可用，特别是跨境支付是否顺畅。</li>
+<li><strong>订单状态更新</strong>：确认订单的状态能实时更新，包括支付成功、物流进展、签收等。</li>
+<li><strong>商品推荐与搜索</strong>：确保搜索和推荐算法正常工作，用户能便捷地找到所需商品。</li>
+<li><strong>促销与优惠</strong>：验证优惠券、满减活动等功能是否能正确应用，特别是在叠加优惠时的计算和使用条件。</li>
+</ul>
+</li>
+<li><p>性能测试</p>
+<ul>
+<li><strong>响应时间</strong>：评估加载商品页面、添加到购物车、支付响应的速度，特别是在高峰期是否会有明显延迟。</li>
+<li><strong>并发性</strong>：模拟高并发购物场景，检查在多个用户同时访问和购买时系统能否稳定运行。</li>
+<li><strong>压力测试</strong>：通过逐步增加负载，评估系统的性能极限以及系统崩溃点。</li>
+</ul>
+</li>
+<li><p>安全测试</p>
+<ul>
+<li><strong>支付安全</strong>：确保支付流程的安全，避免支付信息泄露，如对支付接口进行防护、使用加密通道传输敏感数据。</li>
+<li><strong>数据隐私</strong>：测试用户个人信息（包括收货地址、联系方式等）的保护措施。</li>
+<li><strong>防作弊与防刷单</strong>：验证防止黑客通过伪造请求来刷单，保护平台和商家利益。</li>
+<li><strong>权限控制</strong>：确保普通用户、商家和管理员的权限区分明确，防止未授权访问。</li>
+</ul>
+</li>
+<li><p>用户体验测试</p>
+<ul>
+<li><strong>UI设计</strong>：评估购物页面的界面设计是否清晰、美观、易于使用，是否符合用户操作习惯。</li>
+<li><strong>交互体验</strong>：验证购物体验的流畅性，避免过多点击和复杂操作。</li>
+<li><strong>异常场景</strong>：考虑异常情况的处理，比如网络中断、支付失败、库存不足等情况的提示是否清晰、引导是否明确。</li>
+</ul>
+</li>
+<li><p>兼容性测试</p>
+<ul>
+<li><strong>多设备和平台兼容性</strong>：测试不同设备（如安卓、iOS、iPad等）上的适配情况。</li>
+<li><strong>不同网络条件下的表现</strong>：在4G、5G和Wi-Fi网络环境下进行测试，确保在网络较差时仍能提供基本功能。</li>
+<li><strong>浏览器兼容性</strong>：如果在PC端也有购物功能，测试主流浏览器的兼容性。</li>
+</ul>
+</li>
+<li><p>其他测试</p>
+<ul>
+<li><strong>物流跟踪功能</strong>：测试物流信息的更新是否及时，展示是否准确。</li>
+<li><strong>购物流程的完整性</strong>：通过自动化测试脚本来测试购物流程，确保不同路径的购物体验一致。</li>
+</ul>
+</li>
+</ol>
+<h3 id="测试小红书的首页滑动界面"><a href="#测试小红书的首页滑动界面" class="headerlink" title="测试小红书的首页滑动界面"></a>测试小红书的首页滑动界面</h3><p>测试小红书首页滑动界面，可以使用以下方法：</p>
+<ol>
+<li><p><strong>手动测试</strong></p>
+<ul>
+<li>手动滑动首页内容，观察界面的加载速度、图片和视频的加载效果、流畅性等。</li>
+<li>观察页面是否有卡顿、图片加载是否清晰完整。</li>
+<li>验证滑动过程中是否出现闪退、卡死等异常。</li>
+</ul>
+</li>
+<li><p><strong>自动化测试</strong>：使用自动化工具测试滑动界面有助于提高效率和测试覆盖度，常见的工具和步骤如下：</p>
+<ul>
+<li><p><strong>Appium</strong>: 一个开源的移动应用自动化测试工具，可以对iOS和Android应用进行UI测试。</p>
+<ol>
+<li><strong>编写测试脚本</strong>：使用Appium提供的API控制滑动操作。例如，可以使用<code>scroll</code>或<code>swipe</code>方法滑动首页界面。</li>
+<li><strong>定位元素</strong>：设置断言，检查滑动后是否有新内容加载，以及加载速度、图片显示是否完整等。</li>
+<li><strong>性能监控</strong>：通过Appium结合其他工具（如Android Profiler）监测滑动过程中CPU、内存、网络等性能参数。</li>
+</ol>
+</li>
+<li><p><strong>UI Automator（Android）</strong>:</p>
+<ol>
+<li>使用Android自带的UI Automator工具，可以直接控制滑动并验证页面的流畅度。</li>
+<li>通过<code>UiScrollable</code>类来滑动和加载页面内容，同时可以设置检查点判断页面加载是否顺畅。</li>
+</ol>
+</li>
+<li><p><strong>XCUITest（iOS）</strong>:</p>
+<ol>
+<li>使用Apple的XCUITest对iOS应用进行滑动测试，测试中可以模拟手势操作。</li>
+<li>设置断言，观察滑动过程中页面渲染是否正确。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>压力测试</strong></p>
+<ul>
+<li><strong>模拟高并发</strong>：使用工具模拟多个用户同时滑动首页，查看系统在高并发下的响应情况。</li>
+<li><strong>滑动频率测试</strong>：模拟高频滑动操作，观察是否出现性能下降、闪退等情况。</li>
+</ul>
+</li>
+<li><p><strong>网络环境测试</strong>：模拟不同网络条件（如4G、5G、Wi-Fi等），观察滑动时的加载速度和界面稳定性。</p>
+</li>
+</ol>
+<h3 id="测试商品秒杀系统"><a href="#测试商品秒杀系统" class="headerlink" title="测试商品秒杀系统"></a>测试商品秒杀系统</h3><p>测试商品秒杀系统可以验证系统在高并发情况下的稳定性和正确性。以下是测试秒杀系统的一些关键点和方法：</p>
+<ol>
+<li><p>基本功能测试</p>
+<ul>
+<li><strong>登录验证</strong>：测试用户是否可以正常登录，并能进入秒杀页面。</li>
+<li><strong>库存校验</strong>：确保当库存为零时无法再购买。</li>
+<li><strong>时间限制</strong>：确保秒杀活动在特定时间范围内开启和关闭，活动结束后不能继续购买。</li>
+</ul>
+</li>
+<li><p>高并发测试</p>
+<ul>
+<li>使用压力测试工具（如JMeter、Locust等）模拟大量用户同时请求，验证系统是否能承受高并发访问。</li>
+<li>观察系统在高并发下的响应时间和资源消耗（CPU、内存、数据库连接池等）。</li>
+<li>测试并发量逐步增加，找到系统的瓶颈值或崩溃点。</li>
+</ul>
+</li>
+<li><p>数据库事务和并发控制</p>
+<ul>
+<li><strong>事务隔离性</strong>：测试在并发情况下，库存扣减操作是否正确。要确保事务隔离和防止超卖。</li>
+<li><strong>乐观锁&#x2F;悲观锁</strong>：验证不同锁机制（如乐观锁、悲观锁或分布式锁）的效果。</li>
+<li><strong>库存更新策略</strong>：模拟多个用户同时成功购买的情况，确认库存被正确扣减。</li>
+</ul>
+</li>
+<li><p>限流和熔断</p>
+<ul>
+<li><strong>限流策略</strong>：测试系统在达到最大流量后是否会触发限流，限制后续请求。</li>
+<li><strong>熔断机制</strong>：验证当系统负载过高或后端服务不可用时，系统能否正常触发熔断保护。</li>
+</ul>
+</li>
+<li><p>缓存机制</p>
+<ul>
+<li><strong>缓存有效性</strong>：测试系统是否使用缓存，并验证缓存的数据与数据库数据的一致性。</li>
+<li><strong>缓存穿透、击穿和雪崩</strong>：通过高并发请求测试系统是否会出现缓存失效的问题，并测试系统的应对措施，如设置降级方案或备选方案。</li>
+</ul>
+</li>
+<li><p>网络和安全测试</p>
+<ul>
+<li><strong>网络延迟</strong>：模拟不同网络条件（延迟、丢包）测试用户体验。</li>
+<li><strong>防止恶意刷单</strong>：验证是否有防止恶意抢单的措施，比如滑块验证码、设备指纹等。</li>
+</ul>
+</li>
+<li><p>性能监控</p>
+<ul>
+<li>设置监控系统（如Prometheus、Grafana）实时监控系统的性能指标，包括响应时间、QPS（每秒请求数）、失败率等。</li>
+</ul>
+</li>
+</ol>
+<p>通过这些测试，能验证秒杀系统的稳定性和处理高并发的能力，同时找到潜在的性能瓶颈。</p>
+<h3 id="Github-Workflow自动化测试"><a href="#Github-Workflow自动化测试" class="headerlink" title="Github Workflow自动化测试"></a>Github Workflow自动化测试</h3><p>GitHub Workflow 是指 GitHub Actions 的一种自动化流程管理功能。它可以用于多种用途，包括但不限于测试。具体来说，GitHub Workflow 可以用来：</p>
+<ol>
+<li>持续集成(CI)： 自动运行测试用例，以确保代码在合并之前是正常工作的。这是最常见的用例之一。</li>
+<li>持续部署(CD)： 自动将代码部署到生产环境或其他目标环境。</li>
+<li>代码分析和质量检查： 运行静态代码分析工具，以检查代码质量和一致性。</li>
+<li>构建和发布： 自动构建应用程序并发布构建产物，比如发布到包管理工具(如npm、PyPI)或者生成文档。</li>
+<li>自动化任务： 自动执行脚本或命令，如自动关闭已解决的GitHub Issues、定时执行任务等。</li>
+</ol>
+<p>在 GitHub Actions 中，workflow 文件是通过 <code>.yml</code> 或 <code>.yaml</code> 文件定义的，通常放在 <code>.github/workflows/</code> 目录下。每个 workflow 文件定义了一个或多个 jobs，这些 jobs 可以并行或串行地执行。</p>
+<p>示例：</p>
+<p>以下是一个简单的 GitHub Workflow 文件示例，用于在每次推送时运行测试：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">CI</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span> <span class="string">code</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Set</span> <span class="string">up</span> <span class="string">Node.js</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/setup-node@v2</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">node-version:</span> <span class="string">&#x27;14&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">dependencies</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">npm</span> <span class="string">install</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">tests</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">npm</span> <span class="string">test</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="支付宝-微信转账功能测试用例"><a href="#支付宝-微信转账功能测试用例" class="headerlink" title="支付宝&#x2F;微信转账功能测试用例"></a>支付宝&#x2F;微信转账功能测试用例</h3><p>在设计支付宝转账功能的测试用例时，应该覆盖各种正常情况、边界情况和异常情况，以确保转账功能的健壮性和可靠性。以下是详细的测试用例设计：</p>
+<ul>
+<li><p>正常情况</p>
+<ul>
+<li>成功转账<ul>
+<li>用例描述：用户A向用户B成功转账100元。</li>
+<li>前置条件：用户A账户余额大于等于100元，用户B账户有效。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入转账金额100元。</li>
+<li>输入用户B的账户信息。</li>
+<li>确认转账。</li>
+</ol>
+</li>
+<li>预期结果：转账成功，用户A账户余额减少100元，用户B账户余额增加100元。</li>
+</ul>
+</li>
+<li>转账金额包含小数<ul>
+<li>用例描述：用户A向用户B转账50.75元。</li>
+<li>前置条件：用户A账户余额大于等于50.75元，用户B账户有效。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入转账金额50.75元。</li>
+<li>输入用户B的账户信息。</li>
+<li>确认转账。</li>
+</ol>
+</li>
+<li>预期结果：转账成功，用户A账户余额减少50.75元，用户B账户余额增加50.75元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>边界情况</p>
+<ul>
+<li>转账金额为0<ul>
+<li>用例描述：用户A向用户B转账0元。</li>
+<li>前置条件：用户A账户有效，用户B账户有效。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入转账金额0元。</li>
+<li>输入用户B的账户信息。</li>
+<li>尝试确认转账。</li>
+</ol>
+</li>
+<li>预期结果：系统提示转账金额无效，转账失败。</li>
+</ul>
+</li>
+<li>转账金额为账户余额<ul>
+<li>用例描述：用户A向用户B转账用户A的全部余额。</li>
+<li>前置条件：用户A账户余额为200元，用户B账户有效。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入转账金额200元。</li>
+<li>输入用户B的账户信息。</li>
+<li>确认转账。</li>
+</ol>
+</li>
+<li>预期结果：转账成功，用户A账户余额减少200元，用户B账户余额增加200元。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>异常情况</p>
+<ul>
+<li>转账金额超过账户余额<ul>
+<li>用例描述：用户A尝试向用户B转账300元，而用户A账户余额只有100元。</li>
+<li>前置条件：用户A账户余额100元，用户B账户有效。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入转账金额300元。</li>
+<li>输入用户B的账户信息。</li>
+<li>尝试确认转账。</li>
+</ol>
+</li>
+<li>预期结果：系统提示余额不足，转账失败。</li>
+</ul>
+</li>
+<li>用户B账户无效<ul>
+<li>用例描述：用户A尝试向一个无效的用户B账户转账100元。</li>
+<li>前置条件：用户A账户余额大于等于100元，用户B账户无效。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入转账金额100元。</li>
+<li>输入无效的用户B的账户信息。</li>
+<li>尝试确认转账。</li>
+</ol>
+</li>
+<li>预期结果：系统提示用户B账户无效，转账失败。</li>
+</ul>
+</li>
+<li>网络连接中断<ul>
+<li>用例描述：用户A在转账过程中网络连接中断。</li>
+<li>前置条件：用户A账户有效，用户B账户有效，网络连接不稳定。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入转账金额100元。</li>
+<li>输入用户B的账户信息。</li>
+<li>确认转账时网络中断。</li>
+</ol>
+</li>
+<li>预期结果：系统提示网络连接问题，转账未完成。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>安全测试</p>
+<ul>
+<li>防止重复提交<ul>
+<li>用例描述：用户A在确认转账后多次点击确认按钮。</li>
+<li>前置条件：用户A账户有效，用户B账户有效，转账金额为100元。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入转账金额100元。</li>
+<li>输入用户B的账户信息。</li>
+<li>多次点击确认转账按钮。</li>
+</ol>
+</li>
+<li>预期结果：系统只执行一次转账操作，用户A账户减少100元，用户B账户增加100元。</li>
+</ul>
+</li>
+<li>转账金额非法字符<ul>
+<li>用例描述：用户A尝试输入非法字符作为转账金额。</li>
+<li>前置条件：用户A账户有效，用户B账户有效。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入非法字符(如”abc”)作为转账金额。</li>
+<li>输入用户B的账户信息。</li>
+<li>尝试确认转账。</li>
+</ol>
+</li>
+<li>预期结果：系统提示金额无效，转账失败。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>其他情况</p>
+<ul>
+<li>跨境转账<ul>
+<li>用例描述：用户A向国外的用户B转账100美元。</li>
+<li>前置条件：用户A账户有效且支持跨境转账，用户B账户有效，用户A有足够的美元余额。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择跨境转账功能。</li>
+<li>输入转账金额100美元。</li>
+<li>输入用户B的账户信息。</li>
+<li>确认转账。</li>
+</ol>
+</li>
+<li>预期结果：转账成功，用户A美元余额减少100美元，用户B账户美元余额增加100美元。</li>
+</ul>
+</li>
+<li>转账备注<ul>
+<li>用例描述：用户A向用户B转账100元，并添加备注信息。</li>
+<li>前置条件：用户A账户有效，用户B账户有效。</li>
+<li>操作步骤：<ol>
+<li>用户A登录支付宝账户。</li>
+<li>用户A选择转账功能。</li>
+<li>输入转账金额100元。</li>
+<li>输入用户B的账户信息。</li>
+<li>添加转账备注信息(如“生日礼物”)。</li>
+<li>确认转账。</li>
+</ol>
+</li>
+<li>预期结果：转账成功，备注信息正确保存，用户A账户减少100元，用户B账户增加100元。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>这些测试用例覆盖了支付宝转账功能的主要场景，可以帮助全面测试转账功能，确保系统能够正确处理各种情况下的转账操作。</p>
+<p>在这个示例中，workflow 文件名为 <code>ci.yml</code>，它定义了一个名为 <code>build</code> 的 job，该 job 在 <code>ubuntu-latest</code> 的环境上运行。整个过程包括以下步骤：</p>
+<ol>
+<li>Checkout code：检出代码仓库。</li>
+<li>Set up Node.js：设置 Node.js 环境。</li>
+<li>Install dependencies：安装依赖。</li>
+<li>Run tests：运行测试。</li>
+</ol>
+<p>所以，GitHub Workflow 可以用于测试，但它的应用范围远不止于此。</p>
+<h3 id="测试工具"><a href="#测试工具" class="headerlink" title="测试工具"></a>测试工具</h3><ul>
+<li>JUnit：JUnit是Java中最流行的单元测试框架之一，用于编写和运行单元测试。它提供了一组注解和断言方法，使得编写测试用例变得简单易懂。</li>
+<li>TestNG：TestNG是另一个流行的Java测试框架，提供了比JUnit更丰富的功能，例如参数化测试、测试组、依赖测试等。它也可以用于编写单元测试和集成测试。</li>
+<li>Selenium：Selenium是用于自动化Web应用程序测试的工具，它支持多种浏览器，并提供了Java API，使得测试脚本的编写和执行变得简单。Selenium可以用于执行功能测试、回归测试等。</li>
+<li>JMeter：JMeter是一个用于性能测试的工具，它可以模拟大量用户并测量应用程序的性能和稳定性。JMeter也可以用于功能测试和接口测试。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://cwp0.github.io">cwp0</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://cwp0.github.io/posts/17768.html">https://cwp0.github.io/posts/17768.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a><a class="post-meta__tags" href="/tags/%E6%B5%8B%E8%AF%95%E5%BC%80%E5%8F%91/">测试开发</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/05/27/drCF3NnMKboz1AQ.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.JPG" target="_blank"><img class="post-qr-code-img" src="/img/wechat.JPG" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.JPG" target="_blank"><img class="post-qr-code-img" src="/img/alipay.JPG" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/17770.html" title="计算机基础"><img class="cover" src="https://s2.loli.net/2024/06/27/7o6ubNCe3GgkqMF.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">计算机基础</div></div><div class="info-2"><div class="info-item-1"> 本文参考 JavaGuide  网络常见网络模型 OSI七层模型：如下。 TCP&#x2F;IP四层模型：如下。 混合模型：混合模型结合了OSI模型和TCP&#x2F;IP模型的优点，以更好地解释和实现网络通信。 五层模型： 物理层、数据链路层、网络层、传输层和应用层。 去除了OSI模型中的会话层和表示层，将它们的功能合并到应用层中。   IEEE 802模型：主要用于局域网(LAN)和城域网(MAN)。包含物理层和数据链路层，进一步细分为介质访问控制(MAC)层和逻辑链路控制(LLC)层。  OSI七层模型 应用层：为计算机提供服务 表示层：数据处理(编码、解码、加密解密、压缩解压缩) 会话层：管理(建立、维护、重连)应用程序之间的会话 传输层：为两台主机进程之间的通信提供通用的数据传输服务 网络层：转发、路由和寻址(决定数据在网络中的游走路径) 数据链路层：帧编码和误差纠正控制 物理层：透明地传送比特流传输  TCP&#x2F;IP四层模型 应用层(应用层、表示层、会话层) 传输层 网络层 网络接口层(数据链路层、物理层)  为什么网络要分层复杂系统需要分层，每层专注于一类...</div></div></div></a><a class="pagination-related" href="/posts/17767.html" title="前端&amp;移动端面经"><img class="cover" src="https://s2.loli.net/2024/05/27/QygHftOujrEodTW.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">前端&移动端面经</div></div><div class="info-2"><div class="info-item-1">虚拟列表实现原理虚拟列表(Virtual List)是一种在数据量较大时，优化显示性能和用户体验的技术。其核心思想是在渲染和显示过程中只加载和显示当前视窗内的部分数据，而不是一次性加载和渲染全部数据。这样可以显著减少内存消耗和提高渲染速度。虚拟列表通常用于长列表或表格组件中，特别是在Web应用和移动应用中。  实现原理   可视区域(Viewport)：虚拟列表只渲染用户当前可见区域内的列表项。用户滚动时，更新可视区域内的列表项。 缓冲区(Buffer)：为了防止滚动时的卡顿，虚拟列表通常会在可视区域上下增加一定数量的缓冲区列表项。这些缓冲区项可以在用户快速滚动时提前加载，保证平滑滚动。 位置计算(Position Calculation)：通过计算每个列表项在整个列表中的位置，只渲染可视区域和缓冲区内的项。使用绝对定位或CSS变换属性将这些项放置在正确的位置。 事件监听(Event Listener)：监听滚动事件，根据滚动位置更新可视区域和缓冲区内的列表项。   具体实现步骤   初始设置：确定列表项的高度(或宽度)，以及可视区域的高度(或宽度)。如果列表项高度不一致，需要预...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/17779.html" title="游戏研发面经"><img class="cover" src="https://s2.loli.net/2024/06/28/RviHxaoQPJhA8wj.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-28</div><div class="info-item-2">游戏研发面经</div></div><div class="info-2"><div class="info-item-1">为什么要应聘游戏研发这个岗位玩过哪些游戏？如何设计出一个游戏？UDP在游戏中为什么丢了包不影响在游戏中使用 UDP(用户数据报协议)而丢包不影响游戏体验的原因主要有以下几点：  实时性要求高：许多游戏(特别是在线游戏)需要实时传输数据，保证游戏的流畅性和响应速度。UDP是一种无连接协议，不需要建立连接就能发送数据，传输速度快，延迟低，适合实时数据传输。 数据包丢失容忍度高：游戏中的许多数据(如玩家的位置、动作等)会频繁更新。即使有些数据包丢失了，也很快会被新的数据包覆盖，因此不会对游戏体验造成明显影响。相比之下，TCP需要确认每个数据包的接收，这会导致延迟，影响游戏的实时性。 自定义重传机制：一些游戏会自行实现数据包丢失的检测和重传机制，而不是依赖于底层协议的重传机制。这种方式更灵活，可以根据具体需要决定是否重传丢失的数据包。 不重要的数据：一些数据(如瞬时状态更新)即使丢失也不会对游戏产生重大影响。游戏开发者可以根据数据的重要性选择是否采用UDP来传输这些数据。  这些特点使得UDP在许多需要快速、实时数据传输的游戏中得到了广泛应用。 </div></div></div></a><a class="pagination-related" href="/posts/17766.html" title="Java后端面经"><img class="cover" src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-27</div><div class="info-item-2">Java后端面经</div></div><div class="info-2"><div class="info-item-1"> 准备在这篇文章中，先详细分析简历中可能会被问到的问题，然后总结一下 Java基础的精简答案，最后再回顾一下每次面试的面经。本文参考 JavaGuide  简历相关自我介绍面试官您好，我叫陈温鹏，就读于南京理工大学软件工程专业，学位是学硕，这次应聘的是 Java后端开发岗位。 我呢，研一的时候有过一段开源经历(Casbin社区一个线上实习)，担任社区维护者，日常工作会负责处理社区日常issue，跟踪解决用户需求，修复bug及完善文档等；然后在研一暑假期间中选了中科院和 Casbin 社区联合举办的一个开源项目，主要的工作是完善社区整个大前端系统，包括 web，移动端功能完善，以及为社区开发了一款支持通用2FA的移动端app。除此之外，我还参与过国网经济研究院的一个项目，以及自己做过两个Java前后端项目。这几段项目实习经历锻炼了我文档阅读、编写的能力，并在代码规范、开发流程等技能上获得提升。 然后我呢，我评价觉得自己是一个学习能力很强的人，本科成绩前5%，获得过国家奖学金，辅修了英语双学位，硕士期间也获得过学业一等奖学金，可以比较快速的学习并适应新的环境和技术栈。  最后感谢 x...</div></div></div></a><a class="pagination-related" href="/posts/17773.html" title="面经汇总"><img class="cover" src="https://s2.loli.net/2024/06/25/Jfpxsi8HXMwbC29.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-25</div><div class="info-item-2">面经汇总</div></div><div class="info-2"><div class="info-item-1">腾讯 WXG - 移动客户端开发 实习基础微信&amp;视频号团队2024&#x2F;3&#x2F;19 40多分钟 一面  自我介绍 研究生成绩、本科生成绩 研究生主要专业课 Java - 强引用 弱引用 Java - 垃圾回收机制 TCP连接如何保成可靠性 HTTP状态码 拷打实习、项目 你的开源线上实习主要都做的啥？ 你在开源实习过程中遇到的最难的是什么？ 你的单点登录系统大前端项目中 主要都做了什么东西？ 手撕代码 给定一个字符串 s，你可以通过在字符串前面添加字符将其转换为回文串。找到并返回可以用这种方式转换的最短回文串。   意向城市是上海，组内基本都在广州，这个你有什么问题吗？ 为什么会想要投移动客户端开发？ 除了在实习项目中，你还在有通过其他途径了解到移动客户端开发吗？ 反问： 面试官您觉得我的表现如何？ 组内日常工作？    淘天集团 - 天猫技术部前端 实习2024&#x2F;3&#x2F;26 14:00  70多分钟。。感觉好难。。。  面试官介绍部门、自我介绍 自己自我介绍 RN和React的区别 单点登录SSO原理 PKCE Flutter RN区别，...</div></div></div></a><a class="pagination-related" href="/posts/17771.html" title="框架"><img class="cover" src="https://s2.loli.net/2024/06/12/tSWPZr1EQH6XRAm.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-12</div><div class="info-item-2">框架</div></div><div class="info-2"><div class="info-item-1"> 本文参考 JavaGuide  Spring什么是SpringSpring 是一款基于 Java 的轻量级开源开发框架，旨在提高开发人员的开发效率以及系统的可维护性。 Spring 框架(Spring Framework)是很多模块的集合，使用这些模块可以很方便地协助进行开发。Spring 支持控制反转(Inversion of Control, IOC) 和 面向切面编程(Aspect-Oriented Programming, AOP)、可以很方便地对数据库进行访问、可以很方便地集成第三方组件(电子邮件，任务，调度，缓存等等)、对单元测试支持比较好、支持 RESTful Java 应用程序的开发。 Spring的核心功能主要是 IoC 和 AOP，核心思想是不重新造轮子，开箱即用，提高开发效率。 Spring模块 Spring5.x 版本中 Web 模块的 Portlet 组件已经被废弃掉，同时增加了用于异步响应式处理的 WebFlux 组件。  Core Container：Spring 框架的核心模块、基础模块，主要提供 IoC 依赖注入功能的支持。Spring 其他所...</div></div></div></a><a class="pagination-related" href="/posts/17778.html" title="系统设计"><img class="cover" src="https://s2.loli.net/2024/06/27/OKRYQHdoCfGmgxr.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-27</div><div class="info-item-2">系统设计</div></div><div class="info-2"><div class="info-item-1">实现多个客户端访问一个服务端使用Socket编程来实现一个简单的客户端-服务端模型。 服务端代码： 1234567891011121314151617181920212223242526272829303132import socketimport threading# 定义服务端的IP地址和端口server_ip = &#x27;127.0.0.1&#x27;server_port = 12345# 创建Socket对象server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)server_socket.bind((server_ip, server_port))server_socket.listen(5)  # 最大连接数print(f&quot;服务器启动，监听端口: &#123;server_port&#125;&quot;)def handle_client(client_socket):    while True:        try:            message = client...</div></div></div></a><a class="pagination-related" href="/posts/17770.html" title="计算机基础"><img class="cover" src="https://s2.loli.net/2024/06/27/7o6ubNCe3GgkqMF.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-12</div><div class="info-item-2">计算机基础</div></div><div class="info-2"><div class="info-item-1"> 本文参考 JavaGuide  网络常见网络模型 OSI七层模型：如下。 TCP&#x2F;IP四层模型：如下。 混合模型：混合模型结合了OSI模型和TCP&#x2F;IP模型的优点，以更好地解释和实现网络通信。 五层模型： 物理层、数据链路层、网络层、传输层和应用层。 去除了OSI模型中的会话层和表示层，将它们的功能合并到应用层中。   IEEE 802模型：主要用于局域网(LAN)和城域网(MAN)。包含物理层和数据链路层，进一步细分为介质访问控制(MAC)层和逻辑链路控制(LLC)层。  OSI七层模型 应用层：为计算机提供服务 表示层：数据处理(编码、解码、加密解密、压缩解压缩) 会话层：管理(建立、维护、重连)应用程序之间的会话 传输层：为两台主机进程之间的通信提供通用的数据传输服务 网络层：转发、路由和寻址(决定数据在网络中的游走路径) 数据链路层：帧编码和误差纠正控制 物理层：透明地传送比特流传输  TCP&#x2F;IP四层模型 应用层(应用层、表示层、会话层) 传输层 网络层 网络接口层(数据链路层、物理层)  为什么网络要分层复杂系统需要分层，每层专注于一类...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Valine</span><span id="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">cwp0</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cwp0"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/cwp0" target="_blank" title="Github"><i class="fab fa-github" style="color: #9F9F9F;"></i></a><a class="social-icon" href="mailto:wenpengchen@njust.edu.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: 9F9F9F;"></i></a><a class="social-icon" href="/img/alipay.JPG" target="_blank" title="QQ"><i class="fa-brands fa-qq" style="color: #9F9F9F;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This site is under construction...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E5%BC%80%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">测开自我介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9%E6%B5%8B%E5%BC%80"><span class="toc-number">2.</span> <span class="toc-text">为什么选择测开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9A%E8%BF%87%E5%93%AA%E4%BA%9B%E5%85%B3%E4%BA%8E%E6%B5%8B%E5%BC%80%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">做过哪些关于测开的工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%B1%BB%E5%9E%8B%E5%88%86%E7%B1%BB"><span class="toc-number">4.</span> <span class="toc-text">测试类型分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E5%88%86%E7%B1%BB"><span class="toc-number">5.</span> <span class="toc-text">测试方法分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-number">6.</span> <span class="toc-text">测试用例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95"><span class="toc-number">7.</span> <span class="toc-text">测试用例的设计方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">8.</span> <span class="toc-text">测试生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E6%B5%8B%E8%AF%95%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%BC%80%E5%8F%91"><span class="toc-number">9.</span> <span class="toc-text">如何理解测试开发中的开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%B5%8B%E8%AF%95%E4%BF%9D%E8%AF%81%E4%B8%80%E4%B8%AA%E6%A8%A1%E5%9D%97%E7%9A%84%E8%B4%A8%E9%87%8F"><span class="toc-number">10.</span> <span class="toc-text">如何使用测试保证一个模块的质量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%92%88%E5%AF%B9%E4%BC%98%E9%85%B7%E8%A7%86%E9%A2%91-%E4%BB%8E%E7%B3%BB%E7%BB%9F%E5%B1%82%E9%9D%A2%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95"><span class="toc-number">11.</span> <span class="toc-text">针对优酷视频 从系统层面如何进行测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%AAJava%E9%A1%B9%E7%9B%AE%EF%BC%9F"><span class="toc-number">12.</span> <span class="toc-text">如何测试一个Java项目？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E6%89%80%E5%86%99%E6%8E%A5%E5%8F%A3%E5%8A%9F%E8%83%BD%E6%AD%A3%E5%B8%B8%EF%BC%9F"><span class="toc-number">13.</span> <span class="toc-text">如何判断所写接口功能正常？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E6%9E%84%E9%80%A0%E6%97%A0%E7%94%A8%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%EF%BC%9F"><span class="toc-number">14.</span> <span class="toc-text">怎么构造无用测试用例？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%84%9F%E7%9F%A5%E7%BA%BF%E4%B8%8A%E9%A1%B9%E7%9B%AE%E5%87%BA%E7%8E%B0%E9%97%AE%E9%A2%98"><span class="toc-number">15.</span> <span class="toc-text">如何感知线上项目出现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BA%A2%E4%B9%A6%E8%B4%AD%E7%89%A9%E6%90%9C%E7%B4%A2%E6%A1%86%E8%AE%BE%E8%AE%A1%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-number">16.</span> <span class="toc-text">小红书购物搜索框设计测试用例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E8%AE%BE%E8%AE%A1%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B"><span class="toc-number">17.</span> <span class="toc-text">登录设计测试样例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AE%E4%BF%A1%E5%8F%91%E9%80%81%E6%96%87%E4%BB%B6%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-number">18.</span> <span class="toc-text">微信发送文件的测试用例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AE%E4%BF%A1%E5%8F%91%E9%80%81%E7%BA%A2%E5%8C%85%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-number">19.</span> <span class="toc-text">微信发送红包的测试用例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E5%BD%B1%E8%AE%A2%E7%A5%A8%E5%8A%9F%E8%83%BD%E7%9A%84%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B"><span class="toc-number">20.</span> <span class="toc-text">电影订票功能的测试样例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E5%95%86%E6%BB%A1%E5%87%8F%E4%BC%98%E6%83%A0%E5%88%B8%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E8%AE%BE%E8%AE%A1"><span class="toc-number">21.</span> <span class="toc-text">电商满减优惠券测试用例设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%96%E5%8D%96%E4%BC%98%E6%83%A0%E5%88%B8%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E8%AE%BE%E8%AE%A1"><span class="toc-number">22.</span> <span class="toc-text">外卖优惠券测试用例设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tiktok%E7%82%B9%E5%88%B0%E5%95%86%E5%93%81%E8%AF%A6%E6%83%85%E9%A1%B5%E5%8F%98%E7%99%BD%E4%BA%86%EF%BC%8C%E6%80%8E%E4%B9%88%E6%8E%92%E6%9F%A5"><span class="toc-number">23.</span> <span class="toc-text">tiktok点到商品详情页变白了，怎么排查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tiktok%E8%AF%A6%E6%83%85%E9%A1%B5%E5%9C%BA%E6%99%AF%E6%B5%8B%E8%AF%95"><span class="toc-number">24.</span> <span class="toc-text">tiktok详情页场景测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%92%88%E5%AF%B9%E4%BA%8E%E6%8A%96%E9%9F%B3%E8%B4%AD%E7%89%A9%EF%BC%8C%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95"><span class="toc-number">25.</span> <span class="toc-text">针对于抖音购物，如何进行测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%B0%8F%E7%BA%A2%E4%B9%A6%E7%9A%84%E9%A6%96%E9%A1%B5%E6%BB%91%E5%8A%A8%E7%95%8C%E9%9D%A2"><span class="toc-number">26.</span> <span class="toc-text">测试小红书的首页滑动界面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F"><span class="toc-number">27.</span> <span class="toc-text">测试商品秒杀系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Github-Workflow%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95"><span class="toc-number">28.</span> <span class="toc-text">Github Workflow自动化测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%AF%E4%BB%98%E5%AE%9D-%E5%BE%AE%E4%BF%A1%E8%BD%AC%E8%B4%A6%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-number">29.</span> <span class="toc-text">支付宝&#x2F;微信转账功能测试用例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="toc-number">30.</span> <span class="toc-text">测试工具</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/17782.html" title="学车小记"><img src="https://s2.loli.net/2025/03/19/eVRF7JMl4yjrzhQ.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="学车小记"/></a><div class="content"><a class="title" href="/posts/17782.html" title="学车小记">学车小记</a><time datetime="2025-03-19T07:04:48.000Z" title="Created 2025-03-19 15:04:48">2025-03-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17781.html" title="华为笔试/手撕"><img src="https://s2.loli.net/2025/03/19/kAcZ5yKPDwizuMN.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="华为笔试/手撕"/></a><div class="content"><a class="title" href="/posts/17781.html" title="华为笔试/手撕">华为笔试/手撕</a><time datetime="2024-11-15T03:51:23.000Z" title="Created 2024-11-15 11:51:23">2024-11-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17780.html" title="分布式/高性能/高可用"><img src="https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分布式/高性能/高可用"/></a><div class="content"><a class="title" href="/posts/17780.html" title="分布式/高性能/高可用">分布式/高性能/高可用</a><time datetime="2024-09-03T09:21:00.000Z" title="Created 2024-09-03 17:21:00">2024-09-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17779.html" title="游戏研发面经"><img src="https://s2.loli.net/2024/06/28/RviHxaoQPJhA8wj.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="游戏研发面经"/></a><div class="content"><a class="title" href="/posts/17779.html" title="游戏研发面经">游戏研发面经</a><time datetime="2024-06-27T16:10:26.000Z" title="Created 2024-06-28 00:10:26">2024-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17777.html" title="智力题"><img src="https://s2.loli.net/2024/06/27/9KWGke8lsJaM1fi.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="智力题"/></a><div class="content"><a class="title" href="/posts/17777.html" title="智力题">智力题</a><time datetime="2024-06-27T15:39:07.000Z" title="Created 2024-06-27 23:39:07">2024-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By cwp0</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional and Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nfRxTBEmIAeb6gP2K0LOdLqw-gzGzoHsz',
+      appKey: 'vmeDN8k58dVdPv5Yz7NEkvSN',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('/js/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/posts/17768.html'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'https://cwp0.github.io/posts/17768.html'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = '测开面经'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=&api_key=&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Valine' === 'Disqus' || !true) {
+    if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      GLOBAL_CONFIG_SITE.pageType === 'post' && getCount()
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script async src="https://npm.elemecdn.com/tzy-blog/lib/js/other/sakura.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,678 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>系统设计 | cwp0</title><meta name="author" content="cwp0"><meta name="copyright" content="cwp0"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="系统设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系统设计">
+<meta property="og:url" content="https://cwp0.github.io/posts/17778.html">
+<meta property="og:site_name" content="cwp0">
+<meta property="og:description" content="系统设计">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2024/06/27/OKRYQHdoCfGmgxr.png">
+<meta property="article:published_time" content="2024-06-27T15:39:07.000Z">
+<meta property="article:modified_time" content="2024-06-27T16:15:15.000Z">
+<meta property="article:author" content="cwp0">
+<meta property="article:tag" content="面经">
+<meta property="article:tag" content="系统设计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/06/27/OKRYQHdoCfGmgxr.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "系统设计",
+  "url": "https://cwp0.github.io/posts/17778.html",
+  "image": "https://s2.loli.net/2024/06/27/OKRYQHdoCfGmgxr.png",
+  "datePublished": "2024-06-27T15:39:07.000Z",
+  "dateModified": "2024-06-27T16:15:15.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "cwp0",
+      "url": "https://cwp0.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/assets/%E5%A4%B4%E5%83%8F.png"><link rel="canonical" href="https://cwp0.github.io/posts/17778.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":66,"languages":{"author":"Author: cwp0","link":"Link: ","source":"Source: cwp0","info":"Copyright belongs to the author. For commercial use, please contact the author for authorization. For non-commercial use, please indicate the source."}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '系统设计',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/url(/img/background/%E6%A8%B1%E8%8A%B12.jpg));"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://s2.loli.net/2024/06/27/xFVKjeyNk45c8wv.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/assets/%E5%A4%B4%E5%83%8F.png" alt="Logo"><span class="site-name">cwp0</span></a><a class="nav-page-title" href="/"><span class="site-name">系统设计</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">系统设计</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-06-27T15:39:07.000Z" title="Created 2024-06-27 23:39:07">2024-06-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-06-27T16:15:15.000Z" title="Updated 2024-06-28 00:15:15">2024-06-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>4mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2024-06-28 00:15:15&quot;}" hidden></div><h3 id="实现多个客户端访问一个服务端"><a href="#实现多个客户端访问一个服务端" class="headerlink" title="实现多个客户端访问一个服务端"></a>实现多个客户端访问一个服务端</h3><p>使用<code>Socket</code>编程来实现一个简单的客户端-服务端模型。</p>
+<p>服务端代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义服务端的IP地址和端口</span></span><br><span class="line">server_ip = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line">server_port = <span class="number">12345</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Socket对象</span></span><br><span class="line">server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">server_socket.bind((server_ip, server_port))</span><br><span class="line">server_socket.listen(<span class="number">5</span>)  <span class="comment"># 最大连接数</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;服务器启动，监听端口: <span class="subst">&#123;server_port&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handle_client</span>(<span class="params">client_socket</span>):</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            message = client_socket.recv(<span class="number">1024</span>).decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> message:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;收到消息: <span class="subst">&#123;message&#125;</span>&quot;</span>)</span><br><span class="line">            response = <span class="string">f&quot;服务器收到消息: <span class="subst">&#123;message&#125;</span>&quot;</span></span><br><span class="line">            client_socket.send(response.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">        <span class="keyword">except</span> ConnectionResetError:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    client_socket.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    client_socket, client_address = server_socket.accept()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;连接来自: <span class="subst">&#123;client_address&#125;</span>&quot;</span>)</span><br><span class="line">    client_handler = threading.Thread(target=handle_client, args=(client_socket,))</span><br><span class="line">    client_handler.start()</span><br></pre></td></tr></table></figure>
+<p>客户端代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义服务端的IP地址和端口</span></span><br><span class="line">server_ip = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line">server_port = <span class="number">12345</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Socket对象</span></span><br><span class="line">client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">client_socket.connect((server_ip, server_port))</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    message = <span class="built_in">input</span>(<span class="string">&quot;请输入发送给服务器的消息: &quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> message.lower() == <span class="string">&#x27;exit&#x27;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    client_socket.send(message.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">    response = client_socket.recv(<span class="number">1024</span>).decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;服务器回应: <span class="subst">&#123;response&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">client_socket.close()</span><br></pre></td></tr></table></figure>
+<p>服务端代码:</p>
+<ul>
+<li>创建一个<code>Socket</code>对象并绑定到指定的IP地址和端口。</li>
+<li>使用<code>listen()</code>方法开始监听连接。</li>
+<li>当有客户端连接时，接受连接并创建一个新的线程来处理该客户端的通信。</li>
+<li><code>handle_client</code>函数负责处理与客户端的通信，包括接收消息和发送响应。</li>
+</ul>
+<p>客户端代码:</p>
+<ul>
+<li>创建一个<code>Socket</code>对象并连接到服务端的IP地址和端口。</li>
+<li>进入一个循环，从用户输入获取消息并发送到服务端。</li>
+<li>接收服务端的响应并打印出来。</li>
+<li>当用户输入<code>&#39;exit&#39;</code>时，关闭连接。</li>
+</ul>
+<p>这种方法使用多线程来处理多个客户端的连接，每个客户端都有一个单独的线程来处理，从而实现了多个客户端访问一个服务端。</p>
+<h3 id="置顶和加精如何设计"><a href="#置顶和加精如何设计" class="headerlink" title="置顶和加精如何设计"></a>置顶和加精如何设计</h3><p>执行置顶和加精的设计通常涉及后端系统的多个层面，包括数据库设计、API接口设计、权限控制以及前端展示等。以下是一个基于通用场景的设计方案：</p>
+<ol>
+<li>数据库设计：在数据库中需要为帖子(或文章)表添加相应的字段以支持置顶和加精功能。常见的做法是为帖子表添加两个字段：<ul>
+<li><code>is_top</code>(或类似名称)：用于标识帖子是否置顶。该字段通常为布尔类型或整型(0表示未置顶，1表示已置顶)。</li>
+<li><code>is_wonderful</code>(或类似名称)：用于标识帖子是否加精。该字段同样为布尔类型或整型(0表示未加精，1表示已加精)。</li>
+</ul>
+</li>
+<li>API接口设计：在API层面，需要设计相应的接口来支持置顶和加精操作。<ul>
+<li>置顶接口：接受帖子的ID作为参数，将对应帖子的<code>is_top</code>字段设置为1(或相应的值)，并返回操作结果。</li>
+<li>取消置顶接口：与置顶接口类似，但将<code>is_top</code>字段设置回0(或相应的值)。</li>
+<li>加精接口：接受帖子的ID作为参数，将对应帖子的<code>is_wonderful</code>字段设置为1(或相应的值)，并返回操作结果。</li>
+<li>取消加精接口：与加精接口类似，但将<code>is_wonderful</code>字段设置回0(或相应的值)。</li>
+</ul>
+</li>
+<li>权限控制：在执行置顶和加精操作时，还需要进行权限控制，以确保只有具有相应权限的用户(如版主或管理员)才能执行这些操作。这通常通过以下方式实现： <ul>
+<li>用户认证：首先，用户需要登录系统，并通过身份验证。</li>
+<li>角色和权限检查：系统检查用户的角色(如版主、管理员等)和权限，以确定用户是否有权执行置顶或加精操作。</li>
+</ul>
+</li>
+<li>前端展示：在前端展示方面，需要为具有相应权限的用户显示置顶和加精的按钮或链接，并在帖子列表中根据帖子的<code>is_top</code>和<code>is_wonderful</code>字段的值来展示相应的标识(如置顶标签、加精图标等)。</li>
+<li>额外考虑<ul>
+<li>数据一致性：在执行置顶和加精操作时，需要确保数据的一致性。例如，如果系统只允许一个帖子置顶，那么在置顶新帖子时需要先取消其他帖子的置顶状态。</li>
+<li>性能优化：对于高并发的系统，需要考虑如何优化置顶和加精操作的性能。例如，可以通过缓存技术来减少数据库的访问次数。</li>
+<li>日志记录：为了追踪和审计操作，系统应该记录每次置顶和加精操作的详细信息，包括操作时间、操作人、帖子ID等。</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://cwp0.github.io">cwp0</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://cwp0.github.io/posts/17778.html">https://cwp0.github.io/posts/17778.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a><a class="post-meta__tags" href="/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/06/27/OKRYQHdoCfGmgxr.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.JPG" target="_blank"><img class="post-qr-code-img" src="/img/wechat.JPG" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.JPG" target="_blank"><img class="post-qr-code-img" src="/img/alipay.JPG" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/17779.html" title="游戏研发面经"><img class="cover" src="https://s2.loli.net/2024/06/28/RviHxaoQPJhA8wj.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">游戏研发面经</div></div><div class="info-2"><div class="info-item-1">为什么要应聘游戏研发这个岗位玩过哪些游戏？如何设计出一个游戏？UDP在游戏中为什么丢了包不影响在游戏中使用 UDP(用户数据报协议)而丢包不影响游戏体验的原因主要有以下几点：  实时性要求高：许多游戏(特别是在线游戏)需要实时传输数据，保证游戏的流畅性和响应速度。UDP是一种无连接协议，不需要建立连接就能发送数据，传输速度快，延迟低，适合实时数据传输。 数据包丢失容忍度高：游戏中的许多数据(如玩家的位置、动作等)会频繁更新。即使有些数据包丢失了，也很快会被新的数据包覆盖，因此不会对游戏体验造成明显影响。相比之下，TCP需要确认每个数据包的接收，这会导致延迟，影响游戏的实时性。 自定义重传机制：一些游戏会自行实现数据包丢失的检测和重传机制，而不是依赖于底层协议的重传机制。这种方式更灵活，可以根据具体需要决定是否重传丢失的数据包。 不重要的数据：一些数据(如瞬时状态更新)即使丢失也不会对游戏产生重大影响。游戏开发者可以根据数据的重要性选择是否采用UDP来传输这些数据。  这些特点使得UDP在许多需要快速、实时数据传输的游戏中得到了广泛应用。 </div></div></div></a><a class="pagination-related" href="/posts/17777.html" title="智力题"><img class="cover" src="https://s2.loli.net/2024/06/27/9KWGke8lsJaM1fi.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">智力题</div></div><div class="info-2"><div class="info-item-1">8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球为了在只使用两次测量的情况下找到8个球中偏重的那个球，可以采用以下方法：  将8个球分成3组： 第一组：A、B、C 第二组：D、E、F 第三组：G、H   第一次测量： 将第一组(A、B、C)放在天平的左边，第二组(D、E、F)放在天平的右边。可能的结果有三种： 左边重(A、B、C中有一个是重球) 右边重(D、E、F中有一个是重球) 两边一样重(G、H中有一个是重球)   第二次测量： 如果第一次测量左边重：从A、B、C中任选两个球进行测量，例如A和B。 如果A和B重量相等，则重球是C。 如果A和B不等，则重球是较重的那个。   如果第一次测量右边重：从D、E、F中任选两个球进行测量，例如D和E。 如果D和E重量相等，则重球是F。 如果D和E不等，则重球是较重的那个。   如果第一次测量两边一样重：对G和H进行测量。 如果G和H重量相等，则重球不存在(但由于题意重球必存在，所以这个情况不会出现)。 如果G和H不等，则重球是较重的那个。      通过这种方法，可以在两次测量内准确找到8个球中偏重的那个球。 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/17773.html" title="面经汇总"><img class="cover" src="https://s2.loli.net/2024/06/25/Jfpxsi8HXMwbC29.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-25</div><div class="info-item-2">面经汇总</div></div><div class="info-2"><div class="info-item-1">腾讯 WXG - 移动客户端开发 实习基础微信&amp;视频号团队2024&#x2F;3&#x2F;19 40多分钟 一面  自我介绍 研究生成绩、本科生成绩 研究生主要专业课 Java - 强引用 弱引用 Java - 垃圾回收机制 TCP连接如何保成可靠性 HTTP状态码 拷打实习、项目 你的开源线上实习主要都做的啥？ 你在开源实习过程中遇到的最难的是什么？ 你的单点登录系统大前端项目中 主要都做了什么东西？ 手撕代码 给定一个字符串 s，你可以通过在字符串前面添加字符将其转换为回文串。找到并返回可以用这种方式转换的最短回文串。   意向城市是上海，组内基本都在广州，这个你有什么问题吗？ 为什么会想要投移动客户端开发？ 除了在实习项目中，你还在有通过其他途径了解到移动客户端开发吗？ 反问： 面试官您觉得我的表现如何？ 组内日常工作？    淘天集团 - 天猫技术部前端 实习2024&#x2F;3&#x2F;26 14:00  70多分钟。。感觉好难。。。  面试官介绍部门、自我介绍 自己自我介绍 RN和React的区别 单点登录SSO原理 PKCE Flutter RN区别，...</div></div></div></a><a class="pagination-related" href="/posts/17779.html" title="游戏研发面经"><img class="cover" src="https://s2.loli.net/2024/06/28/RviHxaoQPJhA8wj.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-28</div><div class="info-item-2">游戏研发面经</div></div><div class="info-2"><div class="info-item-1">为什么要应聘游戏研发这个岗位玩过哪些游戏？如何设计出一个游戏？UDP在游戏中为什么丢了包不影响在游戏中使用 UDP(用户数据报协议)而丢包不影响游戏体验的原因主要有以下几点：  实时性要求高：许多游戏(特别是在线游戏)需要实时传输数据，保证游戏的流畅性和响应速度。UDP是一种无连接协议，不需要建立连接就能发送数据，传输速度快，延迟低，适合实时数据传输。 数据包丢失容忍度高：游戏中的许多数据(如玩家的位置、动作等)会频繁更新。即使有些数据包丢失了，也很快会被新的数据包覆盖，因此不会对游戏体验造成明显影响。相比之下，TCP需要确认每个数据包的接收，这会导致延迟，影响游戏的实时性。 自定义重传机制：一些游戏会自行实现数据包丢失的检测和重传机制，而不是依赖于底层协议的重传机制。这种方式更灵活，可以根据具体需要决定是否重传丢失的数据包。 不重要的数据：一些数据(如瞬时状态更新)即使丢失也不会对游戏产生重大影响。游戏开发者可以根据数据的重要性选择是否采用UDP来传输这些数据。  这些特点使得UDP在许多需要快速、实时数据传输的游戏中得到了广泛应用。 </div></div></div></a><a class="pagination-related" href="/posts/17767.html" title="前端&amp;移动端面经"><img class="cover" src="https://s2.loli.net/2024/05/27/QygHftOujrEodTW.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-27</div><div class="info-item-2">前端&amp;移动端面经</div></div><div class="info-2"><div class="info-item-1">虚拟列表实现原理虚拟列表(Virtual List)是一种在数据量较大时，优化显示性能和用户体验的技术。其核心思想是在渲染和显示过程中只加载和显示当前视窗内的部分数据，而不是一次性加载和渲染全部数据。这样可以显著减少内存消耗和提高渲染速度。虚拟列表通常用于长列表或表格组件中，特别是在Web应用和移动应用中。  实现原理   可视区域(Viewport)：虚拟列表只渲染用户当前可见区域内的列表项。用户滚动时，更新可视区域内的列表项。 缓冲区(Buffer)：为了防止滚动时的卡顿，虚拟列表通常会在可视区域上下增加一定数量的缓冲区列表项。这些缓冲区项可以在用户快速滚动时提前加载，保证平滑滚动。 位置计算(Position Calculation)：通过计算每个列表项在整个列表中的位置，只渲染可视区域和缓冲区内的项。使用绝对定位或CSS变换属性将这些项放置在正确的位置。 事件监听(Event Listener)：监听滚动事件，根据滚动位置更新可视区域和缓冲区内的列表项。   具体实现步骤   初始设置：确定列表项的高度(或宽度)，以及可视区域的高度(或宽度)。如果列表项高度不一致，需要预...</div></div></div></a><a class="pagination-related" href="/posts/17776.html" title="Python知识点"><img class="cover" src="https://s2.loli.net/2024/06/27/RATGUg5c6FXC7mH.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-27</div><div class="info-item-2">Python知识点</div></div><div class="info-2"><div class="info-item-1">Python内存模型Python 的内存模型包括几个重要的概念和机制，帮助解释如何管理和操作内存。以下是关键点：  对象模型：在 Python 中，一切皆对象。变量实际上是对对象的引用。对象分为可变对象(如列表、字典等)和不可变对象(如整数、字符串、元组等)。 引用计数：Python 使用引用计数来管理内存。每个对象都有一个引用计数器，当对象被引用时计数加1，当引用被删除时计数减1。当引用计数为0时，对象被回收。 垃圾回收：除了引用计数，Python 还使用垃圾回收机制来处理循环引用。Python 的垃圾回收器会定期检查并回收那些不再被引用的对象。 内存分配器：Python 使用私有堆来管理内存。Python 内存分配器负责从操作系统获取内存并将其分配给对象。常用的内存分配器包括 PyObject_Malloc 和 PyMem_Malloc。 小对象池化：Python 对小对象(通常是小于256字节的对象)进行池化，以提高内存分配和释放的效率。这意味着相同的小对象可能会被多次重用。 全局解释器锁(GIL)：GIL 是 Python 的一个机制，用于保护 Python 对象的访问，...</div></div></div></a><a class="pagination-related" href="/posts/17768.html" title="测开面经"><img class="cover" src="https://s2.loli.net/2024/05/27/drCF3NnMKboz1AQ.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-27</div><div class="info-item-2">测开面经</div></div><div class="info-2"><div class="info-item-1"> 注：下面内容一部分来自于我舍友的博客  测开自我介绍面试官您好，我叫陈温鹏，就读于南京理工大学软件工程专业，学位是学硕，这次应聘的是 测试开发岗位。 我呢，研一的时候积极参加开源社区建设，先参加了Casbin社区一个线上实习，担任社区维护者，日常工作会解决社区 issue，跟踪解决用户需求，修bug以及完善相关文档；然后在研一暑假三个月时间中了一个中科院和 casbin 社区联合举办的一个开源项目，主要的工作是完善社区整个大前端系统，包括 web，移动端功能完善，以及为社区开发了一款支持通用2FA的移动端app。除此之外，我还参与过国家电网经济研究院的一个项目。 这几段项目实习经历锻炼了我文档阅读、编写的能力，并在代码规范、开发流程等技能上获得提升。 其实在开源项目也做过关于测试相关的工作，也激发了我对测试开发的兴趣，所以就应聘了测试开发这个岗位。 然后我呢，我评价觉得自己是一个学习能力很强的人，可以比较快速的学习并适应新的环境和技术栈。 最后感谢 饿了么 给我这次面试机会，我也十分希望能进入 饿了么 ，与公司共同成长进步！ 为什么选择测开之前在社区的一个开发经历让我对软件质量...</div></div></div></a><a class="pagination-related" href="/posts/17777.html" title="智力题"><img class="cover" src="https://s2.loli.net/2024/06/27/9KWGke8lsJaM1fi.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-27</div><div class="info-item-2">智力题</div></div><div class="info-2"><div class="info-item-1">8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球为了在只使用两次测量的情况下找到8个球中偏重的那个球，可以采用以下方法：  将8个球分成3组： 第一组：A、B、C 第二组：D、E、F 第三组：G、H   第一次测量： 将第一组(A、B、C)放在天平的左边，第二组(D、E、F)放在天平的右边。可能的结果有三种： 左边重(A、B、C中有一个是重球) 右边重(D、E、F中有一个是重球) 两边一样重(G、H中有一个是重球)   第二次测量： 如果第一次测量左边重：从A、B、C中任选两个球进行测量，例如A和B。 如果A和B重量相等，则重球是C。 如果A和B不等，则重球是较重的那个。   如果第一次测量右边重：从D、E、F中任选两个球进行测量，例如D和E。 如果D和E重量相等，则重球是F。 如果D和E不等，则重球是较重的那个。   如果第一次测量两边一样重：对G和H进行测量。 如果G和H重量相等，则重球不存在(但由于题意重球必存在，所以这个情况不会出现)。 如果G和H不等，则重球是较重的那个。      通过这种方法，可以在两次测量内准确找到8个球中偏重的那个球。 </div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Valine</span><span id="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">cwp0</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cwp0"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/cwp0" target="_blank" title="Github"><i class="fab fa-github" style="color: #9F9F9F;"></i></a><a class="social-icon" href="mailto:wenpengchen@njust.edu.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: 9F9F9F;"></i></a><a class="social-icon" href="/img/alipay.JPG" target="_blank" title="QQ"><i class="fa-brands fa-qq" style="color: #9F9F9F;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This site is under construction...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%A4%9A%E4%B8%AA%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E4%B8%80%E4%B8%AA%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-number">1.</span> <span class="toc-text">实现多个客户端访问一个服务端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%AE%E9%A1%B6%E5%92%8C%E5%8A%A0%E7%B2%BE%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">置顶和加精如何设计</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/17782.html" title="学车小记"><img src="https://s2.loli.net/2025/03/19/eVRF7JMl4yjrzhQ.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="学车小记"/></a><div class="content"><a class="title" href="/posts/17782.html" title="学车小记">学车小记</a><time datetime="2025-03-19T07:04:48.000Z" title="Created 2025-03-19 15:04:48">2025-03-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17781.html" title="华为笔试/手撕"><img src="https://s2.loli.net/2025/03/19/kAcZ5yKPDwizuMN.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="华为笔试/手撕"/></a><div class="content"><a class="title" href="/posts/17781.html" title="华为笔试/手撕">华为笔试/手撕</a><time datetime="2024-11-15T03:51:23.000Z" title="Created 2024-11-15 11:51:23">2024-11-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17780.html" title="分布式/高性能/高可用"><img src="https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分布式/高性能/高可用"/></a><div class="content"><a class="title" href="/posts/17780.html" title="分布式/高性能/高可用">分布式/高性能/高可用</a><time datetime="2024-09-03T09:21:00.000Z" title="Created 2024-09-03 17:21:00">2024-09-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17779.html" title="游戏研发面经"><img src="https://s2.loli.net/2024/06/28/RviHxaoQPJhA8wj.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="游戏研发面经"/></a><div class="content"><a class="title" href="/posts/17779.html" title="游戏研发面经">游戏研发面经</a><time datetime="2024-06-27T16:10:26.000Z" title="Created 2024-06-28 00:10:26">2024-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17777.html" title="智力题"><img src="https://s2.loli.net/2024/06/27/9KWGke8lsJaM1fi.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="智力题"/></a><div class="content"><a class="title" href="/posts/17777.html" title="智力题">智力题</a><time datetime="2024-06-27T15:39:07.000Z" title="Created 2024-06-27 23:39:07">2024-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By cwp0</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional and Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nfRxTBEmIAeb6gP2K0LOdLqw-gzGzoHsz',
+      appKey: 'vmeDN8k58dVdPv5Yz7NEkvSN',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('/js/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/posts/17778.html'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'https://cwp0.github.io/posts/17778.html'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = '系统设计'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=&api_key=&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Valine' === 'Disqus' || !true) {
+    if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      GLOBAL_CONFIG_SITE.pageType === 'post' && getCount()
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script async src="https://npm.elemecdn.com/tzy-blog/lib/js/other/sakura.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

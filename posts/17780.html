@@ -1,0 +1,1374 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>分布式/高性能/高可用 | cwp0</title><meta name="author" content="cwp0"><meta name="copyright" content="cwp0"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="分布式、高性能、高可用方面的知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式&#x2F;高性能&#x2F;高可用">
+<meta property="og:url" content="https://cwp0.github.io/posts/17780.html">
+<meta property="og:site_name" content="cwp0">
+<meta property="og:description" content="分布式、高性能、高可用方面的知识">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png">
+<meta property="article:published_time" content="2024-09-03T09:21:00.000Z">
+<meta property="article:modified_time" content="2024-09-04T09:21:00.000Z">
+<meta property="article:author" content="cwp0">
+<meta property="article:tag" content="面经">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "分布式/高性能/高可用",
+  "url": "https://cwp0.github.io/posts/17780.html",
+  "image": "https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png",
+  "datePublished": "2024-09-03T09:21:00.000Z",
+  "dateModified": "2024-09-04T09:21:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "cwp0",
+      "url": "https://cwp0.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/assets/%E5%A4%B4%E5%83%8F.png"><link rel="canonical" href="https://cwp0.github.io/posts/17780.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":66,"languages":{"author":"Author: cwp0","link":"Link: ","source":"Source: cwp0","info":"Copyright belongs to the author. For commercial use, please contact the author for authorization. For non-commercial use, please indicate the source."}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '分布式/高性能/高可用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/url(/img/background/%E6%A8%B1%E8%8A%B12.jpg));"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://s2.loli.net/2024/09/03/9CYvjDl1J6hBPWd.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/assets/%E5%A4%B4%E5%83%8F.png" alt="Logo"><span class="site-name">cwp0</span></a><a class="nav-page-title" href="/"><span class="site-name">分布式/高性能/高可用</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">分布式/高性能/高可用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-09-03T09:21:00.000Z" title="Created 2024-09-03 17:21:00">2024-09-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-09-04T09:21:00.000Z" title="Updated 2024-09-04 17:21:00">2024-09-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">20.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>62mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2024-09-04 17:21:00&quot;}" hidden></div><h1 id="分布式-高性能-高可用"><a href="#分布式-高性能-高可用" class="headerlink" title="分布式&#x2F;高性能&#x2F;高可用"></a>分布式&#x2F;高性能&#x2F;高可用</h1><h2 id="分布式✅"><a href="#分布式✅" class="headerlink" title="分布式✅"></a>分布式✅</h2><h3 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h3><p>CAP理论是分布式系统设计中的一个重要理论。</p>
+<ul>
+<li>一致性(Consistency)：所有节点访问同一份最新的数据副本</li>
+<li>可用性(Availability)：非故障的节点在合理的时间内返回合理的响应(不是错误或者超时的响应)。</li>
+<li>分区容错性(Partition Tolerance)：分布式系统出现网络分区的时候，仍然能够对外提供服务。</li>
+</ul>
+<blockquote>
+<p>网络分区：分布式系统中的多节点网络原本是连通的，但因为故障导致某些节点间不连通了，网络分为几块区域。</p>
+</blockquote>
+<p>当网络发生分区后，如果要继续服务的话，P是前提，必须要实现。然后在C和A之间二选一。因此分布式系统理论上不可能选择 CA 架构，只能选择 CP 或者 AP 架构。</p>
+<p>如果网络分区正常的话(系统在绝大部分时候所处的状态)，也就说不需要保证 P 的时候，C 和 A 能够同时保证。</p>
+<h4 id="为什么要首先保证P"><a href="#为什么要首先保证P" class="headerlink" title="为什么要首先保证P"></a>为什么要首先保证P</h4><ul>
+<li>分布式系统的本质：分区容错性(P)是指系统在网络分区发生时，仍然能够继续提供服务的能力。在分布式系统中，网络分区是不可避免的，因此分区容错性是分布式系统必须具备的基本属性。</li>
+<li>保证系统的高可用性：如果不保证分区容错性，那么一旦网络分区发生，系统可能会因为无法处理分区而崩溃或停止服务，这将严重影响系统的可用性和稳定性。通过P确保系统的高可用性。</li>
+<li>符合分布式系统的设计理念：分布式系统的设计初衷就是为了提高系统的可扩展性、可靠性和容错性。如果放弃分区容错性，那么分布式系统就失去了其最重要的优势之一。<ul>
+<li>在分布式系统中，通过将数据和服务分布在多个节点上，可以实现负载均衡、故障转移和容错处理等功能。这些功能的实现都依赖于分区容错性的支持。</li>
+</ul>
+</li>
+<li>实际应用高并发的需求：在实际应用中，分布式系统往往需要处理大量的并发请求和数据，同时还需要面对各种复杂的网络环境和故障情况。<ul>
+<li>如果不保证分区容错性，那么系统在面对这些挑战时可能会显得力不从心，无法满足实际应用的需求。</li>
+</ul>
+</li>
+</ul>
+<h3 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h3><p>雪花算法(Snowflake Algorithm)是由Twitter公司开发的一种分布式ID生成算法。它的主要目的是在分布式系统中高效地生成全局唯一且有序的ID。这种算法非常适合于大规模互联网应用，其中需要确保不同服务器生成的ID不会发生冲突。</p>
+<p><strong>特点</strong></p>
+<ol>
+<li>全局唯一性：保证不同机器生成的ID不会重复。</li>
+<li>无协调性：生成ID的过程不需要跨网络的协调，提高了性能。</li>
+<li>趋势递增：生成的ID具有一定的顺序性，这有助于数据库中的索引优化。</li>
+<li>信息承载：每个ID都包含了一定的信息，比如时间戳、机器ID等。</li>
+</ol>
+<p><strong>结构</strong><br>一个64位的ID通常由以下几个部分组成：</p>
+<ul>
+<li>1位符号位：始终为0，表示正数，不携带实际信息。</li>
+<li>41位时间戳：精确到毫秒，可以使用约69年的时间。</li>
+<li>10位机器标识：可以部署在1024个节点上。</li>
+<li>12位序列号：用于同一毫秒内产生的多个ID，可以每毫秒产生4096个不同的ID。</li>
+</ul>
+<p><strong>工作原理</strong></p>
+<ol>
+<li>时间戳：当请求生成一个ID时，首先获取当前的时间戳，并将其编码到ID的相应位置。</li>
+<li>机器标识：根据部署的机器配置，分配一个唯一的机器ID。</li>
+<li>序列号：在同一毫秒内，如果同一个机器接收到多个ID生成请求，则通过原子操作增加序列号来保证ID的唯一性。</li>
+<li>组合成ID：将上述所有部分组合起来形成一个64位的二进制数字，即为最终生成的ID。</li>
+</ol>
+<p><strong>使用场景</strong></p>
+<ul>
+<li>分布式系统中的唯一ID生成：例如，在微服务架构中为不同的服务提供唯一ID。</li>
+<li>数据库主键生成：作为数据库表的主键，特别是在分库分表的场景下。</li>
+<li>缓存键值生成：在缓存系统中作为键值使用，保证键的唯一性和可读性。</li>
+</ul>
+<p><strong>注意事项</strong></p>
+<ul>
+<li>时钟回拨问题：如果机器的时间被调整到过去，可能会导致生成的ID重复。因此，通常需要有相应的机制来处理这种情况，比如暂停ID生成直到时钟恢复，或者记录最后生成ID的时间戳并进行比较。</li>
+<li>机器ID分配：需要有一个合理的策略来分配机器ID，以避免冲突。</li>
+</ul>
+<h3 id="RPC框架"><a href="#RPC框架" class="headerlink" title="RPC框架"></a>RPC框架</h3><p>RPC(Remote Procedure Call)框架是一种允许程序调用另一个地址空间(通常是网络上的另一台机器)上的过程或函数，就像调用本地程序中的函数一样。RPC 框架隐藏了网络通信的复杂性，使得开发者可以更加专注于业务逻辑的实现，而不是底层的网络通信和序列化&#x2F;反序列化等细节。</p>
+<p>RPC 框架通常包含以下几个关键组件：</p>
+<ul>
+<li>客户端(Client)：发起远程过程调用的程序。客户端负责将调用请求发送给服务器，并等待服务器的响应。</li>
+<li>服务端(Server)：提供远程过程或函数供客户端调用的程序。服务端接收来自客户端的请求，执行相应的操作，并将结果返回给客户端。</li>
+<li>通信协议(Protocol)：客户端和服务端之间通信所遵循的规则。这包括数据的编码方式、传输方式(如TCP&#x2F;IP)、请求和响应的格式等。</li>
+<li>序列化&#x2F;反序列化(Serialization&#x2F;Deserialization)：由于客户端和服务端可能运行在不同的机器上，它们之间的数据交换需要通过网络进行。序列化是将数据结构或对象状态转换成可以存储或传输的格式的过程，反序列化则是其逆过程。RPC 框架需要处理这些数据的序列化和反序列化。</li>
+<li>服务注册与发现(Service Registry and Discovery)：在微服务架构中，服务注册与发现是一个重要的组成部分。服务注册允许服务实例向注册中心注册自己的信息，服务发现则允许客户端从注册中心查询所需服务的信息，以便进行远程调用。</li>
+<li>负载均衡(Load Balancing)：当服务有多个实例时，负载均衡器负责将请求分发到不同的服务实例上，以提高系统的可用性和吞吐量。</li>
+</ul>
+<p>在Java中，有多种RPC(远程过程调用)框架可供选择，这些框架为开发分布式系统提供了强大的支持。以下是一些常见的Java RPC框架：</p>
+<ol>
+<li>Dubbo<br>简介：Dubbo是阿里巴巴开源的高性能RPC框架，具有简单易用、高性能、可扩展等特点。它支持多种协议和负载均衡策略，提供了服务注册、发现和调用的解决方案。<br>特点：面向接口的远程方法调用、智能容错和负载均衡、服务自动注册和发现等。<br>适用场景：广泛应用于许多大型互联网公司，特别是需要高性能和可扩展性的分布式系统。</li>
+<li>Spring Cloud<br>简介：Spring Cloud是Spring家族的一个开源项目，它提供了许多分布式系统的解决方案，其中包括了RPC框架。它利用Spring Boot的特性，整合了开源行业中优秀的组件，为微服务架构提供了一整套服务治理的解决方案。<br>特点：支持服务注册发现、服务调用、负载均衡等，可以方便地实现RPC通信。<br>适用场景：适合需要快速构建微服务架构的Java应用。</li>
+<li>Thrift<br>简介：Thrift是由Facebook开源的跨语言RPC框架，支持多种编程语言，包括Java。它使用接口描述语言(IDL)定义服务接口，通过生成和序列化代码来实现跨语言的通信。<br>特点：高效的序列化和传输机制，支持多种传输协议和压缩算法，适用于各种复杂的分布式应用场景。<br>适用场景：当系统需要支持多种编程语言，且对性能和效率有较高要求时，Thrift是一个很好的选择。</li>
+<li>gRPC<br>简介：gRPC是由Google开源的高性能RPC框架，它使用Protocol Buffers作为接口描述语言，并使用HTTP&#x2F;2作为传输协议。gRPC支持多种编程语言，包括Java。<br>特点：简单易用、高效可靠，适用于构建微服务和移动应用后端服务。<br>适用场景：当系统需要高性能的RPC调用，并且希望使用HTTP&#x2F;2协议和Protocol Buffers作为序列化方式时，gRPC是一个不错的选择。</li>
+<li>Apache CXF<br>简介：Apache CXF是一个开源的全功能的服务框架，它支持多种和Web服务相关的标准和协议，包括SOAP、REST和WS-*协议。Apache CXF提供了丰富的功能和扩展点，可以方便地实现RPC调用。<br>特点：支持多种传输协议和安全机制，适用于构建复杂的分布式系统。<br>适用场景：当系统需要支持多种Web服务标准和协议时，Apache CXF是一个很好的选择。</li>
+<li>其他RPC框架<br>除了上述几种常见的Java RPC框架外，还有一些其他的框架如RMI(基于JRMP通信协议)、Hessian(基于二进制RPC协议)等，它们各自具有不同的特点和适用场景。</li>
+</ol>
+<p>Java中的RPC框架有多种选择，开发人员可以根据具体需求选择合适的框架来实现远程过程调用。这些框架的出现极大地简化了分布式系统的开发，提高了开发效率和系统性能。</p>
+<h2 id="高性能✅"><a href="#高性能✅" class="headerlink" title="高性能✅"></a>高性能✅</h2><h3 id="CDN工作原理详解"><a href="#CDN工作原理详解" class="headerlink" title="CDN工作原理详解"></a>CDN工作原理详解</h3><p>CDN(Content Delivery Network&#x2F;Content Distribution Network)，内容分发网络，其将静态资源分发到多个不同的地方以实现就近访问，进而加快静态资源的访问速度，减轻服务器以及带宽的负担。</p>
+<p>CDN和全站加速不同，全站加速既可以加速静态资源又可以加速动态资源，CDN主要针对静态资源。</p>
+<ol>
+<li>基本概念<ul>
+<li>CDN节点：CDN节点是部署在不同地理位置的服务器。它们可以缓存内容并处理用户请求。</li>
+<li>源站：源站是内容的原始服务器，即CDN未介入时用户直接访问的服务器。</li>
+<li>POP(Point of Presence)：指的是一个CDN服务点，通常是一个小型的数据中心，包含多个CDN节点。</li>
+<li>缓存：CDN节点会缓存从源站获取的内容，以减少对源站的请求频率和用户的访问延迟。</li>
+</ul>
+</li>
+<li>CDN的基本工作流程<ol>
+<li>用户请求内容：当用户访问一个使用CDN的网页时，用户的请求首先会被重定向到离用户最近的CDN节点。</li>
+<li>查找缓存内容：<ul>
+<li>缓存命中：如果该CDN节点已经缓存了所请求的内容(缓存命中)，则直接将内容返回给用户。</li>
+<li>缓存未命中：如果缓存中没有请求的内容(缓存未命中)，该节点会向源站发起请求以获取内容，然后将内容返回给用户，同时缓存该内容以供后续请求使用。</li>
+</ul>
+</li>
+<li>全局负载均衡：CDN利用全局负载均衡系统根据地理位置、服务器负载、网络状况等因素，将用户请求引导至最合适的节点。</li>
+<li>内容刷新与失效：CDN可以根据配置设置内容的缓存时间，过期后需要重新从源站获取。同时，源站也可以主动通知CDN刷新或失效某些内容。</li>
+</ol>
+</li>
+<li>CDN的优化<ul>
+<li>预热：预热是指在 CDN 上提前将内容缓存到 CDN 节点上。</li>
+</ul>
+</li>
+<li>使用CDN的优势<ul>
+<li>降低延迟：由于CDN节点分布在全球各地，用户请求可以在离用户最近的节点上得到响应，减少了物理距离带来的延迟。</li>
+<li>提高可用性：CDN通过分布式架构可以在某些节点发生故障时自动切换到其他节点，提高服务的可靠性。</li>
+<li>分担源站压力：通过将大量的内容缓存到CDN节点，减少了对源站的直接请求，特别是在流量高峰期，显著减轻了源站的压力。</li>
+<li>加速内容分发：CDN可以通过多种优化手段加速内容分发，提升用户体验。</li>
+</ul>
+</li>
+<li>常见的应用场景<ul>
+<li>网站加速：静态内容(如图像、CSS、JavaScript文件)的加速分发。</li>
+<li>视频点播：将视频内容缓存到各个CDN节点，提高视频播放的流畅性。</li>
+<li>实时流媒体：利用CDN的低延迟特点，确保实时视频流的顺畅传输。</li>
+<li>下载加速：通过CDN分发大文件(如软件、游戏安装包等)，加快下载速度。</li>
+</ul>
+</li>
+</ol>
+<h4 id="如何找到最合适的-CDN-节点？"><a href="#如何找到最合适的-CDN-节点？" class="headerlink" title="如何找到最合适的 CDN 节点？"></a>如何找到最合适的 CDN 节点？</h4><p>GSLB(Global Server Load Balance，全局负载均衡)是 CDN 的大脑，负责多个 CDN 节点之间相互协作，最常用的是基于 DNS 的 GSLB。CDN 会通过 GSLB 找到最合适的 CDN 节点：</p>
+<ol>
+<li>浏览器向 DNS 服务器发送域名请求；</li>
+<li>DNS 服务器向根据 CNAME(Canonical Name) 别名记录向 GSLB 发送请求；</li>
+<li>GSLB 返回性能最好(通常距离请求地址最近)的 CDN 节点(边缘服务器，真正缓存内容的地方)的IP地址给浏览器；</li>
+<li>浏览器根据IP地址直接访问指定的 CDN 节点。</li>
+</ol>
+<h3 id="负载均衡✅"><a href="#负载均衡✅" class="headerlink" title="负载均衡✅"></a>负载均衡✅</h3><p>负载均衡指的是将用户请求分摊到不同的服务器上处理，以提高系统整体的并发处理能力以及可靠性。</p>
+<p>一般分为服务端负载均衡和客户端负载均衡：</p>
+<ul>
+<li>服务端负载均衡主要发生在网关层，可以使用软件(便宜，性能也够用)或者硬件(贵，但是性能好)实现。软件负载均衡通过如Nginx之类的软件实现，可在传输层、应用层实现负载均衡<ul>
+<li>传输层主要协议是 TCP&#x2F;UDP，该层能看到数据包里的源端口地址和目的端口地址，会基于这些信息通过一定的负载均衡算法将数据包转发到后端真实服务器，核心就是 IP+端口层面的负载均衡。</li>
+<li>应用层主要协议是 HTTP，该层的负载均衡会读取报文的数据部分，根据读取到的(URL、Cookie)做出负载均衡决策。执行第七层负载均衡的设备通常被称为 反向代理服务器。</li>
+</ul>
+</li>
+<li>客户端负载均衡主要应用于系统内部的不同的服务之间。客户端会自己维护一份服务器的地址列表，发送请求之前，客户端会根据对应的负载均衡算法来选择具体某一台服务器处理请求。(通过Spring Cloud Load Balancer)</li>
+</ul>
+<h4 id="常见负载均衡算法✅"><a href="#常见负载均衡算法✅" class="headerlink" title="常见负载均衡算法✅"></a>常见负载均衡算法✅</h4><ol>
+<li>随机法：随机选择一台服务器处理请求。<ul>
+<li>优点：实现简单，适用于分布较为均匀的场景。</li>
+<li>缺点：不保证请求的均匀分配，可能导致短时间内某些服务器负载过重。</li>
+</ul>
+</li>
+<li>轮询法：将请求依次分配给服务器，以循环的方式逐一选择服务器。<ul>
+<li>优点：实现简单，能够较为均衡地分配请求。</li>
+<li>缺点：对于性能差异较大的服务器，可能导致某些服务器过载。</li>
+</ul>
+</li>
+<li>两次随机法：随机选择两台服务器，比较它们的负载，将请求分配给负载较轻的那台服务器。<ul>
+<li>优点：较普通随机法更为均衡，性能也较为优越。</li>
+<li>缺点：仍存在一定的随机性，可能不完全均衡。</li>
+</ul>
+</li>
+<li>哈希法：根据请求的某些特征(如源IP、URL)计算哈希值，并根据哈希值选择相应的服务器。<ul>
+<li>优点：对相同特征的请求分配到相同的服务器，适合需要会话保持的场景。</li>
+<li>缺点：难以应对服务器动态变化，如增加或减少服务器。</li>
+</ul>
+</li>
+<li>一致性Hash法：将服务器和请求都映射到一个哈希环上，请求沿环顺时针找到最近的服务器。<ul>
+<li>优点：当服务器增加或减少时，只有一小部分请求会被重新分配，适合于动态变化的分布式系统。</li>
+<li>缺点：实现较为复杂，对哈希函数的选择有要求。</li>
+</ul>
+</li>
+<li>最小连接法：将请求分配给当前连接数最少的服务器。<ul>
+<li>优点：动态调整负载，适用于长连接的场景。</li>
+<li>缺点：需要实时监控服务器的连接数，较为复杂。</li>
+</ul>
+</li>
+<li>最少活跃法：将请求分配给当前处理请求最少的服务器。<ul>
+<li>优点：能更精确地反映服务器的实时负载，较为公平地分配请求。</li>
+<li>缺点：实现和计算较为复杂。</li>
+</ul>
+</li>
+<li>最快响应时间法：将请求分配给响应时间最快的服务器。<ul>
+<li>优点：可以提供更好的用户体验，适用于对响应时间要求较高的场景。</li>
+<li>缺点：实现难度较大，需要实时监控和记录每台服务器的响应时间。</li>
+</ul>
+</li>
+</ol>
+<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><p>消息队列是一种存放消息的容器，当需要使用消息的时候，直接从容器中取出使用即可。参与消息传递的双方是生产者和消费者，生产者负责生产并发送消息，消费者负责处理消息。</p>
+<blockquote>
+<p>这里提到的消息队列不是操作系统进程通信中的消息队列，而是各个服务以及系统内部各个组件&#x2F;模块之前的通信，属于一种中间件。<br>中间件(英语：Middleware)，又译中间件、中介层，是一类提供系统软件和应用软件之间连接、便于软件各部件之间的沟通的软件，应用软件可以借助中间件在不同的技术架构之间共享信息与资源。中间件位于客户机服务器的操作系统之上，管理着计算资源和网络通信。</p>
+</blockquote>
+<h4 id="消息队列有什么作用"><a href="#消息队列有什么作用" class="headerlink" title="消息队列有什么作用"></a>消息队列有什么作用</h4><ol>
+<li>异步处理。将用户请求中的一些耗时操作，通过消息队列实现异步处理，将对应的消息发送到消息队列之后就立即返回结果，减少响应时间，提高用户体验。比如异步秒杀的核心是减库存和创建订单这种耗时多的分离出来，单独安排一个线程去执行，这样可以提高接口的响应速度。</li>
+<li>削峰&#x2F;限流。将短时间高并发产生的事务消息存储在消息队列中，然后后端服务再慢慢根据自己的能力去消费这些消息，避免高并发直接把后端服务打垮掉。</li>
+<li>降低系统耦合性。如果模块之间不存在直接调用，那么可以只用消息队列进行解耦。这样新增模块或者修改模块就对其他模块影响较小，这样系统的可扩展性无疑更好一些。<ul>
+<li>消息队列使用发布-订阅模式工作。对新增业务，只要对该类消息感兴趣，即可订阅该消息，对原有系统和业务没有任何影响，从而实现网站业务的可扩展性设计。</li>
+</ul>
+</li>
+<li>实现分布式事务。分布式事务的解决方案之一就是 MQ 事务，允许事件流应用将消费，处理，生产消息整个过程定义为一个原子操作。</li>
+<li>顺序保证。消息队列可以保证数据按照特定的顺序被处理，适用于对数据顺序有严格要求的场景。</li>
+<li>延时&#x2F;定时处理。在发送消息时，可以指定一个时间，到时间后该消息才可以被消费。</li>
+<li>数据流处理。针对分布式系统产生的海量数据流，如业务日志、监控数据、用户行为等，消息队列可以实时或批量收集这些数据，并将其导入到大数据处理引擎中，实现高效的数据流管理和处理。</li>
+</ol>
+<h4 id="使用消息队列会带来的问题"><a href="#使用消息队列会带来的问题" class="headerlink" title="使用消息队列会带来的问题"></a>使用消息队列会带来的问题</h4><ol>
+<li>系统可用性降低。使用消息队列后要考虑消息队列宕机&#x2F;挂掉的情况。</li>
+<li>系统复杂性提高。使用消息队列需要保证消息没有被重复消费、处理消息丢失的情况、保证消息传递的顺序性等等问题！</li>
+<li>一致性问题。可以将一些耗时操作放入消息队列中进行异步处理，但是如果消费者并没有正确消费消息，就会出现数据不一致的情况。</li>
+</ol>
+<h4 id="消息队列如何保证消息被消费"><a href="#消息队列如何保证消息被消费" class="headerlink" title="消息队列如何保证消息被消费"></a>消息队列如何保证消息被消费</h4><p>消息队列系统在保证消息被消费方面采用了多种机制，以下是一些关键的策略：</p>
+<ol>
+<li>消息确认(Acknowledgment)：消息消费后，消费者需要向消息队列发送确认消息。只有在收到确认后，消息队列才会将其从队列中删除。未确认的消息会被视为未消费，可以重发给其他消费者。</li>
+<li>消息持久化：为了防止消息丢失，消息队列通常会将消息持久化到磁盘。即使系统崩溃，持久化的消息依然可以在系统恢复后重新消费。</li>
+<li>重试机制：如果消费者在处理消息时发生错误，消息队列可以将该消息标记为待重试，稍后会重新投递给消费者。这样可以确保消息最终被消费。</li>
+<li>死信队列(Dead Letter Queue, DLQ)：当消息经过多次重试仍然无法成功消费时，可以将其转移到死信队列，以便后续进行分析或人工干预。</li>
+<li>消费组(Consumer Groups)：在分布式系统中，消息队列可以将多个消费者组织为消费组，以实现负载均衡。每条消息只会被消费组中的一个消费者处理，确保每条消息只被消费一次。</li>
+<li>消息顺序性：在某些场景中，消息的顺序性也很重要。消息队列可以采用分区或分组策略来确保某些特定消息的消费顺序。</li>
+<li>监控和报警：监控消息队列的健康状态和消费进度，一旦发现异常情况(如消息积压)，及时发出警报，便于运维人员处理。</li>
+</ol>
+<p>通过这些机制，消息队列可以有效地保证消息被可靠地消费，确保系统的稳定性和数据的一致性。</p>
+<h3 id="JMS"><a href="#JMS" class="headerlink" title="JMS"></a>JMS</h3><p>JMS(JAVA Message Service, Java 消息服务)API 是一个消息服务的标准或者说是规范，允许应用程序组件基于 JavaEE 平台创建、发送、接收和读取消息。它使分布式通信耦合度更低，消息服务更加可靠以及异步性。</p>
+<p>JMS 定义了五种不同的消息正文格式以及调用的消息类型，允许发送并接收以一些不同形式的数据：</p>
+<ul>
+<li>StreamMessage：Java 原始值的数据流</li>
+<li>MapMessage：一套名称-值对</li>
+<li>TextMessage：一个字符串对象</li>
+<li>ObjectMessage：一个序列化的 Java 对象</li>
+<li>BytesMessage：一个字节的数据流</li>
+</ul>
+<h4 id="两种消息模型"><a href="#两种消息模型" class="headerlink" title="两种消息模型"></a>两种消息模型</h4><ul>
+<li>点到点(P2P)模型：使用队列(Queue)作为消息通信载体；满足生产者与消费者模式，一条消息只能被一个消费者使用，未被消费的消息在队列中保留直到被消费或超时。比如：生产者发送 100 条消息的话，两个消费者来消费一般情况下两个消费者会按照消息发送的顺序各自消费一半(也就是你一个我一个的消费)。</li>
+<li>发布&#x2F;订阅(Pub&#x2F;Sub)模型：发布订阅模型(Pub&#x2F;Sub)使用主题(Topic)作为消息通信载体，类似于广播模式；发布者发布一条消息，该消息通过主题传递给所有的订阅者。</li>
+</ul>
+<h3 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h3><p>AMQP(Advanced Message Queuing Protocol, 高级消息队列协议)是一个提供统一消息服务的应用层标准 高级消息队列协议(二进制应用层协议)，是应用层协议的一个开放标准，为面向消息的中间件设计，兼容 JMS。基于此协议的客户端与消息中间件可传递消息，并不受客户端&#x2F;中间件同产品，不同的开发语言等条件的限制。</p>
+<h3 id="JMS-AMQP"><a href="#JMS-AMQP" class="headerlink" title="JMS&#x2F;AMQP"></a>JMS&#x2F;AMQP</h3><table>
+<thead>
+<tr>
+<th align="center">对比方向</th>
+<th align="left">JMS</th>
+<th align="left">AMQP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">定义</td>
+<td align="left">Java API</td>
+<td align="left">协议</td>
+</tr>
+<tr>
+<td align="center">跨语言</td>
+<td align="left">否</td>
+<td align="left">是</td>
+</tr>
+<tr>
+<td align="center">跨平台</td>
+<td align="left">否</td>
+<td align="left">是</td>
+</tr>
+<tr>
+<td align="center">支持消息类型</td>
+<td align="left">提供两种消息模型：①Peer-2-Peer;②Pub&#x2F;sub</td>
+<td align="left">提供了五种消息模型：①direct exchange；②fanout exchange；③topic change；④headers exchange；⑤system exchange。本质来讲，后四种和 JMS 的 pub&#x2F;sub 模型没有太大差别，仅是在路由机制上做了更详细的划分；</td>
+</tr>
+<tr>
+<td align="center">支持消息类型</td>
+<td align="left">支持多种消息类型，在上面提到过</td>
+<td align="left">byte<a href="%E4%BA%8C%E8%BF%9B%E5%88%B6"></a></td>
+</tr>
+</tbody></table>
+<ul>
+<li>AMQP 为消息定义了线路层(wire-level protocol)的协议，而 JMS 所定义的是 API 规范。在 Java 体系中，多个 client 均可以通过 JMS 进行交互，不需要应用修改代码，但是其对跨平台的支持较差。而 AMQP 天然具有跨平台、跨语言特性。</li>
+<li>JMS 支持 <code>TextMessage</code>、<code>MapMessage</code> 等复杂的消息类型；而 AMQP 仅支持 <code>byte[]</code> 消息类型(复杂的类型可序列化后发送)。</li>
+<li>由于 Exchange 提供的路由算法，AMQP 可以提供多样化的路由方式来传递消息到消息队列，而 JMS 仅支持 队列 和 主题&#x2F;订阅 方式两种。</li>
+</ul>
+<h3 id="消息队列选型"><a href="#消息队列选型" class="headerlink" title="消息队列选型"></a>消息队列选型</h3><table>
+<thead>
+<tr>
+<th>对比方向</th>
+<th>概要</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>吞吐量</td>
+<td>ActiveMQ 的性能最差；ActiveMQ、RabbitMQ 吞吐量是万级；RocketMQ、Kafka 吞吐量是十万级、百万级。</td>
+</tr>
+<tr>
+<td>可用性</td>
+<td>都可以实现高可用。ActiveMQ、RabbitMQ 都是基于主从架构实现高可用性。RocketMQ 基于分布式架构。Kafka 也是分布式的，一个数据多个副本，少数机器宕机，不会丢失数据，不会导致不可用</td>
+</tr>
+<tr>
+<td>时效性</td>
+<td>RabbitMQ 基于 Erlang 开发，所以并发能力很强，性能极其好，延时很低，达到微秒级，其他几个都是 ms 级。</td>
+</tr>
+<tr>
+<td>功能支持</td>
+<td>Pulsar 的功能更全面，支持多租户、多种消费模式和持久性模式等功能，是下一代云原生分布式消息流平台。</td>
+</tr>
+<tr>
+<td>消息丢失</td>
+<td>ActiveMQ 和 RabbitMQ 丢失的可能性非常低，Kafka、RocketMQ 和 Pulsar 理论上可以做到 0 丢失。</td>
+</tr>
+</tbody></table>
+<p><strong>总结：</strong></p>
+<ul>
+<li>RabbitMQ 吞吐量稍逊于 Kafka、RocketMQ 和 Pulsar，但并发能力很强，性能极其好，延时很低，达到微秒级。如果业务场景对并发量要求不是太高(十万级、百万级)，可以使用 RabbitMQ。</li>
+<li>RocketMQ 和 Pulsar 支持强一致性，对消息一致性要求比较高的场景可以使用。</li>
+<li>Kafka 提供超高的吞吐量，ms 级的延迟，极高的可用性以及可靠性，而且分布式可以任意扩展。Kafka 唯一的一点劣势是有可能消息重复消费，那么对数据准确性会造成极其轻微的影响。如果是大数据领域的实时计算、日志采集等场景，可以用 Kafka。</li>
+<li>ActiveMQ 社区较成熟，但目前 ActiveMQ 的性能较差，且版本迭代慢，不推荐使用，已被淘汰。</li>
+</ul>
+<h3 id="Kafka✅"><a href="#Kafka✅" class="headerlink" title="Kafka✅"></a>Kafka✅</h3><p>Kafka 是一个分布式流式处理平台。具有三个关键功能：</p>
+<ul>
+<li>消息队列：发布和订阅消息流，该功能类似于消息队列，这也是 Kafka 也被归类为消息队列的原因。</li>
+<li>容错的持久方式存储记录消息流：Kafka 会把消息持久化到磁盘，有效避免了消息丢失的风险。</li>
+<li>流式处理平台：Kafka 提供了一个完整的流式处理类库，在消息发布的时候进行处理。</li>
+</ul>
+<h4 id="Kafka应用场景"><a href="#Kafka应用场景" class="headerlink" title="Kafka应用场景"></a>Kafka应用场景</h4><ul>
+<li>消息队列：建立实时流数据管道，以可靠地在系统或应用程序之间获取数据。</li>
+<li>数据处理：构建实时的流数据处理程序来转换或处理数据流。</li>
+</ul>
+<h4 id="Kafka优势"><a href="#Kafka优势" class="headerlink" title="Kafka优势"></a>Kafka优势</h4><ul>
+<li>极致的性能：基于 Scala 和 Java 语言开发，设计中大量使用了批量处理和异步的思想，提供了超高的吞吐量，最高可以每秒处理千万级别的消息。</li>
+<li>生态系统兼容性：Kafka 与周边生态系统的兼容性非常好，尤其在大数据和流计算领域。</li>
+</ul>
+<h4 id="Kafka消息模型"><a href="#Kafka消息模型" class="headerlink" title="Kafka消息模型"></a>Kafka消息模型</h4><p>Kafka的消息模型是发布订阅模型。发布订阅模型(Pub-Sub)使用主题(Topic)作为消息通信载体，类似于广播模式；发布者发布一条消息，该消息通过主题传递给所有的订阅者，在一条消息广播之后才订阅的用户则是收不到该条消息的。在发布 - 订阅模型中，如果只有一个订阅者，那它和队列模型就基本是一样的了。</p>
+<p>核心概念：</p>
+<ul>
+<li>Producer(生产者)：产生消息的一方。</li>
+<li>Consumer(消费者)：消费消息的一方。</li>
+<li>Broker(代理)：一个独立的 Kafka 实例。多个 Kafka Broker 组成一个 Kafka Cluster。</li>
+<li>Topic(主题)：Producer 将消息发送到特定的主题，Consumer 通过订阅特定的 Topic(主题) 来消费消息。</li>
+<li>Partition(分区)：Partition 属于 Topic 的一部分。一个 Topic 可以有多个 Partition，且同一 Topic 下的 Partition 可以分布在不同的 Broker 上，这也就表明一个 Topic 可以横跨多个 Broker。</li>
+</ul>
+<blockquote>
+<p>Kafka 中的 Partition(分区)实际上可以对应成为消息队列中的队列。</p>
+</blockquote>
+<p><img src="/./image/%E5%88%86%E5%B8%83%E5%BC%8F-%E9%AB%98%E6%80%A7%E8%83%BD-%E9%AB%98%E5%8F%AF%E7%94%A8/Kafka%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B.png" alt="Kafka消息模型"></p>
+<h4 id="Kafka多副本机制"><a href="#Kafka多副本机制" class="headerlink" title="Kafka多副本机制"></a>Kafka多副本机制</h4><p>Kafka为分区(Partition)引入了多副本(Replica)机制。多个副本之间有一个 leader，多个follower。发送的消息会被发送到 leader 副本，然后 follower 副本从 leader 副本中拉取消息进行同步。</p>
+<p>生产者和消费者只与 leader 副本交互，其他副本只是 leader 副本的拷贝，它们的存在只是为了保证消息存储的安全性。当 leader 副本发生故障时会从 follower 中选举出一个 leader，但是 follower 中如果有和 leader 同步程度达不到要求的参加不了 leader 的竞选。</p>
+<p>多分区(Partition)以及多副本(Replica)机制有什么好处呢？</p>
+<ul>
+<li>Kafka 通过给特定 Topic 指定多个 Partition, 而各个 Partition 可以分布在不同的 Broker 上, 这样便能提供比较好的并发能力(负载均衡)。</li>
+<li>Partition 可以指定对应的 Replica 数, 这也极大地提高了消息存储的安全性, 提高了容灾能力，不过也相应的增加了所需要的存储空间。</li>
+</ul>
+<h4 id="Zookeeper和Kafka"><a href="#Zookeeper和Kafka" class="headerlink" title="Zookeeper和Kafka"></a>Zookeeper和Kafka</h4><p>Zookeeper 主要为 Kafka 提供元数据的管理的功能。Zookeeper主要为Kafka做下面这些事情：</p>
+<ol>
+<li>Broker 注册：在 Zookeeper 上会有一个专门用来进行 Broker 服务器列表记录的节点。每个 Broker 在启动时，都会到 Zookeeper 上进行注册，即到 <code>/brokers/ids</code> 下创建属于自己的节点。每个 Broker 就会将自己的 IP 地址和端口等信息记录到该节点中去</li>
+<li>Topic 注册：在 Kafka 中，同一个 Topic 的消息会被分成多个分区并将其分布在多个 Broker 上，这些分区信息及与 Broker 的对应关系也都是由 Zookeeper 在维护。如创建了一个名字为 my-topic 的主题并且它有两个分区，对应到 zookeeper 中会创建这些文件夹：<code>/brokers/topics/my-topic/Partitions/0</code>、<code>/brokers/topics/my-topic/Partitions/1</code></li>
+<li>负载均衡：Kafka 通过给特定 Topic 指定多个 Partition, 而各个 Partition 可以分布在不同的 Broker 上, 这样便能提供比较好的并发能力。 对于同一个 Topic 的不同 Partition，Kafka 会尽力将这些 Partition 分布到不同的 Broker 服务器上。当生产者产生消息后也会尽量投递到不同 Broker 的 Partition 里面。当 Consumer 消费的时候，Zookeeper 可以根据当前的 Partition 数量以及 Consumer 数量来实现动态负载均衡。</li>
+</ol>
+<h4 id="Kafka如何保证消息的顺序性"><a href="#Kafka如何保证消息的顺序性" class="headerlink" title="Kafka如何保证消息的顺序性"></a>Kafka如何保证消息的顺序性</h4><p>Kafka 中 Partition(分区)是真正保存消息的地方，发送的消息都被放在了这里。而 Partition(分区) 又存在于 Topic(主题) 这个概念中，并且我们可以给特定 Topic 指定多个 Partition。每次添加消息到 Partition(分区) 的时候都会采用尾加法，消息在被追加到 Partition(分区)的时候都会分配一个特定的偏移量(offset)，通过偏移量(offset)来保证消息在分区内的顺序性。<strong>Kafka只能保证Partition(分区)中的消息有序</strong>。</p>
+<p>Kafka 中发送 1 条消息的时候，可以指定 topic, partition, key,data(数据)4 个参数。如果发送消息的时候指定了 Partition 的话，所有消息都会被发送到指定的 Partition。并且，同一个 key 的消息可以保证只发送到同一个 partition。总</p>
+<ol>
+<li>1 个 Topic 只对应一个 Partition。 </li>
+<li>(推荐)发送消息的时候指定 key&#x2F;Partition。</li>
+</ol>
+<p><img src="/./image/%E5%88%86%E5%B8%83%E5%BC%8F-%E9%AB%98%E6%80%A7%E8%83%BD-%E9%AB%98%E5%8F%AF%E7%94%A8/Kafka%E6%B6%88%E6%81%AF%E9%A1%BA%E5%BA%8F%E6%80%A7.png" alt="Kafka消息模型"></p>
+<h4 id="Kafka如何保证消息不丢失"><a href="#Kafka如何保证消息不丢失" class="headerlink" title="Kafka如何保证消息不丢失"></a>Kafka如何保证消息不丢失</h4><ul>
+<li>生产者消息丢失：生产者(Producer)调用<code>send()</code>方法(异步)发送消息之后，消息可能因为网络问题并没有发送过去。<ol>
+<li>可以通过<code>get()</code>获取调用结果，但这样也让它变为了同步操作。</li>
+<li>可以为其添加回调函数，如使用异步调用future类，如果失败检查失败原因重新发送。</li>
+<li>为Producer 的retries(重试次数)设置一个比较合理的值，一般是 3，为了保证消息不丢失可以设置更大一点。注意也要设置重试间隔(不能太小，不然一次网络波动就重试完了)。</li>
+</ol>
+</li>
+<li>消费者消息丢失：消费者拉取到了分区的某个消息之后，消费者会自动提交了 offset。假如消费者刚拿到消息准备消费的时候挂掉了，实际消息并没有被消费，但offset却自动提交了。<ol>
+<li>可以关闭自动提交offset，每次在真正消费完消息之后再自己手动提交 offset。但这样会出现重复消费的问题：如刚刚消费完消息之后，还没提交 offset就挂掉了，消息会被消费两次。</li>
+</ol>
+</li>
+<li>Kafka消息丢失：leader副本所在的broker挂掉，但leader中的数据还没有被follower副本完全同步，会造成消息丢失。<ol>
+<li>可以设置acks&#x3D;all，其默认值为1，代表消息被 leader 副本接收之后就算被成功发送。当设置为all时，表示所有副本都接收到消息后生产者才会接收到来自服务器的响应，这种安全级别最高，但是延迟很高。</li>
+<li>设置replication.factor &gt;&#x3D; 3，保证每个分区(partition) 至少有 3 个副本。虽然造成了数据冗余，但是带来了数据的安全性。</li>
+<li>设置 min.insync.replicas &gt; 1，代表消息至少要被写入到 2 个副本才算是被成功发送。其默认值为1要尽量避免。一般设置为replication.factor &#x3D; min.insync.replicas + 1。</li>
+<li>设置 unclean.leader.election.enable &#x3D; false，代表当 leader 副本发生故障时不会从 follower 副本中和 leader 同步程度达不到要求的副本中选择出 leader，这样降低了消息丢失的可能性。</li>
+</ol>
+</li>
+</ul>
+<h4 id="Kafka如何保证消息不重复消费"><a href="#Kafka如何保证消息不重复消费" class="headerlink" title="Kafka如何保证消息不重复消费"></a>Kafka如何保证消息不重复消费</h4><p>重复消费原因：</p>
+<ul>
+<li>服务端侧已经消费的数据没有成功提交 offset(根本原因)。</li>
+<li>Kafka 侧 由于服务端处理业务时间长或者网络链接等等原因让 Kafka 认为服务假死，触发了分区 rebalance。</li>
+</ul>
+<p>解决方案：</p>
+<ul>
+<li>消费消息服务做幂等校验，比如 Redis 的 set、MySQL 的主键等天然的幂等功能。这种方法最有效。</li>
+<li>将 enable.auto.commit 参数设置为 false，关闭自动提交，开发者在代码中手动提交 offset。<ul>
+<li>处理完消息再提交：依旧有消息重复消费的风险，和自动提交一样</li>
+<li>拉取到消息即提交：会有消息丢失的风险。允许消息延时的场景，一般会采用这种方式。然后，通过定时任务在业务不繁忙(比如凌晨)的时候做数据兜底。</li>
+</ul>
+</li>
+</ul>
+<h4 id="重试失败后的数据如何再次处理"><a href="#重试失败后的数据如何再次处理" class="headerlink" title="重试失败后的数据如何再次处理?"></a>重试失败后的数据如何再次处理?</h4><p>当达到最大重试次数后，数据会直接被跳过，继续向后进行。</p>
+<p>死信队列(Dead Letter Queue，简称 DLQ)是消息中间件中的一种特殊队列，主要用于处理无法被消费者正确处理的消息，通常是因为消息格式错误、处理失败、消费超时等情况导致的消息被”丢弃”或”死亡”的情况。当消息进入队列后，消费者会尝试处理它。如果处理失败，或者超过一定的重试次数仍无法被成功处理，消息可以发送到死信队列中，而不是被永久性地丢弃。在死信队列中，可以进一步分析、处理这些无法正常消费的消息，以便定位问题、修复错误，并采取适当的措施。</p>
+<p><code>@RetryableTopic</code> 是 Spring Kafka 中的一个注解,它用于配置某个 Topic 支持消息重试，更推荐使用这个注解来完成重试。当达到最大重试次数后，如果仍然无法成功处理消息，消息会被发送到对应的死信队列中。对于死信队列的处理，既可以用 <code>@DltHandler</code> 处理，也可以使用 <code>@KafkaListener</code> 重新消费。</p>
+<h3 id="RocketMQ✅"><a href="#RocketMQ✅" class="headerlink" title="RocketMQ✅"></a>RocketMQ✅</h3><p>RocketMQ 是一个 队列模型 的消息中间件，具有高性能、高可靠、高实时、分布式 的特点。它是一个采用 Java 语言开发的分布式的消息系统，由阿里巴巴团队开发，在 2016 年底贡献给 Apache，成为了 Apache 的一个顶级项目。 在阿里内部，RocketMQ 很好地服务了集团大大小小上千个应用，在每年的双十一当天，更有不可思议的万亿级消息通过 RocketMQ 流转。</p>
+<p>RocketMQ 通过使用在一个 Topic 中配置多个队列并且每个队列维护每个消费者组的消费位置 实现了 主题模式&#x2F;发布订阅模式 。</p>
+<h4 id="RocketMQ的消息模型"><a href="#RocketMQ的消息模型" class="headerlink" title="RocketMQ的消息模型"></a>RocketMQ的消息模型</h4><p>RocketMQ 的消息模型是发布订阅模型，但其没有队列这个概念，与之对应的是Topic。</p>
+<p><img src="/./image/%E5%88%86%E5%B8%83%E5%BC%8F-%E9%AB%98%E6%80%A7%E8%83%BD-%E9%AB%98%E5%8F%AF%E7%94%A8/RocketMQ%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B.jpg" alt="RocketMQ消息模型"></p>
+<p>主要模块：</p>
+<ul>
+<li>生产者组(Producer Group)：</li>
+<li>消费者组(Consumer Group)：</li>
+<li>主题(Topic)：Producer 将消息发送到特定的主题，Consumer 通过订阅特定的 Topic(主题) 来消费消息。</li>
+<li>代理(Broker)：一个独立的 RocketMQ 实例。多个 RocketMQ Broker 组成一个 RocketMQ Cluster。</li>
+<li>队列：每个Topic有多个队列(提高并发能力)，集群模式下主题和队列可以分布在不同的Broker，一个消费者集群共同消费一个 topic 的多个队列，一个队列只会被一个消费者消费。如果某个消费者挂掉，分组内其它消费者会接替挂掉的消费者继续消费。</li>
+</ul>
+<h4 id="为什么队列为每个消费者组维护一个消费偏移"><a href="#为什么队列为每个消费者组维护一个消费偏移" class="headerlink" title="为什么队列为每个消费者组维护一个消费偏移"></a>为什么队列为每个消费者组维护一个消费偏移</h4><p>在发布订阅模式中一般会涉及到多个消费者组，而每个消费者组在每个队列中的消费位置都是不同的。消息被一个消费者组消费后是不会删除的，其他消费者组也需要消费。所以队列为每个消费者组维护一个偏移(offset)，每次消费者组消费完会返回一个成功的响应，然后队列再把维护的消费位移加一，这样就不会出现刚刚消费过的消息再一次被消费了。</p>
+<h4 id="RocketMQ架构"><a href="#RocketMQ架构" class="headerlink" title="RocketMQ架构"></a>RocketMQ架构</h4><p><img src="/./image/%E5%88%86%E5%B8%83%E5%BC%8F-%E9%AB%98%E6%80%A7%E8%83%BD-%E9%AB%98%E5%8F%AF%E7%94%A8/RocketMQ%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg" alt="RockrtMQ架构图"></p>
+<p>RocketMQ架构中有四个角色：</p>
+<ul>
+<li>Broker：消息队列服务器，主要负责消息的存储、投递和查询以及服务高可用保证。生产者生产消息到 Broker，消费者从 Broker 拉取消息并消费。<ul>
+<li>Broker和Topic是多对多的关系，一个 Topic 分布在多个 Broker上，一个 Broker 可以配置多个 Topic。</li>
+<li>如果某个 Topic 消息量很大，应该给它多配置几个队列(提高并发能力)，并且尽量多分布在不同 Broker 上，以减轻某个 Broker 的压力。</li>
+<li>Broker做集群和主从部署，salve 定时从 master 同步数据(同步刷盘或者异步刷盘)，如果 master 宕机，则 slave 提供消费服务，但是不能写入消息。</li>
+</ul>
+</li>
+<li>NameServer：注册中心，主要提供 Broker 管理 和 路由信息管理 功能。Broker会将自己的信息注册到NameServer(路由表)，消费者和生产者从 NameServer 中获取路由表然后照着路由表的信息和对应的 Broker 进行通信(生产者和消费者定期会向 NameServer 去查询相关的 Broker 的信息)。<ul>
+<li>为了保证高可用，NameServer以去中心化(无主节点)的集群方式部署。通过单个 Broker 和所有 NameServer 保持长连接 ，并且在每隔 30 秒 Broker 会向所有 Nameserver 发送心跳，心跳包含了自身的 Topic 配置信息。</li>
+</ul>
+</li>
+<li>Producer：支持分布式集群方式部署。在生产者需要向 Broker 发送消息的时候，需要先从 NameServer 获取关于 Broker 的路由信息，然后通过 轮询 的方法去向每个队列中生产数据以达到 负载均衡 的效果。</li>
+<li>Consumer：支持分布式集群方式部署。消费者通过 NameServer 获取所有 Broker 的路由信息后，向 Broker 发送 Pull 请求来获取消息数据。Consumer 可以以两种模式启动—— 广播(Broadcast)和集群(Cluster)。广播模式下，一条消息会发送给 同一个消费组中的所有消费者 ，集群模式下消息只会发送给一个消费者。</li>
+</ul>
+<p><img src="/./image/%E5%88%86%E5%B8%83%E5%BC%8F-%E9%AB%98%E6%80%A7%E8%83%BD-%E9%AB%98%E5%8F%AF%E7%94%A8/16ef386c6d1e8bdb.jpg" alt="架构细节图"></p>
+<h4 id="NameServer作用"><a href="#NameServer作用" class="headerlink" title="NameServer作用"></a>NameServer作用</h4><p>需要使用多个Broker进行负载均衡，如果没有NameServer，那么多个生产者和消费者直接和多个Broker相连，会产生耦合问题，NameServer 注册中心就是用来解决这个问题的。</p>
+<h4 id="生产者不建议单一线程大量创建"><a href="#生产者不建议单一线程大量创建" class="headerlink" title="生产者不建议单一线程大量创建"></a>生产者不建议单一线程大量创建</h4><p>Apache RocketMQ 的生产者和主题是多对多的关系，支持同一个生产者向多个主题发送消息。对于生产者的创建和初始化，建议遵循够用即可、最大化复用原则，如果有需要发送消息到多个主题的场景，无需为每个主题都创建一个生产者。</p>
+<h4 id="生产者不建议频繁创建和销毁"><a href="#生产者不建议频繁创建和销毁" class="headerlink" title="生产者不建议频繁创建和销毁"></a>生产者不建议频繁创建和销毁</h4><p>Apache RocketMQ 的生产者是可以重复利用的底层资源，类似数据库的连接池。因此不需要在每次发送消息时动态创建生产者，且在发送结束后销毁生产者。这样频繁的创建销毁会在服务端产生大量短连接请求，严重影响系统性能。</p>
+<h4 id="普通消息-定时消息"><a href="#普通消息-定时消息" class="headerlink" title="普通消息&#x2F;定时消息"></a>普通消息&#x2F;定时消息</h4><ul>
+<li>普通消息：一般应用于微服务解耦、事件驱动、数据集成等场景，这些场景大多数要求数据传输通道具有可靠传输的能力，且对消息的处理时机、处理顺序没有特别要求。以在线的电商交易场景为例，上游订单系统将用户下单支付这一业务事件封装成独立的普通消息并发送至 RocketMQ 服务端，下游按需从服务端订阅消息并按照本地消费逻辑处理下游任务。每个消息之间都是相互独立的，且不需要产生关联。另外还有日志系统，以离线的日志收集场景为例，通过埋点组件收集前端应用的相关操作日志，并转发到 RocketMQ 。</li>
+<li>定时消息：在分布式定时调度触发、任务超时处理等场景，需要实现精准、可靠的定时事件触发。使用 RocketMQ 的定时消息可以简化定时调度任务的开发逻辑，实现高性能、可扩展、高可靠的定时触发能力。定时消息仅支持在 MessageType 为 Delay 的主题内使用，即定时消息只能发送至类型为定时消息的主题中，发送的消息的类型必须和主题的类型一致。在 4.x 版本中，只支持延时消息，默认分为 18 个等级分别为：1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h，也可以在配置文件中增加自定义的延时等级和时长。在 5.x 版本中，开始支持定时消息，在构造消息时提供了 3 个 API 来指定延迟时间或定时时间。</li>
+</ul>
+<h4 id="普通消息生命周期"><a href="#普通消息生命周期" class="headerlink" title="普通消息生命周期"></a>普通消息生命周期</h4><ul>
+<li>初始化：消息被生产者构建并完成初始化，待发送到服务端的状态。</li>
+<li>待消费：消息被发送到服务端，对消费者可见，等待消费者消费的状态。</li>
+<li>消费中：消息被消费者获取，并按照消费者本地的业务逻辑进行处理的过程。此时服务端会等待消费者完成消费并提交消费结果，如果一定时间后没有收到消费者的响应，RocketMQ 会对消息进行重试处理。</li>
+<li>消费提交：消费者完成消费处理，并向服务端提交消费结果，服务端标记当前消息已经被处理(包括消费成功和失败)。RocketMQ 默认支持保留所有消息，此时消息数据并不会立即被删除，只是逻辑标记已消费。消息在保存时间到期或存储空间不足被删除前，消费者仍然可以回溯消息重新消费。</li>
+<li>消息删除：RocketMQ 按照消息保存机制滚动清理最早的消息数据，将消息从物理文件中删除。</li>
+</ul>
+<p>基于定时消息的超时任务处理具备如下优势：</p>
+<ul>
+<li>精度高、开发门槛低：基于消息通知方式不存在定时阶梯间隔。可以轻松实现任意精度事件触发，无需业务去重。</li>
+<li>高性能可扩展：传统的数据库扫描方式较为复杂，需要频繁调用接口扫描，容易产生性能瓶颈。RocketMQ 的定时消息具有高并发和水平扩展的能力。</li>
+</ul>
+<h4 id="定时消息生命周期"><a href="#定时消息生命周期" class="headerlink" title="定时消息生命周期"></a>定时消息生命周期</h4><ul>
+<li>定时消息生命周期初始化：消息被生产者构建并完成初始化，待发送到服务端的状态。</li>
+<li>定时中：消息被发送到服务端，和普通消息不同的是，服务端不会直接构建消息索引，而是会将定时消息单独存储在定时存储系统中，等待定时时刻到达。</li>
+<li>待消费：定时时刻到达后，服务端将消息重新写入普通存储引擎，对下游消费者可见，等待消费者消费的状态。</li>
+<li>消费中：消息被消费者获取，并按照消费者本地的业务逻辑进行处理的过程。此时服务端会等待消费者完成消费并提交消费结果，如果一定时间后没有收到消费者的响应，RocketMQ 会对消息进行重试处理。</li>
+<li>消费提交：消费者完成消费处理，并向服务端提交消费结果，服务端标记当前消息已经被处理(包括消费成功和失败)。RocketMQ 默认支持保留所有消息，此时消息数据并不会立即被删除，只是逻辑标记已消费。消息在保存时间到期或存储空间不足被删除前，消费者仍然可以回溯消息重新消费。</li>
+<li>消息删除：Apache RocketMQ 按照消息保存机制滚动清理最早的消息数据，将消息从物理文件中删除。</li>
+</ul>
+<p>定时消息的实现逻辑需要先经过定时存储等待触发，定时时间到达后才会被投递给消费者。因此，如果将大量定时消息的定时时间设置为同一时刻，则到达该时刻后会有大量消息同时需要被处理，会造成系统压力过大，导致消息分发延迟，影响定时精度。</p>
+<h4 id="顺序消息-事务消息"><a href="#顺序消息-事务消息" class="headerlink" title="顺序消息&#x2F;事务消息"></a>顺序消息&#x2F;事务消息</h4><ul>
+<li>顺序消息：顺序消息仅支持使用 MessageType 为 FIFO 的主题，即顺序消息只能发送至类型为顺序消息的主题中，发送的消息的类型必须和主题的类型一致。和普通消息发送相比，顺序消息发送必须要设置消息组。要保证消息的顺序性需要单一生产者串行发送。单线程使用 MessageListenerConcurrently 可以顺序消费，多线程环境下使用 MessageListenerOrderly 才能顺序消费。</li>
+<li>事务消息：事务消息是 Apache RocketMQ 提供的一种高级消息类型，支持在分布式场景下保障消息生产和本地事务的最终一致性。简单来讲，就是将本地事务(数据库的 DML 操作)与发送消息合并在同一个事务中。例如，新增一个订单。在事务未提交之前，不发送订阅的消息。发送消息的动作随着事务的成功提交而发送，随着事务的回滚而取消。当然真正地处理过程不止这么简单，包含了半消息、事务监听和事务回查等概念，下面有更详细的说明。</li>
+</ul>
+<h4 id="消费者分类"><a href="#消费者分类" class="headerlink" title="消费者分类"></a>消费者分类</h4><h3 id="RabbitMQ✅"><a href="#RabbitMQ✅" class="headerlink" title="RabbitMQ✅"></a>RabbitMQ✅</h3><h2 id="高可用✅"><a href="#高可用✅" class="headerlink" title="高可用✅"></a>高可用✅</h2><h3 id="什么是高可用"><a href="#什么是高可用" class="headerlink" title="什么是高可用"></a>什么是高可用</h3><p>高可用描述的是一个系统在大部分时间都是可用的，可以提供服务的。高可用代表系统即使在发生硬件故障或者系统升级的时候，服务仍然是可用的。</p>
+<ul>
+<li>99.9999% 就是代表该系统在所有的运行时间中只有 0.0001% 的时间是不可用的，这样的系统就是非常非常高可用的了</li>
+<li>系统的可用性还可以用某功能的失败次数与总的请求次数之比来衡量，比如对网站请求 1000 次，其中有 10 次请求失败，那么可用性就是 99%。</li>
+</ul>
+<h3 id="哪些情况会导致系统不可用？"><a href="#哪些情况会导致系统不可用？" class="headerlink" title="哪些情况会导致系统不可用？"></a>哪些情况会导致系统不可用？</h3><ul>
+<li>黑客攻击；</li>
+<li>硬件故障，比如服务器坏掉。</li>
+<li>并发量&#x2F;用户请求量激增导致整个服务宕掉或者部分服务不可用。</li>
+<li>代码中的坏味道导致内存泄漏或者其他问题导致程序挂掉。</li>
+<li>网站架构某个重要的角色比如 Nginx 或者数据库突然不可用。</li>
+<li>自然灾害或者人为破坏。</li>
+<li>……</li>
+</ul>
+<h3 id="提高系统高可用的方法"><a href="#提高系统高可用的方法" class="headerlink" title="提高系统高可用的方法"></a>提高系统高可用的方法</h3><p><strong>注重代码质量，测试严格把关</strong><br>代码质量有问题比如比较常见的内存泄漏、循环依赖都是对系统可用性极大的损害。比较实际可用的提高代码质量方法就是 CodeReview。</p>
+<p><strong>使用集群，减少单点故障</strong><br>比如使用一个 Redis 实例作为缓存的时候，这个 Redis 实例挂了之后，整个缓存服务可能就挂了。使用了集群之后，即使一台 Redis 实例挂了，不到一秒就会有另外一台 Redis 实例顶上。</p>
+<p><strong>限流</strong><br>流量控制，其原理是监控应用流量的 QPS 或并发线程数等指标，当达到指定的阈值时对流量进行控制，以避免被瞬时的流量高峰冲垮，从而保障应用的高可用性。</p>
+<p><strong>超时和重试机制设置</strong><br>一旦用户请求超过某个时间的得不到响应，就抛出异常。这个是非常重要的，很多线上系统故障都是因为没有进行超时设置或者超时设置的方式不对导致的。在读取第三方服务的时候，尤其适合设置超时和重试机制。一般使用一些 RPC 框架的时候，这些框架都自带的超时重试的配置。如果不进行超时设置可能会导致请求响应速度慢，甚至导致请求堆积进而让系统无法再处理请求。重试的次数一般设为 3 次，再多次的重试没有好处，反而会加重服务器压力(部分场景使用失败重试机制会不太适合)。</p>
+<p><strong>熔断机制</strong><br>超时和重试机制设置之外，熔断机制也是很重要的。 熔断机制说的是系统自动收集所依赖服务的资源使用情况和性能指标，当所依赖的服务恶化或者调用失败次数达到某个阈值的时候就迅速失败，让当前系统立即切换依赖其他备用服务。 比较常用的流量控制和熔断降级框架是 Netflix 的 Hystrix 和 alibaba 的 Sentinel。</p>
+<p><strong>异步调用</strong><br>异步调用的话我们不需要关心最后的结果，这样就可以用户请求完成之后就立即返回结果，具体处理我们可以后续再做，秒杀场景用这个还是蛮多的。</p>
+<p><strong>使用缓存</strong><br>如果系统属于并发量比较高的话，如果单纯使用数据库的话，当大量请求直接落到数据库可能数据库就会直接挂掉。使用缓存缓存热点数据，因为缓存存储在内存中，所以速度相当地快！</p>
+<p><strong>其他</strong></p>
+<ul>
+<li>核心应用和服务优先使用更好的硬件</li>
+<li>监控系统资源使用情况增加报警设置。</li>
+<li>注意备份，必要时候回滚。</li>
+<li>灰度发布：将服务器集群分成若干部分，每天只发布一部分机器，观察运行稳定没有故障，第二天继续发布一部分机器，持续几天才把整个集群全部发布完毕，期间如果发现问题，只需要回滚已发布的一部分服务器即可</li>
+<li>定期检查&#x2F;更换硬件： 如果不是购买的云服务的话，定期还是需要对硬件进行一波检查的，对于一些需要更换或者升级的硬件，要及时更换或者升级。</li>
+<li>……</li>
+</ul>
+<h3 id="冗余设计"><a href="#冗余设计" class="headerlink" title="冗余设计"></a>冗余设计</h3><p>冗余设计是保证系统和数据高可用的最常的手段。</p>
+<ul>
+<li>对于服务来说，冗余的思想就是相同的服务部署多份，如果正在使用的服务突然挂掉的话，系统可以很快切换到备份服务上，大大减少系统的不可用时间，提高系统的可用性。</li>
+<li>对于数据来说，冗余的思想就是相同的数据备份多份，这样就可以很简单地提高数据的安全性。</li>
+</ul>
+<p>高可用集群(High Availability Cluster，简称 HA Cluster)、同城灾备、异地灾备、同城多活和异地多活是冗余思想在高可用系统设计中最典型的应用。</p>
+<ul>
+<li>高可用集群：同一份服务部署两份或者多份，当正在使用的服务突然挂掉的话，可以切换到另外一台服务，从而保证服务的高可用。</li>
+<li>同城灾备：一整个集群可以部署在同一个机房，而同城灾备中相同服务部署在同一个城市的不同机房中。并且，备用服务不处理请求。这样可以避免机房出现意外情况比如停电、火灾。</li>
+<li>异地灾备：类似于同城灾备，不同的是，相同服务部署在异地(通常距离较远，甚至是在不同的城市或者国家)的不同机房中</li>
+<li>同城多活：类似于同城灾备，但备用服务可以处理请求，这样可以充分利用系统资源，提高系统的并发。</li>
+<li>异地多活：将服务部署在异地的不同机房中，并且，它们可以同时对外提供服务。</li>
+</ul>
+<h3 id="常见限流算法✅"><a href="#常见限流算法✅" class="headerlink" title="常见限流算法✅"></a>常见限流算法✅</h3><h4 id="固定窗口计数器算法"><a href="#固定窗口计数器算法" class="headerlink" title="固定窗口计数器算法"></a>固定窗口计数器算法</h4><p>原理是将时间划分为固定大小的窗口，在每个窗口内限制请求的数量或速率，即固定窗口计数器算法规定了系统单位时间处理的请求数量。<br>假如规定系统中某个接口 1 分钟只能被访问 33 次的话，使用固定窗口计数器算法的实现思路如下：</p>
+<ul>
+<li>将时间划分固定大小窗口，这里是 1 分钟一个窗口。</li>
+<li>给定一个变量 counter 来记录当前接口处理的请求数量，初始值为 0(代表接口当前 1 分钟内还未处理请求)。</li>
+<li>1 分钟之内每处理一个请求之后就将 counter+1 ，当 counter&#x3D;33 之后(也就是说在这 1 分钟内接口已经被访问 33 次的话)，后续的请求就会被全部拒绝。</li>
+<li>等到 1 分钟结束后，将 counter 重置 0，重新开始计数。</li>
+</ul>
+<p>优点：实现简单，易于理解。<br>缺点：</p>
+<ul>
+<li>限流不够平滑。例如限制某个接口每分钟只能访问 30 次，假设前 30 秒就有 30 个请求到达的话，那后续 30 秒将无法处理请求，这是不可取的，用户体验极差！</li>
+<li>无法保证限流速率，因而无法应对突然激增的流量。例如限制某个接口 1 分钟只能访问 1000 次，该接口的 QPS 为 500，前 55s 这个接口 1 个请求没有接收，后 1s 突然接收了 1000 个请求。然后，在当前场景下，这 1000 个请求在 1s 内是没办法被处理的，系统直接就被瞬时的大量请求给击垮了。</li>
+</ul>
+<h4 id="滑动窗口计数器算法"><a href="#滑动窗口计数器算法" class="headerlink" title="滑动窗口计数器算法"></a>滑动窗口计数器算法</h4><p>滑动窗口计数器算法限流的颗粒度更小，其把固定窗口算法中的固定窗口再次划分为若干片。</p>
+<p>例如接口限流每分钟处理 60 个请求，可以把 1 分钟分为 60 个窗口。每隔 1 秒移动一次，每个窗口一秒只能处理不大于 60(请求数)&#x2F;60(窗口数)的请求，如果当前窗口的请求计数总和超过了限制的数量的话就不再处理其他请求。很显然，当滑动窗口的格子划分的越多，滑动窗口的滚动就越平滑，限流的统计就会越精确。</p>
+<p>优点：</p>
+<ul>
+<li>相比于固定窗口算法，滑动窗口计数器算法可以应对突然激增的流量。</li>
+<li>相比于固定窗口算法，滑动窗口计数器算法的颗粒度更小，可以提供更精确的限流控制。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>与固定窗口计数器算法类似，滑动窗口计数器算法依然存在限流不够平滑的问题。</li>
+<li>相比较于固定窗口计数器算法，滑动窗口计数器算法实现和理解起来更复杂一些。</li>
+</ul>
+<h4 id="漏桶算法"><a href="#漏桶算法" class="headerlink" title="漏桶算法"></a>漏桶算法</h4><p>可以把发请求的动作比作成注水到桶中，处理请求的过程可以比喻为漏桶漏水。往桶中以任意速率流入水，以一定速率流出水。当水超过桶流量则丢弃，因为桶容量是不变的，保证了整体的速率。如果想要实现这个算法的话也很简单，准备一个队列用来保存请求，然后定期从队列中拿请求来执行就好了(和消息队列削峰&#x2F;限流的思想是一样的)。</p>
+<p><img src="/./image/Java-backend/loutong-algo.png" alt="漏桶算法"></p>
+<p>优点：</p>
+<ul>
+<li>实现简单，易于理解。</li>
+<li>可以控制限流速率，避免网络拥塞和系统过载。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>无法应对突然激增的流量，因为只能以固定的速率处理请求，对系统资源利用不够友好。</li>
+<li>桶流入水(发请求)的速率如果一直大于桶流出水(处理请求)的速率的话，那么桶会一直是满的，一部分新的请求会被丢弃，导致服务质量下降。</li>
+</ul>
+<p>实际业务场景中，基本不会使用漏桶算法。</p>
+<h4 id="令牌桶算法"><a href="#令牌桶算法" class="headerlink" title="令牌桶算法"></a>令牌桶算法</h4><p>和漏桶算法算法一样，过现在桶里装的是令牌了，请求在被处理之前需要拿到一个令牌，请求处理完毕之后将这个令牌丢弃(删除)。根据限流大小，按照一定的速率往桶里添加令牌。如果桶装满了，就不能继续往里面继续添加令牌了。<br><img src="/./image/Java-backend/lingpaitong-algo.png" alt="令牌桶算法"></p>
+<p>优点：</p>
+<ul>
+<li>可以限制平均速率和应对突然激增的流量。</li>
+<li>可以动态调整生成令牌的速率。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>如果令牌产生速率和桶的容量设置不合理，可能会出现问题比如大量的请求被丢弃、系统过载。</li>
+<li>相比于其他限流算法，实现和理解起来更复杂一些。</li>
+</ul>
+<h3 id="针对什么来进行限流？"><a href="#针对什么来进行限流？" class="headerlink" title="针对什么来进行限流？"></a>针对什么来进行限流？</h3><p>实际项目中，还需要确定限流对象，也就是针对什么来进行限流。常见的限流对象如下：</p>
+<ul>
+<li>IP ：针对 IP 进行限流，适用面较广，简单粗暴。</li>
+<li>业务 ID：挑选唯一的业务 ID 以实现更针对性地限流。例如，基于用户 ID 进行限流。</li>
+<li>个性化：根据用户的属性或行为，进行不同的限流策略。例如， VIP 用户不限流，而普通用户限流。根据系统的运行指标(如 QPS、并发调用数、系统负载等)，动态调整限流策略。例如，当系统负载较高的时候，控制每秒通过的请求减少。</li>
+</ul>
+<h3 id="单机限流怎么做"><a href="#单机限流怎么做" class="headerlink" title="单机限流怎么做"></a>单机限流怎么做</h3><p>可使用令牌桶算法</p>
+<h3 id="分布式限流怎么做"><a href="#分布式限流怎么做" class="headerlink" title="分布式限流怎么做"></a>分布式限流怎么做</h3><p>分布式限流针对的分布式&#x2F;微服务应用架构应用，在这种架构下，单机限流就不适用了，因为会存在多种服务，并且一种服务也可能会被部署多份。<br>分布式限流常见的方案：</p>
+<ul>
+<li>借助中间件限流：可以借助 Sentinel 或者使用 Redis 来自己实现对应的限流逻辑。</li>
+<li>网关层限流：比较常用的一种方案，直接在网关层把限流给安排上了。不过，通常网关层限流通常也需要借助到中间件&#x2F;框架。就比如 Spring Cloud Gateway 的分布式限流实现RedisRateLimiter就是基于 Redis+Lua 来实现的，再比如 Spring Cloud Gateway 还可以整合 Sentinel 来做限流。</li>
+</ul>
+<p>如果你要基于 Redis 来手动实现限流逻辑的话，建议配合 Lua 脚本来做。为什么建议 Redis+Lua 的方式？主要有两点原因：</p>
+<ul>
+<li>减少了网络开销：可以利用 Lua 脚本来批量执行多条 Redis 命令，这些 Redis 命令会被提交到 Redis 服务器一次性执行完成，大幅减小了网络开销。</li>
+<li>原子性：一段 Lua 脚本可以视作一条命令执行，一段 Lua 脚本执行过程中不会有其他脚本或 Redis 命令同时执行，保证了操作不会被其他指令插入或打扰。</li>
+</ul>
+<h3 id="降级"><a href="#降级" class="headerlink" title="降级"></a>降级</h3><p>降级指的是在服务压力过大或部分功能出现故障时，主动减少或关闭某些非核心功能，从而确保核心功能的正常运行。通过降级，系统可以在不影响主要功能的情况下，减轻负载，避免因部分功能故障导致整个系统不可用。</p>
+<p>应用场景：</p>
+<ul>
+<li>系统负载过高：当系统承受的请求量过大，可能会导致性能下降。此时，可以通过关闭一些耗资源的非关键功能，确保核心服务的响应速度。</li>
+<li>依赖服务异常：如果系统依赖的某个外部服务发生故障或延迟过大，可以选择临时关闭与该服务相关的功能，而不是完全停掉系统的服务。</li>
+<li>业务需求波动：在某些特殊时期(如促销活动)，为了应对突增的流量，可以提前降级部分非核心功能。</li>
+</ul>
+<p>实现方式：</p>
+<ul>
+<li>关闭某些功能：通过开关、配置中心等手段，临时禁用部分功能或模块。</li>
+<li>提供默认值：在依赖服务不可用时，返回默认数据或缓存数据。</li>
+<li>减少服务质量：降低服务的质量，例如降低图像分辨率、减少查询结果数量等。</li>
+</ul>
+<p>优势：</p>
+<ul>
+<li>保障系统核心功能的可用性。</li>
+<li>减轻系统负载，避免雪崩效应。</li>
+</ul>
+<h3 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h3><p>熔断是一种故障隔离机制，当系统某个组件(如外部服务)出现问题时，熔断器会自动切断对该组件的请求，从而避免故障蔓延到整个系统。熔断器在一段时间后会尝试恢复连接，如果故障消失，系统会恢复正常调用。</p>
+<p>熔断的状态：</p>
+<ul>
+<li>关闭状态(Closed)：正常情况下，所有请求都通过，熔断器处于关闭状态。</li>
+<li>打开状态(Open)：当外部服务持续出现故障，超过一定阈值时，熔断器切换到打开状态，直接拒绝请求并返回错误响应。</li>
+<li>半开状态(Half-Open)：熔断器在一段时间后尝试恢复连接，允许少量请求通过，测试外部服务是否恢复正常。如果请求成功，熔断器切回到关闭状态；如果失败，继续保持打开状态。</li>
+</ul>
+<p>应用场景：</p>
+<ul>
+<li>依赖服务不可用：当依赖的外部服务出现异常或性能下降时，频繁的调用失败会导致资源浪费和系统阻塞。此时，熔断器可以及时切断这些无效请求，保护系统的其他部分不受影响。</li>
+<li>防止级联故障：在分布式系统中，如果一个服务的故障导致下游服务的负载激增，可能引发连锁反应。熔断可以防止这种级联故障的发生。</li>
+</ul>
+<p>实现方式：</p>
+<ul>
+<li>错误率监控：根据外部服务的错误率或响应时间来判断是否触发熔断。</li>
+<li>超时设置：如果外部服务的响应时间超过设定的阈值，触发熔断。</li>
+<li>自动恢复：熔断器在一段时间后自动尝试恢复连接。</li>
+</ul>
+<p>优势：</p>
+<ul>
+<li>防止故障扩散，保障系统的稳定性。</li>
+<li>提高系统的容错能力和恢复能力。</li>
+</ul>
+<h3 id="降级与熔断的区别"><a href="#降级与熔断的区别" class="headerlink" title="降级与熔断的区别"></a>降级与熔断的区别</h3><ul>
+<li>目标不同：降级的目标是保障核心功能在高负载或异常情况下仍然可用；熔断的目标是防止系统因依赖的某个组件故障而出现更大范围的故障。</li>
+<li>触发条件不同：降级通常是基于系统的负载、请求量等情况进行主动调整；熔断则是基于对外部服务的健康状态监控进行被动触发。</li>
+<li>恢复方式不同：降级通常需要手动干预恢复，比如流量减少后手动恢复被关闭的功能；熔断则具有自动恢复机制，当外部服务恢复正常后熔断器会自动切换到关闭状态。</li>
+</ul>
+<h3 id="超时机制"><a href="#超时机制" class="headerlink" title="超时机制"></a>超时机制</h3><p><strong>超时机制</strong>用于防止请求长时间等待而不返回结果。它为每个请求设定一个最大等待时间，一旦超过这个时间，系统就会认为该请求失败，从而采取相应的措施(如重试、降级或直接返回错误)。</p>
+<p>关键点：</p>
+<ul>
+<li>超时的设定：超时时间应根据具体业务需求、网络延迟和系统性能来合理设定。超时过短可能导致误判，超时过长又可能影响用户体验和系统响应时间。</li>
+<li>超时的作用：防止资源的长期占用，减少系统的线程或连接被长时间挂起，从而保持系统的响应能力。</li>
+<li>分级超时：在复杂的分布式系统中，不同的服务或组件可以有不同的超时设置，以适应各自的性能特点和业务需求。</li>
+</ul>
+<p>示例：<br>在微服务架构中，假设服务 A 需要调用服务 B，B 可能由于各种原因(如高负载、网络抖动)无法及时响应。A 可以设置一个超时时间(如 2 秒)，如果 B 在 2 秒内没有响应，A 会认为调用失败并处理该情况。</p>
+<h3 id="重试机制"><a href="#重试机制" class="headerlink" title="重试机制"></a>重试机制</h3><p><strong>重试机制</strong>用于在请求失败时自动重试，以应对临时性故障。重试可以显著提高成功率，特别是在分布式系统中，网络故障、资源争用等问题可能只是暂时的。</p>
+<p>关键点：</p>
+<ul>
+<li>重试策略：重试机制需要设计合理的策略，包括：<ul>
+<li>重试次数：设定最大重试次数，防止无限重试导致系统过载。</li>
+<li>重试间隔：设置重试之间的等待时间，可以是固定时间间隔，也可以是指数退避(每次重试间隔逐渐增加)。</li>
+<li>重试条件：明确哪些错误或状态需要重试，如网络超时、连接中断等。</li>
+</ul>
+</li>
+<li>幂等性考虑：重试机制要求操作是幂等的，即同一操作多次执行不会产生副作用。如果操作不可避免地产生副作用(如扣款操作)，需要设计幂等处理逻辑。如购买商品时判断是否已经购买过了。</li>
+</ul>
+<p>示例：<br>在支付系统中，用户支付请求可能由于网络抖动而失败。系统可以在支付失败后自动重试 3 次，每次间隔 1 秒。如果第 3 次重试后仍然失败，则返回错误给用户。</p>
+<h3 id="超时与重试的协作"><a href="#超时与重试的协作" class="headerlink" title="超时与重试的协作"></a>超时与重试的协作</h3><p>超时和重试通常结合使用，以实现更高的可用性：</p>
+<ul>
+<li>超时后重试：请求在超时后进行重试，直到达到最大重试次数。</li>
+<li>分布式场景中的挑战：在分布式系统中，超时和重试可能会放大问题，例如请求风暴或级联故障。因此，在设计时要特别注意这些可能的副作用。</li>
+</ul>
+<p><strong>总结：</strong></p>
+<ul>
+<li><strong>超时机制</strong>防止请求长时间挂起，提升系统的资源利用效率。</li>
+<li><strong>重试机制</strong>则通过自动化的重试操作，提高请求的成功率和系统的容错能力。</li>
+<li>两者结合使用时，需要精心设计超时和重试策略，以确保系统的高可用性和稳定性。</li>
+</ul>
+<h3 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h3><h4 id="性能测试-1"><a href="#性能测试-1" class="headerlink" title="性能测试"></a>性能测试</h4><p>性能测试方法是通过测试工具模拟用户请求系统，目的主要是为了测试系统的性能是否满足要求。通俗地说，这种方法就是要在特定的运行条件下验证系统的能力状态。性能测试是你在对系统性能已经有了解的前提之后进行的，并且有明确的性能指标。</p>
+<h4 id="负载测试"><a href="#负载测试" class="headerlink" title="负载测试"></a>负载测试</h4><p>对被测试的系统继续加大请求压力，直到服务器的某个资源已经达到饱和了，比如系统的缓存已经不够用了或者系统的响应时间已经不满足要求了。负载测试说白点就是测试系统的上限。</p>
+<h4 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h4><p>不去管系统资源的使用情况，对系统继续加大请求压力，直到服务器崩溃无法再继续提供服务。</p>
+<h4 id="稳定性测试"><a href="#稳定性测试" class="headerlink" title="稳定性测试"></a>稳定性测试</h4><p>模拟真实场景，给系统一定压力，看看业务是否能稳定运行。</p>
+<h4 id="常见性能优化策略"><a href="#常见性能优化策略" class="headerlink" title="常见性能优化策略"></a>常见性能优化策略</h4><p>性能优化之前需要对请求经历的各个环节进行分析，排查出可能出现性能瓶颈的地方，定位问题。</p>
+<ol>
+<li>系统是否需要缓存？</li>
+<li>系统架构本身是不是就有问题？</li>
+<li>系统是否存在死锁的地方？</li>
+<li>系统是否存在内存泄漏？(Java 的自动回收内存虽然很方便，但是，有时候代码写的不好真的会造成内存泄漏)</li>
+<li>数据库索引使用是否合理？</li>
+<li>…</li>
+</ol>
+<h4 id="相关指标"><a href="#相关指标" class="headerlink" title="相关指标"></a>相关指标</h4><ul>
+<li>QPS(Query Per Second)：服务器每秒可以执行的查询次数；</li>
+<li>TPS(Transaction Per Second)：服务器每秒处理的事务数(这里的一个事务可以理解为客户发出请求到收到服务器的过程)；</li>
+<li>RT：响应时间RT(Response-time)就是用户发出请求到用户收到系统处理结果所需要的时间。</li>
+<li>并发数：可以简单理解为系统能够同时供多少人访问使用也就是说系统同时能处理的请求数量。</li>
+<li>吞吐量：吞吐量指的是系统单位时间内系统处理的请求数量。</li>
+</ul>
+<p>QPS(TPS) &#x3D; 并发数&#x2F;平均响应时间(RT)<br>并发数 &#x3D; QPS * 平均响应时间(RT)</p>
+<blockquote>
+<p>QPS vs TPS：QPS 基本类似于 TPS，但是不同的是，对于一个页面的一次访问，形成一个 TPS；但一次页面请求，可能产生多次对服务器的请求，服务器对这些请求，就可计入“QPS”之中。如，访问一个页面会请求服务器 2 次，一次访问，产生一个“T”，产生 2 个“Q”。</p>
+</blockquote>
+<h2 id="处理上限为100的接口，突然10000个请求过来了，怎么办？"><a href="#处理上限为100的接口，突然10000个请求过来了，怎么办？" class="headerlink" title="处理上限为100的接口，突然10000个请求过来了，怎么办？"></a>处理上限为100的接口，突然10000个请求过来了，怎么办？</h2><p>当接口突然接收到超出其处理能力的大量请求时，需要采取一些策略来防止系统过载，并确保服务的可用性。</p>
+<ul>
+<li>限流：通过限制每个时间单位内允许处理的请求数量来防止过载。常见的限流算法包括漏桶算法和令牌桶算法。</li>
+<li>负载均衡：使用负载均衡器将请求分配到多个服务器上，以均衡负载。可以使用软件解决方案(如 Nginx 或 Apache)。</li>
+<li>缓存：缓存可以减轻数据库和后端服务的压力。对于一些可以缓存的请求结果，可以使用 Redis 进行缓存。</li>
+<li>降级：在高负载时，可以对某些非关键功能进行降级，例如延迟处理或返回默认值。</li>
+<li>消息队列：将请求放入消息队列中进行异步处理，如使用 Kafka、RabbitMQ 或 ActiveMQ。</li>
+<li>扩展资源：根据实际情况扩展服务器资源，包括水平扩展(增加服务器数量)和垂直扩展(增加单个服务器的处理能力)。</li>
+</ul>
+<h2 id="公司逐渐发展数据量与业务量暴增，如何设计公司的系统架构？"><a href="#公司逐渐发展数据量与业务量暴增，如何设计公司的系统架构？" class="headerlink" title="公司逐渐发展数据量与业务量暴增，如何设计公司的系统架构？"></a>公司逐渐发展数据量与业务量暴增，如何设计公司的系统架构？</h2><p>当公司从小规模发展壮大，数据量和业务量激增时，系统架构的设计必须能够应对当前的增长，并且为未来的扩展留有余地。以下是在这种情况下可以采取的一些架构设计策略：</p>
+<ol>
+<li>分层架构(Layered Architecture)<ul>
+<li>表现层(Presentation Layer)：用户界面层，处理所有用户请求和响应。它可以独立于后端逻辑和数据层，通过 REST API 或 GraphQL 与后端通信。</li>
+<li>业务逻辑层(Business Logic Layer)：处理公司核心业务逻辑，保证系统的可维护性和可扩展性。可以通过微服务架构拆分为独立的服务。</li>
+<li>数据访问层(Data Access Layer)：负责与数据库的交互，采用合适的数据存储方式来管理不同的数据类型，例如使用关系数据库(如 MySQL)和 NoSQL 数据库(如 MongoDB)。</li>
+</ul>
+</li>
+<li>微服务架构(Microservices Architecture)：随着业务增长，将单一的应用拆分为多个微服务，每个微服务专注于特定业务领域。微服务的优势包括：<ul>
+<li>独立部署和扩展：每个微服务可以独立部署，按需水平扩展。</li>
+<li>故障隔离：如果某个服务出现故障，其他服务不受影响。</li>
+<li>技术异构：可以为不同的服务选择最合适的技术栈。</li>
+</ul>
+</li>
+<li>水平扩展和负载均衡(Horizontal Scaling &amp; Load Balancing)<ul>
+<li>水平扩展(Horizontal Scaling)：增加更多服务器实例来分担负载，可以利用云服务平台(如 AWS、Azure、阿里云)来实现弹性扩展。</li>
+<li>负载均衡(Load Balancing)：使用负载均衡器(如 Nginx、HAProxy)将流量分配给不同服务器实例，以避免单点故障并提高吞吐量。</li>
+</ul>
+</li>
+<li>缓存层(Caching Layer)：在高并发的情况下，使用缓存机制可以显著提高系统性能。<ul>
+<li>缓存数据：使用 Redis 或 Memcached 缓存频繁访问的数据，减少数据库的查询压力。</li>
+<li>页面缓存：可以在 CDN(如 Cloudflare)层面缓存静态内容，减少请求的响应时间。</li>
+</ul>
+</li>
+<li>数据库设计与优化：随着数据量的增加，数据库的设计和优化至关重要。<ul>
+<li>读写分离：可以通过主从数据库架构，将读操作分发到从库，写操作集中在主库。</li>
+<li>分库分表：当单个数据库难以承载大量数据时，可以通过数据分片(Sharding)来分散数据压力。</li>
+<li>NoSQL 数据库：对于非结构化数据或需要快速存取的场景，可以引入 NoSQL 数据库，如 Cassandra、MongoDB。</li>
+</ul>
+</li>
+<li>服务发现与通信：在微服务架构中，服务之间的通信和发现是关键问题。<ul>
+<li>服务发现：使用服务注册中心(如 Consul、Eureka)来管理服务的注册与发现。</li>
+<li>API 网关：引入 API 网关(如 Kong、Zuul)统一管理外部请求，并提供安全、路由、负载均衡等功能。</li>
+<li>异步通信：对于一些延时不敏感的任务，可以使用消息队列(如 RabbitMQ、Kafka)进行异步通信，减轻系统的实时压力。</li>
+</ul>
+</li>
+<li>自动化运维与监控<ul>
+<li>容器化与编排：使用 Docker 容器化应用，利用 Kubernetes 管理集群，自动化扩展和负载分配。</li>
+<li>监控与告警：使用 Prometheus、Grafana 等工具实时监控系统性能，设置告警机制，及时发现和处理问题。</li>
+<li>日志管理：引入 ELK(Elasticsearch, Logstash, Kibana)等日志管理方案，集中处理日志数据并进行分析。</li>
+</ul>
+</li>
+<li>安全性设计<ul>
+<li>认证与授权：使用 OAuth、JWT 等标准认证机制来保障用户的身份验证和权限管理。</li>
+<li>数据加密：对敏感数据进行传输和存储加密。</li>
+<li>安全审计：实时记录系统访问和操作，进行安全审计，防止恶意攻击。</li>
+</ul>
+</li>
+<li>灾难恢复与备份：随着业务的增长，容灾和数据备份显得更加重要。<ul>
+<li>数据备份：定期进行数据库和文件系统的备份，确保在灾难发生时数据可恢复。</li>
+<li>异地容灾：在多个地域部署冗余系统，确保一地出现故障时，业务可以无缝切换到其他地区。</li>
+</ul>
+</li>
+</ol>
+<p>通过以上方法，可以构建一个可扩展、高可用、易维护的系统架构，支持公司在数据量和业务量快速增长的情况下平稳运行并持续扩展。</p>
+<h2 id="如何在不停机的情况下完成系统更新"><a href="#如何在不停机的情况下完成系统更新" class="headerlink" title="如何在不停机的情况下完成系统更新"></a>如何在不停机的情况下完成系统更新</h2><p>在不停机的情况下更新系统，通常称为<strong>无缝升级</strong>或<strong>热升级</strong>，主要目标是确保服务在更新期间不中断。以下是几种常用方法：</p>
+<ol>
+<li>滚动更新(Rolling Update)：滚动更新是一种逐步更新系统的方式，其中服务的实例逐一被替换。更新过程中，旧版本仍然在运行，当某一实例被更新到新版本后，继续处理请求。常见步骤如下：<ul>
+<li>先将一部分实例下线，不接收新的请求。</li>
+<li>更新这些实例并重新上线。</li>
+<li>逐步对系统中所有实例进行更新，直到所有实例都使用新版本。</li>
+<li>常用于<strong>微服务架构</strong>和<strong>容器化部署</strong>(如 Kubernetes)。</li>
+</ul>
+</li>
+<li>蓝绿部署(Blue-Green Deployment)：蓝绿部署通过并行运行两个环境来实现无缝切换：<ul>
+<li>“蓝色”环境是当前正在运行的版本，处理所有的生产流量。</li>
+<li>“绿色”环境则是新版本，一旦部署完成并确认其正常运行，生产流量将从“蓝色”切换到“绿色”环境。</li>
+<li>这样可以保证在整个更新过程中，至少有一个环境在提供服务，并且如果绿色环境出现问题，能快速切换回蓝色环境。</li>
+<li>适用于<strong>云原生应用</strong>或<strong>虚拟机</strong>等灵活资源管理系统。</li>
+</ul>
+</li>
+<li>金丝雀发布(Canary Release)：金丝雀发布是一种逐步扩展的更新方式：<ul>
+<li>将新版本首先部署到一小部分服务器或特定用户群体中。</li>
+<li>监控该群体的反馈和系统表现，确保新版本稳定。</li>
+<li>确认没问题后，逐渐扩大新版本的覆盖范围，直至全面替换旧版本。</li>
+<li>可以与<strong>A&#x2F;B测试</strong>结合，确保最优的用户体验。</li>
+</ul>
+</li>
+</ol>
+<p><strong>实施中的注意事项：</strong></p>
+<ul>
+<li>数据库迁移：如果系统更新中涉及数据库结构的变化，必须确保兼容性，通常会通过版本化的迁移脚本或双写机制实现。</li>
+<li>监控和回滚：在发布新版本时，应有完善的监控系统来跟踪错误和性能问题，必要时快速回滚到旧版本。</li>
+<li>自动化工具：使用CI&#x2F;CD工具(如Jenkins、GitLab CI)自动化部署过程，提高更新效率并减少人工干预。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://cwp0.github.io">cwp0</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://cwp0.github.io/posts/17780.html">https://cwp0.github.io/posts/17780.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a><a class="post-meta__tags" href="/tags/%E6%95%99%E7%A8%8B/">教程</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.JPG" target="_blank"><img class="post-qr-code-img" src="/img/wechat.JPG" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.JPG" target="_blank"><img class="post-qr-code-img" src="/img/alipay.JPG" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/17781.html" title="华为笔试/手撕"><img class="cover" src="https://s2.loli.net/2025/03/19/kAcZ5yKPDwizuMN.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">华为笔试/手撕</div></div><div class="info-2"><div class="info-item-1">对华为文化的了解华为的企业文化可以用几个关键词来概括：奋斗、客户至上、团队合作和自我批判。以下是一些具体的特点：  奋斗者文化：华为一直强调“奋斗者为本”，这不仅仅是对员工的期望，也体现在公司对个人的奖励制度上。公司认为，只有通过努力和奋斗，才能在竞争中脱颖而出，创造更大的价值。因此，华为推崇拼搏精神，鼓励员工不断进步。 客户至上：华为在文化中一直强调“以客户为中心”。这意味着华为关注客户的需求和期望，致力于提供最优质的产品和服务。公司倡导通过创新和精益求精来满足客户的需求。 自我批判和持续改进：华为的领导层，尤其是创始人任正非，推崇自我批判的精神。公司鼓励员工、管理层定期反思并查找自己的不足，不断改进，不满足于现状。任正非曾多次提到，华为的成功不仅仅是外部环境使然，更重要的是公司能够在内部自我调整、避免固守错误的做法。 全球化与本地化：华为从创立伊始就立足于全球化发展，强调跨文化的交流与融合。公司在全球范围内设有研发中心，注重本地化的产品设计与服务。 高度的责任感：华为还推崇高度的社会责任感。任正非曾提到，华为不仅仅要在商业上成功，还要在社会和文化层面贡献自己的力量。华为也积极...</div></div></div></a><a class="pagination-related" href="/posts/17779.html" title="游戏研发面经"><img class="cover" src="https://s2.loli.net/2024/06/28/RviHxaoQPJhA8wj.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">游戏研发面经</div></div><div class="info-2"><div class="info-item-1">为什么要应聘游戏研发这个岗位玩过哪些游戏？如何设计出一个游戏？UDP在游戏中为什么丢了包不影响在游戏中使用 UDP(用户数据报协议)而丢包不影响游戏体验的原因主要有以下几点：  实时性要求高：许多游戏(特别是在线游戏)需要实时传输数据，保证游戏的流畅性和响应速度。UDP是一种无连接协议，不需要建立连接就能发送数据，传输速度快，延迟低，适合实时数据传输。 数据包丢失容忍度高：游戏中的许多数据(如玩家的位置、动作等)会频繁更新。即使有些数据包丢失了，也很快会被新的数据包覆盖，因此不会对游戏体验造成明显影响。相比之下，TCP需要确认每个数据包的接收，这会导致延迟，影响游戏的实时性。 自定义重传机制：一些游戏会自行实现数据包丢失的检测和重传机制，而不是依赖于底层协议的重传机制。这种方式更灵活，可以根据具体需要决定是否重传丢失的数据包。 不重要的数据：一些数据(如瞬时状态更新)即使丢失也不会对游戏产生重大影响。游戏开发者可以根据数据的重要性选择是否采用UDP来传输这些数据。  这些特点使得UDP在许多需要快速、实时数据传输的游戏中得到了广泛应用。 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/17771.html" title="框架"><img class="cover" src="https://s2.loli.net/2024/06/12/tSWPZr1EQH6XRAm.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-12</div><div class="info-item-2">框架</div></div><div class="info-2"><div class="info-item-1"> 本文参考 JavaGuide  Spring什么是SpringSpring 是一款基于 Java 的轻量级开源开发框架，旨在提高开发人员的开发效率以及系统的可维护性。 Spring 框架(Spring Framework)是很多模块的集合，使用这些模块可以很方便地协助进行开发。Spring 支持控制反转(Inversion of Control, IOC) 和 面向切面编程(Aspect-Oriented Programming, AOP)、可以很方便地对数据库进行访问、可以很方便地集成第三方组件(电子邮件，任务，调度，缓存等等)、对单元测试支持比较好、支持 RESTful Java 应用程序的开发。 Spring的核心功能主要是 IoC 和 AOP，核心思想是不重新造轮子，开箱即用，提高开发效率。 Spring模块 Spring5.x 版本中 Web 模块的 Portlet 组件已经被废弃掉，同时增加了用于异步响应式处理的 WebFlux 组件。  Core Container：Spring 框架的核心模块、基础模块，主要提供 IoC 依赖注入功能的支持。Spring 其他所...</div></div></div></a><a class="pagination-related" href="/posts/17778.html" title="系统设计"><img class="cover" src="https://s2.loli.net/2024/06/27/OKRYQHdoCfGmgxr.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-27</div><div class="info-item-2">系统设计</div></div><div class="info-2"><div class="info-item-1">实现多个客户端访问一个服务端使用Socket编程来实现一个简单的客户端-服务端模型。 服务端代码： 1234567891011121314151617181920212223242526272829303132import socketimport threading# 定义服务端的IP地址和端口server_ip = &#x27;127.0.0.1&#x27;server_port = 12345# 创建Socket对象server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)server_socket.bind((server_ip, server_port))server_socket.listen(5)  # 最大连接数print(f&quot;服务器启动，监听端口: &#123;server_port&#125;&quot;)def handle_client(client_socket):    while True:        try:            message = client...</div></div></div></a><a class="pagination-related" href="/posts/36313.html" title="云笔记系统扩容"><img class="cover" src="https://s2.loli.net/2024/02/06/ENM4lTRwfKyOtJB.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-20</div><div class="info-item-2">云笔记系统扩容</div></div><div class="info-2"><div class="info-item-1">起因之前部署的云笔记系统的存储卷太小了，当用户数量增加的时候，笔记及用户信息会增大，这有可能会引起内存爆掉的情况。存储用户信息的 mysql和存储笔记信息的 mongodb在部署的时候我都设置了 1G的存储卷，这是远远不够的，因此需对其进行扩容。 根据老师要求，需将内存从 1G扩展到  50G，这是针对存笔记系统的 mongodb，为了更加稳妥，跟学弟协商后决定将存用户数据的 mysql也扩充到 10G。 大体思路： 确定 mongodb和 mysql的 pod所在的 node节点。 备份数据 删除旧的 pod 分别修改 mongodb和 mysql的 pv、 pvc为 50Gi、 10Gi。 指定 mongodb和 mysql的 pv、 pvc及 mongodb、 mysql部署的亲和性，让其部署在指定 node节点，便于扩容。 重新部署相应 pod 扩容指定的 mongodb、 mysql部署的节点的虚拟机。   注：本笔记图片里的 deployment的编号等信息可能会不一样，因为自己操作的时候可能会删了pod在重建导致其编号及时间等不一样，图片仅用于描述过程及结果。  1...</div></div></div></a><a class="pagination-related" href="/posts/17775.html" title="C++知识点"><img class="cover" src="https://s2.loli.net/2024/06/27/xvtGedjogpz15iE.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-27</div><div class="info-item-2">C++知识点</div></div><div class="info-2"><div class="info-item-1">C++常用数据结构 数组(Array)：数组是固定大小的连续内存块，用于存储相同类型的数据。 动态数组(Vector)：std::vector 是一个动态数组，可以根据需要自动调整大小。 栈(Stack)：栈是一种后进先出(LIFO)的数据结构。C++ 中可以使用 std::stack 实现栈。 队列(Queue)：队列是一种先进先出(FIFO)的数据结构。C++ 中可以使用 std::queue 实现队列。 双端队列(Deque)：双端队列允许在两端进行插入和删除操作。C++ 中可以使用 std::deque 实现双端队列。 集合(Set)：集合是一种无序且不允许重复元素的数据结构。C++ 中可以使用 std::set 实现集合。 映射(Map)：映射是一种键值对的数据结构。C++ 中可以使用 std::map 实现映射。 优先队列(Priority Queue)：优先队列是一种元素带有优先级的队列，C++ 中可以使用 std::priority_queue 实现优先队列。 哈希表(Unordered Map)：哈希表是一种基于哈希函数的数据结构，用于高效地进行查找、插入和删除...</div></div></div></a><a class="pagination-related" href="/posts/17770.html" title="计算机基础"><img class="cover" src="https://s2.loli.net/2024/06/27/7o6ubNCe3GgkqMF.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-12</div><div class="info-item-2">计算机基础</div></div><div class="info-2"><div class="info-item-1"> 本文参考 JavaGuide  网络常见网络模型 OSI七层模型：如下。 TCP&#x2F;IP四层模型：如下。 混合模型：混合模型结合了OSI模型和TCP&#x2F;IP模型的优点，以更好地解释和实现网络通信。 五层模型： 物理层、数据链路层、网络层、传输层和应用层。 去除了OSI模型中的会话层和表示层，将它们的功能合并到应用层中。   IEEE 802模型：主要用于局域网(LAN)和城域网(MAN)。包含物理层和数据链路层，进一步细分为介质访问控制(MAC)层和逻辑链路控制(LLC)层。  OSI七层模型 应用层：为计算机提供服务 表示层：数据处理(编码、解码、加密解密、压缩解压缩) 会话层：管理(建立、维护、重连)应用程序之间的会话 传输层：为两台主机进程之间的通信提供通用的数据传输服务 网络层：转发、路由和寻址(决定数据在网络中的游走路径) 数据链路层：帧编码和误差纠正控制 物理层：透明地传送比特流传输  TCP&#x2F;IP四层模型 应用层(应用层、表示层、会话层) 传输层 网络层 网络接口层(数据链路层、物理层)  为什么网络要分层复杂系统需要分层，每层专注于一类...</div></div></div></a><a class="pagination-related" href="/posts/17772.html" title="手撕相关"><img class="cover" src="https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-13</div><div class="info-item-2">手撕相关</div></div><div class="info-2"><div class="info-item-1">经典题型链表有序链表合并12345678910111213141516171819202122232425ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;    // 虚拟头结点    ListNode dummy = new ListNode(-1), p = dummy;    ListNode p1 = l1, p2 = l2;    while (p1 != null &amp;&amp; p2 != null) &#123;        // 比较 p1 和 p2 两个指针        // 将值较小的的节点接到 p 指针        if (p1.val &gt; p2.val) &#123;            p.next = p2;            p2 = p2.next;        &#125; else &#123;            p.next = p1;            p1 = p1.next;        &#125;        // p 指针不断前进...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Valine</span><span id="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">cwp0</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cwp0"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/cwp0" target="_blank" title="Github"><i class="fab fa-github" style="color: #9F9F9F;"></i></a><a class="social-icon" href="mailto:wenpengchen@njust.edu.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: 9F9F9F;"></i></a><a class="social-icon" href="/img/alipay.JPG" target="_blank" title="QQ"><i class="fa-brands fa-qq" style="color: #9F9F9F;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This site is under construction...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F-%E9%AB%98%E6%80%A7%E8%83%BD-%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">分布式&#x2F;高性能&#x2F;高可用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E2%9C%85"><span class="toc-number">1.1.</span> <span class="toc-text">分布式✅</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CAP%E7%90%86%E8%AE%BA"><span class="toc-number">1.1.1.</span> <span class="toc-text">CAP理论</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%A6%96%E5%85%88%E4%BF%9D%E8%AF%81P"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">为什么要首先保证P</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95"><span class="toc-number">1.1.2.</span> <span class="toc-text">雪花算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RPC%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">RPC框架</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E6%80%A7%E8%83%BD%E2%9C%85"><span class="toc-number">1.2.</span> <span class="toc-text">高性能✅</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CDN%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.2.1.</span> <span class="toc-text">CDN工作原理详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%89%BE%E5%88%B0%E6%9C%80%E5%90%88%E9%80%82%E7%9A%84-CDN-%E8%8A%82%E7%82%B9%EF%BC%9F"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">如何找到最合适的 CDN 节点？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E2%9C%85"><span class="toc-number">1.2.2.</span> <span class="toc-text">负载均衡✅</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95%E2%9C%85"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">常见负载均衡算法✅</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">1.2.3.</span> <span class="toc-text">消息队列</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">消息队列有什么作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BC%9A%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">使用消息队列会带来的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E8%A2%AB%E6%B6%88%E8%B4%B9"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">消息队列如何保证消息被消费</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JMS"><span class="toc-number">1.2.4.</span> <span class="toc-text">JMS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%A4%E7%A7%8D%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">两种消息模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AMQP"><span class="toc-number">1.2.5.</span> <span class="toc-text">AMQP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JMS-AMQP"><span class="toc-number">1.2.6.</span> <span class="toc-text">JMS&#x2F;AMQP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B"><span class="toc-number">1.2.7.</span> <span class="toc-text">消息队列选型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kafka%E2%9C%85"><span class="toc-number">1.2.8.</span> <span class="toc-text">Kafka✅</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Kafka%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.2.8.1.</span> <span class="toc-text">Kafka应用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kafka%E4%BC%98%E5%8A%BF"><span class="toc-number">1.2.8.2.</span> <span class="toc-text">Kafka优势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kafka%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.8.3.</span> <span class="toc-text">Kafka消息模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kafka%E5%A4%9A%E5%89%AF%E6%9C%AC%E6%9C%BA%E5%88%B6"><span class="toc-number">1.2.8.4.</span> <span class="toc-text">Kafka多副本机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Zookeeper%E5%92%8CKafka"><span class="toc-number">1.2.8.5.</span> <span class="toc-text">Zookeeper和Kafka</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E7%9A%84%E9%A1%BA%E5%BA%8F%E6%80%A7"><span class="toc-number">1.2.8.6.</span> <span class="toc-text">Kafka如何保证消息的顺序性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1"><span class="toc-number">1.2.8.7.</span> <span class="toc-text">Kafka如何保证消息不丢失</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9"><span class="toc-number">1.2.8.8.</span> <span class="toc-text">Kafka如何保证消息不重复消费</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E8%AF%95%E5%A4%B1%E8%B4%A5%E5%90%8E%E7%9A%84%E6%95%B0%E6%8D%AE%E5%A6%82%E4%BD%95%E5%86%8D%E6%AC%A1%E5%A4%84%E7%90%86"><span class="toc-number">1.2.8.9.</span> <span class="toc-text">重试失败后的数据如何再次处理?</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RocketMQ%E2%9C%85"><span class="toc-number">1.2.9.</span> <span class="toc-text">RocketMQ✅</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RocketMQ%E7%9A%84%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.9.1.</span> <span class="toc-text">RocketMQ的消息模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%98%9F%E5%88%97%E4%B8%BA%E6%AF%8F%E4%B8%AA%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E7%BB%B4%E6%8A%A4%E4%B8%80%E4%B8%AA%E6%B6%88%E8%B4%B9%E5%81%8F%E7%A7%BB"><span class="toc-number">1.2.9.2.</span> <span class="toc-text">为什么队列为每个消费者组维护一个消费偏移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RocketMQ%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.9.3.</span> <span class="toc-text">RocketMQ架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NameServer%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.9.4.</span> <span class="toc-text">NameServer作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%8D%E5%BB%BA%E8%AE%AE%E5%8D%95%E4%B8%80%E7%BA%BF%E7%A8%8B%E5%A4%A7%E9%87%8F%E5%88%9B%E5%BB%BA"><span class="toc-number">1.2.9.5.</span> <span class="toc-text">生产者不建议单一线程大量创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%8D%E5%BB%BA%E8%AE%AE%E9%A2%91%E7%B9%81%E5%88%9B%E5%BB%BA%E5%92%8C%E9%94%80%E6%AF%81"><span class="toc-number">1.2.9.6.</span> <span class="toc-text">生产者不建议频繁创建和销毁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF-%E5%AE%9A%E6%97%B6%E6%B6%88%E6%81%AF"><span class="toc-number">1.2.9.7.</span> <span class="toc-text">普通消息&#x2F;定时消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.2.9.8.</span> <span class="toc-text">普通消息生命周期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E6%B6%88%E6%81%AF%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.2.9.9.</span> <span class="toc-text">定时消息生命周期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF-%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="toc-number">1.2.9.10.</span> <span class="toc-text">顺序消息&#x2F;事务消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.9.11.</span> <span class="toc-text">消费者分类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RabbitMQ%E2%9C%85"><span class="toc-number">1.2.10.</span> <span class="toc-text">RabbitMQ✅</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E2%9C%85"><span class="toc-number">1.3.</span> <span class="toc-text">高可用✅</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">什么是高可用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%AA%E4%BA%9B%E6%83%85%E5%86%B5%E4%BC%9A%E5%AF%BC%E8%87%B4%E7%B3%BB%E7%BB%9F%E4%B8%8D%E5%8F%AF%E7%94%A8%EF%BC%9F"><span class="toc-number">1.3.2.</span> <span class="toc-text">哪些情况会导致系统不可用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E9%AB%98%E7%B3%BB%E7%BB%9F%E9%AB%98%E5%8F%AF%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.3.</span> <span class="toc-text">提高系统高可用的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%97%E4%BD%99%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.3.4.</span> <span class="toc-text">冗余设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95%E2%9C%85"><span class="toc-number">1.3.5.</span> <span class="toc-text">常见限流算法✅</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BA%E5%AE%9A%E7%AA%97%E5%8F%A3%E8%AE%A1%E6%95%B0%E5%99%A8%E7%AE%97%E6%B3%95"><span class="toc-number">1.3.5.1.</span> <span class="toc-text">固定窗口计数器算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E8%AE%A1%E6%95%B0%E5%99%A8%E7%AE%97%E6%B3%95"><span class="toc-number">1.3.5.2.</span> <span class="toc-text">滑动窗口计数器算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95"><span class="toc-number">1.3.5.3.</span> <span class="toc-text">漏桶算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95"><span class="toc-number">1.3.5.4.</span> <span class="toc-text">令牌桶算法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%92%88%E5%AF%B9%E4%BB%80%E4%B9%88%E6%9D%A5%E8%BF%9B%E8%A1%8C%E9%99%90%E6%B5%81%EF%BC%9F"><span class="toc-number">1.3.6.</span> <span class="toc-text">针对什么来进行限流？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E6%9C%BA%E9%99%90%E6%B5%81%E6%80%8E%E4%B9%88%E5%81%9A"><span class="toc-number">1.3.7.</span> <span class="toc-text">单机限流怎么做</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%99%90%E6%B5%81%E6%80%8E%E4%B9%88%E5%81%9A"><span class="toc-number">1.3.8.</span> <span class="toc-text">分布式限流怎么做</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%8D%E7%BA%A7"><span class="toc-number">1.3.9.</span> <span class="toc-text">降级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%86%94%E6%96%AD"><span class="toc-number">1.3.10.</span> <span class="toc-text">熔断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%8D%E7%BA%A7%E4%B8%8E%E7%86%94%E6%96%AD%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.3.11.</span> <span class="toc-text">降级与熔断的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E6%9C%BA%E5%88%B6"><span class="toc-number">1.3.12.</span> <span class="toc-text">超时机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6"><span class="toc-number">1.3.13.</span> <span class="toc-text">重试机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E7%9A%84%E5%8D%8F%E4%BD%9C"><span class="toc-number">1.3.14.</span> <span class="toc-text">超时与重试的协作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.15.</span> <span class="toc-text">性能测试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95-1"><span class="toc-number">1.3.15.1.</span> <span class="toc-text">性能测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.15.2.</span> <span class="toc-text">负载测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.15.3.</span> <span class="toc-text">压力测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%B3%E5%AE%9A%E6%80%A7%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.15.4.</span> <span class="toc-text">稳定性测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5"><span class="toc-number">1.3.15.5.</span> <span class="toc-text">常见性能优化策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%8C%87%E6%A0%87"><span class="toc-number">1.3.15.6.</span> <span class="toc-text">相关指标</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E4%B8%8A%E9%99%90%E4%B8%BA100%E7%9A%84%E6%8E%A5%E5%8F%A3%EF%BC%8C%E7%AA%81%E7%84%B610000%E4%B8%AA%E8%AF%B7%E6%B1%82%E8%BF%87%E6%9D%A5%E4%BA%86%EF%BC%8C%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">处理上限为100的接口，突然10000个请求过来了，怎么办？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AC%E5%8F%B8%E9%80%90%E6%B8%90%E5%8F%91%E5%B1%95%E6%95%B0%E6%8D%AE%E9%87%8F%E4%B8%8E%E4%B8%9A%E5%8A%A1%E9%87%8F%E6%9A%B4%E5%A2%9E%EF%BC%8C%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E5%85%AC%E5%8F%B8%E7%9A%84%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%EF%BC%9F"><span class="toc-number">1.5.</span> <span class="toc-text">公司逐渐发展数据量与业务量暴增，如何设计公司的系统架构？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%8D%E5%81%9C%E6%9C%BA%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%AE%8C%E6%88%90%E7%B3%BB%E7%BB%9F%E6%9B%B4%E6%96%B0"><span class="toc-number">1.6.</span> <span class="toc-text">如何在不停机的情况下完成系统更新</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/17782.html" title="学车小记"><img src="https://s2.loli.net/2025/03/19/eVRF7JMl4yjrzhQ.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="学车小记"/></a><div class="content"><a class="title" href="/posts/17782.html" title="学车小记">学车小记</a><time datetime="2025-03-19T07:04:48.000Z" title="Created 2025-03-19 15:04:48">2025-03-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17781.html" title="华为笔试/手撕"><img src="https://s2.loli.net/2025/03/19/kAcZ5yKPDwizuMN.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="华为笔试/手撕"/></a><div class="content"><a class="title" href="/posts/17781.html" title="华为笔试/手撕">华为笔试/手撕</a><time datetime="2024-11-15T03:51:23.000Z" title="Created 2024-11-15 11:51:23">2024-11-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17780.html" title="分布式/高性能/高可用"><img src="https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分布式/高性能/高可用"/></a><div class="content"><a class="title" href="/posts/17780.html" title="分布式/高性能/高可用">分布式/高性能/高可用</a><time datetime="2024-09-03T09:21:00.000Z" title="Created 2024-09-03 17:21:00">2024-09-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17779.html" title="游戏研发面经"><img src="https://s2.loli.net/2024/06/28/RviHxaoQPJhA8wj.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="游戏研发面经"/></a><div class="content"><a class="title" href="/posts/17779.html" title="游戏研发面经">游戏研发面经</a><time datetime="2024-06-27T16:10:26.000Z" title="Created 2024-06-28 00:10:26">2024-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17777.html" title="智力题"><img src="https://s2.loli.net/2024/06/27/9KWGke8lsJaM1fi.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="智力题"/></a><div class="content"><a class="title" href="/posts/17777.html" title="智力题">智力题</a><time datetime="2024-06-27T15:39:07.000Z" title="Created 2024-06-27 23:39:07">2024-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By cwp0</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional and Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nfRxTBEmIAeb6gP2K0LOdLqw-gzGzoHsz',
+      appKey: 'vmeDN8k58dVdPv5Yz7NEkvSN',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('/js/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/posts/17780.html'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'https://cwp0.github.io/posts/17780.html'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = '分布式/高性能/高可用'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=&api_key=&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Valine' === 'Disqus' || !true) {
+    if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      GLOBAL_CONFIG_SITE.pageType === 'post' && getCount()
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script async src="https://npm.elemecdn.com/tzy-blog/lib/js/other/sakura.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

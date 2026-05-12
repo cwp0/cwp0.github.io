@@ -1,0 +1,1966 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计算机基础 | cwp0</title><meta name="author" content="cwp0"><meta name="copyright" content="cwp0"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="计算机网络和操作系统面经">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机基础">
+<meta property="og:url" content="https://cwp0.github.io/posts/17770.html">
+<meta property="og:site_name" content="cwp0">
+<meta property="og:description" content="计算机网络和操作系统面经">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2024/06/27/7o6ubNCe3GgkqMF.png">
+<meta property="article:published_time" content="2024-06-12T14:47:24.000Z">
+<meta property="article:modified_time" content="2024-06-27T16:15:24.000Z">
+<meta property="article:author" content="cwp0">
+<meta property="article:tag" content="面经">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/06/27/7o6ubNCe3GgkqMF.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "计算机基础",
+  "url": "https://cwp0.github.io/posts/17770.html",
+  "image": "https://s2.loli.net/2024/06/27/7o6ubNCe3GgkqMF.png",
+  "datePublished": "2024-06-12T14:47:24.000Z",
+  "dateModified": "2024-06-27T16:15:24.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "cwp0",
+      "url": "https://cwp0.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/assets/%E5%A4%B4%E5%83%8F.png"><link rel="canonical" href="https://cwp0.github.io/posts/17770.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":66,"languages":{"author":"Author: cwp0","link":"Link: ","source":"Source: cwp0","info":"Copyright belongs to the author. For commercial use, please contact the author for authorization. For non-commercial use, please indicate the source."}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '计算机基础',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/url(/img/background/%E6%A8%B1%E8%8A%B12.jpg));"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://s2.loli.net/2024/06/27/k28sUQb3XqIK9wC.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/assets/%E5%A4%B4%E5%83%8F.png" alt="Logo"><span class="site-name">cwp0</span></a><a class="nav-page-title" href="/"><span class="site-name">计算机基础</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">计算机基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-06-12T14:47:24.000Z" title="Created 2024-06-12 22:47:24">2024-06-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-06-27T16:15:24.000Z" title="Updated 2024-06-28 00:15:24">2024-06-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">36.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>115mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2024-06-28 00:15:24&quot;}" hidden></div><blockquote>
+<p>本文参考 <a target="_blank" rel="noopener" href="https://javaguide.cn/">JavaGuide</a></p>
+</blockquote>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><h3 id="常见网络模型"><a href="#常见网络模型" class="headerlink" title="常见网络模型"></a>常见网络模型</h3><ul>
+<li>OSI七层模型：如下。</li>
+<li>TCP&#x2F;IP四层模型：如下。</li>
+<li>混合模型：混合模型结合了OSI模型和TCP&#x2F;IP模型的优点，以更好地解释和实现网络通信。<ul>
+<li>五层模型： 物理层、数据链路层、网络层、传输层和应用层。 去除了OSI模型中的会话层和表示层，将它们的功能合并到应用层中。</li>
+</ul>
+</li>
+<li>IEEE 802模型：主要用于局域网(LAN)和城域网(MAN)。包含物理层和数据链路层，进一步细分为介质访问控制(MAC)层和逻辑链路控制(LLC)层。</li>
+</ul>
+<h4 id="OSI七层模型"><a href="#OSI七层模型" class="headerlink" title="OSI七层模型"></a>OSI七层模型</h4><ul>
+<li>应用层：为计算机提供服务</li>
+<li>表示层：数据处理(编码、解码、加密解密、压缩解压缩)</li>
+<li>会话层：管理(建立、维护、重连)应用程序之间的会话</li>
+<li>传输层：为两台主机进程之间的通信提供通用的数据传输服务</li>
+<li>网络层：转发、路由和寻址(决定数据在网络中的游走路径)</li>
+<li>数据链路层：帧编码和误差纠正控制</li>
+<li>物理层：透明地传送比特流传输</li>
+</ul>
+<h4 id="TCP-IP四层模型"><a href="#TCP-IP四层模型" class="headerlink" title="TCP&#x2F;IP四层模型"></a>TCP&#x2F;IP四层模型</h4><ul>
+<li>应用层(应用层、表示层、会话层)</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>网络接口层(数据链路层、物理层)</li>
+</ul>
+<h3 id="为什么网络要分层"><a href="#为什么网络要分层" class="headerlink" title="为什么网络要分层"></a>为什么网络要分层</h3><p>复杂系统需要分层，每层专注于一类事情。主要有三个原因：</p>
+<ul>
+<li>各层之间相互独立，不需要关注其他层如何实现的，只需知道如何调用下层的接口。</li>
+<li>提高了灵活性和可替换性。每层可使用最合适的技术实现，只需保证提供的功能及接口没改变就行。这也与平时系统开发高内聚、低耦合的原则契合。</li>
+<li>将复杂的网络问题分解为较小的、清晰的小问题来处理解决，使得计算机网络系统易于设计和维护。</li>
+</ul>
+<h3 id="常见网络协议"><a href="#常见网络协议" class="headerlink" title="常见网络协议"></a>常见网络协议</h3><h4 id="应用层协议"><a href="#应用层协议" class="headerlink" title="应用层协议"></a>应用层协议</h4><ul>
+<li>HTTP(Hypertext Transfer Protocol，超文本传输协议)：基于 TCP 协议，是一种用于传输超文本和多媒体内容的协议，主要是为 Web 浏览器与 Web 服务器之间的通信而设计的。</li>
+<li>SMTP(Simple Mail Transfer Protocol，简单邮件发送协议)：基于 TCP 协议，是一种用于发送电子邮件的协议。</li>
+<li>POP3&#x2F;IMAP(邮件接收协议)：基于 TCP 协议，两者都是负责邮件接收的协议。IMAP 协议是比 POP3 更新的协议，它在功能和性能上都更加强大。IMAP 支持邮件搜索、标记、分类、归档等高级功能，而且可以在多个设备之间同步邮件状态。</li>
+<li>FTP(File Transfer Protocol，文件传输协议): 基于 TCP 协议，是一种用于在计算机之间传输文件的协议，可以屏蔽操作系统和文件存储方式。(不安全，更安全可以用SFTP)</li>
+<li>Telnet(远程登陆协议)：基于 TCP 协议，用于通过一个终端登陆到其他服务器。Telnet 协议的最大缺点之一是所有数据(包括用户名和密码)均以明文形式发送，这有潜在的安全风险。</li>
+<li>SSH(Secure Shell Protocol，安全的网络传输协议)：基于 TCP 协议，通过加密和认证机制实现安全的访问和文件传输等业务。</li>
+<li>RTP(Real-time Transport Protocol，实时传输协议)：通常基于 UDP 协议，但也支持 TCP 协议。它提供了端到端的实时传输数据的功能，但不包含资源预留存、不保证实时传输质量，这些功能由 WebRTC 实现。</li>
+<li>DNS(Domain Name System，域名管理系统): 基于 UDP 协议，用于解决域名和 IP 地址的映射问题，端口为 53。</li>
+</ul>
+<h4 id="传输层协议"><a href="#传输层协议" class="headerlink" title="传输层协议"></a>传输层协议</h4><ul>
+<li>TCP(Transmission Control Protocol，传输控制协议 )：提供 面向连接 的，可靠 的数据传输服务。</li>
+<li>UDP(User Datagram Protocol，用户数据协议)：提供 无连接 的，尽最大努力 的数据传输服务(不保证数据传输的可靠性)，简单高效。</li>
+</ul>
+<h4 id="网络层协议"><a href="#网络层协议" class="headerlink" title="网络层协议"></a>网络层协议</h4><ul>
+<li>IP(Internet Protocol，网际协议)：TCP&#x2F;IP 协议中最重要的协议之一，主要作用是定义数据包的格式、对数据包进行路由和寻址，以便它们可以跨网络传播并到达正确的目的地。(IPv4、IPv6)</li>
+<li>ARP(Address Resolution Protocol，地址解析协议)：ARP 协议解决的是网络层地址和链路层地址之间的转换问题(IP 地址转 MAC 地址)。</li>
+<li>ICMP(Internet Control Message Protocol，互联网控制报文协议)：一种用于传输网络状态和错误消息的协议，常用于网络诊断和故障排除。</li>
+<li>NAT(Network Address Translation，网络地址转换协议)：用于内部网到外部网的地址转换过程中。</li>
+<li>OSPF(Open Shortest Path First，开放式最短路径优先)：一种内部网关协议(Interior Gateway Protocol，IGP)，也是广泛使用的一种动态路由协议，基于链路状态算法，考虑了链路的带宽、延迟等因素来选择最佳路径。</li>
+<li>RIP(Routing Information Protocol，路由信息协议)：一种内部网关协议(Interior Gateway Protocol，IGP)，也是一种动态路由协议，基于距离向量算法，使用固定的跳数作为度量标准，选择跳数最少的路径作为最佳路径。</li>
+<li>BGP(Border Gateway Protocol，边界网关协议)：一种用来在路由选择域之间交换网络层可达性信息(Network Layer Reachability Information，NLRI)的路由选择协议，具有高度的灵活性和可扩展性。</li>
+</ul>
+<h3 id="浏览器输入URL到页面展示的过程"><a href="#浏览器输入URL到页面展示的过程" class="headerlink" title="浏览器输入URL到页面展示的过程"></a>浏览器输入URL到页面展示的过程</h3><ol>
+<li>在浏览器中输入指定网页的 URL。</li>
+<li>浏览器通过 DNS 协议，获取域名对应的 IP 地址。</li>
+<li>浏览器根据 IP 地址和端口号，向目标服务器发起一个 TCP 连接请求。</li>
+<li>连接建立后，浏览器在 TCP 连接上，向服务器发送一个 HTTP 请求报文，请求获取网页的内容。</li>
+<li>服务器收到 HTTP 请求报文后，处理请求，并返回 HTTP 响应报文给浏览器。</li>
+<li>浏览器收到 HTTP 响应报文后，解析响应体中的 HTML 代码，渲染网页的结构和样式，同时根据 HTML 中的其他资源的 URL(如图片、CSS、JS 等)，再次发起 HTTP 请求，获取这些资源的内容，直到网页完全加载显示。<ul>
+<li>在解析HTML的过程中，浏览器会遇到外部资源如CSS、JavaScript、图像等，会再次发送请求获取这些资源。</li>
+<li>浏览器解析CSS文件，构建CSSOM(CSS Object Model)，并与DOM树合并形成渲染树(Render Tree)。</li>
+<li>如果有JavaScript代码，浏览器会暂停渲染，先执行JS代码，这可能改变DOM结构和样式。</li>
+<li>浏览器计算每个元素的位置和尺寸，进行布局，然后将渲染树绘制到屏幕上。</li>
+<li>事件监听与用户交互：直到页面变得可交互，浏览器开始监听用户的动作，如点击、滚动等。</li>
+</ul>
+</li>
+<li>浏览器在页面加载完成后或不需要和服务器通信时，可以主动关闭 TCP 连接，或者等待服务器的关闭请求。</li>
+<li>后续操作：浏览器可能继续监听用户事件，执行异步JS代码，处理AJAX请求等。</li>
+</ol>
+<h3 id="URL的组成"><a href="#URL的组成" class="headerlink" title="URL的组成"></a>URL的组成</h3><p>URL(Uniform Resource Locators)，即统一资源定位器。网络上的所有资源都靠 URL 来定位，每一个文件就对应着一个 URL，就像是路径地址。</p>
+<p><img src="/./image/Computer-Basic/URL-parts.png" alt="URL的组成"></p>
+<ul>
+<li>协议：用于指定访问资源的协议，如 http、https、ftp(文件传输)、file(本地文件)、mailto(邮件)、telnet(远程登录)等。</li>
+<li>域名&#x2F;IP：用于指定资源所在的主机名或 IP 地址。</li>
+<li>端口号：用于指定访问资源的端口号，HTTP默认端口号是 80，HTTPS默认端口号是 443。</li>
+<li>资源路径：从第一个&#x2F;开始，表示从服务器上根目录开始进行索引到的文件路径。</li>
+<li>参数：浏览器在向服务器提交请求时，在 URL 中附带着参数会提取这些参数。参数采用键值对的形式<code>key=value</code>，每一个键值对使用<code>&amp;</code>隔开。</li>
+<li>锚点：锚点就是在要访问的页面上的一个锚点，可以直接跳转到指定的位置。在 URL 中，锚点以<code>#</code>开头，并且不会作为请求的一部分发送给服务端。</li>
+</ul>
+<h3 id="DNS域名系统"><a href="#DNS域名系统" class="headerlink" title="DNS域名系统"></a>DNS域名系统</h3><p>DNS(Domain Name System)域名管理系统，是当用户使用浏览器访问网址之后，使用的第一个重要协议，解决的是域名和 IP 地址的映射问题。</p>
+<p><img src="/./image/Computer-Basic/dns-overview.png" alt="DNS解析过程"></p>
+<p>浏览器在本地维护一个<code>hosts</code>列表，用户访问网址时，先查看要访问的域名是否在<code>hosts</code>列表中，如果有就直接提取对应的 IP 地址记录，如果没有就使用 DNS 服务器获取域名和 IP 地址的映射。</p>
+<p><strong>DNS服务器</strong><br>DNS 服务器自底向上几个层级：</p>
+<ul>
+<li>根域名服务器：负责管理顶级域名服务器的 IP 地址。世界上有 600多个根服务器，但只有 13 个 IP 地址。为了提高 DNS 的可靠性、安全性和性能，每个IP地址对应多个服务器。</li>
+<li>顶级域 DNS 服务器(TLD 服务器)：负责管理各个顶级域名服务器的 IP 地址。如 <code>.com</code>、<code>.cn</code>、<code>.org</code>、<code>.net</code> 等。</li>
+<li>权威 DNS 服务器：在因特网上具有公共可访问主机的每个组织机构必须提供公共可访问的 DNS 记录，如baidu.com 的 DNS 服务器，负责管理该域名下的所有子域名。</li>
+<li>本地 DNS 服务器：每个 ISP(互联网服务提供商)都有一个自己的本地 DNS 服务器。</li>
+</ul>
+<p><strong>DNS工作流程</strong><br>主机<code>cis.poly.edu</code>想知道<code>gaia.cs.umass.edu</code>的 IP 地址。<br><img src="/./image/Computer-Basic/DNS-process.png" alt="迭代式查询"><br><img src="/./image/Computer-Basic/DNS-process2.png" alt="递归式查询"></p>
+<h3 id="HTTP状态码"><a href="#HTTP状态码" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h3><table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>类别</th>
+<th>原因短语</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1XX</td>
+<td>Informational(信息性状态码)</td>
+<td>接收的请求正在处理</td>
+</tr>
+<tr>
+<td>2XX</td>
+<td>Success(成功状态码)</td>
+<td>请求正常处理完毕</td>
+</tr>
+<tr>
+<td>3XX</td>
+<td>Redirection(重定向状态码)</td>
+<td>需要进行附加操作以完成请求</td>
+</tr>
+<tr>
+<td>4XX</td>
+<td>Client Error(<strong><em>客户端错误状态码</em></strong>)</td>
+<td>服务器无法处理请求</td>
+</tr>
+<tr>
+<td>5XX</td>
+<td>Server Error(<strong><em>服务器错误状态码</em></strong>)</td>
+<td>服务器处理请求出错</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p><code>200 OK</code>：请求被成功处理。如发送查询用户数据的 HTTP 请求到服务端，服务端正确返回了用户数据。</p>
+</li>
+<li><p><code>201 Created</code>：请求被成功处理并且在服务端创建了一个新的资源。如通过 POST 请求创建一个新的用户。</p>
+</li>
+<li><p><code>202 Accepted</code>：服务端已接收到了请求，但还未处理。</p>
+</li>
+<li><p><code>204 No Content</code>：服务端已经成功处理了请求，但是没有返回任何内容。</p>
+</li>
+<li><p><code>206 Partial Content</code>：服务端成功处理了部分请求。如请求一个大文件，服务端只返回了部分内容。</p>
+</li>
+<li><p><code>301 Moved Permanently</code>：资源被永久重定向了。如网站的网址更换了。</p>
+</li>
+<li><p><code>302 Found</code>：资源被临时重定向了。如网站暂时关闭，重定向到一个临时的页面。</p>
+</li>
+<li><p><code>304 Not Modified</code>：客户端发送了一个条件式请求，服务端告诉客户端资源未被修改，可以使用缓存的资源。</p>
+</li>
+<li><p><code>400 Bad Request</code>：发送的 HTTP 请求存在问题。如请求参数不合法、请求方法错误。</p>
+</li>
+<li><p><code>401 Unauthorized</code>：未认证却请求需要认证之后才能访问的资源。</p>
+</li>
+<li><p><code>403 Forbidden</code>：直接拒绝 HTTP 请求，不处理。一般用来针对非法请求。</p>
+</li>
+<li><p><code>404 Not Found</code>：请求的资源未在服务端找到。如请求某个用户的信息，服务端并没有找到指定的用户。</p>
+</li>
+<li><p><code>409 Conflict</code>：表示请求的资源与服务端当前的状态存在冲突，请求无法被处理。</p>
+</li>
+<li><p><code>500 Internal Server Error</code>：服务端出问题了(通常是服务端出 Bug 了)。如服务端处理请求的时候突然抛出异常，但异常并未在服务端被正确处理。</p>
+</li>
+<li><p><code>502 Bad Gateway</code>：网关将请求转发到服务端，但服务端返回的却是一个错误的响应。</p>
+</li>
+</ul>
+<h3 id="HTTP请求里包含什么"><a href="#HTTP请求里包含什么" class="headerlink" title="HTTP请求里包含什么"></a>HTTP请求里包含什么</h3><ol>
+<li><p>请求行(Request Line)：这是HTTP请求的第一行，包含三个部分：</p>
+<ul>
+<li>请求方法(HTTP Method)：常见的方法包括 <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code> 等。不同的方法用于执行不同的操作。</li>
+<li>请求的资源路径(Request URI)：表示客户端请求的资源的路径，通常是相对路径。例如，<code>/index.html</code>。</li>
+<li>HTTP版本：指定请求使用的HTTP协议版本，如 <code>HTTP/1.1</code> 或 <code>HTTP/2.0</code>。</li>
+</ul>
+<p> <strong>示例</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /index.html HTTP/1.1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>请求头(Request Headers)：请求头部分由键值对组成，用来传递客户端的配置信息、授权信息、以及其他元数据。这些头可以帮助服务器理解客户端的请求。常见的请求头有：</p>
+<ul>
+<li>Host：服务器的域名或IP地址。例如：<code>Host: www.example.com</code></li>
+<li>User-Agent：描述客户端(通常是浏览器)的类型。例如：<code>User-Agent: Mozilla/5.0</code></li>
+<li>Accept：指定客户端可以接受的MIME类型。例如：<code>Accept: text/html</code></li>
+<li>Authorization：包含授权信息(如Bearer token或Basic Auth)。例如：<code>Authorization: Bearer &lt;token&gt;</code></li>
+<li>Content-Type：指定请求体的类型(如果有请求体的话)。例如：<code>Content-Type: application/json</code></li>
+</ul>
+<p> <strong>示例</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Host: www.example.com</span><br><span class="line">User-Agent: Mozilla/5.0</span><br><span class="line">Accept: text/html</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>请求体(Request Body)：请求体通常在<code>POST</code>, <code>PUT</code>, <code>PATCH</code>等请求方法中出现，携带要传递给服务器的数据。数据可以是表单数据、JSON、XML等格式。</p>
+<p> <strong>示例</strong> (POST请求的请求体):</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;john_doe&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;123456&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="HTTP-HTTPS区别"><a href="#HTTP-HTTPS区别" class="headerlink" title="HTTP&#x2F;HTTPS区别"></a>HTTP&#x2F;HTTPS区别</h3><p><strong>基本概念</strong></p>
+<ul>
+<li>HTTP协议：用来规范超文本的传输，主要用来是规范浏览器和服务器端的行为。扩展性强、速度快、跨平台支持性好。</li>
+<li>HTTPS协议：HTTPS基于HTTP协议，并使用 SSL&#x2F;TLS 协议用作加密和安全认证，其更安全可靠。保密性好、信任度高。</li>
+</ul>
+<blockquote>
+<p>HTTP和HTTPS协议都需要三次握手建立连接、四次挥手断开连接。</p>
+</blockquote>
+<p><strong>HTTP和HTTPS的区别</strong></p>
+<ul>
+<li>HTTP是明文传输，HTTPS使用SSL进行加密加密传输，更安全可靠。</li>
+<li>HTTP默认端口是80，HTTPS默认端口是443。</li>
+<li>HTTP连接简单，无状态，HTTPS握手阶段比较费时，所以HTTP比HTTPS快。</li>
+</ul>
+<p><strong>HTTP通信过程</strong><br>HTTP 是应用层协议，它以 TCP(传输层)作为底层协议，通信过程主要如下：</p>
+<ul>
+<li>服务器在 80 端口等待客户的请求。</li>
+<li>浏览器发起到服务器的 TCP 连接(创建套接字 Socket)。</li>
+<li>服务器接收来自浏览器的 TCP 连接。</li>
+<li>浏览器(HTTP 客户端)与 Web 服务器(HTTP 服务器)交换 HTTP 消息。</li>
+<li>关闭 TCP 连接。</li>
+</ul>
+<h3 id="HTTP-1-0和HTTP-1-1区别"><a href="#HTTP-1-0和HTTP-1-1区别" class="headerlink" title="HTTP&#x2F;1.0和HTTP&#x2F;1.1区别"></a>HTTP&#x2F;1.0和HTTP&#x2F;1.1区别</h3><ul>
+<li>连接方式：HTTP&#x2F;1.0 为短连接，HTTP&#x2F;1.1 支持长连接。HTTP 协议的长连接和短连接，实质上是 TCP 协议的长连接和短连接。</li>
+<li>状态响应码：HTTP&#x2F;1.1 中新加入了大量的状态码，光是错误响应状态码就新增了 24 种。比如说，100 (Continue)——在请求大资源前的预热请求，206 (Partial Content)——范围请求的标识码，409 (Conflict)——请求与当前资源的规定冲突，410 (Gone)——资源已被永久转移，而且没有任何已知的转发地址。</li>
+<li>缓存机制：在 HTTP&#x2F;1.0 中主要使用 Header 里的 If-Modified-Since,Expires 来做为缓存判断的标准，HTTP&#x2F;1.1 则引入了更多的缓存控制策略例如 Entity tag，If-Unmodified-Since, If-Match, If-None-Match 等更多可供选择的缓存头来控制缓存策略。</li>
+<li>带宽：HTTP&#x2F;1.0 中，存在一些浪费带宽的现象，例如客户端只是需要某个对象的一部分，而服务器却将整个对象送过来了，并且不支持断点续传功能，HTTP&#x2F;1.1 则在请求头引入了 range 头域，它允许只请求资源的某个部分，即返回码是 206(Partial Content)，这样就方便了开发者自由的选择以便于充分利用带宽和连接。</li>
+<li>Host头(Host Header)处理：HTTP&#x2F;1.1 引入了 Host 头字段，允许在同一 IP 地址上托管多个域名，从而支持虚拟主机的功能。而 HTTP&#x2F;1.0 没有 Host 头字段，无法实现虚拟主机。</li>
+</ul>
+<h3 id="HTTP-1-1和HTTP-2-0区别"><a href="#HTTP-1-1和HTTP-2-0区别" class="headerlink" title="HTTP&#x2F;1.1和HTTP&#x2F;2.0区别"></a>HTTP&#x2F;1.1和HTTP&#x2F;2.0区别</h3><ul>
+<li>多路复用(Multiplexing)：HTTP&#x2F;2.0 在同一连接上可以同时传输多个请求和响应(可以看作是 HTTP&#x2F;1.1 中长链接的升级版本)，互不干扰。HTTP&#x2F;1.1 则使用串行方式，每个请求和响应都需要独立的连接，而浏览器为了控制资源会有 6-8 个 TCP 连接的限制。。这使得 HTTP&#x2F;2.0 在处理多个请求时更加高效，减少了网络延迟和提高了性能。</li>
+<li>二进制帧(Binary Frames)：HTTP&#x2F;2.0 使用二进制帧进行数据传输，而 HTTP&#x2F;1.1 则使用文本格式的报文。二进制帧更加紧凑和高效，减少了传输的数据量和带宽消耗。</li>
+<li>头部压缩(Header Compression)：HTTP&#x2F;1.1 支持Body压缩，Header不支持压缩。HTTP&#x2F;2.0 支持对Header压缩，使用了专门为Header压缩而设计的 HPACK 算法，减少了网络开销。</li>
+<li>服务器推送(Server Push)：HTTP&#x2F;2.0 支持服务器推送，可以在客户端请求一个资源时，将其他相关资源一并推送给客户端，从而减少了客户端的请求次数和延迟。而 HTTP&#x2F;1.1 需要客户端自己发送请求来获取相关资源。</li>
+</ul>
+<h3 id="HTTP-2-0和HTTP-3-0区别"><a href="#HTTP-2-0和HTTP-3-0区别" class="headerlink" title="HTTP&#x2F;2.0和HTTP&#x2F;3.0区别"></a>HTTP&#x2F;2.0和HTTP&#x2F;3.0区别</h3><ul>
+<li><p>HTTP&#x2F;2.0：使用 TCP 作为传输协议、使用 HPACK 进行头部压缩、依赖 TLS 进行加密。</p>
+</li>
+<li><p>HTTP&#x2F;3.0：使用基于 UDP 的 QUIC 协议、使用更高效的 QPACK 进行头部压缩、在 QUIC 中直接集成了 TLS。QUIC 协议具备连接迁移、拥塞控制与避免、流量控制等特性。</p>
+</li>
+<li><p>传输协议：HTTP&#x2F;2.0 是基于 TCP 协议实现的，HTTP&#x2F;3.0 新增了 QUIC(Quick UDP Internet Connections) 协议来实现可靠的传输，提供与 TLS&#x2F;SSL 相当的安全性，具有较低的连接和传输延迟。你可以将 QUIC 看作是 UDP 的升级版本，在其基础上新增了很多功能比如加密、重传等等。HTTP&#x2F;3.0 之前名为 HTTP-over-QUIC，从这个名字中我们也可以发现，HTTP&#x2F;3 最大的改造就是使用了 QUIC。</p>
+</li>
+<li><p>连接建立：HTTP&#x2F;2.0 需要经过经典的 TCP 三次握手过程(由于安全的 HTTPS 连接建立还需要 TLS 握手，共需要大约 3 个 RTT)。由于 QUIC 协议的特性(TLS 1.3，TLS 1.3 除了支持 1 个 RTT 的握手，还支持 0 个 RTT 的握手)连接建立仅需 0-RTT 或者 1-RTT。这意味着 QUIC 在最佳情况下不需要任何的额外往返时间就可以建立新连接。</p>
+</li>
+<li><p>头部压缩：HTTP&#x2F;2.0 使用 HPACK 算法进行头部压缩，而 HTTP&#x2F;3.0 使用更高效的 QPACK 头压缩算法。</p>
+</li>
+<li><p>队头阻塞：HTTP&#x2F;2.0 多请求复用一个 TCP 连接，一旦发生丢包，就会阻塞住所有的 HTTP 请求。由于 QUIC 协议的特性，HTTP&#x2F;3.0 在一定程度上解决了队头阻塞(Head-of-Line blocking, 简写：HOL blocking)问题，一个连接建立多个不同的数据流，这些数据流之间独立互不影响，某个数据流发生丢包了，其数据流不受影响(本质上是多路复用+轮询)。</p>
+</li>
+<li><p>连接迁移：HTTP&#x2F;3.0 支持连接迁移，因为 QUIC 使用 64 位 ID 标识连接，只要 ID 不变就不会中断，网络环境改变时(如从 Wi-Fi 切换到移动数据)也能保持连接。而 TCP 连接是由(源 IP，源端口，目的 IP，目的端口)组成，这个四元组中一旦有一项值发生改变，这个连接也就不能用了。</p>
+</li>
+<li><p>错误恢复：HTTP&#x2F;3.0 具有更好的错误恢复机制，当出现丢包、延迟等网络问题时，可以更快地进行恢复和重传。而 HTTP&#x2F;2.0 则需要依赖于 TCP 的错误恢复机制。</p>
+</li>
+<li><p>安全性：在 HTTP&#x2F;2.0 中，TLS 用于加密和认证整个 HTTP 会话，包括所有的 HTTP 头部和数据负载。TLS 的工作是在 TCP 层之上，它加密的是在 TCP 连接中传输的应用层的数据，并不会对 TCP 头部以及 TLS 记录层头部进行加密，所以在传输的过程中 TCP 头部可能会被攻击者篡改来干扰通信。而 HTTP&#x2F;3.0 的 QUIC 对整个数据包(包括报文头和报文体)进行了加密与认证处理，保障安全性。</p>
+</li>
+</ul>
+<h3 id="SSL-TSL协议加密原理"><a href="#SSL-TSL协议加密原理" class="headerlink" title="SSL&#x2F;TSL协议加密原理"></a>SSL&#x2F;TSL协议加密原理</h3><p>HTTPS 协议中，SSL 通道通常使用基于密钥的加密算法，密钥长度通常是 40 比特或 128 比特。</p>
+<p>SSL&#x2F;TLS 的加密的原理是非对称加密和对称加密的配合使用。对称加密用来加密数据，并生成唯一私有密钥 k，非对称加密用来加密k。通信双方(Client、Server)只需要一次非对称加密，交换对称加密的密钥k，在之后的信息通信中，使用绝对安全的密钥k，对信息进行对称加密，即可保证传输消息的保密性。</p>
+<ul>
+<li>非对称加密采用两个密钥：公钥、私钥。在通信时，私钥仅由Server保存，公钥由Client所知晓。公钥用于加密数据，私钥用于解密数据。</li>
+<li>对称加密中双方共享唯一密钥 k，加解密算法已知，加密方利用密钥 k 加密，解密方利用密钥 k 解密。</li>
+</ul>
+<p><strong>公钥传输隐患</strong><br>假设存在攻击者 A，其对应服务器为AServer，A发送给Client一个假包，假装是Server公钥，其实是诱饵服务器 AServer的公钥，Client收到后误以为是 Server的公钥，Client后续使用AServer公钥加密密钥k，然后在公开信道传输，那么攻击者 A可以捕获加密的包，然后用AServer的私钥解密，得到密钥k，这样攻击者 A 就可以解密Client和Server之间的通信。</p>
+<p><strong>数字证书</strong><br>为了解决这个问题，需要使用数字证书，数字证书是由权威机构(CA，Certificate Authority)颁发的，用于证明公钥的合法性。具体流程如下：<br>假设有服务器 Server，CA 机构，客户端 Client。</p>
+<ol>
+<li>Server信任 CA，CA也知道 Server公钥，CA首先为 Server颁发证书(包含 Server公钥)，采用散列技术为证书生成一个摘要，然后使用 CA私钥对摘要进行加密，生成数字签名。</li>
+<li>Server获得 CA颁发的证书和数字签名，并在 Client请求时，将证书和数字签名一并发送给 Client。</li>
+<li>Client信任 CA并知晓 CA公钥。Client在收到 Server的证书和数字签名时，使用 CA公钥解密数字签名，得到摘要，然后使用相同的散列技术为证书生成摘要。</li>
+<li>Client对比两个摘要是否一致，如果一致则证明证书(包含 Server公钥)是真实的，可以使用 Server公钥加密密钥k，然后在公开信道传输。</li>
+</ol>
+<h3 id="HTTP无状态如何保存用户状态"><a href="#HTTP无状态如何保存用户状态" class="headerlink" title="HTTP无状态如何保存用户状态"></a>HTTP无状态如何保存用户状态</h3><p>可以使用 Session 机制来保存用户状态。服务端给特定的用户创建特定的 Session 之后就可以标识这个用户并且跟踪这个用户了(一般情况下，服务器会在一定时间内保存这个 Session，过了时间限制，就会销毁这个 Session)。</p>
+<p>服务端可以使用内存和数据库保存Session，Session 跟踪是通过在客户端的 Cookie 中存放 Session ID 来实现的。如果 Cookie被禁用可以利用 URL 重写把 Session ID 直接附加在 URL 路径的后面。</p>
+<h3 id="URI-URL区别"><a href="#URI-URL区别" class="headerlink" title="URI&#x2F;URL区别"></a>URI&#x2F;URL区别</h3><ul>
+<li>URI(Uniform Resource Identifier)是统一资源标志符，可以唯一标识一个资源。</li>
+<li>URL(Uniform Resource Locator)是统一资源定位符，可以提供该资源的路径。它是一种具体的 URI，即 URL 可以用来标识一个资源，而且还指明了如何 定位 这个资源。</li>
+</ul>
+<p>URI 的作用像身份证号一样，URL 的作用更像家庭住址一样。URL 是一种具体的 URI，它不仅唯一标识资源，而且还提供了定位该资源的信息。</p>
+<h3 id="Session-Cookie区别"><a href="#Session-Cookie区别" class="headerlink" title="Session&#x2F;Cookie区别"></a>Session&#x2F;Cookie区别</h3><ul>
+<li>存储位置不同：Cookie 存储在客户端，Session 存储在服务端。</li>
+<li>存储容量不同：单个Cookie保存的数据&lt;&#x3D;4KB，一个站点最多保存20个Cookie。Session 存储在服务端，一般没有存储容量限制，但考虑服务器性能，一般会设置 Session 的有效期和存储容量。</li>
+<li>安全性不同：Cookie 存储在客户端，容易被篡改，不安全。Session 存储在服务端，相对安全。</li>
+<li>生命周期不同：Cookie 有过期时间，可以设置长期有效的 Cookie。Session 一般保存在内存中，会话结束后会被销毁。</li>
+<li>作用范围不同：Cookie 的作用范围是整个域名，Session 的作用范围是当前会话。</li>
+<li>传输方式不同：Cookie 会随着 HTTP 请求一起发送到服务端，Session 保存在服务端，客户端只会收到 Session ID。</li>
+</ul>
+<h3 id="GET-POST区别"><a href="#GET-POST区别" class="headerlink" title="GET&#x2F;POST区别"></a>GET&#x2F;POST区别</h3><ul>
+<li>GET 用于获取或查询资源，POST 用于创建或修改资源。</li>
+<li>GET 请求是幂等的，即多次重复执行不会改变资源的状态，POST 请求是不幂等的，即每次执行可能会产生不同的结果或影响资源的状态。</li>
+<li>GET 请求参数会附加在 URL 后面，POST 请求参数会放在请求体(<code>body</code>)中。</li>
+<li>GET 请求的URL长度受到浏览器和服务器的限制，POST 请求的 <code>body</code>大小则没有明确的限制。</li>
+<li>由于 GET 请求是幂等的，可以被缓存，而POST 请求是不幂等的，不适合被缓存。</li>
+<li>GET 请求的安全性较差，参数会暴露在 URL 中，POST 请求的安全性较好，参数在请求体中，不会暴露在 URL 中。</li>
+</ul>
+<blockquote>
+<p>幂等：一个操作、方法或函数被调用多次，其结果与仅调用一次相同。</p>
+</blockquote>
+<h3 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h3><p>WebSocket 是一种基于 TCP 连接的全双工通信协议，即客户端和服务器可以同时发送和接收数据。</p>
+<p>WebSocket 协议是应用层的协议，用于弥补 HTTP 协议在持久通信能力上的不足。客户端和服务器仅需一次握手，两者之间就直接可以创建持久性的连接，并进行双向数据传输。</p>
+<p>WebSocket 的常见应用场景：视频弹幕、实时消息推送、实时游戏对战、多用户协同编辑、社交聊天等。</p>
+<h3 id="WebSocket-HTTP区别"><a href="#WebSocket-HTTP区别" class="headerlink" title="WebSocket&#x2F;HTTP区别"></a>WebSocket&#x2F;HTTP区别</h3><ul>
+<li>WebSocket 是全双工通信，HTTP 是单向通信。且 HTTP 协议只能由客户端发起，服务器只能响应请求。</li>
+<li>WebSocket 是持久连接，HTTP 是短连接。HTTP 请求结束后，连接就会断开，而 WebSocket 连接会一直保持。</li>
+<li>WebSocket 使用 <code>ws://</code> 或 <code>wss://</code>作为协议前缀，HTTP 使用 <code>http://</code> 或 <code>https://</code>作为协议前缀。</li>
+<li>WebSocket 通信数据格式比较轻量，用于协议控制的数据包头部相对较小，而 HTTP 通信每次都要携带完整的头部，网络开销较大。</li>
+<li>WebSocket 支持扩展，可以自定义协议，HTTP 不支持扩展。</li>
+</ul>
+<h3 id="WebSocket工作流程"><a href="#WebSocket工作流程" class="headerlink" title="WebSocket工作流程"></a>WebSocket工作流程</h3><ol>
+<li>客户端向服务器发起一个 HTTP 请求，请求头中包含 <code>Upgrade: websocket</code> 和 <code>Sec-WebSocket-Key</code>等字段，表示要求升级协议为 WebSocket。</li>
+<li>服务器收到请求后，会进行协议升级，如果支持 WebSocket 协议，将回复<code>HTTP 101</code>状态码，响应头中包含<code>Upgrade: websocket</code>和<code>Sec-WebSocket-Accept:xxx</code>等字段，表示升级成功。</li>
+<li>现在已经建立了 WebSocket 连接，可以进行双向的数据传输。连接建立之后，通过心跳机制保持连接的稳定性和活跃性。数据以帧(frames)的形式传输，WebSocket的发送端将每条消息被切分成多个帧发送，接收端将关联的帧重新组装成完整的消息。</li>
+<li>关闭连接时，双方都可以发送一个关闭帧，表示关闭连接。另一方收到后，会回复一个关闭帧，然后关闭连接。</li>
+</ol>
+<h3 id="PING命令原理"><a href="#PING命令原理" class="headerlink" title="PING命令原理"></a>PING命令原理</h3><p>PING 命令是一种常用的网络诊断工具，经常用来测试网络中主机之间的连通性和网络延迟。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ping -c 4 www.baidu.com</span><br><span class="line">PING www.baidu.com(36.155.132.3): 56 data bytes</span><br><span class="line">64 bytes from 36.155.132.3: icmp_seq=0 ttl=49 time=8.890 ms</span><br><span class="line">64 bytes from 36.155.132.3: icmp_seq=1 ttl=49 time=8.874 ms</span><br><span class="line">64 bytes from 36.155.132.3: icmp_seq=2 ttl=49 time=9.136 ms</span><br><span class="line">64 bytes from 36.155.132.3: icmp_seq=3 ttl=49 time=9.400 ms</span><br><span class="line"></span><br><span class="line">--- www.baidu.com ping statistics ---</span><br><span class="line">4 packets transmitted, 4 packets received, 0.0% packet loss</span><br><span class="line">round-trip min/avg/max/stddev = 8.874/9.075/9.400/0.214 ms</span><br></pre></td></tr></table></figure>
+<p>输出由以下几部分组成：</p>
+<ul>
+<li>ICMP Echo Request(请求报文)信息：序列号、TTL(Time to Live)值。</li>
+<li>目标主机的域名或 IP 地址：输出结果的第一行。</li>
+<li>往返时间(RTT，Round-Trip Time)：从发送 ICMP Echo Request(请求报文)到接收到 ICMP Echo Reply(响应报文)的总时间，用来衡量网络连接的延迟。</li>
+<li>统计结果(Statistics)：包括发送的 ICMP 请求数据包数量、接收到的 ICMP 响应数据包数量、丢包率、往返时间(RTT)的最小、平均、最大和标准偏差值。</li>
+</ul>
+<p>如果PING目标主机无法正确响应，则说明网络连通性出现问题。</p>
+<p>PING命令的原理是基于 ICMP 协议，通过发送 ICMP Echo Request(请求报文)到目标主机，目标主机收到请求后，会返回 ICMP Echo Reply(响应报文)给发送方，从而实现网络连通性的测试。</p>
+<h3 id="ping底层过程"><a href="#ping底层过程" class="headerlink" title="ping底层过程"></a>ping底层过程</h3><ol>
+<li><strong>发送 ICMP Echo Request</strong>：<ul>
+<li>当你在命令行中执行 <code>ping</code> 命令时，系统会构造一个 ICMP Echo Request 数据包。这是一个特别类型的 ICMP 消息，源自发送方并目标是接收方。</li>
+<li>数据包的格式包括：类型(Type)、代码(Code)、校验和(Checksum)、标识符(Identifier)、序列号(Sequence Number)等字段。</li>
+<li>Type：Echo Request 的 Type 是 8。 echo Reply 的 Type 是 0。</li>
+<li>Code：对于 Echo Request 和 Echo Reply，Code 都是 0。</li>
+<li>Identifier (标识符)：用于标识请求和响应的配对。</li>
+<li>Sequence Number (序列号)：每个请求包的序列号，用于区分每个请求。</li>
+</ul>
+</li>
+<li><strong>网络传输</strong>：<ul>
+<li><code>ping</code> 会把 ICMP Echo Request 数据包通过 IP 协议发送到目标主机。</li>
+<li>数据包经过路由器、交换机等网络设备，根据目标地址传输到目的地。</li>
+</ul>
+</li>
+<li><strong>目标主机接收并处理</strong>：<ul>
+<li>目标主机接收到 ICMP Echo Request 后，会根据 ICMP 协议自动回复一个 ICMP Echo Reply 消息。</li>
+<li>Echo Reply 包含目标主机的标识符、序列号等信息，通常原封不动地返回给源主机。</li>
+</ul>
+</li>
+<li><strong>接收 ICMP Echo Reply</strong>：发送方接收到 Echo Reply 后，<code>ping</code> 会计算从发送到接收的往返时间(RTT，Round Trip Time)。这个时间也被称为延迟，单位通常是毫秒(ms)。</li>
+<li><strong>显示结果</strong>：<ul>
+<li><code>ping</code> 会在命令行界面上显示每个数据包的往返时间以及丢包率等信息。</li>
+<li>默认情况下，<code>ping</code> 会发送多个包并显示每个包的 RTT，直到用户中断命令(通常按 <code>Ctrl+C</code>)或达到预设的发送次数。</li>
+</ul>
+</li>
+</ol>
+<h3 id="HTTP-TCP区别"><a href="#HTTP-TCP区别" class="headerlink" title="HTTP&#x2F;TCP区别"></a>HTTP&#x2F;TCP区别</h3><ul>
+<li><strong>TCP</strong> 是一种底层的传输协议，提供可靠的数据传输。</li>
+<li><strong>HTTP</strong> 是一种应用层协议，使用 TCP 作为其传输层协议，专门用于 web 数据的传输。</li>
+</ul>
+<ol>
+<li><strong>层次</strong>：TCP 位于传输层，HTTP 位于应用层。</li>
+<li><strong>功能</strong>：TCP 提供可靠的、面向连接的通信。HTTP 用于在客户端和服务器之间传输超文本数据(如 HTML 文档、图片、视频等)。</li>
+<li><strong>连接方式</strong>：TCP 通过三次握手建立连接，确保通信双方准备就绪。HTTP 基于请求-响应模型，客户端发送请求，服务器返回响应。</li>
+<li><strong>数据传输</strong>：TCP 是流式传输数据，没有消息边界。HTTP 是面向消息，每个请求和响应都是独立的。</li>
+<li><strong>错误检测和恢复</strong>：TCP 具有错误检测和恢复机制，保证数据完整性。HTTP 没有错误检测和恢复机制，需要依赖 TCP 来保证数据传输的可靠性。且 HTTP 无状态，依赖于 Cookie 和 Session 来保存用户状态。</li>
+<li><strong>用途</strong>：TCP 适用于需要高可靠性的数据传输，如文件传输、电子邮件等。HTTP 主要用于万维网(WWW)上的数据通信，如浏览网页、提交表单等。</li>
+</ol>
+<p>HTTP 是建立在 TCP 之上的，它利用 TCP 提供的可靠连接来传输数据，但它们在网络模型中的层次和具体功能上有所不同。</p>
+<h3 id="TCP、UDP区别"><a href="#TCP、UDP区别" class="headerlink" title="TCP、UDP区别"></a>TCP、UDP区别</h3><p>二者都是常见的传输层协议。</p>
+<ul>
+<li>TCP(Transmission Control Protocol，传输控制协议 )：提供 <strong>面向连接</strong> 的，<strong>可靠</strong> 的数据传输服务。</li>
+<li>UDP(User Datagram Protocol，用户数据协议)：提供 <strong>无连接</strong> 的，<strong>尽最大努力</strong> 的数据传输服务(不保证数据传输的可靠性)，简单高效。</li>
+</ul>
+<p>区别总结：</p>
+<ol>
+<li>TCP面向连接(三次握手四次挥手)，UDP是无连接的，即发送数据之前不需要建立连接</li>
+<li>TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保证可靠交付</li>
+<li>TCP面向字节流，TCP把数据看成一连串无结构的字节流，UDP是面向报文的，UDP没有拥塞控制，因此网络出现拥塞不会使源主机的发送速率降低(对实时应用很有用，如实时视频会议)</li>
+<li>TCP只支持点对点通信，UDP支持一对一，一对多，多对一和多对多的交互通信</li>
+<li>TCP首部开销20字节，UDP的首部开销小，只有8个字节</li>
+<li>TCP通信信道是全双工的可靠信道，UDP则是不可靠信道</li>
+</ol>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Li_Ning_/article/details/52117463">https://blog.csdn.net/Li_Ning_/article/details/52117463</a></p>
+<h3 id="TCP-UDP应用场景"><a href="#TCP-UDP应用场景" class="headerlink" title="TCP&#x2F;UDP应用场景"></a>TCP&#x2F;UDP应用场景</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44273429/article/details/131375961">https://blog.csdn.net/qq_44273429/article/details/131375961</a></p>
+<p>由于TCP提供了可靠的、有序的数据传输，它适用于以下场景：</p>
+<ul>
+<li>文件传输：TCP的可靠性和有序性确保了文件在传输过程中不会丢失和损坏，并按正确的顺序接收。</li>
+<li>网页浏览：TCP可靠地传输网页内容，确保网页的准确显示。</li>
+<li>电子邮件传输：TCP保证电子邮件的传输不会出现丢失或乱序的情况。</li>
+<li>远程登录：TCP提供了稳定的连接，适合远程登录操作。</li>
+<li>数据库管理系统：TCP确保了数据库的一致性和完整性，防止数据丢失和损坏。</li>
+</ul>
+<p>由于UDP具有低延迟和高效性的特点，它适用于以下场景：</p>
+<ul>
+<li>视频流和音频流传输：由于UDP的低延迟，它常用于视频流和音频流的实时传输，如在线直播、视频会议等。</li>
+<li>实时游戏：UDP的快速传输和低延迟使其成为在线游戏中常用的协议，可以实现实时的游戏数据传输。</li>
+<li>DNS(域名系统)：UDP广泛用于域名系统中，用于域名解析和查询。</li>
+<li>实时传感器数据：UDP适用于需要快速传输实时传感器数据的场景，如工业自动化、物联网等</li>
+</ul>
+<h3 id="UDP的广播和多播"><a href="#UDP的广播和多播" class="headerlink" title="UDP的广播和多播"></a>UDP的广播和多播</h3><ul>
+<li>UDP广播是指将数据包发送到同一子网内的所有设备。广播消息使用了一个特殊的IP地址，该地址的子网内主机标志部分的二进制全部为1(即点分十进制IP的最后一部分是255)。例如，在子网192.168.1.x中，广播地址是192.168.1.255。<ul>
+<li>特点：<ul>
+<li>广播消息可以被子网内的所有设备接收，无需设备事先注册或加入特定的组。</li>
+<li>广播只能在局域网内使用，广域网中无法使用UDP进行广播。</li>
+<li>广播的开销较小，因为发送者只需发送一个数据包，而该数据包会被子网内的所有设备接收。</li>
+</ul>
+</li>
+<li>应用场景：<ul>
+<li>局域网内的通知或广播消息，如DHCP(动态主机配置协议)服务器向局域网内的设备发送IP地址分配信息。</li>
+<li>局域网内的设备发现或同步操作，如打印机共享或文件同步服务。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>UDP多播(也称为组播)是一种将数据包发送到一组特定接收者的网络通信模式。多播使用特定的多播地址(在IPv4中为224.0.0.0到239.255.255.255范围内的地址)，该地址标识了一组接收数据的接口。<ul>
+<li>特点：<ul>
+<li>多播比广播具有更高的可控性，只有加入多播组的接收者才能接收数据。</li>
+<li>多播不仅限于局域网，也可以用于广域网环境，适用于在大型网络中分发数据。</li>
+<li>多播地址由IANA(互联网号码分配机构)进行全球分配和管理。</li>
+</ul>
+</li>
+<li>应用场景：<ul>
+<li>视频直播：将视频数据同时分发给大量观众。 </li>
+<li>文件分发：向大量客户端分发相同文件。 </li>
+<li>在线游戏：实现游戏房间的快速组建和对手匹配。 </li>
+<li>监控系统：将视频数据同时分发给多个监控终端。 </li>
+<li>分布式计算：将计算任务分发给多个节点。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>多播工作工程：</p>
+<ol>
+<li>发送者创建一个UDP套接字，并设置多播属性。</li>
+<li>发送者使用sendto()函数向多播地址发送数据。</li>
+<li>网络设备(如路由器)根据多播路由协议(如IGMP、PIM等)将数据包转发到需要接收该数据的各个网段。</li>
+<li>接收者通过加入多播组来接收数据，使用setsockopt()函数设置套接字加入多播组。</li>
+</ol>
+<h3 id="如何将UDP变为将TCP那样可靠"><a href="#如何将UDP变为将TCP那样可靠" class="headerlink" title="如何将UDP变为将TCP那样可靠"></a>如何将UDP变为将TCP那样可靠</h3><p>要使 UDP 像 TCP 那样可靠，需要在应用层实现类似 TCP 的功能。以下是一些常见的方法和步骤：</p>
+<ol>
+<li>数据包确认机制(<code>ACK</code>)：每当接收方收到一个数据包时，它会发送一个确认(<code>ACK</code>)回给发送方。发送方在发送数据包后会等待 <code>ACK</code>，如果在一定时间内没有收到 <code>ACK</code>，则会重传该数据包。</li>
+<li>序列号：在每个数据包中添加一个序列号，以便接收方可以按顺序重组数据包，并检测丢失或重复的数据包。</li>
+<li>超时和重传：发送方在发送每个数据包后启动一个定时器。如果在规定时间内没有收到 <code>ACK</code>，则会重传该数据包。</li>
+<li>滑动窗口：使用滑动窗口协议来控制数据包的流动。发送方可以在等待 <code>ACK</code> 的同时继续发送多个数据包，从而提高传输效率。</li>
+<li>校验和：在数据包中包含校验和，以检测数据包在传输过程中是否被损坏。接收方会检查校验和，并丢弃任何损坏的数据包。</li>
+<li>流量控制：发送方和接收方协商一个窗口大小，以确保发送方不会超过接收方的处理能力。</li>
+</ol>
+<h3 id="三次握手四次挥手✅"><a href="#三次握手四次挥手✅" class="headerlink" title="三次握手四次挥手✅"></a>三次握手四次挥手✅</h3><p>建立 TCP 连接需要“三次握手”，缺一不可：</p>
+<ul>
+<li>一次握手:客户端发送带有 <code>SYN</code>(SEQ&#x3D;x)标志的数据包 <code>-&gt;</code> 服务端，然后客户端进入 <code>SYN_SEND</code> 状态，等待服务端的确认；</li>
+<li>二次握手:服务端发送带有 <code>SYN+ACK</code>(SEQ&#x3D;y,ACK&#x3D;x+1)标志的数据包 <code>–&gt;</code> 客户端，然后服务端进入 <code>SYN_RECV</code> 状态；</li>
+<li>三次握手:客户端发送带有 <code>ACK</code>(ACK&#x3D;y+1)标志的数据包 <code>–&gt;</code> 服务端，然后客户端和服务端都进入<code>ESTABLISHED</code>状态，完成 TCP 三次握手。</li>
+</ul>
+<p>注意，连接建立后，客户端和服务端都可以发送数据。</p>
+<p>断开 TCP 连接则需要“四次挥手”，缺一不可：</p>
+<ul>
+<li>第一次挥手：客户端发送一个 <code>FIN</code>(SEQ&#x3D;x)标志的数据包 <code>-&gt;</code> 服务端，用来关闭客户端到服务端的数据传送。然后客户端进入 <code>FIN-WAIT-1</code> 状态。</li>
+<li>第二次挥手：服务端收到<code>FIN</code>标志的数据包，它发送一个 <code>ACK</code>(ACK&#x3D;x+1)标志的数据包 <code>-&gt;</code> 客户端。然后服务端进入 <code>CLOSE-WAIT</code> 状态，客户端进入 <code>FIN-WAIT-2</code>状态。</li>
+<li>第三次挥手：服务端发送一个 <code>FIN</code>(SEQ&#x3D;y)标志的数据包 <code>-&gt;</code> 客户端，请求关闭连接，然后服务端进入 <code>LAST-ACK</code> 状态。</li>
+<li>第四次挥手：客户端发送 <code>ACK</code>(ACK&#x3D;y+1)标志的数据包 <code>-&gt;</code> 服务端，然后客户端进入<code>TIME-WAIT</code>状态，服务端在收到 <code>ACK</code>(ACK&#x3D;y+1)标志的数据包后进入 <code>CLOSE</code> 状态。此时如果客户端等待 <code>2MSL</code> 后依然没有收到回复，就证明服务端已正常关闭，随后客户端也可以关闭连接了。</li>
+</ul>
+<p>TCP 是全双工通信，可以双向传输数据。任何一方都可以在数据传送结束后发出连接释放的通知，待对方确认后进入半关闭状态。当另一方也没有数据再发送的时候，则发出连接释放通知，对方确认后就完全关闭了 TCP 连接。</p>
+<p>只要四次挥手没有结束，客户端和服务端就可以继续传输数据！</p>
+<blockquote>
+<p>2MSL, Maximum Segment Lifetime，即最长报文段寿命的两倍。</p>
+</blockquote>
+<p><img src="/./image/Computer-Basic/tcp-shakes-hands-three-times.png" alt="三次握手"></p>
+<p><img src="/./image/Computer-Basic/tcp-waves-four-times.png" alt="四次挥手"></p>
+<h3 id="TIME-WAIT-CLOSE-WAIT是什么"><a href="#TIME-WAIT-CLOSE-WAIT是什么" class="headerlink" title="TIME_WAIT&#x2F;CLOSE_WAIT是什么"></a>TIME_WAIT&#x2F;CLOSE_WAIT是什么</h3><p><code>TIME_WAIT/CLOSE_WAIT</code>是TCP关闭连接过程中出现的两种状态。</p>
+<ul>
+<li><code>CLOSE_WAIT</code>是被动关闭连接的一方(通常是服务器)出现的一种状态，当TCP连接的一端(被动关闭方)收到对方发送的FIN报文时，会发送一个<code>ACK</code>报文作为响应，并进入<code>CLOSE_WAIT</code>状态。</li>
+<li><code>TIME_WAIT</code>是主动关闭连接的一方(通常是客户端)出现的一种状态，当主动关闭连接的一方收到对方发送的<code>FIN</code>报文并发送自己的<code>ACK</code>报文后，就会进入<code>TIME_WAIT</code>状态。这个状态会持续<code>2MSL</code>(两倍的报文最大生存时间)。</li>
+</ul>
+<h3 id="半连接队列-全连接队列"><a href="#半连接队列-全连接队列" class="headerlink" title="半连接队列&#x2F;全连接队列"></a>半连接队列&#x2F;全连接队列</h3><p>在三次握手中，Linux 内核会维护两个队列管理连接请求：</p>
+<ul>
+<li>半连接队列(也称 SYN Queue)：当服务端收到客户端的 <code>SYN</code> 请求时，此时双方还没有完全建立连接，服务端会把半连接状态的连接放在半连接队列。</li>
+<li>全连接队列(也称 Accept Queue)：当服务端收到客户端的 <code>ACK</code> 请求时，意味着三次握手成功完成，服务端会将该连接从半连接队列移动到全连接队列。若未收到 <code>ACK</code> 请求，会进行重传，若超过最大重传次数，系统将从半连接队列中删除该连接信息。</li>
+</ul>
+<p>两队列的存在是为了处理并发请求，确保服务端能够有效地管理新的连接请求。</p>
+<h3 id="为什么要三次握手"><a href="#为什么要三次握手" class="headerlink" title="为什么要三次握手"></a>为什么要三次握手</h3><p>三次握手为的是确认双方收发功能都正常，缺一不可。</p>
+<ul>
+<li>第一次握手：Client 无法确认任何信息；Server 确认了：对方发送正常，自己接收正常</li>
+<li>第二次握手：Client 确认了：自己发送、接收正常，对方发送、接收正常；Server 确认了：对方发送正常，自己接收正常</li>
+<li>第三次握手：Client 确认了：自己发送、接收正常，对方发送、接收正常；Server 确认了：自己发送、接收正常，对方发送、接收正常</li>
+</ul>
+<h3 id="第二次握手为何传回ACK和SYN"><a href="#第二次握手为何传回ACK和SYN" class="headerlink" title="第二次握手为何传回ACK和SYN"></a>第二次握手为何传回ACK和SYN</h3><p><strong>为什么传回ACK</strong><br>第二次握手中，服务端传回 <code>ACK</code> 是为了确认接收到客户端的 <code>SYN</code> 报文。<br><strong>为什么传回SYN</strong><br>在第一次握手中，客户端发送 <code>SYN</code>包 是为了建立客户端到服务端的连接，然而 TCP 连接是双向的，服务端到客户端也需要建立连接，所以服务端在第二次握手中向客户端发送 <code>SYN</code>包，以建立服务端到客户端的连接。</p>
+<p>同时发送 <code>SYN</code> 包和 <code>ACK</code>包，服务器能够在一个报文中同时完成这两个操作，从而减少报文的数量，加快连接建立的效率。</p>
+<h3 id="三次握手中可以携带数据吗"><a href="#三次握手中可以携带数据吗" class="headerlink" title="三次握手中可以携带数据吗"></a>三次握手中可以携带数据吗</h3><p>允许在第三次发送 <code>ACK</code> 的时候携带数据，但是不建议这样做，因为在第三次握手时，服务端还没有确认客户端的 <code>ACK</code> 包，可能会导致数据丢失。</p>
+<h3 id="为什么要四次挥手"><a href="#为什么要四次挥手" class="headerlink" title="为什么要四次挥手"></a>为什么要四次挥手</h3><ul>
+<li>确保数据传输的完整性和可靠性：在任何一方关闭连接之前，确保所有数据都已正确接收和处理。</li>
+<li>保证双向关闭的确认：TCP 是全双工通信，每一方都需要确认对方的关闭请求，以避免数据丢失和连接的不正常终止。</li>
+<li>避免半开连接：确保在关闭过程中，没有未完成的数据传输或者遗留的数据包。</li>
+<li>保证连接的有序终止：TCP 是全双工的，每一方都需要单独关闭自己的发送和接收通道，因此需要四步来完成这一过程。</li>
+</ul>
+<p>四次挥手虽然复杂，但却能够确保连接的稳定、可靠和有序终止。</p>
+<h3 id="为何不能把服务端发送的ACK和FIN合并变成三次挥手"><a href="#为何不能把服务端发送的ACK和FIN合并变成三次挥手" class="headerlink" title="为何不能把服务端发送的ACK和FIN合并变成三次挥手"></a>为何不能把服务端发送的ACK和FIN合并变成三次挥手</h3><p>因为服务端收到客户端断开连接的请求时，可能还有一些数据没有发完，这时先回复 <code>ACK</code>，表示接收到了断开连接的请求。等到数据发完之后再发 <code>FIN</code>，断开服务端到客户端的数据传送。</p>
+<h3 id="如果第二次挥手客户端未收到服务端发送的ACK会怎样"><a href="#如果第二次挥手客户端未收到服务端发送的ACK会怎样" class="headerlink" title="如果第二次挥手客户端未收到服务端发送的ACK会怎样"></a>如果第二次挥手客户端未收到服务端发送的ACK会怎样</h3><p>客户端没有收到 ACK 确认，会重新发送 FIN 请求。</p>
+<h3 id="为什么第四次握手客户端需等待2-MSL"><a href="#为什么第四次握手客户端需等待2-MSL" class="headerlink" title="为什么第四次握手客户端需等待2*MSL"></a>为什么第四次握手客户端需等待2*MSL</h3><p>第四次挥手时，客户端发送服务端的 <code>ACK</code> 有可能丢失，如果服务端没收到 <code>ACK</code> 的话，服务端就会重发 <code>FIN</code>，如果客户端在 <code>2*MSL</code> 的时间内收到了 <code>FIN</code>，就会重新发送 <code>ACK</code> 并再次等待 <code>2MSL</code>，防止 Server 没有收到 <code>ACK</code> 而不断重发 <code>FIN</code>。</p>
+<blockquote>
+<p><code>MSL</code>(Maximum Segment Lifetime): 一个片段在网络中最大的存活时间，<code>2MSL</code> 就是一个发送和一个回复所需的最大时间。如果直到 <code>2MSL</code>，Client 都没有再次收到 <code>FIN</code>，那么 Client 推断 <code>ACK</code> 已经被成功接收，则结束 <code>TCP</code> 连接。</p>
+</blockquote>
+<h3 id="TCP如何保证连接可靠性"><a href="#TCP如何保证连接可靠性" class="headerlink" title="TCP如何保证连接可靠性"></a>TCP如何保证连接可靠性</h3><ol>
+<li>基于数据块传输：数据被分割成 TCP 认为最适合发送的数据块，再传输给网络层，数据块被称为报文段或段。</li>
+<li>对失序数据包重新排序以及去重：TCP 为了保证不发生丢包，给每个包一个序列号，这使得能够将接收到的数据根据序列号排序，去掉重复序列号的数据就可以实现数据包去重。</li>
+<li>校验和：TCP 有端到端的校验和机制，目的是检测数据在传输过程中的任何变化。如果收到段的检验和有差错，TCP 将丢弃此报文段和不确认收到此报文段。</li>
+<li>重传机制：在数据包丢失或延迟的情况下，重新发送数据包，直到收到对方的确认应答(ACK)。<ul>
+<li>超时重传：当发送方发送数据后，如果超时重传计时器超时，仍没有收到接收方的确认应答，就会重传数据包。</li>
+<li>快速重传：当发送方连续收到三个重复的 ACK 时，立即重传相应的数据包，而不必等待超时。</li>
+</ul>
+</li>
+<li>TCP 连接每一方都有固定大小的缓冲空间，TCP 的接收端只允许发送端发送接收端缓冲区能接纳的数据。当接收方来不及处理发送方的数据，能提示发送方降低发送的速率，防止包丢失。TCP 利用滑动窗口实现流量控制。</li>
+<li>拥塞控制：当网络拥塞时，减少数据的发送。TCP 在发送数据的时候会考虑网络的拥塞程度，由拥塞窗口表示，它是发送方根据网络状况自己维护的一个值，表示发送方认为可以在网络中传输的数据量。发送方发送数据的大小是滑动窗口和拥塞窗口的最小值，这样可以保证发送方既不会超过接收方的接收能力，也不会造成网络的过度拥塞。</li>
+</ol>
+<h3 id="如何实现快速重传"><a href="#如何实现快速重传" class="headerlink" title="如何实现快速重传"></a>如何实现快速重传</h3><p>快速重传(Fast Retransmit)：当发送方连续收到三个重复的ACK时，立即重传相应的数据包，而不必等待超时。</p>
+<ul>
+<li>快速重传就是要发送方尽快重传，而不是等待超时重传计时器超时再重传。<ul>
+<li>要求接收方不要等待自己发送数据时捎带<code>ACK</code>，而是立即发送<code>ACK</code>。</li>
+<li>即使收到了失序的报文段，也要立即发送对自己收到的报文段的重复确认<code>ACK</code>。</li>
+<li>发送方一旦收到三个连续的<code>ACK</code>，就立即重传对应的报文段，而不必等待超时重传计时器超时。</li>
+<li>使用快速重传可以将网络吞吐量提高 20%~30%。</li>
+</ul>
+</li>
+</ul>
+<h3 id="TCP如何实现流量控制"><a href="#TCP如何实现流量控制" class="headerlink" title="TCP如何实现流量控制"></a>TCP如何实现流量控制</h3><p>TCP 利用滑动窗口实现流量控制。流量控制是为了控制发送方发送速率，保证接收方来得及接收。 接收方发送的确认报文中的窗口字段用来控制发送方窗口大小，从而影响发送方的发送速率。将窗口字段设置为 0，则发送方不能发送数据。</p>
+<h3 id="为什么需要流量控制"><a href="#为什么需要流量控制" class="headerlink" title="为什么需要流量控制"></a>为什么需要流量控制</h3><p>因为双方在通信的时候，发送方的速率与接收方的速率是不一定相等，如果发送方的发送速率太快，会导致接收方处理不过来。如果处理不过来，会先将数据放入接收缓冲区(Receiving Buffers)里。如果接收缓冲区满了，就只能把再收到的数据包丢掉。而丢包会浪费网络资源。因此要让接收方与发送方处于一种动态平衡。</p>
+<h3 id="为什么要进行拥塞控制"><a href="#为什么要进行拥塞控制" class="headerlink" title="为什么要进行拥塞控制"></a>为什么要进行拥塞控制</h3><p>拥塞控制是为了避免网络拥塞，确保网络的稳定性和可靠性。当网络中的数据包过多，超过网络的处理能力时，就会发生拥塞，导致数据包丢失、延迟增加、吞吐量下降等问题。拥塞控制的目的是通过限制发送方的发送速率，避免过多的数据包注入到网络中，从而保持网络的正常运行。</p>
+<h3 id="TCP拥塞控制的四种算法"><a href="#TCP拥塞控制的四种算法" class="headerlink" title="TCP拥塞控制的四种算法"></a>TCP拥塞控制的四种算法</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/love_668/article/details/116913790">https://blog.csdn.net/love_668/article/details/116913790</a></p>
+<ul>
+<li>慢开始(Slow Start)：初始阶段发送方以指数增长的方式增加拥塞窗口(Congestion Window, cwnd)，逐渐探测网络的可用带宽。</li>
+<li>拥塞避免(Congestion Avoidance)：当<code>cwnd</code>达到慢启动阈值(Slow Start Threshold, ssthresh)时，<code>cwnd</code>以线性增长方式增加。<ul>
+<li>发送方维护一个拥塞窗口(<code>cwnd</code>)，用于控制发送数据的速率，其值取决于网络的拥塞程度，并且动态变化。<ul>
+<li><code>cwnd</code>的维护原则：只要网络没有拥塞，就增大<code>cwnd</code>，以提高发送速率；一旦网络出现拥塞，就减小<code>cwnd</code>。</li>
+<li>判断拥塞依据：没有按时收到应当到达的报文(即发生超时重传)。</li>
+</ul>
+</li>
+<li>发送方将拥塞窗口作为发送窗口<code>swnd</code>，即<code>swnd=cwnd</code>。</li>
+<li>维护一个慢开始门限<code>ssthresh</code>状态变量：<ul>
+<li>当<code>cwnd &lt; ssthresh</code>时，使用慢开始算法；</li>
+<li>当<code>cwnd &gt; ssthresh</code>时，停止使用慢开始算法而改用拥塞避免算法；</li>
+<li>当<code>cwnd = ssthresh</code>时，既可以使用慢开始算法，也可以使用拥塞避免算法；</li>
+</ul>
+</li>
+<li>在TCP双方建立逻辑连接关系时，<code>cwnd</code>的值被设置为1，慢开始门限ssthresh值进行设置(假设为 16)。</li>
+</ul>
+<ol>
+<li>慢开始阶段：<code>cwnd</code>从1开始，每收到一个<code>ACK</code>，<code>cwnd</code>加倍，即<code>cwnd = cwnd * 2</code>，直到<code>cwnd &gt;= ssthresh</code>。</li>
+<li>当<code>cwnd &gt;= ssthresh</code>，开始执行拥塞避免算法，<code>cwnd</code>每次只增加1，即<code>cwnd = cwnd + 1</code>。</li>
+<li>如果此时部分数据报文段丢失,那么发送方会对这些丢失的数据报文段进行超时重传。发送方以此判断可能发生了网络拥塞，进行调整：将慢开始门限值<code>ssthresh</code>值更新为发生拥塞时<code>cwnd</code>值的一半；将<code>cwnd</code>的值减少为1，并重新开始执行慢开始算法。</li>
+<li>当<code>cwnd</code>重新达到新的<code>ssthresh</code>时，再次执行拥塞避免算法。</li>
+</ol>
+</li>
+<li>快速重传(Fast Retransmit)：当发送方连续收到三个重复的ACK时，立即重传相应的数据包，而不必等待超时。</li>
+<li>快速恢复(Fast Recovery)：在快速重传后，<code>cwnd</code>减半，但不重新进入慢启动，而是进入快速恢复阶段，通过继续发送数据来尽快恢复网络的正常传输。<ul>
+<li>有时候个别报文丢失，但实际上并没有网络拥塞。这导致发送发超时重传，误认为发生了网络拥塞，错误地使用慢开始算法，降低了网络的传输效率。为了解决这个问题，TCP引入了快速重传机制、快速恢复机制。</li>
+<li>快速重传就是要发送方尽快重传，而不是等待超时重传计时器超时再重传。<ul>
+<li>要求接收方不要等待自己发送数据时捎带<code>ACK</code>，而是立即发送<code>ACK</code>。</li>
+<li>即使收到了失序的报文段，也要立即发送对自己收到的报文段的重复确认<code>ACK</code>。</li>
+<li>发送方一旦收到三个连续的<code>ACK</code>，就立即重传对应的报文段，而不必等待超时重传计时器超时。</li>
+<li>使用快速重传可以将网络吞吐量提高 20%~30%。</li>
+</ul>
+</li>
+<li>发送方收到三个重复的<code>ACK</code>，就知道只是丢失了个别报文，所以不使用慢开始算法，而是使用快恢复算法。<ul>
+<li>发送方将慢开始门限<code>ssthresh</code>和拥塞窗口<code>cwnd</code>设置为原来<code>cwnd</code>的一半，然后执行拥塞避免算法。</li>
+<li>有的快恢复算法实现是将新的拥塞窗口设置的大一点，即<code>cwnd = ssthresh(cwnd/2) + 3</code>，然后执行拥塞避免算法。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/./image/Computer-Basic/20210517113954737.png" alt="TCP拥塞控制"></p>
+<blockquote>
+<p>注意：<br>慢开始是指一开始向网络中注入的报文少，并不是指<code>cwnd</code>的增长速度慢；<br>拥塞避免并非不能完全避免拥塞，而是在网络出现拥塞时使用线性增长方式控制<code>cwnd</code>，使网络不容易出现拥塞。</p>
+</blockquote>
+<h3 id="TCP如何实现拥塞控制"><a href="#TCP如何实现拥塞控制" class="headerlink" title="TCP如何实现拥塞控制"></a>TCP如何实现拥塞控制</h3><p>TCP 发送发维持一个 拥塞窗口(<code>cwnd</code>)的状态变量。采用了四种算法，即 <code>慢开始</code>、 <code>拥塞避免</code>、<code>快重传</code> 和 <code>快恢复</code>。</p>
+<ul>
+<li>发送方维护一个拥塞窗口(<code>cwnd</code>)，用于控制发送数据的速率，其值取决于网络的拥塞程度，并且动态变化。<ul>
+<li><code>cwnd</code>的维护原则：只要网络没有拥塞，就增大<code>cwnd</code>，以提高发送速率；一旦网络出现拥塞，就减小<code>cwnd</code>。</li>
+<li>判断拥塞依据：没有按时收到应当到达的报文(即发生超时重传)。</li>
+</ul>
+</li>
+<li>发送方将拥塞窗口作为发送窗口<code>swnd</code>，即<code>swnd=cwnd</code>。</li>
+<li>维护一个慢开始门限<code>ssthresh</code>状态变量：<ul>
+<li>当<code>cwnd &lt; ssthresh</code>时，使用慢开始算法；</li>
+<li>当<code>cwnd &gt; ssthresh</code>时，停止使用慢开始算法而改用拥塞避免算法；</li>
+<li>当<code>cwnd = ssthresh</code>时，既可以使用慢开始算法，也可以使用拥塞避免算法；</li>
+</ul>
+</li>
+<li>在TCP双方建立逻辑连接关系时，<code>cwnd</code>的值被设置为1，慢开始门限ssthresh值进行设置(假设为 16)。</li>
+</ul>
+<ol>
+<li>慢开始阶段：<code>cwnd</code>从1开始，每收到一个<code>ACK</code>，<code>cwnd</code>加倍，即<code>cwnd = cwnd * 2</code>，直到<code>cwnd &gt;= ssthresh</code>。</li>
+<li>当<code>cwnd &gt;= ssthresh</code>，开始执行拥塞避免算法，<code>cwnd</code>每次只增加1，即<code>cwnd = cwnd + 1</code>。</li>
+<li>如果此时部分数据报文段丢失,那么发送方会对这些丢失的数据报文段进行超时重传。发送方以此判断可能发生了网络拥塞，进行调整：将慢开始门限值<code>ssthresh</code>值更新为发生拥塞时<code>cwnd</code>值的一半；将<code>cwnd</code>的值减少为1，并重新开始执行慢开始算法。</li>
+<li>当<code>cwnd</code>重新达到新的<code>ssthresh</code>时，再次执行拥塞避免算法。</li>
+</ol>
+<ul>
+<li>有时候个别报文丢失，但实际上并没有网络拥塞。这导致发送发超时重传，误认为发生了网络拥塞，错误地使用慢开始算法，降低了网络的传输效率。为了解决这个问题，TCP引入了快速重传机制、快速恢复机制。</li>
+<li>快速重传就是要发送方尽快重传，而不是等待超时重传计时器超时再重传。<ul>
+<li>要求接收方不要等待自己发送数据时捎带<code>ACK</code>，而是立即发送<code>ACK</code>。</li>
+<li>即使收到了失序的报文段，也要立即发送对自己收到的报文段的重复确认<code>ACK</code>。</li>
+<li>发送方一旦收到三个连续的<code>ACK</code>，就立即重传对应的报文段，而不必等待超时重传计时器超时。</li>
+<li>使用快速重传可以将网络吞吐量提高 20%~30%。</li>
+</ul>
+</li>
+<li>发送方收到三个重复的<code>ACK</code>，就知道只是丢失了个别报文，所以不使用慢开始算法，而是使用快恢复算法。<ul>
+<li>发送方将慢开始门限<code>ssthresh</code>和拥塞窗口<code>cwnd</code>设置为原来<code>cwnd</code>的一半，然后执行拥塞避免算法。</li>
+<li>有的快恢复算法实现是将新的拥塞窗口设置的大一点，即<code>cwnd = ssthresh(cwnd/2) + 3</code>，然后执行拥塞避免算法。</li>
+</ul>
+</li>
+</ul>
+<h3 id="TCP解决丢包问题"><a href="#TCP解决丢包问题" class="headerlink" title="TCP解决丢包问题"></a>TCP解决丢包问题</h3><ul>
+<li>重传机制<ul>
+<li>超时重传(Retransmission TimeOut, RTO)：当发送方没有在预期时间内收到确认应答(<code>ACK</code>)时，认为数据包丢失，重新发送该数据包。</li>
+<li>快速重传(Fast Retransmit)：当发送方连续收到三个重复的ACK时，立即重传相应的数据包，而不必等待超时。</li>
+</ul>
+</li>
+<li>拥塞控制<ul>
+<li>慢启动(Slow Start)：初始阶段发送方以指数增长的方式增加拥塞窗口(Congestion Window, CWND)，逐渐探测网络的可用带宽。</li>
+<li>拥塞避免(Congestion Avoidance)：当CWND达到慢启动阈值(Slow Start Threshold, SSTHRESH)时，CWND以线性增长方式增加。</li>
+<li>快速恢复(Fast Recovery)：在快速重传后，CWND减半，但不重新进入慢启动，而是进入快速恢复阶段，通过继续发送数据来尽快恢复网络的正常传输。</li>
+<li>快速重传(Fast Retransmit)：当发送方连续收到三个重复的ACK时，立即重传相应的数据包，而不必等待超时。</li>
+</ul>
+</li>
+<li>选择性确认(Selective Acknowledgement, SACK)：允许接收方通知发送方已接收的非连续数据块，发送方可以只重传丢失的部分数据，而不是所有后续数据包。</li>
+<li>冗余传输(Redundant Transmission)：使用前向纠错码(Forward Error Correction, FEC)或者额外的冗余数据，以便在接收方能够自行修复部分丢失的数据包。</li>
+<li>流量控制(Flow Control)：通过调整接收窗口(Receiver Window, RWND)的大小，确保发送方不会发送超过接收方处理能力的数据量，减少因拥塞而导致的丢包。</li>
+<li>网络层优化<ul>
+<li>质量服务(Quality of Service, QoS)：在路由器和交换机上设置优先级规则，确保关键数据包优先传输。</li>
+<li>负载均衡(Load Balancing)：将流量分布到多个路径或链路上，避免某一路径过载导致丢包。</li>
+</ul>
+</li>
+<li>物理层优化：改善物理连接质量，如使用更好的网络电缆、优化无线信号强度等，以减少物理层的丢包率。</li>
+<li>网络协议的改进：Quick UDP Internet Connections(QUIC)，谷歌开发的一种基于UDP的协议，具有更快速的连接建立和恢复能力。</li>
+</ul>
+<p>通过结合以上各种方法，可以更有效地应对TCP丢包问题，提高网络传输的稳定性和效率。</p>
+<h3 id="TCP粘包拆包问题"><a href="#TCP粘包拆包问题" class="headerlink" title="TCP粘包拆包问题"></a>TCP粘包拆包问题</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010429831/article/details/119932832">https://blog.csdn.net/u010429831/article/details/119932832</a><br>TCP 是一个面向字节流的传输层协议。发送方无法保证对方每次收到的都是一个完整的数据包。于是就有了粘包、拆包问题的出现。粘包、拆包问题只发生在TCP协议中。</p>
+<ul>
+<li>接收端只收到一个TCP报文段，去掉首部后，报文段中包含发送端发送来的两个数据包的信息，即为粘包。由于接收端不知道两数据包的界限，所以对于接收端来说很难处理。</li>
+<li>接收端收到了两个TCP报文段，但是去掉首部后，两个数据包要么是不完整的，要么就是多出来一部分，这种现象即为粘包、拆包问题。<ul>
+<li>粘包问题分两种：一种是粘在一起的包都是完整的数据包，另一种情况是粘在一起的包有不完整的数据包。</li>
+<li>拆包：应用程序的数据包被拆分成若干部分发送出去，从接收缓存看，接收方收到的只是数据包的一部分内容。</li>
+</ul>
+</li>
+</ul>
+<h3 id="粘包产生原因"><a href="#粘包产生原因" class="headerlink" title="粘包产生原因"></a>粘包产生原因</h3><ul>
+<li>应用程序(发送方)进程写入的数据量大于TCP发送缓冲区的大小，这将会发生拆包。此时数据包需要进行拆包处理，分多次进行发送。</li>
+<li>应用进程写入的数据量小于TCP发送缓冲区的大小，这将会发生粘包。由于TCP发送缓存空间足够，它会等到有多个数据包时，再组装成一个TCP报文段，然后通过网卡发送到网络中去。</li>
+<li>当应用进程发送的数据包大于 MSS(最大报文段长度： TCP报文段的长度 - TCP首部长度)时，将会发生拆包。TCP 协议会将大的数据包拆分成 MSS 大小的数据包进行发送。</li>
+<li>接收方不及时读取接收缓冲区中的数据，将会发生粘包。接收方先把接收到的数据存放在内核接收缓冲区中，用户进程从接收缓冲区读取数据，若下一个数据包到达时前一个数据包尚未被用户进程取走，则下一个数据包放到内核接收缓冲区时就和前一数据包粘在一起，而用户进程根据预先设定的缓冲区大小从内核接收缓冲区读取数据，这样就一次性读取到了多个数据包。</li>
+</ul>
+<p><strong>什么时候需要考虑粘包问题</strong><br>TCP是长连接，并且传输的是结构化数据时，如：传送的是一个结构体类型的数据，由于不知道结构化数据的边界，容易导致粘包问题的出现。这时需要考虑粘包问题的影响。</p>
+<p><strong>什么时候不需要考虑粘包问题</strong></p>
+<ul>
+<li>如果 TCP 是短连接，即只进行一次数据通信过程，通信完成就关闭连接，这样就不会出现粘包问题。</li>
+<li>如果传输的是字符串、文件等无结构化数据时，也不会出现粘包问题。因为发送方只管发送，接收方只管接收存储就行了</li>
+</ul>
+<h3 id="粘包问题解决方案"><a href="#粘包问题解决方案" class="headerlink" title="粘包问题解决方案"></a>粘包问题解决方案</h3><ol>
+<li>发送定长包。即发送端将每个数据包封装为固定长度(长度不够的可以通过补0填充)，这样接收端每次从接收缓冲区中读取固定长度的数据就自然而然的把每个数据包拆分开来。(适合定长结构的数据)</li>
+<li>包头加上包体长度。发送端给每个数据包添加包首部，首部中应该至少包含数据包的长度，这样接收端在接收到数据后，通过读取包首部的长度字段，便可以知道每一个数据包的实际长度了。(适合不定长结构的数据)</li>
+<li>在包尾部设置边界标记。发送端在每个数据包尾部添加边界标记，可以使用特殊符号作为边界标记。如此，接收端通过这个边界标记就可以将不同的数据包拆分开来。但这可能会存在一个问题：如果数据包内容中也包含有边界标记，则会被误判为消息的边界，导致出错。这样方法要视具体情况而定。例如，FTP协议就是采用 “\r\n” 来识别一个消息的边界的。</li>
+</ol>
+<h3 id="ARQ协议"><a href="#ARQ协议" class="headerlink" title="ARQ协议"></a>ARQ协议</h3><p>自动重传请求(Automatic Repeat-reQuest，ARQ)是数据链路层和传输层的错误纠正协议之一。它通过使用确认和超时这两个机制，在不可靠服务的基础上实现可靠的信息传输。如果发送方在发送后一段时间之内没有收到确认信息<code>ACK</code>，就会重新发送，直到收到确认或者重试超过一定的次数。</p>
+<h3 id="停止等待ARQ协议"><a href="#停止等待ARQ协议" class="headerlink" title="停止等待ARQ协议"></a>停止等待ARQ协议</h3><p>停止等待协议是为了实现可靠传输的，它的基本原理就是每发完一个分组就停止发送，等待对方确认(回复 <code>ACK</code>)。如果过了一段时间(超时时间后)，还是没有收到 ACK 确认，说明没有发送成功，需要重新发送，直到收到确认后再发下一个分组；</p>
+<h3 id="连续ARQ协议"><a href="#连续ARQ协议" class="headerlink" title="连续ARQ协议"></a>连续ARQ协议</h3><p>连续 ARQ 协议可提高信道利用率。发送方维持一个发送窗口，凡位于发送窗口内的分组可以连续发送出去，而不需要等待对方确认。接收方一般采用累计确认，对按序到达的最后一个分组发送确认，表明到这个分组为止的所有分组都已经正确收到了。</p>
+<ul>
+<li>优点：信道利用率高，容易实现。</li>
+<li>缺点：不能向发送方反映出接收方已经正确收到的所有分组的信息。如：发送方发送了5条消息，中间第三条丢失(3号)，这时接收方只能对前两个发送确认。发送方无法知道后三个分组的下落，而只好把后三个全部重传一次。这也叫 Go-Back-N(回退 N)，表示需要退回来重传已经发送过的 N 个消息。</li>
+</ul>
+<h3 id="超时重传机制如何实现"><a href="#超时重传机制如何实现" class="headerlink" title="超时重传机制如何实现"></a>超时重传机制如何实现</h3><p>发送方发送完数据后，会启动一个定时器，等待接收端确认收到这个报文段。接收端成功收到报文段的话会发送会 <code>ACK</code>包，如果发送端在合理的往返时延(RTT)内未收到确认信息，那数据包就被标记为已丢失并进行重传。</p>
+<p>超时重传时间 RTO(Retransmission Time Out)直接影响到 TCP 的性能和效率。如果 RTO 设置得太小，会导致不必要的重传，增加网络负担；如果 RTO 设置得太大，会导致数据传输的延迟，降低吞吐量。因此 RTO 应根据网络的实际状况，动态地进行调整。</p>
+<p>超时重传时间不能直接使用往返时延RTT，因为其值会随着网络波动而变化。</p>
+<h3 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h3><p>IP地址是每个连入互联网的设备或域(如计算机、服务器、路由器等)都被分配的一个唯一标识符。</p>
+<h3 id="IP地址过滤"><a href="#IP地址过滤" class="headerlink" title="IP地址过滤"></a>IP地址过滤</h3><p>IP 地址过滤(IP Address Filtering)就是限制或阻止特定 IP 地址或 IP 地址范围的访问。如：有一个图片服务突然被某一个 IP 地址攻击，那就可以禁止这个 IP 地址访问图片服务。</p>
+<h3 id="IPv4-IPv6区别"><a href="#IPv4-IPv6区别" class="headerlink" title="IPv4&#x2F;IPv6区别"></a>IPv4&#x2F;IPv6区别</h3><p>IPv4(Internet Protocol version 4)是四组由点分隔的数字，例如：<code>123.89.46.72</code>。IPv4 使用 4Bytes 32 位(bits)地址作为其 Internet 地址，共有约 42 亿(2^32)个可用 IP 地址。不够用。</p>
+<p>为了解决 IP 地址耗尽的问题，采用具有更大地址空间的新版本 IP 协议 - IPv6(Internet Protocol version 6)。该格式使用由单或双冒号分隔的一组数字和字母，如：<code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code>。IPv6 使用 128 位互联网地址，有 2^128个可用 IP 地址。</p>
+<ul>
+<li>IPv4采用DHCP(动态主机配置协议)来自动分配IP地址。IPv6支持自动配置(SLAAC)和DHCPv6，自动化程度更高。</li>
+<li>IPv4路由表较大，互联网的快速增长导致路由表膨胀，路由效率受到一定影响。IPv6有更高效的路由聚合(aggregation)，路由表规模更小，有助于提高路由效率。</li>
+</ul>
+<h3 id="判断两IP同属一个子网"><a href="#判断两IP同属一个子网" class="headerlink" title="判断两IP同属一个子网"></a>判断两IP同属一个子网</h3><ol>
+<li>获取IP地址和子网掩码：每个IP地址(IPv4)都有一个对应的子网掩码。子网掩码用于确定一个IP地址中哪些位是网络部分，哪些位是主机部分。</li>
+<li>按位与操作(AND操作)：将IP地址和子网掩码进行逐位的“与操作”(AND)，得到每个IP地址的网络号。<br>与操作规则：<ul>
+<li>1 AND 1 &#x3D; 1</li>
+<li>1 AND 0 &#x3D; 0</li>
+<li>0 AND 0 &#x3D; 0</li>
+</ul>
+</li>
+<li>比较网络号：如果两个IP地址通过子网掩码计算得到的网络号相同，那么这两个IP地址就属于同一个子网。</li>
+</ol>
+<p><strong>示例</strong></p>
+<ul>
+<li><p>IP地址1：192.168.1.10</p>
+</li>
+<li><p>子网掩码：255.255.255.0</p>
+</li>
+<li><p>IP地址2：192.168.1.20</p>
+</li>
+<li><p>子网掩码：255.255.255.0</p>
+</li>
+<li><p>IP地址1：192.168.1.10  -&gt; 11000000.10101000.00000001.00001010</p>
+</li>
+<li><p>子网掩码：255.255.255.0 -&gt; 11111111.11111111.11111111.00000000<br>结果：网络号1：11000000.10101000.00000001.00000000 -&gt; 192.168.1.0</p>
+</li>
+<li><p>IP地址2：192.168.1.20 -&gt; 11000000.10101000.00000001.00010100</p>
+</li>
+<li><p>子网掩码：255.255.255.0 -&gt; 11111111.11111111.11111111.00000000<br>结果：网络号2：11000000.10101000.00000001.00000000 -&gt; 192.168.1.0</p>
+</li>
+</ul>
+<p>结论：IP1和IP2的网络号相同，这两个IP地址属于同一个子网。</p>
+<h3 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h3><p>子网掩码(Subnet Mask)是与IP地址配合使用的一种技术。它用于标识IP地址中的网络部分和主机部分，从而确定一个设备属于哪个网络。子网掩码通常采用与IP地址相同的点分十进制形式表示。</p>
+<p><strong>子网掩码的作用</strong></p>
+<ol>
+<li><strong>区分网络与主机</strong>：通过子网掩码可以确定一个IP地址中哪些位代表网络地址，哪些位代表主机地址。这有助于路由器正确地将数据包转发到目的网络。</li>
+<li><strong>网络划分</strong>：通过设置不同的子网掩码，可以将一个大的网络划分为多个较小的子网，这样可以有效管理和控制网络流量，提高网络性能和安全性。</li>
+</ol>
+<p><strong>常见的子网掩码</strong></p>
+<ul>
+<li><strong>A类地址</strong>：默认子网掩码为255.0.0.0。A类地址的第一个字节表示网络部分，后三个字节表示主机部分。</li>
+<li><strong>B类地址</strong>：默认子网掩码为255.255.0.0。B类地址的前两个字节表示网络部分，后两个字节表示主机部分。</li>
+<li><strong>C类地址</strong>：默认子网掩码为255.255.255.0。C类地址的前三个字节表示网络部分，最后一个字节表示主机部分。</li>
+</ul>
+<p><strong>子网掩码的计算</strong><br>子网掩码由32位组成，其中网络部分用1表示，主机部分用0表示。例如，255.255.255.0 的二进制表示为 11111111.11111111.11111111.00000000，这意味着前24位用于网络地址，剩下的8位用于主机地址。</p>
+<p><strong>子网划分</strong><br>通过改变子网掩码中的1和0的位置，可以实现对网络的进一步细分。例如，对于一个C类地址，如果需要更多的子网而不是每个子网有很多主机，可以增加子网掩码中的1的数量。比如使用255.255.255.128(11111111.11111111.11111111.10000000)作为子网掩码，这样就创建了两个子网，每个子网有126个可用的主机地址。</p>
+<p><strong>CIDR表示法</strong><br>CIDR(无类别域间路由)是一种改进的子网划分方法，它允许更灵活地分配和聚合IP地址。CIDR使用斜线加数字的形式来表示子网掩码，如192.168.1.0&#x2F;24，这里的&#x2F;24表示子网掩码中有24个连续的1，即255.255.255.0。</p>
+<h3 id="断点续传在浏览器如何实现"><a href="#断点续传在浏览器如何实现" class="headerlink" title="断点续传在浏览器如何实现"></a>断点续传在浏览器如何实现</h3><p>断点续传是一种在网络传输中恢复中断数据的技术，常用于下载文件时继续未完成的部分。浏览器中实现断点续传主要依赖HTTP的<code>Range</code>头和状态码<code>206 Partial Content</code>。</p>
+<ul>
+<li><code>Range</code>头：客户端在请求资源时，通过<code>Range</code>头指定请求的范围，如<code>Range: bytes=500-</code>表示请求资源的 500 字节之后的部分。</li>
+<li><code>206 Partial Content</code>：服务器收到带有<code>Range</code>头的请求后，会返回状态码<code>206 Partial Content</code>，并在响应头中包含<code>Content-Range</code>字段，指示返回的数据范围。</li>
+<li>实现细节：<ol>
+<li>发送初始请求：浏览器首先发送一个普通的GET请求，下载文件的起始部分。</li>
+<li>检测中断：如果下载中断或用户暂停下载，记录下已下载的字节数。</li>
+<li>发送带<code>Range</code>头的请求：重新开始下载时，浏览器发送一个带有<code>Range</code>头的请求，从上次中断的地方继续。</li>
+<li>处理服务器响应：服务器返回<code>206 Partial Content</code>状态码和请求范围的内容，浏览器继续下载剩余部分。</li>
+</ol>
+</li>
+</ul>
+<p><strong>如何判断浏览器是否支持断点续传</strong><br>要检测浏览器是否支持断点续传，可以通过发送一个带有<code>Range</code>头的请求，并检查服务器的响应。如果服务器返回状态码<code>206 Partial Content</code>，则表示支持断点续传。</p>
+<p><strong>处理不支持断点续传的情况</strong><br>如果浏览器或服务器不支持断点续传，可以采取以下几种策略：</p>
+<ul>
+<li>完整下载：直接进行完整下载，而不是尝试断点续传。</li>
+<li>分块下载：将文件分成多个小块，分别下载并在客户端合并。这种方法需要服务器支持多部分下载，但不依赖于HTTP的断点续传功能。</li>
+</ul>
+<p><strong>在项目中处理断点续传的支持性</strong><br>在实际项目中，通常会有以下步骤来处理断点续传的支持性：</p>
+<ul>
+<li>检测支持性：如上所示，首先检测浏览器是否支持断点续传。</li>
+<li>优先使用断点续传：如果支持，使用断点续传来提高下载效率和用户体验。</li>
+<li>回退方案：如果不支持，使用完整下载或其他替代方案。</li>
+<li>用户提示：在用户界面上显示相关提示，例如告诉用户当前浏览器不支持断点续传，可能需要更长时间下载。</li>
+</ul>
+<h3 id="大端-小端"><a href="#大端-小端" class="headerlink" title="大端&#x2F;小端"></a>大端&#x2F;小端</h3><p>大端(Big Endian)和小端(Little Endian)是两种不同的字节序(也叫“字节顺序”)概念，用来定义多字节数据在内存中存储的顺序。具体来说：</p>
+<ul>
+<li><strong>大端模式</strong>：将数据的高字节存储在内存的低地址，低字节存储在高地址。</li>
+<li><strong>小端模式</strong>：将数据的低字节存储在内存的低地址，高字节存储在高地址。</li>
+</ul>
+<h3 id="为什么会存在大端和小端？"><a href="#为什么会存在大端和小端？" class="headerlink" title="为什么会存在大端和小端？"></a>为什么会存在大端和小端？</h3><p>大端和小端并非仅仅是设计者的爱好，而是与历史、硬件架构设计及其应用需求相关：</p>
+<ol>
+<li><p><strong>历史原因</strong>：不同的计算机架构、处理器厂商在早期开发时，选择了不同的字节序。例如，Motorola 68k系列处理器使用大端字节序，而Intel x86系列使用小端字节序。不同的设计理念导致了不同的字节存储方式。</p>
+</li>
+<li><p><strong>应用场景差异</strong>：</p>
+<ul>
+<li>大端模式更符合人类书写习惯，因为我们从左到右书写高位在前的数字。</li>
+<li>小端模式则在某些场景下更加高效，比如在处理低位优先的计算操作时，小端可以直接访问低位字节，处理器可能因此提高效率。</li>
+</ul>
+</li>
+</ol>
+<h3 id="网络传输中的大端-小端"><a href="#网络传输中的大端-小端" class="headerlink" title="网络传输中的大端&#x2F;小端"></a>网络传输中的大端&#x2F;小端</h3><p>网络传输中，通常使用大端字节序，这被称为“网络字节序”。这是因为网络传输协议(如TCP&#x2F;IP)规定数据要按照大端序进行传输。</p>
+<p><strong>需要注意的点</strong>：</p>
+<ul>
+<li>当不同字节序的机器(如一台大端字节序的机器和一台小端字节序的机器)进行通信时，必须确保数据按照统一的网络字节序传输。</li>
+<li>如果两台机器使用不同的字节序，在进行数据传输前，可能需要将本机的数据转换成网络字节序，并在接收到数据后再转换回本机字节序。</li>
+<li>在编写跨平台网络程序时，通常使用标准库中的函数(如<code>htonl()</code>、<code>ntohl()</code>等)来进行字节序的转换，确保数据的正确性。</li>
+</ul>
+<p>总结来说，字节序问题与硬件设计历史和处理器架构密切相关，而在网络传输中，为了统一和避免混乱，使用大端字节序作为标准。</p>
+<h3 id="长连接-短连接"><a href="#长连接-短连接" class="headerlink" title="长连接&#x2F;短连接"></a>长连接&#x2F;短连接</h3><p>在计算机网络中，<strong>长连接</strong>和<strong>短连接</strong>是指客户端与服务器之间的连接状态和持续时间。它们的区别主要在于连接的维护方式和使用场景。</p>
+<h4 id="长连接"><a href="#长连接" class="headerlink" title="长连接"></a>长连接</h4><ul>
+<li><strong>定义</strong>：长连接是一种保持客户端与服务器之间的连接持续较长时间的方式，多个数据请求可以共享同一个连接。</li>
+<li><strong>特点</strong>：<ul>
+<li>在首次建立连接后，连接不会立即关闭，而是保持一段时间，期间可以多次请求数据。</li>
+<li>减少了多次建立连接和断开连接的开销(如TCP的三次握手和四次挥手)，提高了效率。</li>
+<li>常用于需要频繁数据交互或实时性要求高的场景，如聊天应用、WebSocket、视频直播等。</li>
+<li>服务器和客户端需要定期发送心跳包以保持连接活跃，防止超时关闭。</li>
+</ul>
+</li>
+<li><strong>优点</strong>：<ul>
+<li>适用于频繁交互的场景，减少重复建立连接的成本。</li>
+<li>提高了通信效率，降低了延迟。</li>
+</ul>
+</li>
+<li><strong>缺点</strong>：<ul>
+<li>占用系统资源较多，服务器需要管理更多的活跃连接。</li>
+<li>如果不合理管理，可能导致连接过多，服务器压力增大。</li>
+</ul>
+</li>
+<li><strong>使用场景</strong>：长连接适合需要频繁通信或实时互动的场景，例如即时通讯、在线游戏、WebSocket、数据库连接等。</li>
+</ul>
+<h4 id="短连接"><a href="#短连接" class="headerlink" title="短连接"></a>短连接</h4><ul>
+<li><strong>定义</strong>：短连接是一种在每次客户端与服务器通信时都建立新连接，并在数据传输完成后立即关闭连接的方式。</li>
+<li><strong>特点</strong>：<ul>
+<li>每次请求数据都会新建一个连接，完成后立即断开连接。</li>
+<li>HTTP&#x2F;1.0中默认使用短连接，适用于简单的请求-响应模式。</li>
+<li>资源消耗相对较少，因为连接只在需要时才建立和维护。</li>
+</ul>
+</li>
+<li><strong>优点</strong>：<ul>
+<li>适用于较少交互或单次请求的场景，如一次性文件下载、网页请求。</li>
+<li>每次请求都重新建立连接，服务器不需要长期维护大量的活跃连接。</li>
+</ul>
+</li>
+<li><strong>缺点</strong>：<ul>
+<li>每次请求都要进行连接的建立和断开，增加了连接的开销，降低了效率。</li>
+<li>在高频请求的场景下，性能可能不如长连接。</li>
+</ul>
+</li>
+<li><strong>使用场景</strong>：短连接适合简单的请求-响应场景，例如静态网页访问、文件下载等。</li>
+</ul>
+<h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><h3 id="用户态和内核态"><a href="#用户态和内核态" class="headerlink" title="用户态和内核态"></a>用户态和内核态</h3><ul>
+<li>用户态是指应用程序运行时所处的模式。在用户态下，程序执行受到严格的限制，不能直接访问硬件或内存中的关键部分。任何试图进行这些操作的指令都会导致异常，并且操作系统会终止该程序。这种限制可以防止用户程序破坏系统的稳定性和安全性。<ul>
+<li>受限的指令集：只能执行非特权指令。</li>
+<li>受限的资源访问：不能直接访问硬件设备和内核内存空间。</li>
+<li>需要通过系统调用(System Call)与内核进行交互。</li>
+</ul>
+</li>
+<li>内核态是指操作系统内核运行时所处的模式。在内核态下，系统具有完全的访问权限，可以执行任何指令，并且可以访问所有的硬件设备和内存。这种模式下，操作系统能够管理系统资源和控制硬件。<ul>
+<li>完全的指令集：可以执行所有的指令，包括特权指令。</li>
+<li>完全的资源访问：可以直接访问硬件设备和内存。</li>
+<li>执行关键任务：处理系统调用、中断处理、设备管理等。</li>
+</ul>
+</li>
+</ul>
+<p><strong>切换</strong></p>
+<ul>
+<li>系统调用：当用户态的应用程序需要执行特权操作(如读写文件、分配内存、访问硬件设备)时，它会发出一个系统调用请求，触发从用户态到内核态的切换。内核处理完系统调用后，会返回用户态继续执行应用程序。</li>
+<li>中断：当外围设备完成用户请求的操作后，会向 CPU 发出相应的中断信号，这时 CPU 会暂停执行下一条即将要执行的指令转而去执行与中断信号对应的处理程序。这种从用户态到内核态的切换是由硬件中断控制器完成的。</li>
+<li>异常：当 CPU 在执行运行在用户态下的程序时，发生了某些事先不可知的异常，这时会触发由当前运行进程切换到处理此异常的内核相关程序中，也就转到了内核态，比如缺页异常。</li>
+</ul>
+<p><strong>示例</strong></p>
+<ul>
+<li>用户态：运行中的应用程序，如文本编辑器、浏览器等。它们通过系统调用请求操作系统提供的服务。</li>
+<li>内核态：操作系统内核在处理系统调用、硬件中断或其他低级别任务时的运行状态。</li>
+</ul>
+<p><strong>安全性和稳定性</strong><br>用户态和内核态的分离是现代操作系统安全性和稳定性的关键。通过将用户程序与操作系统核心隔离，防止用户程序直接操作硬件或内存，减少了系统崩溃和安全漏洞的风险。</p>
+<p><strong>总结</strong><br>用户态和内核态的划分使得计算机系统能够有效地管理资源，提供安全的运行环境，同时允许用户程序执行。用户态用于执行普通应用程序，而内核态用于执行操作系统核心任务，保证了系统的稳定性和安全性。</p>
+<h3 id="只有内核态不行吗？"><a href="#只有内核态不行吗？" class="headerlink" title="只有内核态不行吗？"></a>只有内核态不行吗？</h3><ul>
+<li>在 CPU 的所有指令中，有一些指令是比较危险的比如内存分配、设置时钟、IO 处理等，如果所有的程序都能使用这些指令的话，会对系统的正常运行造成灾难性地影响。因此，需要限制这些危险指令只能内核态运行。这些只能由操作系统内核态执行的指令也被叫做 特权指令 。</li>
+<li>如果计算机系统中只有一个内核态，那么所有程序或进程都必须共享系统资源，例如内存、CPU、硬盘等，这将导致系统资源的竞争和冲突，从而影响系统性能和效率。并且，这样也会让系统的安全性降低，毕竟所有程序或进程都具有相同的特权级别和访问权限。</li>
+</ul>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><p>系统调用是应用程序与操作系统之间进行交互的一种方式，通过系统调用，应用程序可以访问操作系统底层资源例如文件、设备、网络等。</p>
+<p>系统调用(System Call)是操作系统提供给应用程序的接口，用于访问操作系统内核的服务和功能。在用户程序中，凡是与系统态级别的资源有关的操作(如文件管理、进程控制、内存管理等)，必须通过系统调用方式向操作系统提出服务请求，并由操作系统代为完成。</p>
+<p>系统调用分下面几类：</p>
+<ul>
+<li>设备管理：完成设备(输入输出设备和外部存储设备等)的请求或释放，以及设备启动等功能。</li>
+<li>文件管理：完成文件的读、写、创建及删除等功能。</li>
+<li>进程管理：进程的创建、撤销、阻塞、唤醒，进程间的通信等功能。</li>
+<li>内存管理：完成内存的分配、回收以及获取作业占用内存区大小及地址等功能。</li>
+</ul>
+<p>系统调用和普通库函数调用非常相似，只是系统调用由操作系统内核提供，运行于内核态，而普通的库函数调用由函数库或用户自己提供，运行于用户态。</p>
+<h3 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h3><p>虚拟内存是一种内存管理技术，它为每个进程提供了一个统一的地址空间，使得进程认为它独占一个大的连续内存空间。然而，实际的物理内存可能是零散的或不足的，操作系统通过虚拟内存技术将虚拟地址转换为物理地址，从而透明地管理内存。</p>
+<p>主要作用：</p>
+<ul>
+<li>隔离进程：物理内存通过虚拟地址空间访问，虚拟地址空间与进程一一对应。每个进程都认为自己拥有了整个物理内存，进程之间彼此隔离，一个进程中的代码无法更改正在由另一进程或操作系统使用的物理内存。</li>
+<li>提升物理内存利用率：有了虚拟地址空间后，操作系统只需要将进程当前正在使用的部分数据或指令加载入物理内存。</li>
+<li>简化内存管理：进程都有一个一致且私有的虚拟地址空间，程序员不用和真正的物理内存打交道，而是借助虚拟地址空间访问物理内存，从而简化了内存管理。</li>
+<li>多个进程共享物理内存：进程在运行过程中，会加载许多操作系统的动态库。这些库对于每个进程而言都是公用的，它们在内存中实际只会加载一份，这部分称为共享内存。</li>
+<li>提高内存使用安全性：控制进程对物理内存的访问，隔离不同进程的访问权限，提高系统的安全性。</li>
+<li>提供更大的可使用内存空间：可以让程序拥有超过系统物理内存大小的可用内存空间。这是因为当物理内存不够用时，可以利用磁盘充当，将物理内存页(通常大小为 4 KB)保存到磁盘文件(会影响读写速度)，数据或代码页会根据需要在物理内存与磁盘之间移动。</li>
+</ul>
+<h3 id="没有虚拟内存会存在什么问题？"><a href="#没有虚拟内存会存在什么问题？" class="headerlink" title="没有虚拟内存会存在什么问题？"></a>没有虚拟内存会存在什么问题？</h3><ul>
+<li>程序之间的内存隔离性差：没有虚拟内存，不同程序的内存空间可能会重叠，一个程序可以访问另一个程序的内存空间，导致数据泄露或者程序崩溃。</li>
+<li>物理内存利用率低：没有虚拟内存，每个程序都需要占用一定的物理内存，如果物理内存不足，就会导致程序无法运行。</li>
+<li>程序的内存管理复杂：没有虚拟内存，程序需要直接管理物理内存，需要考虑内存的分配、释放、回收等问题，增加了程序的复杂性。</li>
+<li>程序的安全性差：没有虚拟内存，程序可以直接访问物理内存，可能会导致程序的安全漏洞，如缓冲区溢出等。</li>
+</ul>
+<h3 id="内存池"><a href="#内存池" class="headerlink" title="内存池"></a>内存池</h3><p>内存池(Memory Pool)是一种内存管理技术，旨在提高内存分配和释放的效率，同时减少内存碎片化的问题。内存池主要用于那些需要频繁进行内存分配和释放的场景，比如游戏开发、实时系统、嵌入式系统等。</p>
+<p>内存池可以在应用程序级别实现，也可以在操作系统内核中实现。例如，操作系统内核中的一些子系统(如文件系统、网络堆栈等)可能会使用内存池来提高内存管理的效率。在用户态，应用程序可以自行实现内存池，或者使用一些第三方库来管理内存池。而在内核态，操作系统可能会提供类似的机制来优化内存管理。</p>
+<h3 id="内存碎片"><a href="#内存碎片" class="headerlink" title="内存碎片"></a>内存碎片</h3><ul>
+<li>外部碎片化(External Fragmentation)：内存中存在许多小的、非连续的空闲块，导致大块内存请求无法满足，即使总的空闲内存量足够。</li>
+<li>内部碎片化(Internal Fragmentation)：分配的内存块内部有未被使用的空间，因为分配的块大于实际需要的内存。</li>
+</ul>
+<h3 id="内存池如何解决内存碎片问题"><a href="#内存池如何解决内存碎片问题" class="headerlink" title="内存池如何解决内存碎片问题"></a>内存池如何解决内存碎片问题</h3><ul>
+<li>预先分配固定大小的内存块：内存池通常在初始化时预先分配一大块连续的内存，然后将这块内存划分成许多大小相等的内存块。这样做可以避免外部碎片化，因为所有的内存分配都是从预先划分好的内存块中进行的。</li>
+<li>减少分配和释放次数：通过预先分配和重用内存块，内存池减少了系统进行内存分配和释放的次数。这不仅提高了性能，还减少了产生碎片的机会。</li>
+<li>分层内存池：有些内存池会根据不同大小的内存请求划分成多个子池，每个子池管理一种特定大小的内存块。这样可以有效减少内部碎片化，因为每个内存块的大小都是根据需求精细划分的。</li>
+</ul>
+<h3 id="进程-线程-协程"><a href="#进程-线程-协程" class="headerlink" title="进程&#x2F;线程&#x2F;协程"></a>进程&#x2F;线程&#x2F;协程</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_60505735/article/details/131047046">https://blog.csdn.net/m0_60505735/article/details/131047046</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_49199646/article/details/109210547">https://blog.csdn.net/weixin_49199646/article/details/109210547</a></p>
+<ul>
+<li>进程： 进程是程序的一次执行过程，是系统资源分配和运行程序的基本单位；一个进程在其执行的过程中可以产生多个线程。</li>
+<li>线程： 线程是进程的一个执行单元，是任务调度和系统执行的最小单位；与进程不同的是同类的多个线程共享进程的堆和方法区资源，但每个线程有自己的程序计数器、虚拟机栈和本地方法栈。所以系统在产生一个线程，或是在各个线程之间做切换工作时，负担要比进程小得多，也正因为如此，线程也被称为轻量级进程。</li>
+<li>协程： 协程是一种用户态的轻量级线程，协程的调度完全由用户控制。</li>
+</ul>
+<p><strong>进程与线程的区别</strong></p>
+<ul>
+<li>根本区别： 进程是操作系统资源分配和独立运行的最小单位；线程是任务调度和系统执行的最小单位。</li>
+<li>地址空间区别： 每个进程都有独立的地址空间，一个进程崩溃不影响其它进程；一个进程中的多个线程共享该 进程的地址空间，一个线程的非法操作会使整个进程崩溃。</li>
+<li>上下文切换开销区别： 每个进程有独立的代码和数据空间，进程之间上下文切换开销较大；线程组共享代码和数据空间，线程之间切换的开销较小。</li>
+</ul>
+<p><strong>进程与线程的联系</strong><br>一个进程由共享空间(包括堆、代码区、数据区、进程空间和打开的文件描述符)和一个或多个线程组成，各个线程之间共享进程的内存空间。而一个标准的线程由线程ID、程序计数器PC、寄存器和栈组成。</p>
+<p><strong>进程与线程的选择</strong></p>
+<ul>
+<li>线程的创建或销毁的代价比进程小，需要频繁创建和销毁时应优先选用线程；</li>
+<li>线程上下文切换的速度比进程快，需要大量计算时优先选用线程；</li>
+<li>线程在CPU上的使用效率更高，需要多核分布时优先选用线程，需要多机分布时优先选用进程</li>
+<li>线程的安全性、稳定性没有进程好，需要更稳定安全时优先使用进程。</li>
+</ul>
+<p>综上，线程创建和销毁的代价低、上下文切换速度快、对系统资源占用小、对CPU的使用效率高，因此一般情况下优先选择线程进行高并发编程；但线程组的所有线程共用一个进程的内存空间，安全稳定性相对较差，若其中一个线程发生崩溃，可能会使整个进程，因此对安全稳定性要求较高时，需要优先选择进程进行高并发编程。</p>
+<h3 id="进程间的通信方式"><a href="#进程间的通信方式" class="headerlink" title="进程间的通信方式"></a>进程间的通信方式</h3><p>进程间通信(Inter-Process Communication, IPC)是指在操作系统中不同进程之间传递数据或信息的机制。常见的进程间通信方式有多种，每种方式都有其独特的应用场景和优缺点。以下是一些主要的进程间通信方式：</p>
+<ol>
+<li>管道(Pipes)：<ul>
+<li>匿名管道(Anonymous Pipes)：主要用于有亲缘关系的进程之间的通信，如父子进程。数据以字节流的形式在进程间传递。</li>
+<li>命名管道(Named Pipes)：支持在无亲缘关系的进程之间进行通信。命名管道存在于文件系统中，可以被不同的进程打开和使用。</li>
+</ul>
+</li>
+<li>消息队列(Message Queues)：<ul>
+<li>允许进程通过发送和接收消息进行通信。消息队列提供了一种在进程间传递数据的有序方式，可以实现异步通信。</li>
+</ul>
+</li>
+<li>共享内存(Shared Memory)：<ul>
+<li>进程共享一段内存空间，进程可以直接读写这段共享内存中的数据。共享内存是最快的一种通信方式，因为数据不需要在进程间复制，但需要额外的同步机制来避免并发访问问题。</li>
+</ul>
+</li>
+<li>信号量(Semaphores)：<ul>
+<li>用于控制多个进程对共享资源的访问，通过信号量可以实现进程间的同步和互斥。</li>
+</ul>
+</li>
+<li>信号(Signals)：<ul>
+<li>信号是一种有限的异步通知机制，用于通知进程某个事件的发生。进程可以捕捉和处理信号，从而实现简单的通信和控制。</li>
+</ul>
+</li>
+<li>套接字(Sockets)：<ul>
+<li>套接字不仅支持同一台计算机上进程间的通信，也支持分布式网络中不同计算机上的进程间通信。常用于网络编程中。</li>
+</ul>
+</li>
+<li>文件系统(File System)：<ul>
+<li>进程可以通过读写共享的文件进行通信。这种方式简单但效率较低，适用于需要持久化存储的场景。</li>
+</ul>
+</li>
+<li>内存映射文件(Memory-Mapped Files)：<ul>
+<li>通过将文件映射到进程的地址空间，实现文件内容的共享和通信。与共享内存类似，但数据的持久化由文件系统提供。</li>
+</ul>
+</li>
+</ol>
+<h3 id="线程间的通信方式"><a href="#线程间的通信方式" class="headerlink" title="线程间的通信方式"></a>线程间的通信方式</h3><p>线程间的通信是指在同一个进程内，不同线程之间交换数据或信号的机制。常见的线程间通信方式包括以下几种：</p>
+<ol>
+<li>共享内存：<ul>
+<li>全局变量：所有线程都可以访问和修改同一个全局变量。</li>
+<li>静态变量：静态变量在进程的生命周期内只初始化一次，所有线程共享。</li>
+</ul>
+</li>
+<li>互斥锁(Mutex)：<ul>
+<li>用于防止多个线程同时访问共享资源，从而避免数据竞争。</li>
+</ul>
+</li>
+<li>读写锁(RWLock)：<ul>
+<li>允许多个线程同时读数据，但在写数据时需要独占锁，确保写操作的安全性。</li>
+</ul>
+</li>
+<li>信号量(Semaphore)：<ul>
+<li>主要用于限制对共享资源的访问数量，可以控制同时访问资源的线程数。</li>
+</ul>
+</li>
+<li>条件变量(Condition Variable)：<ul>
+<li>用于线程之间的等待通知机制，一个线程可以等待一个条件变量，而另一个线程可以通知该条件变量改变状态，从而唤醒等待的线程。</li>
+</ul>
+</li>
+<li>事件(Event)：<ul>
+<li>线程可以等待一个事件，直到另一个线程设置该事件，从而实现线程之间的同步。</li>
+</ul>
+</li>
+<li>队列(Queue)：<ul>
+<li>线程安全的队列，常用于生产者-消费者模型，一个线程放入数据，另一个线程取出数据。</li>
+</ul>
+</li>
+<li>管道(Pipe)：<ul>
+<li>用于线程之间的数据传输，常见于一些操作系统提供的进程间通信机制中。</li>
+</ul>
+</li>
+<li>消息队列(Message Queue)：<ul>
+<li>一种线程安全的队列，专门用于在多个线程之间传递消息。</li>
+</ul>
+</li>
+<li>信号(Signal)：</li>
+</ol>
+<ul>
+<li>一种用于通知线程某个事件发生的机制，通常用在异步事件处理。</li>
+</ul>
+<h3 id="CPU满载如何排查问题"><a href="#CPU满载如何排查问题" class="headerlink" title="CPU满载如何排查问题"></a>CPU满载如何排查问题</h3><p>当CPU满载时，排查问题通常需要系统地检查多个方面，以确定导致高负载的具体原因。以下是一些详细的排查步骤：</p>
+<ol>
+<li>使用系统监控工具<br>查看系统负载：首先，使用系统监控工具(如Windows的任务管理器、Linux的top或htop命令)来查看系统的整体负载情况，包括CPU、内存、磁盘和网络等资源的使用情况。<br>确定高占用进程：在监控工具中查找哪个进程或应用程序的CPU占用率很高。这通常是导致CPU满载的直接原因。</li>
+<li>分析进程和资源使用情况<br>查看进程详细信息：在任务管理器或相应的系统监控工具中，查看高占用进程的详细信息，包括其启动时间、占用资源量、关联的模块或服务等。<br>检查进程行为：分析进程的行为，看是否有异常操作或不必要的资源占用。例如，某些进程可能因为死循环、内存泄漏或低效的算法而持续占用大量CPU资源。</li>
+<li>检查系统配置和设置<br>查看启动项和服务：检查系统启动时自动运行的程序和服务，看是否有不必要的程序或服务在后台运行并占用CPU资源。<br>优化系统设置：关闭不必要的后台程序、禁用不必要的系统服务、降低屏幕分辨率或减少同时打开的窗口数量等，以降低CPU的使用率。</li>
+<li>检查硬件和驱动程序<br>检查硬件状态：确保CPU、内存、硬盘等硬件设备工作正常，没有过热、损坏或性能瓶颈等问题。<br>更新驱动程序：确保所有硬件设备的驱动程序都是最新的，以避免因驱动程序问题导致的CPU高占用。</li>
+<li>排查病毒和恶意软件<br>运行杀毒软件：使用可靠的杀毒软件对系统进行全面扫描，以排除病毒或恶意软件导致的CPU高占用。<br>检查系统日志：查看系统日志文件，查找是否有与病毒或恶意软件相关的异常记录。</li>
+<li>使用性能分析工具<br>使用专业工具：对于复杂的问题，可以使用专业的性能分析工具(如VisualVM、Arthas等)来进一步分析CPU使用情况，并确定具体的性能瓶颈。</li>
+<li>咨询专业人员<br>如果以上步骤都无法解决问题，或者您对系统配置和性能分析不熟悉，建议咨询专业的技术人员或计算机维修人员。<br>通过以上步骤，您可以系统地排查CPU满载的问题，并找到导致高负载的具体原因。在排查过程中，请保持耐心和细心，以便准确地定位问题并采取相应的解决措施。</li>
+</ol>
+<h3 id="孤儿进程"><a href="#孤儿进程" class="headerlink" title="孤儿进程"></a>孤儿进程</h3><p>在操作系统中，孤儿进程(Orphan Process)和僵尸进程(Zombie Process)是两种特殊的进程状态，它们各自具有特定的行为和影响。</p>
+<p>孤儿进程(Orphan Process)定义：孤儿进程是指在其父进程执行完毕或被终止后，该进程仍然运行着的进程。这些进程会被操作系统中的“进程收养所”(通常是init进程，其PID为1)收养，成为init进程的子进程。</p>
+<p>特点：</p>
+<ul>
+<li>孤儿进程不再是任何有效进程的子进程。</li>
+<li>孤儿进程的结束处理由收养它的进程(如init进程)负责。</li>
+<li>孤儿进程本身对系统没有直接的负面影响，因为操作系统能够正确处理它们。</li>
+</ul>
+<p>孤儿进程是系统能够自动处理的，</p>
+<h3 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h3><p>僵尸进程(Zombie Process)定义：僵尸进程是指已经结束(即已经完成了执行)但是其父进程尚未通过调用wait()或waitpid()等系统调用来获取其终止状态的进程。</p>
+<p>特点：</p>
+<ul>
+<li>僵尸进程已经释放了除进程描述符以外的所有资源，但仍在进程表中占有一个表项，这意味着它们的PID仍然被占用。</li>
+<li>如果系统中有大量僵尸进程，可能会导致PID耗尽，从而影响新进程的创建。</li>
+<li>僵尸进程的存在是为了让父进程能够查询子进程的退出状态。如果父进程不调用wait()或waitpid()，子进程就会一直处于僵尸状态。</li>
+</ul>
+<p>解决方法：</p>
+<ul>
+<li>确保父进程在适当的时候调用wait()或waitpid()来回收子进程的终止状态，从而避免僵尸进程的产生。</li>
+<li>如果父进程已经结束，而子进程成为僵尸进程，那么这些僵尸进程最终会被init进程收养，并由init进程调用wait()来回收。</li>
+<li>在某些情况下，如果父进程确实不需要知道子进程的退出状态，可以考虑在子进程中调用_exit()而不是exit()，这样可以在子进程结束时立即释放资源，但这种方法并不推荐，因为它可能掩盖了潜在的错误。</li>
+</ul>
+<p>僵尸进程则需要程序员通过编程来避免其产生或及时回收。</p>
+<h3 id="动态链接和静态链接的区别"><a href="#动态链接和静态链接的区别" class="headerlink" title="动态链接和静态链接的区别"></a>动态链接和静态链接的区别</h3><p>动态链接和静态链接是计算机科学中两种重要的程序链接方式。</p>
+<ul>
+<li>静态链接：在程序编译时，将所有外部库文件(如DLL文件在Windows系统中，或.so文件在Linux系统中)直接嵌入到可执行文件中，形成一个独立的可执行文件。当程序运行时，就不需要再加载这些外部库文件。</li>
+<li>动态链接：在程序编译时，只生成程序的可执行文件和一些必要的资源文件，而将外部库文件放在一个单独的目录下(如系统的PATH环境变量所指定的目录)。当程序运行时，系统会在这些目录下查找所需的外部库文件，并将其加载到内存中。</li>
+</ul>
+<p><strong>优缺点</strong><br>静态链接</p>
+<ul>
+<li><p>优点：</p>
+<ul>
+<li>程序运行时不依赖于外部库文件，减少了程序的依赖性，提高了程序的独立性和安全性。</li>
+<li>避免了因外部库文件版本不匹配导致的兼容性问题。</li>
+<li>在某些情况下，可以提高程序的运行速度(尽管这取决于具体情况，如硬盘读写速度等)。</li>
+</ul>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>程序体积较大，因为包含了所有外部库文件的代码。</li>
+<li>升级程序时需要替换所有的外部库文件，增加了维护成本。</li>
+<li>灵活性较差，无法实现模块化编程。<br>动态链接</li>
+</ul>
+</li>
+<li><p>优点：</p>
+<ul>
+<li>程序体积较小，因为不包含外部库文件的代码，只包含对外部库文件的引用。</li>
+<li>便于升级和维护，只需替换外部库文件即可，无需重新编译整个程序。</li>
+<li>灵活性高，可以根据需要加载不同的库或模块，实现模块化编程。</li>
+<li>节省内存和磁盘空间，因为多个程序可以共享同一个外部库文件。</li>
+</ul>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>程序运行时需要依赖于外部库文件，可能导致安全性问题和兼容性问题。</li>
+<li>性能开销较大，因为程序运行时需要不断地检查外部库或模块是否已经加载。</li>
+<li>可能导致内存泄漏等问题，需要开发者更加关注内存管理。</li>
+</ul>
+</li>
+<li><p>应用场景</p>
+<ul>
+<li>静态链接：适用于需要将程序打包成一个独立的可执行文件，并且不需要频繁更新外部库文件的场景。例如，嵌入式系统、游戏等对性能和安全性要求较高的应用程序。</li>
+<li>动态链接：适用于项目规模较大、模块化程度较高的项目，以及需要频繁更新外部库文件的场景。例如，操作系统、数据库等需要不断更新的软件。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><h3 id="Linux文件系统简介"><a href="#Linux文件系统简介" class="headerlink" title="Linux文件系统简介"></a>Linux文件系统简介</h3><p>在 Linux 操作系统中，一切被操作系统管理的资源，如网络接口卡、磁盘驱动器、打印机、输入输出设备、普通文件或目录等，都被视为文件。这种设计使得 Linux 系统可以通过统一的文件接口来管理和操作不同类型的资源，从而实现了一种统一的文件操作方式。如可以使用类似于读写文件的方式来对待网络接口、磁盘驱动器、设备文件等，使得操作和管理这些资源更加统一和简便。种文件为中心的设计理念为 Linux 系统带来了灵活性和可扩展性，使得 Linux 成为一种强大的操作系统。</p>
+<h3 id="inode介绍"><a href="#inode介绍" class="headerlink" title="inode介绍"></a>inode介绍</h3><p>inode 是 Linux&#x2F;Unix 文件系统的基础。inode存储文件的 <strong>元信息 metadata</strong>：如某个文件被分成几块、每一块在的地址、文件拥有者，创建时间，权限，大小等。</p>
+<ol>
+<li>硬盘的最小存储单位是扇区(Sector)，块(block)由多个扇区组成。文件数据存储在块中。块的最常见的大小是 4kb，约为 8 个连续的扇区组成(每个扇区存储 512 字节)。一个文件可能会占用多个 block，但是一个块只能存放一个文件(inode指向文档数据，如果有两个文件的数据放在同一个块中，就不对了)。<strong>每个文件都有一个唯一的 inode，存储文件的元信息。</strong></li>
+<li>inode 是一种固定大小的数据结构，其大小在文件系统创建时就确定了，且在文件生命周期内不改变。</li>
+<li>inode 访问速度很快，系统可直接通过 inode 号码定位到文件的元数据信息，无需遍历整个文件系统。</li>
+<li>inode 数量是有限，每个文件系统只能包含固定数量的 inode。当文件系统中的 inode 用完后，即使磁盘上还有可用空间，也无法创建新的文件或目录。</li>
+<li>用 <code>stat</code> 命令可查看文件的 inode 信息，包括文件的 inode 号、文件类型、权限、所有者、文件大小、修改时间。</li>
+</ol>
+<p><strong>优点</strong><br>Linux&#x2F;Unix 操作系统使用 inode 区分不同的文件。这样即便文件名被修改或删除，文件的 inode 号码不会改变，从而避免一些因文件重命名、移动或删除导致的错误。同时，由于inode的访问速度非常快，可直接通过 inode 号码定位到文件的元数据信息，无需遍历整个文件系统，因此可提供更高的文件系统性能。</p>
+<p><strong>缺点</strong><br>但使用 inode 号码也使得文件系统在用户和应用程序层面更加抽象和复杂，需要通过系统命令或文件系统接口来访问和管理文件的 inode 信息。</p>
+<h3 id="硬链接-软链接"><a href="#硬链接-软链接" class="headerlink" title="硬链接&#x2F;软链接"></a>硬链接&#x2F;软链接</h3><p>在 Linux&#x2F;类 Unix 系统上，文件链接(File Link)是一种特殊的文件类型，可以在文件系统中指向另一个文件。常见的文件链接类型有两种：</p>
+<p><strong>1、硬链接(Hard Link)</strong></p>
+<ul>
+<li>在 Linux&#x2F;类 Unix 文件系统中，每个文件和目录都有一个唯一的索引节点(inode)号，用来标识该文件或目录。硬链接通过 inode 节点号建立连接，硬链接和源文件的 inode 节点号相同，两者对文件系统来说是完全平等的(可以看作是互为硬链接，源头是同一份文件)，删除其中任何一个对另外一个没有影响，可以通过给文件设置硬链接文件来防止重要文件被误删。</li>
+<li>只有删除了源文件和所有对应的硬链接文件，该文件才会被真正删除。</li>
+<li>硬链接具有一些限制，不能对目录以及不存在的文件创建硬链接，并且，硬链接也不能跨越文件系统。</li>
+<li><code>ln</code> 命令用于创建硬链接。</li>
+</ul>
+<p><strong>2、软链接(Symbolic Link 或 Symlink)</strong></p>
+<ul>
+<li>软链接和源文件的 inode 节点号不同，而是指向一个文件路径。</li>
+<li>源文件删除后，软链接依然存在，但是指向的是一个无效的文件路径。</li>
+<li>软连接类似于 Windows 系统中的快捷方式。</li>
+<li>不同于硬链接，可以对目录或者不存在的文件创建软链接，并且，软链接可以跨越文件系统。</li>
+<li><code>ln -s</code> 命令用于创建软链接。</li>
+</ul>
+<h4 id="硬链接为啥不能跨文件系统？"><a href="#硬链接为啥不能跨文件系统？" class="headerlink" title="硬链接为啥不能跨文件系统？"></a>硬链接为啥不能跨文件系统？</h4><p>硬链接是通过 inode 节点号建立连接的，而硬链接和源文件共享相同的 inode 节点号。</p>
+<p>然而，每个文件系统都有自己的独立 inode 表，且每个 inode 表只维护该文件系统内的 inode。如果在不同的文件系统之间创建硬链接，可能会导致 inode 节点号冲突的问题，即目标文件的 inode 节点号已经在该文件系统中被使用。</p>
+<h3 id="Linux-文件类型"><a href="#Linux-文件类型" class="headerlink" title="Linux 文件类型"></a>Linux 文件类型</h3><p>Linux 支持很多文件类型，其中非常重要的文件类型有: <strong>普通文件</strong>，<strong>目录文件</strong>，<strong>链接文件</strong>，<strong>设备文件</strong>，<strong>管道文件</strong>，<strong>Socket 套接字文件</strong> 等。</p>
+<ul>
+<li>普通文件(-)：用于存储信息和数据， Linux 用户可以根据访问权限对普通文件进行查看、更改和删除。比如：图片、声音、PDF、text、视频、源代码等等。</li>
+<li>目录文件(d，directory file)：目录也是文件的一种，用于表示和管理系统中的文件，目录文件中包含一些文件名和子目录名。打开目录事实上就是打开目录文件。</li>
+<li>符号链接文件(l，symbolic link)：保留了指向文件的地址而不是文件本身。</li>
+<li>字符设备(c，char)：用来访问字符设备比如键盘。</li>
+<li>设备文件(b，block)：用来访问块设备比如硬盘、软盘。</li>
+<li>管道文件(p，pipe)：一种特殊类型的文件，用于进程之间的通信。</li>
+<li>套接字文件(s，socket)：用于进程间的网络通信，也可以用于本机之间的非网络通信。</li>
+</ul>
+<p>每种文件类型都有不同的用途和属性，可以通过命令如<code>ls</code>、<code>file</code>等来查看文件的类型信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 普通文件(-)</span></span><br><span class="line">-rw-r--r--  1 user  group  1024 Apr 14 10:00 file.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目录文件(d，directory file)*</span></span><br><span class="line">drwxr-xr-x  2 user  group  4096 Apr 14 10:00 directory/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 套接字文件(s，socket)</span></span><br><span class="line">srwxrwxrwx  1 user  group    0 Apr 14 10:00 socket</span><br></pre></td></tr></table></figure>
+
+<h3 id="Linux-目录树"><a href="#Linux-目录树" class="headerlink" title="Linux 目录树"></a>Linux 目录树</h3><p>Linux 使用目录树这种层次结构来组织文件和目录。目录树由根目录(<code>/</code>)作为起始点，向下延伸，形成一系列的目录和子目录。每个目录可以包含文件和其他子目录。结构层次鲜明，就像一棵倒立的树。<br><img src="/./image/Computer-Basic/Linux%E7%9B%AE%E5%BD%95%E6%A0%91.png" alt="Linux目录树"></p>
+<p><strong>常见目录说明：</strong></p>
+<ul>
+<li><strong>&#x2F;bin：</strong> 存放二进制可执行文件(ls、cat、mkdir等)，常用命令一般都在这里；</li>
+<li><strong>&#x2F;etc：</strong> 存放系统管理和配置文件；</li>
+<li><strong>&#x2F;home：</strong> 存放所有用户文件的根目录，是用户主目录的基点，比如用户 user 的主目录就是<code>/home/user</code>，可以用 <code>~user</code> 表示；</li>
+<li><strong>&#x2F;usr：</strong> 用于存放系统应用程序；</li>
+<li><strong>&#x2F;opt：</strong> 额外安装的可选应用程序包所放置的位置。一般情况下，我们可以把 tomcat 等都安装到这里；</li>
+<li><strong>&#x2F;proc：</strong> 虚拟文件系统目录，是系统内存的映射。可直接访问这个目录来获取系统信息；</li>
+<li><strong>&#x2F;root：</strong> 超级用户(系统管理员)的主目录；</li>
+<li><strong>&#x2F;sbin:</strong> 存放二进制可执行文件，只有 root 才能访问。这里存放的是系统管理员使用的系统级别的管理命令和程序。如 <code>ifconfig</code> 等；</li>
+<li><strong>&#x2F;dev：</strong> 用于存放设备文件；</li>
+<li><strong>&#x2F;mnt：</strong> 系统管理员安装临时文件系统的安装点，系统提供这个目录是让用户临时挂载其他的文件系统；</li>
+<li><strong>&#x2F;boot：</strong> 存放用于系统引导时使用的各种文件；</li>
+<li><strong>&#x2F;lib 和&#x2F;lib64：</strong> 存放着和系统运行相关的库文件；</li>
+<li><strong>&#x2F;tmp：</strong> 用于存放各种临时文件，是公用的临时文件存储点；</li>
+<li><strong>&#x2F;var：</strong> 用于存放运行时需要改变数据的文件，也是某些大文件的溢出区，比方说各种服务的日志文件(系统启动日志等。)等；</li>
+<li><strong>&#x2F;lost+found：</strong> 这个目录平时是空的，系统非正常关机而留下的文件(windows下xxx.chk)就在这里。</li>
+</ul>
+<h3 id="Linux-环境变量"><a href="#Linux-环境变量" class="headerlink" title="Linux 环境变量"></a>Linux 环境变量</h3><p>在 Linux 系统中，环境变量是用来定义系统运行环境的一些参数，比如每个用户不同的主目录(HOME)。</p>
+<p>按照作用域来分，环境变量可以简单的分成:</p>
+<ul>
+<li>用户级别环境变量 : <code>~/.bashrc</code>、<code>~/.bash_profile</code>。</li>
+<li>系统级别环境变量 : <code>/etc/bashrc</code>、<code>/etc/environment</code>、<code>/etc/profile</code>、<code>/etc/profile.d</code>。</li>
+</ul>
+<p>上述配置文件执行先后顺序为：<code>/etc/environment</code> –&gt; <code>/etc/profile</code> –&gt; <code>/etc/profile.d</code> –&gt; <code>~/.bash_profile</code> –&gt; <code>/etc/bashrc</code> –&gt; <code>~/.bashrc</code></p>
+<p>如果要修改系统级别环境变量文件，需要管理员具备对该文件的写入权限。建议用户级别环境变量在 <code>~/.bash_profile</code>中配置，系统级别环境变量在 <code>/etc/profile.d</code> 中配置。</p>
+<p>按照生命周期来分，环境变量可以简单的分成:</p>
+<ul>
+<li>永久的：需要用户修改相关的配置文件，变量永久生效。</li>
+<li>临时的：用户利用 <code>export</code> 命令，在当前终端下声明环境变量，关闭 shell 终端失效。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出当前的PATH环境变量的值</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line"><span class="comment"># 输出当前的HOME环境变量的值</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$HOME</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出当前的环境变量值</span></span><br><span class="line"><span class="built_in">export</span> -p</span><br><span class="line"><span class="built_in">env</span> </span><br><span class="line"><span class="comment"># export 命令可以修改指定的环境变量。不过这种方式修改环境变量仅仅对当前 shell 终端生效，关闭 shell 终端就会失效。修改完成之后，立即生效。</span></span><br><span class="line"><span class="built_in">export</span> CLASSPATH=./JAVA_HOME/lib;<span class="variable">$JAVA_HOME</span>/jre/lib</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过 vim 命令修改环境变量配置文件。这种方式修改环境变量永久有效</span></span><br><span class="line">vim ~/.bash_profile</span><br><span class="line"><span class="comment"># 如果修改的是系统级别环境变量则对所有用户生效，如果修改的是用户级别环境变量则仅对当前用户生效。</span></span><br><span class="line"><span class="comment"># 修改完成之后，需要 `source` 命令让其生效或者关闭 shell 终端重新登录。</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h3 id="Linux常用命令"><a href="#Linux常用命令" class="headerlink" title="Linux常用命令"></a>Linux常用命令</h3><blockquote>
+<p>可以在这个网站查看更加详细的命令：<a target="_blank" rel="noopener" href="https://wangchujiang.com/linux-command/">https://wangchujiang.com/linux-command/</a>。<br>可以在这个网站解释常见命令(Linux、Git、npm)的意思：<a target="_blank" rel="noopener" href="https://www.shell.how/">https://www.shell.how/</a>。</p>
+</blockquote>
+<h4 id="目录切换"><a href="#目录切换" class="headerlink" title="目录切换"></a>目录切换</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 切换到该目录下 usr 目录</span></span><br><span class="line"><span class="built_in">cd</span> user </span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到上一层目录</span></span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line"><span class="built_in">cd</span> ../</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到系统根目录</span></span><br><span class="line"><span class="built_in">cd</span> /</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到用户主目录</span></span><br><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到上一个操作所在目录</span></span><br><span class="line"><span class="built_in">cd</span> -</span><br></pre></td></tr></table></figure>
+
+<h4 id="目录操作"><a href="#目录操作" class="headerlink" title="目录操作"></a>目录操作</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 显示目录中的文件和子目录的列表。</span></span><br><span class="line"><span class="built_in">ls</span> [目录]</span><br><span class="line"><span class="comment"># 显示 /home 目录下的文件和子目录列表。</span></span><br><span class="line"><span class="built_in">ls</span> /home</span><br><span class="line"><span class="comment"># 查看到该目录下的所有目录和文件的详细信息</span></span><br><span class="line"><span class="built_in">ls</span> -l </span><br><span class="line">ll  <span class="comment"># 是ls -l的缩写</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新目录(增)</span></span><br><span class="line"><span class="built_in">mkdir</span> [选项] 目录名</span><br><span class="line"><span class="comment"># 创建一个名为 `my_directory` 的新目录，并将其权限设置为 755，即所有用户对该目录有读、写和执行的权限。</span></span><br><span class="line"><span class="built_in">mkdir</span> -m 755 my_directory</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在指定目录及其子目录中搜索文件或目录(查)</span></span><br><span class="line">find [路径] [表达式]</span><br><span class="line"><span class="comment"># 列出当前目录及子目录下所有文件和文件夹</span></span><br><span class="line">find .</span><br><span class="line"><span class="comment"># 在 /home 目录下查找以 .txt 结尾的文件名</span></span><br><span class="line">find /home -name <span class="string">&quot;*.txt&quot;</span></span><br><span class="line">find /home -i name <span class="string">&quot;*.txt&quot;</span>  <span class="comment"># 忽略大小写</span></span><br><span class="line"><span class="comment"># 在当前目录及子目录下查找所有以 .txt 和 .pdf 结尾的文件</span></span><br><span class="line">find . \( -name <span class="string">&quot;*.txt&quot;</span> -o -name <span class="string">&quot;*.pdf&quot;</span> \)</span><br><span class="line">find . -name <span class="string">&quot;*.txt&quot;</span> -o -name <span class="string">&quot;*.pdf&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示当前工作目录的路径</span></span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除空目录(删)</span></span><br><span class="line"><span class="built_in">rmdir</span> [选项] 目录名</span><br><span class="line"><span class="comment"># 删除名为 my_directory 的空目录，并且会递归删除 my_directory 的空父目录，直到遇到非空目录或根目录。</span></span><br><span class="line"><span class="built_in">rmdir</span> -p my_directory</span><br><span class="line"><span class="comment"># 删除文件/目录(删)</span></span><br><span class="line"><span class="built_in">rm</span> [选项] 文件或目录名</span><br><span class="line"><span class="comment"># 删除名为 my_directory 的目录，-r(recursive,递归) 表示会递归删除指定目录及其所有子目录和文件。</span></span><br><span class="line"><span class="built_in">rm</span> -r my_directory</span><br><span class="line"><span class="comment"># 强制删除名为 my_directory 的目录，f(force,强制)表示强制。</span></span><br><span class="line"><span class="built_in">rm</span> -rf my_directory</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制文件或目录(移)</span></span><br><span class="line"><span class="built_in">cp</span> [选项] 源文件/目录 目标文件/目录</span><br><span class="line"><span class="comment"># 将 file.txt 文件复制到 /home 目录下，并重命名为 file.txt。</span></span><br><span class="line"><span class="built_in">cp</span> file.txt /home/file.txt</span><br><span class="line"><span class="comment"># 将 source 目录及其下的所有子目录和文件复制到 destination 目录下，并保留源文件的属性和目录结构。</span></span><br><span class="line"><span class="built_in">cp</span> -r <span class="built_in">source</span> destination</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移动文件或目录(移)，也可以用于重命名文件或目录。</span></span><br><span class="line"><span class="built_in">mv</span> [选项] 源文件/目录 目标文件/目录</span><br><span class="line"><span class="comment"># 将 file.txt 文件移动到 /home 目录下，并重命名为 file.txt。`mv` 与 `cp` 的结果不同，`mv` 好像文件“搬家”，文件个数并未增加。而 `cp` 对文件进行复制，文件个数增加了。</span></span><br><span class="line"><span class="built_in">mv</span> file.txt /home/file.txt</span><br></pre></td></tr></table></figure>
+
+<h4 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h4><p>像 <code>mv</code>、<code>cp</code>、<code>rm</code> 等文件和目录都适用的命令，这里就不重复列举了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新文件或更新已存在文件(增)。</span></span><br><span class="line"><span class="built_in">touch</span> [选项] 文件名..</span><br><span class="line"><span class="comment"># 创建file1.txt file2.txt file3.txt 3 个文件</span></span><br><span class="line"><span class="built_in">touch</span> file1.txt file2.txt file3.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建硬链接/软链接。</span></span><br><span class="line"><span class="built_in">ln</span> [选项] &lt;源文件&gt; &lt;硬链接/软链接文件&gt;</span><br><span class="line"><span class="comment"># 创建名为 file_link 的软链接，指向 file.txt 文件。</span></span><br><span class="line"><span class="built_in">ln</span> -s file.txt file_link  <span class="comment"># -s 选项代表的就是创建软链接，s 即 symbolic(软链接又名符号链接) 。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件的查看(查)。</span></span><br><span class="line"><span class="built_in">cat</span> 文件名</span><br><span class="line">more 文件名</span><br><span class="line">less 文件名</span><br><span class="line"><span class="built_in">tail</span> 文件名</span><br><span class="line"><span class="comment"># 对某个文件进行动态监控，如 Tomcat 文件</span></span><br><span class="line"><span class="built_in">tail</span> -f 文件</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改文件的内容(改)。</span></span><br><span class="line">vim 文件名</span><br><span class="line"><span class="comment"># 在实际开发中，使用 vim 编辑器主要作用就是修改配置文件，步骤：</span></span><br><span class="line"><span class="comment"># vim 文件--&gt;进入文件--&gt;命令模式--&gt;按i进入编辑模式--&gt;编辑文件--&gt;按Esc进入底行模式--&gt;输入：wq/q!</span></span><br><span class="line"><span class="comment"># (输入 wq 代表写入内容并退出，即保存；输入 `q!`代表强制退出不保存)。</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="文件压缩"><a href="#文件压缩" class="headerlink" title="文件压缩"></a>文件压缩</h4><p><strong>1)打包并压缩文件：</strong><br>Linux 中的打包文件一般是以 <code>.tar</code> 结尾的，压缩的命令一般是以 <code>.gz</code> 结尾的。而一般情况下打包和压缩是一起进行的，打包并压缩后的文件的后缀名一般 <code>.tar.gz</code>。</p>
+<ul>
+<li><code>z</code>：调用 <code>gzip</code> 压缩命令进行压缩</li>
+<li><code>c</code>：打包文件</li>
+<li><code>v</code>：显示运行过程</li>
+<li><code>f</code>：指定文件名</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar [-zcvf] 打包压缩后的文件名 要打包压缩的文件</span><br></pre></td></tr></table></figure>
+<p>假如 test 目录下有三个文件分别是：<code>aaa.txt</code>、 <code>bbb.txt</code>、<code>ccc.txt</code>，若要打包 <code>test</code> 目录并指定压缩后的压缩包名称为 <code>test.tar.gz</code> 可以使用命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zcvf test.tar.gz aaa.txt bbb.txt ccc.txt</span><br><span class="line">tar -zcvf test.tar.gz /test/</span><br></pre></td></tr></table></figure>
+
+<p><strong>2)解压压缩包：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar [-xvf] 压缩文件</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>x</code>：代表解压</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将 /test 下的 test.tar.gz 解压到当前目录下</span></span><br><span class="line">tar -xvf test.tar.gz</span><br><span class="line"><span class="comment"># 将 /test 下的 test.tar.gz 解压到根目录/usr 下</span></span><br><span class="line">tar -xvf test.tar.gz -C /usr  <span class="comment"># -C 代表指定解压的位置</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="文件传输"><a href="#文件传输" class="headerlink" title="文件传输"></a>文件传输</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># scp 即 secure copy，安全复制：通过 SSH 协议安全传输文件，实现本地与远程主机之间的文件上传与下载。</span></span><br><span class="line">scp [选项] 源文件 远程文件</span><br><span class="line"><span class="comment"># 将本地目录 my_directory 上传到远程服务器 /home/user 目录下。</span></span><br><span class="line">scp -r my_directory user@remote:/home/user</span><br><span class="line"><span class="comment"># 将远程服务器的 /home/user 目录下的 my_directory 目录下载到本地。</span></span><br><span class="line">scp -r user@remote:/home/user/my_directory</span><br><span class="line"></span><br><span class="line"><span class="comment"># scp 命令要在本地和远程系统之间建立 SSH 连接进行文件传输，需要确保远程服务器已经配置了 SSH 服务，并且具有正确的权限和认证方式。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在本地和远程系统之间高效地进行文件复制，并且能够智能地处理增量复制，节省带宽和时间。</span></span><br><span class="line">rsync [选项] 源文件 远程文件</span><br><span class="line"><span class="comment"># 将本地目录 my_directory 上传到远程服务器 /home/user 目录下。</span></span><br><span class="line">rsync -r my_directory user@remote:/home/user</span><br><span class="line"></span><br><span class="line"><span class="comment"># File Transfer Protocol：提供一种简单方式来连接到远程 FTP 服务器并进行文件上传、下载、删除等操作。</span></span><br><span class="line">ftp</span><br><span class="line"><span class="comment"># 使用之前需要先连接登录远程 FTP 服务器，进入 FTP 命令行界面后，</span></span><br><span class="line"><span class="comment"># 用 put 命令将本地文件上传到远程主机，用 get 命令将远程主机的文件下载到本地，用 delete 命令删除远程主机的文件。</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h4><p>操作系统中每个文件都拥有特定的权限、所属用户和所属组。权限是操作系统用来限制资源访问的机制，在 Linux 中权限一般分为读(readable)、写(writable)和执行(executable)，分为三组。分别对应文件的属主(owner)，属组(group)和其他用户(other)，通过这样的机制来限制哪些用户、哪些组可以对特定的文件进行什么样的操作。</p>
+<p>通过 <strong><code>ls -l</code></strong> 命令可查看某个目录下的文件或目录的权限。第一列的内容的信息解释如下：<br><img src="/./image/Computer-Basic/Linux%E6%9D%83%E9%99%90%E8%A7%A3%E8%AF%BB.png" alt="Linux权限解读"></p>
+<p><strong>文件的类型：</strong></p>
+<ul>
+<li><code>d</code>：代表目录</li>
+<li><code>-</code>：代表文件</li>
+<li><code>l</code>：代表软链接(可以认为是 window 中的快捷方式)</li>
+</ul>
+<p><strong>Linux 中权限分为以下几种：</strong></p>
+<ul>
+<li><code>r</code>：代表权限是可读，也可以用数字 4 表示</li>
+<li><code>w</code>：代表权限是可写，也可以用数字 2 表示</li>
+<li><code>x</code>：代表权限是可执行，也可以用数字 1 表示</li>
+</ul>
+<p><strong>文件和目录权限的区别：</strong><br>对文件和目录而言，读写执行表示不同的意义。<br>对于文件：</p>
+<ul>
+<li><code>r</code>：可以使用 <code>cat</code> 查看文件的内容</li>
+<li><code>w</code>：可以修改文件的内容</li>
+<li><code>x</code>：可以将其运行为二进制文件</li>
+</ul>
+<p>对于目录：</p>
+<ul>
+<li><code>r</code>：可以查看目录下列表</li>
+<li><code>w</code>：可以创建和删除目录下文件</li>
+<li><code>x</code>：可以使用 <code>cd</code> 进入目录</li>
+</ul>
+<blockquote>
+<p>超级用户可以无视普通用户的权限，即使文件目录权限是 000，依旧可以访问。</p>
+</blockquote>
+<p><strong>修改文件的所有者&amp;所在组</strong><br>在 linux 中的每个用户必须属于一个组，不能独立于组外。</p>
+<ul>
+<li>所有者(u)：一般为文件的创建者，谁创建了该文件，就是该文件的所有者。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看文件的所有者</span></span><br><span class="line"><span class="built_in">ls</span> -ahl</span><br><span class="line"><span class="comment"># 修改文件的所有者。</span></span><br><span class="line"><span class="built_in">chown</span> 用户名 文件名</span><br></pre></td></tr></table></figure></li>
+<li>文件所在组(g)：当某个用户创建了一个文件后，这个文件的所在组就是该用户所在的组。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看文件的所有组</span></span><br><span class="line"><span class="built_in">ls</span> -ahl</span><br><span class="line"><span class="comment"># 修改文件所在的组。</span></span><br><span class="line"><span class="built_in">chgrp</span> 组名 文件名</span><br></pre></td></tr></table></figure></li>
+<li>其它组(o)：除开文件的所有者和所在组的用户外，系统的其它用户都是文件的其它组。</li>
+</ul>
+<p><strong>修改文件&#x2F;目录的权限的命令</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 修改后的权限 文件</span><br><span class="line"><span class="comment"># 修改 /test 下的 aaa.txt 的权限为文件所有者有全部权限，文件所有者所在的组有读写权限，其他用户只有读的权限。</span></span><br><span class="line"><span class="built_in">chmod</span> u=rwx,g=rw,o=r aaa.txt</span><br><span class="line"><span class="built_in">chmod</span> 764 aaa.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>zookeeper开机自启动</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 新建一个脚本 zookeeper</span></span><br><span class="line">zookeeper</span><br><span class="line"><span class="comment"># 为新建的脚本 zookeeper 添加可执行权限</span></span><br><span class="line"><span class="built_in">chmod</span> +x zookeeper</span><br><span class="line"><span class="comment"># 把 zookeeper 这个脚本添加到开机启动项里面</span></span><br><span class="line">chkconfig --add zookeeper</span><br><span class="line"><span class="comment"># 查看是否添加成功</span></span><br><span class="line">chkconfig --list</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h4><p>Linux 系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。</p>
+<p>用户的账号一方面可以帮助系统管理员对使用系统的用户进行跟踪，并控制他们对系统资源的访问；另一方面也可以帮助用户组织文件，并为用户提供安全性保护。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建用户账号，保存在 /etc/passwd 文本文件中。</span></span><br><span class="line">useradd [选项] 用户名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除用户帐号。</span></span><br><span class="line">userdel [选项] 用户名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改用户账号的属性和配置如用户名、用户 ID、家目录。</span></span><br><span class="line">usermod [选项] 用户名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置用户的认证信息，如用户密码、密码过期时间等。</span></span><br><span class="line">passwd [选项] 用户名</span><br><span class="line"><span class="comment"># 显示用户账号密码信息。</span></span><br><span class="line">passwd -S 用户名</span><br><span class="line"><span class="comment"># 清除用户密码，会导致用户无法登录。</span></span><br><span class="line">passwd -d 用户名</span><br><span class="line"><span class="comment"># 修改用户密码，随后系统会提示输入新密码并确认密码。</span></span><br><span class="line">passwd 用户名</span><br><span class="line"></span><br><span class="line"><span class="comment"># su 即 Switch User，切换用户：在当前登录的用户和其他用户之间切换身份。</span></span><br><span class="line">su [选项] 用户名</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="用户组管理"><a href="#用户组管理" class="headerlink" title="用户组管理"></a>用户组管理</h4><p>每个用户都有一个用户组，系统可以对一个用户组中的所有用户进行集中管理。不同 Linux 系统对用户组的规定有所不同，如 Linux 下的用户属于与它同名的用户组，这个用户组在创建用户时同时创建。</p>
+<p>组的增加、删除和修改实际上就是对 <code>/etc/group</code> 文件的更新。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 增加一个新的用户组。</span></span><br><span class="line">groupadd [选项] 用户组</span><br><span class="line"></span><br><span class="line"><span class="comment"># 要删除一个已有的用户组。</span></span><br><span class="line">groupdel 用户组</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改用户组的属性。</span></span><br><span class="line">groupmod [选项] 用户组</span><br></pre></td></tr></table></figure>
+
+<h4 id="系统状态"><a href="#系统状态" class="headerlink" title="系统状态"></a>系统状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 实时查看系统的 CPU 使用率、内存使用率、进程信息等。</span></span><br><span class="line">top [选项]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 类似于 top，但提供了更加交互式和友好的界面，可让用户交互式操作，支持颜色主题，可横向或纵向滚动浏览进程列表，并支持鼠标操作。</span></span><br><span class="line">htop [选项]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看系统总共运行了多长时间、系统的平均负载等信息。</span></span><br><span class="line"><span class="built_in">uptime</span> [选项]</span><br><span class="line"></span><br><span class="line"><span class="comment"># vmstat (Virtual Memory Statistics) 显示虚拟内存状态，但是它可以报告关于进程、内存、I/O 等系统整体运行状态。</span></span><br><span class="line">vmstat [间隔时间] [重复次数]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看系统的内存使用情况，包括已用内存、可用内存、缓冲区和缓存等。</span></span><br><span class="line">free [选项]</span><br><span class="line"><span class="comment"># -h选项表示以人类可读的格式(如KB、MB、GB)显示内存大小。</span></span><br><span class="line">free -h</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看系统的磁盘空间使用情况，包括磁盘空间的总量、已使用量和可用量等，可以指定文件系统上。</span></span><br><span class="line"><span class="built_in">df</span> [选项] [文件系统]</span><br><span class="line"><span class="comment"># 查看全部文件系统。</span></span><br><span class="line"><span class="built_in">df</span> -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看指定目录或文件的磁盘空间使用情况，可指定不同的选项来控制输出格式和单位。</span></span><br><span class="line"><span class="built_in">du</span> [选项] [文件]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用于收集、报告和分析系统的性能统计信息，包括系统的 CPU 使用、内存使用、磁盘 I/O、网络活动等详细信息。</span></span><br><span class="line"><span class="comment"># 其特点是可以连续对系统取样，获得大量的取样数据。取样数据和分析的结果都可以存入文件，使用它时消耗的系统资源很小。</span></span><br><span class="line">sar [选项] [时间间隔] [重复次数]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看系统中的进程信息，包括进程的 ID、状态、资源使用情况等。</span></span><br><span class="line">ps [选项]</span><br><span class="line"><span class="comment"># 两个命令都是查看当前系统正在运行进程，两者的区别是展示格式不同。</span></span><br><span class="line">ps -ef</span><br><span class="line">ps -aux</span><br><span class="line"><span class="comment"># 查看特定的进程。如查看包括 redis 字符串的进程</span></span><br><span class="line">ps aux|grep redis</span><br><span class="line">pgrep redis -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 管理系统的服务和单元，可以查看系统服务的状态、启动、停止、重启等。</span></span><br><span class="line">systemctl [命令] [服务名称]</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="网络通信"><a href="#网络通信" class="headerlink" title="网络通信"></a>网络通信</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 测试与目标主机的网络连接。</span></span><br><span class="line">ping [选项] 目标主机</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看系统的网络接口信息，包括网络接口的 IP 地址、MAC 地址、状态等。</span></span><br><span class="line">ifconfig</span><br><span class="line">ip</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看系统的网络连接状态和网络统计信息，可以查看当前的网络连接情况、监听端口、网络协议等。</span></span><br><span class="line">netstat [选项]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 比 netstat 更好用，提供了更快速、更详细的网络连接信息。</span></span><br><span class="line">ss [选项]</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以系统管理者的身份执行指令，经由 sudo 所执行的指令就好像是 root 亲自执行。</span></span><br><span class="line">sudo + 其他命令</span><br><span class="line"></span><br><span class="line"><span class="comment"># 搜索命令，--color 代表高亮显示。</span></span><br><span class="line">grep 要搜索的字符串 要搜索的文件 --color</span><br><span class="line"></span><br><span class="line"><span class="comment"># 杀死进程(-9 表示强制终止)先用 ps 查找进程，然后用 kill 杀掉。</span></span><br><span class="line"><span class="built_in">kill</span> -9 进程的pid</span><br><span class="line"></span><br><span class="line">shutdown</span><br><span class="line"><span class="comment"># 指定现在立即关机</span></span><br><span class="line">shutdown -h now</span><br><span class="line"><span class="comment"># 指定 5 分钟后关机，同时送出警告信息给登入用户。</span></span><br><span class="line">shutdown +5 <span class="string">&quot;System will shutdown after 5 minutes&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重开机</span></span><br><span class="line">reboot</span><br><span class="line"><span class="comment"># 做个重开机的模拟(只有纪录并不会真的重开机)。</span></span><br><span class="line">reboot -w</span><br></pre></td></tr></table></figure>
+
+<h3 id="常见Linux线程间的通信方式"><a href="#常见Linux线程间的通信方式" class="headerlink" title="常见Linux线程间的通信方式"></a>常见Linux线程间的通信方式</h3><h3 id="如何查询内存大小"><a href="#如何查询内存大小" class="headerlink" title="如何查询内存大小"></a>如何查询内存大小</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -h选项表示以人类可读的格式(如KB、MB、GB)显示内存大小。</span></span><br><span class="line">free -h</span><br><span class="line"></span><br><span class="line"><span class="comment"># /proc/meminfo文件包含了详细的内存使用信息。可以在这个文件中搜索与内存大小相关的信息，比如MemTotal项显示了总的物理内存大小。</span></span><br><span class="line"><span class="built_in">cat</span> /proc/meminfo</span><br></pre></td></tr></table></figure>
+
+<h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><p>管道(Pipes)使用竖线|)符号表示。它的作用是将一个命令的输出作为另一个命令的输入。这样，用户可以将多个命令串联起来，形成一个命令管道，从而执行复杂的任务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查找当前目录下所有.txt文件，并显示这些文件的内容行数：</span></span><br><span class="line"><span class="built_in">ls</span> *.txt | xargs <span class="built_in">wc</span> -l</span><br></pre></td></tr></table></figure>
+<p>这里，ls *.txt命令列出所有.txt文件，然后通过管道|将这些文件名传递给xargs命令，xargs命令再将这些文件名作为wc -l命令的参数，wc -l命令计算并显示每个文件的行数。</p>
+<h3 id="如何查询系统日志文件"><a href="#如何查询系统日志文件" class="headerlink" title="如何查询系统日志文件"></a>如何查询系统日志文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对于使用systemd的Linux系统，journalctl命令是查看系统日志的强大工具。</span></span><br><span class="line"><span class="comment"># 查看所有系统日志</span></span><br><span class="line">journalctl</span><br><span class="line"><span class="comment"># 查看nginx服务器的日志</span></span><br><span class="line">journalctl -u nginx.service</span><br><span class="line"><span class="comment"># 查看系统启动时的日志</span></span><br><span class="line">journalctl -b</span><br><span class="line"><span class="comment"># 查看系统上一次启动时的日志</span></span><br><span class="line">journalctl -b -1</span><br><span class="line"><span class="comment"># 搜索包含特定文本的日志</span></span><br><span class="line">journalctl | grep <span class="string">&quot;特定文本&quot;</span></span><br><span class="line"><span class="comment"># 对于不直接使用systemd日志或需要查看传统日志文件的情况，可以直接查看/var/log目录下的日志文件。</span></span><br><span class="line"><span class="comment"># 查看系统消息日志(通常是系统级别的警告和错误信息)：</span></span><br><span class="line"><span class="built_in">cat</span> /var/log/syslog  </span><br><span class="line"><span class="comment"># 或者在某些系统中可能是  </span></span><br><span class="line"><span class="built_in">cat</span> /var/log/messages</span><br><span class="line"><span class="comment"># 查看认证和授权相关的日志(如SSH登录尝试)：</span></span><br><span class="line"><span class="built_in">cat</span> /var/log/auth.log  </span><br><span class="line"><span class="comment"># 或者  </span></span><br><span class="line"><span class="built_in">cat</span> /var/log/secure</span><br><span class="line"><span class="comment"># 查看Web服务器(如Apache或Nginx)的日志(通常位于/var/log/apache2或/var/log/nginx目录)：</span></span><br><span class="line"><span class="built_in">cat</span> /var/log/apache2/access.log  </span><br><span class="line"><span class="built_in">cat</span> /var/log/nginx/access.log</span><br></pre></td></tr></table></figure>
+<p>使用<code>logrotate</code>管理日志文件。<code>/var/log</code>目录下的日志文件可能会随着时间增长而变得非常大。为了管理这些日志文件的大小和数量，大多数Linux系统使用<code>logrotate</code>工具定期轮转、压缩、删除或邮寄旧日志文件。<code>logrotate</code>的配置文件通常位于<code>/etc/logrotate.conf</code>以及<code>/etc/logrotate.d/</code>目录下的文件中。</p>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><p>重定向(Redirection)允许用户将命令的输出(标准输出或标准错误输出)重定向到文件或其他命令中，或者将文件的内容作为命令的输入。重定向使用大于号(&gt;)和小于号(&lt;)等符号表示。</p>
+<ul>
+<li>标准输出重定向(&gt;)：将命令的输出重定向到文件中。如果文件已存在，则覆盖原有内容；如果文件不存在，则创建新文件。</li>
+<li>标准输出追加重定向(&gt;&gt;)：将命令的输出追加到文件的末尾，而不是覆盖原有内容。</li>
+<li>标准输入重定向(&lt;)：将文件的内容作为命令的输入。</li>
+<li>标准错误输出重定向(2&gt;)：将命令的错误输出重定向到文件中。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将ls命令的输出(即当前目录下的文件和目录列表)重定向到files.txt文件中。</span></span><br><span class="line"><span class="built_in">ls</span> &gt; files.txt</span><br><span class="line"><span class="comment"># 将文本&quot;Hello, World!&quot;追加到greeting.txt文件的末尾。</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Hello, World!&quot;</span> &gt;&gt; greeting.txt</span><br><span class="line"><span class="comment"># 将files.txt文件的内容作为wc -l命令的输入，计算并显示文件的行数。</span></span><br><span class="line"><span class="built_in">wc</span> -l &lt; files.txt</span><br><span class="line"><span class="comment"># 如果non_existent_file文件不存在，ls命令的错误输出(通常是“No such file or directory”消息)将被重定向到errors.txt文件中。</span></span><br><span class="line"><span class="built_in">ls</span> non_existent_file 2&gt; errors.txt</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Linux如何查看文件前5行"><a href="#Linux如何查看文件前5行" class="headerlink" title="Linux如何查看文件前5行"></a>Linux如何查看文件前5行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">head</span> -n 5 filename</span><br></pre></td></tr></table></figure>
+
+<h3 id="Linux怎么看进程占用多少内存"><a href="#Linux怎么看进程占用多少内存" class="headerlink" title="Linux怎么看进程占用多少内存"></a>Linux怎么看进程占用多少内存</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 实时查看系统的 CPU 使用率、内存使用率、进程信息等。</span></span><br><span class="line">top [选项]</span><br></pre></td></tr></table></figure>
+
+<h3 id="Linux抓包"><a href="#Linux抓包" class="headerlink" title="Linux抓包"></a>Linux抓包</h3><p>功能：tcpdump是一个强大的命令行抓包工具，可以捕获经过网络接口的数据包，并将其显示或保存到文件中。它支持复杂的过滤器和表达式，能够灵活地筛选和捕获所需的数据包。<br>特点：tcpdump是Linux系统自带的抓包工具之一，使用起来非常方便。它提供了丰富的选项和参数，可以精确控制抓包过程，包括指定网络接口、设置抓包数量、保存抓包数据等。<br>使用场景：适用于需要深入分析网络流量、诊断网络问题或进行安全审计的场景。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tcpdump [ -adeflnNOpqStvx ] [ -c 数量 ] [ -F 文件名 ] [ -i 网络接口 ] [ -r 文件名] [ -s snaplen ] [ -T 类型 ] [ -w 文件名] [表达式 ]</span><br></pre></td></tr></table></figure>
+<p>二、常用选项说明<br>-a：将网络地址和广播地址转变成名字。<br>-c 数量：指定要抓取的包的数量。<br>-d：将匹配信息包的代码以人们能够理解的汇编格式给出。<br>-e：在输出行打印出数据链路层的头部信息，例如源MAC和目标MAC。<br>-f：将外部的Internet地址以数字的形式打印出来。<br>-i 网络接口：指定tcpdump需要监听的接口。<br>-n：对地址以数字方式显式，不进行主机名解析。<br>-nn：除了-n的作用外，还把端口显示为数值，不进行端口名解析。<br>-P：指定要抓取的包是流入还是流出的包，可以给定的值为”in”、”out”和”inout”，默认为”inout”。<br>-q：快速打印输出，即打印很少的协议相关信息，输出行简短。<br>-s snaplen：设置tcpdump的数据包抓取长度为snaplen，如果不设置默认将会是65535字节。<br>-t：在输出的每一行不打印时间戳。<br>-v、-vv、-vvv：分别产生详细程度递增的输出信息。<br>-w 文件名：将抓包数据输出到文件中而不是标准输出。<br>-r 文件名：从给定的数据包文件中读取数据。<br>-X：输出包的头部数据，以16进制和ASCII两种方式同时输出。<br>-XX：输出包的头部数据，以16进制和ASCII两种方式同时输出，更详细。<br>-D：列出可用于抓包的接口。<br>-F：从文件中读取抓包的表达式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 默认启动</span></span><br><span class="line">tcpdump</span><br><span class="line"><span class="comment"># 默认情况下，tcpdump将监视第一个网络接口(非lo口)上所有流通的数据包。</span></span><br><span class="line"><span class="comment"># 监视指定网络接口的数据包</span></span><br><span class="line">tcpdump -i eth1</span><br><span class="line"><span class="comment"># 如果不指定网卡，默认tcpdump只会监视第一个网络接口，如eth0。</span></span><br><span class="line"><span class="comment"># 截获主机hostname发送的所有数据</span></span><br><span class="line">tcpdump src host hostname</span><br><span class="line"><span class="comment"># 监视所有发送到主机hostname的数据包</span></span><br><span class="line">tcpdump dst host hostname</span><br><span class="line"><span class="comment"># 监视指定主机和端口的数据包</span></span><br><span class="line">tcpdump tcp port 22 and host hostname</span><br><span class="line"><span class="comment"># 抓取包含特定IP的数据包</span></span><br><span class="line">tcpdump -i eth0 -vnn host 10.84.10.217</span><br><span class="line"><span class="comment"># 抓取包含特定端口的数据包</span></span><br><span class="line">tcpdump -i eth0 -vnn port 22</span><br><span class="line"><span class="comment"># 抓取特定协议的数据包</span></span><br><span class="line">tcpdump -i eth0 -vnn udp</span><br><span class="line"><span class="comment"># 将抓取的数据包记录存到文件中</span></span><br><span class="line">tcpdump -i eth0 -vnn -w /tmp/fil1 -c 100</span><br><span class="line"><span class="comment"># 从文件中读取数据包进行分析</span></span><br><span class="line">tcpdump -i eth0 -vnn -r /tmp/fil1 tcp</span><br></pre></td></tr></table></figure>
+
+<p>tcpdump只能抓取流经本机的数据包。<br>在使用复杂的表达式时，建议使用单引号将表达式括起来，以防止shell对特殊字符进行错误解析。抓取长度(snaplen)的设置需要根据实际需求进行调整，以避免包截断或处理时间过长。</p>
+<h3 id="epoll线程模型"><a href="#epoll线程模型" class="headerlink" title="epoll线程模型"></a>epoll线程模型</h3><p><code>epoll</code> 是一种用于高效处理大规模 I&#x2F;O 多路复用的 Linux 内核机制，通常用于网络服务器或其他需要处理大量并发 I&#x2F;O 操作的场景。与传统的 <code>select</code> 或 <code>poll</code> 相比，<code>epoll</code> 在处理大量文件描述符(如 socket 连接)时具有显著的性能优势。通过 <code>epoll</code>，我们可以以事件驱动的方式来监控多个文件描述符的状态变化(可读、可写、异常等)。</p>
+<p>epoll 工作模型</p>
+<p><code>epoll</code> 工作模式主要有两种：</p>
+<ol>
+<li><p>**LT(Level-Triggered，电平触发)**：这种模式类似于 <code>select</code> 和 <code>poll</code>，当文件描述符处于可读或可写状态时，<code>epoll_wait</code> 会不断返回该文件描述符，直到操作完成。因此，开发者在处理事件时需要确保一次性读取所有可用数据。</p>
+</li>
+<li><p><strong>ET(Edge-Triggered，边沿触发)<strong>：与 LT 不同，ET 模式只在文件描述符状态</strong>从不可用到可用</strong>的瞬间触发事件通知。如果数据未读完，而此时不再有新的数据到达，<code>epoll_wait</code> 将不会再次返回该文件描述符。ET 模式通常与非阻塞 I&#x2F;O 配合使用，以避免发生事件遗漏的问题。</p>
+</li>
+</ol>
+<p>epoll 线程模型</p>
+<p>在高并发网络服务器设计中，<code>epoll</code> 通常配合多线程模型来提高并发处理能力。典型的 <code>epoll</code> 线程模型包括：</p>
+<ol>
+<li><p><strong>单线程 + epoll 模型</strong>：这种模型中，主线程通过 <code>epoll_wait</code> 来监听所有 I&#x2F;O 事件，所有 I&#x2F;O 操作均由该线程处理。虽然实现简单，但在大规模并发情况下性能有限，因为所有操作都是在单线程中完成的，容易成为瓶颈。</p>
+</li>
+<li><p><strong>主线程 epoll + 工作线程池模型</strong>：</p>
+</li>
+</ol>
+<ul>
+<li>主线程负责通过 <code>epoll_wait</code> 监听所有的 I&#x2F;O 事件，并将需要处理的事件分发给工作线程池中的线程来处理。</li>
+<li>当某个文件描述符可读或可写时，主线程会将其任务分配给线程池的空闲线程进行处理，避免了阻塞主线程。</li>
+<li>工作线程负责处理读取、写入等 I&#x2F;O 操作，一旦操作完成，线程回到线程池等待下一个任务。</li>
+<li>这种模型结合了 <code>epoll</code> 的高效事件处理机制与线程池的并行计算能力，能够在大规模并发环境下发挥较高的处理性能。</li>
+</ul>
+<ol start="3">
+<li><strong>多线程 epoll 模型</strong>：</li>
+</ol>
+<ul>
+<li>每个线程维护一个独立的 <code>epoll</code> 实例，处理各自的文件描述符集合。通过合理的负载均衡策略，将连接分配到不同线程的 <code>epoll</code> 实例中，避免某一线程成为性能瓶颈。</li>
+<li>这种模型适合 CPU 密集型的场景，因为每个线程都可以独立地进行 I&#x2F;O 多路复用，从而最大化利用多核处理器的资源。</li>
+</ul>
+<p>典型的 epoll + 线程池模型的流程：</p>
+<ol>
+<li><strong>初始化 epoll 实例</strong>：在主线程中创建一个 <code>epoll</code> 实例。</li>
+<li><strong>注册文件描述符</strong>：将需要监控的 socket 文件描述符通过 <code>epoll_ctl</code> 注册到 <code>epoll</code> 实例中。</li>
+<li><strong>等待事件</strong>：主线程调用 <code>epoll_wait</code> 等待文件描述符上发生的事件。</li>
+<li><strong>分发事件</strong>：当有事件发生时，将文件描述符及其相关操作分发给线程池中的工作线程。</li>
+<li><strong>处理 I&#x2F;O</strong>：工作线程执行读取、写入等 I&#x2F;O 操作，并根据需要再次注册或修改文件描述符的监听事件。</li>
+</ol>
+<p>这种模型非常适合需要处理大量 I&#x2F;O 请求且对响应时间要求较高的应用场景，比如网络服务器、即时通讯系统等。</p>
+<p>小结</p>
+<p><code>epoll</code> 是 Linux 下高效处理并发 I&#x2F;O 的利器，其与线程池结合可以实现高性能的网络服务器架构。通过合理的线程模型和 <code>epoll</code> 机制，能够有效解决大规模并发连接下的性能瓶颈问题。</p>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><h3 id="Git常用命令"><a href="#Git常用命令" class="headerlink" title="Git常用命令"></a>Git常用命令</h3><h4 id="配置相关"><a href="#配置相关" class="headerlink" title="配置相关"></a>配置相关</h4><ul>
+<li>初始化Git仓库：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure></li>
+<li>设置用户名和邮箱：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;Your Name&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;youremail@example.com&quot;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="操作本地仓库"><a href="#操作本地仓库" class="headerlink" title="操作本地仓库"></a>操作本地仓库</h4><ul>
+<li>查看状态：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure></li>
+<li>添加文件到暂存区：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add &lt;file&gt;</span><br></pre></td></tr></table></figure></li>
+<li>提交代码到本地仓库：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m <span class="string">&quot;Commit message&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li>查看提交记录：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span></span><br></pre></td></tr></table></figure></li>
+<li>查看简洁的提交记录：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span> --oneline</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="分支操作"><a href="#分支操作" class="headerlink" title="分支操作"></a>分支操作</h4><ul>
+<li>创建分支：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<li>切换分支：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<li>创建并切换到新分支：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<li>删除分支：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<li>查看所有分支：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="远程仓库操作"><a href="#远程仓库操作" class="headerlink" title="远程仓库操作"></a>远程仓库操作</h4><ul>
+<li>添加远程仓库：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin &lt;repository-url&gt;</span><br></pre></td></tr></table></figure></li>
+<li>推送代码到远程仓库：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<li>拉取远程分支：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<li>克隆远程仓库：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> &lt;repository-url&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="合并与同步"><a href="#合并与同步" class="headerlink" title="合并与同步"></a>合并与同步</h4><ul>
+<li>合并分支：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<li>变基操作：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="撤销操作"><a href="#撤销操作" class="headerlink" title="撤销操作"></a>撤销操作</h4><ul>
+<li>撤销工作区的更改：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure></li>
+<li>重置暂存区的文件：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset HEAD &lt;file&gt;</span><br></pre></td></tr></table></figure></li>
+<li>回退到某个提交：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard &lt;commit-id&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="merge-rebase区别"><a href="#merge-rebase区别" class="headerlink" title="merge&#x2F;rebase区别"></a>merge&#x2F;rebase区别</h3><p>merge：将指定分支的最新改动合并到当前分支，生成一个新的合并提交。保留了历史记录，清楚地显示了不同分支的合并过程。<br><strong>优点</strong>：</p>
+<ul>
+<li>清晰展示分支的开发历程。</li>
+<li>不会修改已有的提交记录，适合协作开发。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>历史记录可能较为冗杂，尤其是频繁合并时。</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在当前分支合并另一个分支</span></span><br><span class="line">git merge &lt;branch-name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>rebase：将一个分支上的提交应用到另一个分支之上，改变历史记录的基底。提交记录更加线性和简洁。</p>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>提交历史清晰线性，便于查看。</li>
+<li>合适的场景如整理自己的开发分支提交。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>修改了历史记录，可能导致团队协作中的问题（如冲突）。</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将当前分支变基到指定分支</span></span><br><span class="line">git rebase &lt;branch-name&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>选择使用场景</strong></p>
+<ul>
+<li>使用<code>merge</code>：团队开发，保留完整的提交历史和分支关系。</li>
+<li>使用<code>rebase</code>：个人开发，追求干净、线性的历史记录（需要在推送前变基）。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://cwp0.github.io">cwp0</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://cwp0.github.io/posts/17770.html">https://cwp0.github.io/posts/17770.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/06/27/7o6ubNCe3GgkqMF.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.JPG" target="_blank"><img class="post-qr-code-img" src="/img/wechat.JPG" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.JPG" target="_blank"><img class="post-qr-code-img" src="/img/alipay.JPG" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/17769.html" title="数据库"><img class="cover" src="https://s2.loli.net/2024/06/12/cKiSbvguBp27oq8.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">数据库</div></div><div class="info-2"><div class="info-item-1"> 本文参考 JavaGuide  SQL&#x2F;NoSQL基础什么是SQLSQL 是一种结构化查询语言(Structured Query Language)，提供一种从数据库中读写数据的简单有效的方法。几乎所有的主流关系数据库都支持 SQL ，适用性非常强。一些非关系型数据库也兼容 SQL 或者使用类似于 SQL 的查询语言。 DB&#x2F;DBMS&#x2F;DBS&#x2F;DBA 数据库：数据库(DataBase,DB)是由数据库管理系统管理的数据的集合。 数据库管理系统：数据库管理系统(Database Management System,DBMS)是一种操纵和管理数据库的大型软件，通常用于建立、使用和维护数据库。 数据库系统：数据库系统(Data Base System,DBS)通常由软件、数据库和数据管理员(DBA)组成。 数据库管理员：数据库管理员(Database Administrator,DBA)负责全面管理和控制数据库系统。  数据库术语 数据库(database)：保存有组织的数据的容器(通常是一个文件或一组文件)。 数据表(table)：某种特定类...</div></div></div></a><a class="pagination-related" href="/posts/17768.html" title="测开面经"><img class="cover" src="https://s2.loli.net/2024/05/27/drCF3NnMKboz1AQ.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">测开面经</div></div><div class="info-2"><div class="info-item-1"> 注：下面内容一部分来自于我舍友的博客  测开自我介绍面试官您好，我叫陈温鹏，就读于南京理工大学软件工程专业，学位是学硕，这次应聘的是 测试开发岗位。 我呢，研一的时候积极参加开源社区建设，先参加了Casbin社区一个线上实习，担任社区维护者，日常工作会解决社区 issue，跟踪解决用户需求，修bug以及完善相关文档；然后在研一暑假三个月时间中了一个中科院和 casbin 社区联合举办的一个开源项目，主要的工作是完善社区整个大前端系统，包括 web，移动端功能完善，以及为社区开发了一款支持通用2FA的移动端app。除此之外，我还参与过国家电网经济研究院的一个项目。 这几段项目实习经历锻炼了我文档阅读、编写的能力，并在代码规范、开发流程等技能上获得提升。 其实在开源项目也做过关于测试相关的工作，也激发了我对测试开发的兴趣，所以就应聘了测试开发这个岗位。 然后我呢，我评价觉得自己是一个学习能力很强的人，可以比较快速的学习并适应新的环境和技术栈。 最后感谢 饿了么 给我这次面试机会，我也十分希望能进入 饿了么 ，与公司共同成长进步！ 为什么选择测开之前在社区的一个开发经历让我对软件质量...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/17780.html" title="分布式&#x2F;高性能&#x2F;高可用"><img class="cover" src="https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-03</div><div class="info-item-2">分布式&#x2F;高性能&#x2F;高可用</div></div><div class="info-2"><div class="info-item-1">分布式&#x2F;高性能&#x2F;高可用分布式✅CAP理论CAP理论是分布式系统设计中的一个重要理论。  一致性(Consistency)：所有节点访问同一份最新的数据副本 可用性(Availability)：非故障的节点在合理的时间内返回合理的响应(不是错误或者超时的响应)。 分区容错性(Partition Tolerance)：分布式系统出现网络分区的时候，仍然能够对外提供服务。   网络分区：分布式系统中的多节点网络原本是连通的，但因为故障导致某些节点间不连通了，网络分为几块区域。  当网络发生分区后，如果要继续服务的话，P是前提，必须要实现。然后在C和A之间二选一。因此分布式系统理论上不可能选择 CA 架构，只能选择 CP 或者 AP 架构。 如果网络分区正常的话(系统在绝大部分时候所处的状态)，也就说不需要保证 P 的时候，C 和 A 能够同时保证。 为什么要首先保证P 分布式系统的本质：分区容错性(P)是指系统在网络分区发生时，仍然能够继续提供服务的能力。在分布式系统中，网络分区是不可避免的，因此分区容错性是分布式系统必须具备的基本属性。 保证系统的高可用性：如果不...</div></div></div></a><a class="pagination-related" href="/posts/17766.html" title="Java后端面经"><img class="cover" src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-27</div><div class="info-item-2">Java后端面经</div></div><div class="info-2"><div class="info-item-1"> 准备在这篇文章中，先详细分析简历中可能会被问到的问题，然后总结一下 Java基础的精简答案，最后再回顾一下每次面试的面经。本文参考 JavaGuide  简历相关自我介绍面试官您好，我叫陈温鹏，就读于南京理工大学软件工程专业，学位是学硕，这次应聘的是 Java后端开发岗位。 我呢，研一的时候有过一段开源经历(Casbin社区一个线上实习)，担任社区维护者，日常工作会负责处理社区日常issue，跟踪解决用户需求，修复bug及完善文档等；然后在研一暑假期间中选了中科院和 Casbin 社区联合举办的一个开源项目，主要的工作是完善社区整个大前端系统，包括 web，移动端功能完善，以及为社区开发了一款支持通用2FA的移动端app。除此之外，我还参与过国网经济研究院的一个项目，以及自己做过两个Java前后端项目。这几段项目实习经历锻炼了我文档阅读、编写的能力，并在代码规范、开发流程等技能上获得提升。 然后我呢，我评价觉得自己是一个学习能力很强的人，本科成绩前5%，获得过国家奖学金，辅修了英语双学位，硕士期间也获得过学业一等奖学金，可以比较快速的学习并适应新的环境和技术栈。  最后感谢 x...</div></div></div></a><a class="pagination-related" href="/posts/17769.html" title="数据库"><img class="cover" src="https://s2.loli.net/2024/06/12/cKiSbvguBp27oq8.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-12</div><div class="info-item-2">数据库</div></div><div class="info-2"><div class="info-item-1"> 本文参考 JavaGuide  SQL&#x2F;NoSQL基础什么是SQLSQL 是一种结构化查询语言(Structured Query Language)，提供一种从数据库中读写数据的简单有效的方法。几乎所有的主流关系数据库都支持 SQL ，适用性非常强。一些非关系型数据库也兼容 SQL 或者使用类似于 SQL 的查询语言。 DB&#x2F;DBMS&#x2F;DBS&#x2F;DBA 数据库：数据库(DataBase,DB)是由数据库管理系统管理的数据的集合。 数据库管理系统：数据库管理系统(Database Management System,DBMS)是一种操纵和管理数据库的大型软件，通常用于建立、使用和维护数据库。 数据库系统：数据库系统(Data Base System,DBS)通常由软件、数据库和数据管理员(DBA)组成。 数据库管理员：数据库管理员(Database Administrator,DBA)负责全面管理和控制数据库系统。  数据库术语 数据库(database)：保存有组织的数据的容器(通常是一个文件或一组文件)。 数据表(table)：某种特定类...</div></div></div></a><a class="pagination-related" href="/posts/17771.html" title="框架"><img class="cover" src="https://s2.loli.net/2024/06/12/tSWPZr1EQH6XRAm.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-12</div><div class="info-item-2">框架</div></div><div class="info-2"><div class="info-item-1"> 本文参考 JavaGuide  Spring什么是SpringSpring 是一款基于 Java 的轻量级开源开发框架，旨在提高开发人员的开发效率以及系统的可维护性。 Spring 框架(Spring Framework)是很多模块的集合，使用这些模块可以很方便地协助进行开发。Spring 支持控制反转(Inversion of Control, IOC) 和 面向切面编程(Aspect-Oriented Programming, AOP)、可以很方便地对数据库进行访问、可以很方便地集成第三方组件(电子邮件，任务，调度，缓存等等)、对单元测试支持比较好、支持 RESTful Java 应用程序的开发。 Spring的核心功能主要是 IoC 和 AOP，核心思想是不重新造轮子，开箱即用，提高开发效率。 Spring模块 Spring5.x 版本中 Web 模块的 Portlet 组件已经被废弃掉，同时增加了用于异步响应式处理的 WebFlux 组件。  Core Container：Spring 框架的核心模块、基础模块，主要提供 IoC 依赖注入功能的支持。Spring 其他所...</div></div></div></a><a class="pagination-related" href="/posts/17776.html" title="Python知识点"><img class="cover" src="https://s2.loli.net/2024/06/27/RATGUg5c6FXC7mH.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-27</div><div class="info-item-2">Python知识点</div></div><div class="info-2"><div class="info-item-1">Python内存模型Python 的内存模型包括几个重要的概念和机制，帮助解释如何管理和操作内存。以下是关键点：  对象模型：在 Python 中，一切皆对象。变量实际上是对对象的引用。对象分为可变对象(如列表、字典等)和不可变对象(如整数、字符串、元组等)。 引用计数：Python 使用引用计数来管理内存。每个对象都有一个引用计数器，当对象被引用时计数加1，当引用被删除时计数减1。当引用计数为0时，对象被回收。 垃圾回收：除了引用计数，Python 还使用垃圾回收机制来处理循环引用。Python 的垃圾回收器会定期检查并回收那些不再被引用的对象。 内存分配器：Python 使用私有堆来管理内存。Python 内存分配器负责从操作系统获取内存并将其分配给对象。常用的内存分配器包括 PyObject_Malloc 和 PyMem_Malloc。 小对象池化：Python 对小对象(通常是小于256字节的对象)进行池化，以提高内存分配和释放的效率。这意味着相同的小对象可能会被多次重用。 全局解释器锁(GIL)：GIL 是 Python 的一个机制，用于保护 Python 对象的访问，...</div></div></div></a><a class="pagination-related" href="/posts/17779.html" title="游戏研发面经"><img class="cover" src="https://s2.loli.net/2024/06/28/RviHxaoQPJhA8wj.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-28</div><div class="info-item-2">游戏研发面经</div></div><div class="info-2"><div class="info-item-1">为什么要应聘游戏研发这个岗位玩过哪些游戏？如何设计出一个游戏？UDP在游戏中为什么丢了包不影响在游戏中使用 UDP(用户数据报协议)而丢包不影响游戏体验的原因主要有以下几点：  实时性要求高：许多游戏(特别是在线游戏)需要实时传输数据，保证游戏的流畅性和响应速度。UDP是一种无连接协议，不需要建立连接就能发送数据，传输速度快，延迟低，适合实时数据传输。 数据包丢失容忍度高：游戏中的许多数据(如玩家的位置、动作等)会频繁更新。即使有些数据包丢失了，也很快会被新的数据包覆盖，因此不会对游戏体验造成明显影响。相比之下，TCP需要确认每个数据包的接收，这会导致延迟，影响游戏的实时性。 自定义重传机制：一些游戏会自行实现数据包丢失的检测和重传机制，而不是依赖于底层协议的重传机制。这种方式更灵活，可以根据具体需要决定是否重传丢失的数据包。 不重要的数据：一些数据(如瞬时状态更新)即使丢失也不会对游戏产生重大影响。游戏开发者可以根据数据的重要性选择是否采用UDP来传输这些数据。  这些特点使得UDP在许多需要快速、实时数据传输的游戏中得到了广泛应用。 </div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Valine</span><span id="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">cwp0</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cwp0"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/cwp0" target="_blank" title="Github"><i class="fab fa-github" style="color: #9F9F9F;"></i></a><a class="social-icon" href="mailto:wenpengchen@njust.edu.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: 9F9F9F;"></i></a><a class="social-icon" href="/img/alipay.JPG" target="_blank" title="QQ"><i class="fa-brands fa-qq" style="color: #9F9F9F;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This site is under construction...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C"><span class="toc-number">1.</span> <span class="toc-text">网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">常见网络模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OSI%E4%B8%83%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">OSI七层模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">TCP&#x2F;IP四层模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%BD%91%E7%BB%9C%E8%A6%81%E5%88%86%E5%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">为什么网络要分层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.</span> <span class="toc-text">常见网络协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.1.</span> <span class="toc-text">应用层协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.2.</span> <span class="toc-text">传输层协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.3.</span> <span class="toc-text">网络层协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BE%93%E5%85%A5URL%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">浏览器输入URL到页面展示的过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#URL%E7%9A%84%E7%BB%84%E6%88%90"><span class="toc-number">1.5.</span> <span class="toc-text">URL的组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.6.</span> <span class="toc-text">DNS域名系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">1.7.</span> <span class="toc-text">HTTP状态码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E8%AF%B7%E6%B1%82%E9%87%8C%E5%8C%85%E5%90%AB%E4%BB%80%E4%B9%88"><span class="toc-number">1.8.</span> <span class="toc-text">HTTP请求里包含什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-HTTPS%E5%8C%BA%E5%88%AB"><span class="toc-number">1.9.</span> <span class="toc-text">HTTP&#x2F;HTTPS区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-1-0%E5%92%8CHTTP-1-1%E5%8C%BA%E5%88%AB"><span class="toc-number">1.10.</span> <span class="toc-text">HTTP&#x2F;1.0和HTTP&#x2F;1.1区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-1-1%E5%92%8CHTTP-2-0%E5%8C%BA%E5%88%AB"><span class="toc-number">1.11.</span> <span class="toc-text">HTTP&#x2F;1.1和HTTP&#x2F;2.0区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-2-0%E5%92%8CHTTP-3-0%E5%8C%BA%E5%88%AB"><span class="toc-number">1.12.</span> <span class="toc-text">HTTP&#x2F;2.0和HTTP&#x2F;3.0区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSL-TSL%E5%8D%8F%E8%AE%AE%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86"><span class="toc-number">1.13.</span> <span class="toc-text">SSL&#x2F;TSL协议加密原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E6%97%A0%E7%8A%B6%E6%80%81%E5%A6%82%E4%BD%95%E4%BF%9D%E5%AD%98%E7%94%A8%E6%88%B7%E7%8A%B6%E6%80%81"><span class="toc-number">1.14.</span> <span class="toc-text">HTTP无状态如何保存用户状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#URI-URL%E5%8C%BA%E5%88%AB"><span class="toc-number">1.15.</span> <span class="toc-text">URI&#x2F;URL区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Session-Cookie%E5%8C%BA%E5%88%AB"><span class="toc-number">1.16.</span> <span class="toc-text">Session&#x2F;Cookie区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GET-POST%E5%8C%BA%E5%88%AB"><span class="toc-number">1.17.</span> <span class="toc-text">GET&#x2F;POST区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebSocket"><span class="toc-number">1.18.</span> <span class="toc-text">WebSocket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebSocket-HTTP%E5%8C%BA%E5%88%AB"><span class="toc-number">1.19.</span> <span class="toc-text">WebSocket&#x2F;HTTP区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebSocket%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.20.</span> <span class="toc-text">WebSocket工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PING%E5%91%BD%E4%BB%A4%E5%8E%9F%E7%90%86"><span class="toc-number">1.21.</span> <span class="toc-text">PING命令原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ping%E5%BA%95%E5%B1%82%E8%BF%87%E7%A8%8B"><span class="toc-number">1.22.</span> <span class="toc-text">ping底层过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-TCP%E5%8C%BA%E5%88%AB"><span class="toc-number">1.23.</span> <span class="toc-text">HTTP&#x2F;TCP区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E3%80%81UDP%E5%8C%BA%E5%88%AB"><span class="toc-number">1.24.</span> <span class="toc-text">TCP、UDP区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-UDP%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.25.</span> <span class="toc-text">TCP&#x2F;UDP应用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP%E7%9A%84%E5%B9%BF%E6%92%AD%E5%92%8C%E5%A4%9A%E6%92%AD"><span class="toc-number">1.26.</span> <span class="toc-text">UDP的广播和多播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%B0%86UDP%E5%8F%98%E4%B8%BA%E5%B0%86TCP%E9%82%A3%E6%A0%B7%E5%8F%AF%E9%9D%A0"><span class="toc-number">1.27.</span> <span class="toc-text">如何将UDP变为将TCP那样可靠</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E2%9C%85"><span class="toc-number">1.28.</span> <span class="toc-text">三次握手四次挥手✅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TIME-WAIT-CLOSE-WAIT%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.29.</span> <span class="toc-text">TIME_WAIT&#x2F;CLOSE_WAIT是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8A%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97-%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97"><span class="toc-number">1.30.</span> <span class="toc-text">半连接队列&#x2F;全连接队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-number">1.31.</span> <span class="toc-text">为什么要三次握手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%BA%E4%BD%95%E4%BC%A0%E5%9B%9EACK%E5%92%8CSYN"><span class="toc-number">1.32.</span> <span class="toc-text">第二次握手为何传回ACK和SYN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%AD%E5%8F%AF%E4%BB%A5%E6%90%BA%E5%B8%A6%E6%95%B0%E6%8D%AE%E5%90%97"><span class="toc-number">1.33.</span> <span class="toc-text">三次握手中可以携带数据吗</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="toc-number">1.34.</span> <span class="toc-text">为什么要四次挥手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BD%95%E4%B8%8D%E8%83%BD%E6%8A%8A%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%8F%91%E9%80%81%E7%9A%84ACK%E5%92%8CFIN%E5%90%88%E5%B9%B6%E5%8F%98%E6%88%90%E4%B8%89%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="toc-number">1.35.</span> <span class="toc-text">为何不能把服务端发送的ACK和FIN合并变成三次挥手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%8C%A5%E6%89%8B%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%AA%E6%94%B6%E5%88%B0%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%8F%91%E9%80%81%E7%9A%84ACK%E4%BC%9A%E6%80%8E%E6%A0%B7"><span class="toc-number">1.36.</span> <span class="toc-text">如果第二次挥手客户端未收到服务端发送的ACK会怎样</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AC%AC%E5%9B%9B%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%9C%80%E7%AD%89%E5%BE%852-MSL"><span class="toc-number">1.37.</span> <span class="toc-text">为什么第四次握手客户端需等待2*MSL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E8%BF%9E%E6%8E%A5%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="toc-number">1.38.</span> <span class="toc-text">TCP如何保证连接可靠性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%BF%AB%E9%80%9F%E9%87%8D%E4%BC%A0"><span class="toc-number">1.39.</span> <span class="toc-text">如何实现快速重传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="toc-number">1.40.</span> <span class="toc-text">TCP如何实现流量控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="toc-number">1.41.</span> <span class="toc-text">为什么需要流量控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%9B%E8%A1%8C%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="toc-number">1.42.</span> <span class="toc-text">为什么要进行拥塞控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6%E7%9A%84%E5%9B%9B%E7%A7%8D%E7%AE%97%E6%B3%95"><span class="toc-number">1.43.</span> <span class="toc-text">TCP拥塞控制的四种算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="toc-number">1.44.</span> <span class="toc-text">TCP如何实现拥塞控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E8%A7%A3%E5%86%B3%E4%B8%A2%E5%8C%85%E9%97%AE%E9%A2%98"><span class="toc-number">1.45.</span> <span class="toc-text">TCP解决丢包问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85%E9%97%AE%E9%A2%98"><span class="toc-number">1.46.</span> <span class="toc-text">TCP粘包拆包问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%98%E5%8C%85%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-number">1.47.</span> <span class="toc-text">粘包产生原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.48.</span> <span class="toc-text">粘包问题解决方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ARQ%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.49.</span> <span class="toc-text">ARQ协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9C%E6%AD%A2%E7%AD%89%E5%BE%85ARQ%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.50.</span> <span class="toc-text">停止等待ARQ协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E7%BB%ADARQ%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.51.</span> <span class="toc-text">连续ARQ协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E9%87%8D%E4%BC%A0%E6%9C%BA%E5%88%B6%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.52.</span> <span class="toc-text">超时重传机制如何实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP%E5%9C%B0%E5%9D%80"><span class="toc-number">1.53.</span> <span class="toc-text">IP地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP%E5%9C%B0%E5%9D%80%E8%BF%87%E6%BB%A4"><span class="toc-number">1.54.</span> <span class="toc-text">IP地址过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IPv4-IPv6%E5%8C%BA%E5%88%AB"><span class="toc-number">1.55.</span> <span class="toc-text">IPv4&#x2F;IPv6区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E4%B8%A4IP%E5%90%8C%E5%B1%9E%E4%B8%80%E4%B8%AA%E5%AD%90%E7%BD%91"><span class="toc-number">1.56.</span> <span class="toc-text">判断两IP同属一个子网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81"><span class="toc-number">1.57.</span> <span class="toc-text">子网掩码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.58.</span> <span class="toc-text">断点续传在浏览器如何实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E7%AB%AF-%E5%B0%8F%E7%AB%AF"><span class="toc-number">1.59.</span> <span class="toc-text">大端&#x2F;小端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%AD%98%E5%9C%A8%E5%A4%A7%E7%AB%AF%E5%92%8C%E5%B0%8F%E7%AB%AF%EF%BC%9F"><span class="toc-number">1.60.</span> <span class="toc-text">为什么会存在大端和小端？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E4%B8%AD%E7%9A%84%E5%A4%A7%E7%AB%AF-%E5%B0%8F%E7%AB%AF"><span class="toc-number">1.61.</span> <span class="toc-text">网络传输中的大端&#x2F;小端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%BF%E8%BF%9E%E6%8E%A5-%E7%9F%AD%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.62.</span> <span class="toc-text">长连接&#x2F;短连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%95%BF%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.62.1.</span> <span class="toc-text">长连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9F%AD%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.62.2.</span> <span class="toc-text">短连接</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.</span> <span class="toc-text">操作系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81"><span class="toc-number">2.1.</span> <span class="toc-text">用户态和内核态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AA%E6%9C%89%E5%86%85%E6%A0%B8%E6%80%81%E4%B8%8D%E8%A1%8C%E5%90%97%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">只有内核态不行吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-number">2.3.</span> <span class="toc-text">系统调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-number">2.4.</span> <span class="toc-text">虚拟内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B2%A1%E6%9C%89%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E4%BC%9A%E5%AD%98%E5%9C%A8%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">2.5.</span> <span class="toc-text">没有虚拟内存会存在什么问题？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%B1%A0"><span class="toc-number">2.6.</span> <span class="toc-text">内存池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87"><span class="toc-number">2.7.</span> <span class="toc-text">内存碎片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%B1%A0%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87%E9%97%AE%E9%A2%98"><span class="toc-number">2.8.</span> <span class="toc-text">内存池如何解决内存碎片问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B-%E7%BA%BF%E7%A8%8B-%E5%8D%8F%E7%A8%8B"><span class="toc-number">2.9.</span> <span class="toc-text">进程&#x2F;线程&#x2F;协程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F"><span class="toc-number">2.10.</span> <span class="toc-text">进程间的通信方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F"><span class="toc-number">2.11.</span> <span class="toc-text">线程间的通信方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E6%BB%A1%E8%BD%BD%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%E9%97%AE%E9%A2%98"><span class="toc-number">2.12.</span> <span class="toc-text">CPU满载如何排查问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.13.</span> <span class="toc-text">孤儿进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.14.</span> <span class="toc-text">僵尸进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%92%8C%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.15.</span> <span class="toc-text">动态链接和静态链接的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux"><span class="toc-number">3.</span> <span class="toc-text">Linux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%AE%80%E4%BB%8B"><span class="toc-number">3.1.</span> <span class="toc-text">Linux文件系统简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inode%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.2.</span> <span class="toc-text">inode介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E9%93%BE%E6%8E%A5-%E8%BD%AF%E9%93%BE%E6%8E%A5"><span class="toc-number">3.3.</span> <span class="toc-text">硬链接&#x2F;软链接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A1%AC%E9%93%BE%E6%8E%A5%E4%B8%BA%E5%95%A5%E4%B8%8D%E8%83%BD%E8%B7%A8%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%EF%BC%9F"><span class="toc-number">3.3.1.</span> <span class="toc-text">硬链接为啥不能跨文件系统？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.4.</span> <span class="toc-text">Linux 文件类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-%E7%9B%AE%E5%BD%95%E6%A0%91"><span class="toc-number">3.5.</span> <span class="toc-text">Linux 目录树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">3.6.</span> <span class="toc-text">Linux 环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.7.</span> <span class="toc-text">Linux常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E5%88%87%E6%8D%A2"><span class="toc-number">3.7.1.</span> <span class="toc-text">目录切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="toc-number">3.7.2.</span> <span class="toc-text">目录操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="toc-number">3.7.3.</span> <span class="toc-text">文件操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8E%8B%E7%BC%A9"><span class="toc-number">3.7.4.</span> <span class="toc-text">文件压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93"><span class="toc-number">3.7.5.</span> <span class="toc-text">文件传输</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90"><span class="toc-number">3.7.6.</span> <span class="toc-text">文件权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="toc-number">3.7.7.</span> <span class="toc-text">用户管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%BB%84%E7%AE%A1%E7%90%86"><span class="toc-number">3.7.8.</span> <span class="toc-text">用户组管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%8A%B6%E6%80%81"><span class="toc-number">3.7.9.</span> <span class="toc-text">系统状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1"><span class="toc-number">3.7.10.</span> <span class="toc-text">网络通信</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">3.7.11.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81Linux%E7%BA%BF%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F"><span class="toc-number">3.8.</span> <span class="toc-text">常见Linux线程间的通信方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%9F%A5%E8%AF%A2%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F"><span class="toc-number">3.9.</span> <span class="toc-text">如何查询内存大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E9%81%93"><span class="toc-number">3.10.</span> <span class="toc-text">管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%9F%A5%E8%AF%A2%E7%B3%BB%E7%BB%9F%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6"><span class="toc-number">3.11.</span> <span class="toc-text">如何查询系统日志文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">3.12.</span> <span class="toc-text">重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%89%8D5%E8%A1%8C"><span class="toc-number">3.13.</span> <span class="toc-text">Linux如何查看文件前5行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E6%80%8E%E4%B9%88%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%8D%A0%E7%94%A8%E5%A4%9A%E5%B0%91%E5%86%85%E5%AD%98"><span class="toc-number">3.14.</span> <span class="toc-text">Linux怎么看进程占用多少内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E6%8A%93%E5%8C%85"><span class="toc-number">3.15.</span> <span class="toc-text">Linux抓包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#epoll%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">3.16.</span> <span class="toc-text">epoll线程模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Git"><span class="toc-number">4.</span> <span class="toc-text">Git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">4.1.</span> <span class="toc-text">Git常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3"><span class="toc-number">4.1.1.</span> <span class="toc-text">配置相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="toc-number">4.1.2.</span> <span class="toc-text">操作本地仓库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E6%93%8D%E4%BD%9C"><span class="toc-number">4.1.3.</span> <span class="toc-text">分支操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E6%93%8D%E4%BD%9C"><span class="toc-number">4.1.4.</span> <span class="toc-text">远程仓库操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="toc-number">4.1.5.</span> <span class="toc-text">合并与同步</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%92%A4%E9%94%80%E6%93%8D%E4%BD%9C"><span class="toc-number">4.1.6.</span> <span class="toc-text">撤销操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#merge-rebase%E5%8C%BA%E5%88%AB"><span class="toc-number">4.2.</span> <span class="toc-text">merge&#x2F;rebase区别</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/17782.html" title="学车小记"><img src="https://s2.loli.net/2025/03/19/eVRF7JMl4yjrzhQ.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="学车小记"/></a><div class="content"><a class="title" href="/posts/17782.html" title="学车小记">学车小记</a><time datetime="2025-03-19T07:04:48.000Z" title="Created 2025-03-19 15:04:48">2025-03-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17781.html" title="华为笔试/手撕"><img src="https://s2.loli.net/2025/03/19/kAcZ5yKPDwizuMN.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="华为笔试/手撕"/></a><div class="content"><a class="title" href="/posts/17781.html" title="华为笔试/手撕">华为笔试/手撕</a><time datetime="2024-11-15T03:51:23.000Z" title="Created 2024-11-15 11:51:23">2024-11-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17780.html" title="分布式/高性能/高可用"><img src="https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分布式/高性能/高可用"/></a><div class="content"><a class="title" href="/posts/17780.html" title="分布式/高性能/高可用">分布式/高性能/高可用</a><time datetime="2024-09-03T09:21:00.000Z" title="Created 2024-09-03 17:21:00">2024-09-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17779.html" title="游戏研发面经"><img src="https://s2.loli.net/2024/06/28/RviHxaoQPJhA8wj.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="游戏研发面经"/></a><div class="content"><a class="title" href="/posts/17779.html" title="游戏研发面经">游戏研发面经</a><time datetime="2024-06-27T16:10:26.000Z" title="Created 2024-06-28 00:10:26">2024-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17777.html" title="智力题"><img src="https://s2.loli.net/2024/06/27/9KWGke8lsJaM1fi.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="智力题"/></a><div class="content"><a class="title" href="/posts/17777.html" title="智力题">智力题</a><time datetime="2024-06-27T15:39:07.000Z" title="Created 2024-06-27 23:39:07">2024-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By cwp0</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional and Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nfRxTBEmIAeb6gP2K0LOdLqw-gzGzoHsz',
+      appKey: 'vmeDN8k58dVdPv5Yz7NEkvSN',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('/js/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/posts/17770.html'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'https://cwp0.github.io/posts/17770.html'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = '计算机基础'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=&api_key=&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Valine' === 'Disqus' || !true) {
+    if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      GLOBAL_CONFIG_SITE.pageType === 'post' && getCount()
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script async src="https://npm.elemecdn.com/tzy-blog/lib/js/other/sakura.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
