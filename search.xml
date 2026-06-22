@@ -108,33 +108,6 @@
     
     
     <entry>
-      <title>智力题</title>
-      <link href="/posts/17777.html"/>
-      <url>/posts/17777.html</url>
-      
-        <content type="html"><![CDATA[<h3 id="8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球"><a href="#8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球" class="headerlink" title="8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球"></a>8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球</h3><p>为了在只使用两次测量的情况下找到8个球中偏重的那个球，可以采用以下方法：</p><ul><li>将8个球分成3组：<ul><li>第一组：A、B、C</li><li>第二组：D、E、F</li><li>第三组：G、H</li></ul></li><li>第一次测量：<ul><li>将第一组(A、B、C)放在天平的左边，第二组(D、E、F)放在天平的右边。<br>可能的结果有三种：</li><li>左边重(A、B、C中有一个是重球)</li><li>右边重(D、E、F中有一个是重球)</li><li>两边一样重(G、H中有一个是重球)</li></ul></li><li>第二次测量：<ul><li>如果第一次测量左边重：从A、B、C中任选两个球进行测量，例如A和B。<ul><li>如果A和B重量相等，则重球是C。</li><li>如果A和B不等，则重球是较重的那个。</li></ul></li><li>如果第一次测量右边重：从D、E、F中任选两个球进行测量，例如D和E。<ul><li>如果D和E重量相等，则重球是F。</li><li>如果D和E不等，则重球是较重的那个。</li></ul></li><li>如果第一次测量两边一样重：对G和H进行测量。<ul><li>如果G和H重量相等，则重球不存在(但由于题意重球必存在，所以这个情况不会出现)。</li><li>如果G和H不等，则重球是较重的那个。</li></ul></li></ul></li></ul><p>通过这种方法，可以在两次测量内准确找到8个球中偏重的那个球。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 面经 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 面经 </tag>
-            
-            <tag> 智力题 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>系统设计</title>
       <link href="/posts/17778.html"/>
       <url>/posts/17778.html</url>
@@ -154,6 +127,33 @@
             <tag> 面经 </tag>
             
             <tag> 系统设计 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>智力题</title>
+      <link href="/posts/17777.html"/>
+      <url>/posts/17777.html</url>
+      
+        <content type="html"><![CDATA[<h3 id="8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球"><a href="#8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球" class="headerlink" title="8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球"></a>8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球</h3><p>为了在只使用两次测量的情况下找到8个球中偏重的那个球，可以采用以下方法：</p><ul><li>将8个球分成3组：<ul><li>第一组：A、B、C</li><li>第二组：D、E、F</li><li>第三组：G、H</li></ul></li><li>第一次测量：<ul><li>将第一组(A、B、C)放在天平的左边，第二组(D、E、F)放在天平的右边。<br>可能的结果有三种：</li><li>左边重(A、B、C中有一个是重球)</li><li>右边重(D、E、F中有一个是重球)</li><li>两边一样重(G、H中有一个是重球)</li></ul></li><li>第二次测量：<ul><li>如果第一次测量左边重：从A、B、C中任选两个球进行测量，例如A和B。<ul><li>如果A和B重量相等，则重球是C。</li><li>如果A和B不等，则重球是较重的那个。</li></ul></li><li>如果第一次测量右边重：从D、E、F中任选两个球进行测量，例如D和E。<ul><li>如果D和E重量相等，则重球是F。</li><li>如果D和E不等，则重球是较重的那个。</li></ul></li><li>如果第一次测量两边一样重：对G和H进行测量。<ul><li>如果G和H重量相等，则重球不存在(但由于题意重球必存在，所以这个情况不会出现)。</li><li>如果G和H不等，则重球是较重的那个。</li></ul></li></ul></li></ul><p>通过这种方法，可以在两次测量内准确找到8个球中偏重的那个球。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 面经 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 面经 </tag>
+            
+            <tag> 智力题 </tag>
             
         </tags>
       
