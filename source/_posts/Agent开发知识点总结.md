@@ -521,6 +521,27 @@ Reflexion 的优势：
 
 > **工程实战建议**：**单轮任务**用 ReAct 就够；**有重试机会 + 可量化评测**的场景（写代码 → 跑测试、刷题 → 看对错、博弈 → 看胜负），叠加 Reflexion 收益最大；**没有 Evaluator** 但希望提升输出质量的场景，退而求其次用 Self-Refine（自评自改、留在单轮内）。`AI相关项目.md` 中薪酬 AI 质检里的 "Self-Refine + 编译器 Verifier" 循环其实更接近 Reflexion 的轻量变体 —— 编译器扮演 Evaluator、错误信息扮演 Reflection，只是把"跨 trial"压缩到了"3 轮内"。
 
+### Spec 编程 / Spec-Driven Development
+
+**一句话定义**：**Spec-Driven Development（SDD，规范驱动开发）** 是 GitHub 2025/09 推出的 AI 编程范式 —— 先用自然语言写"可执行规范"，再让 AI 按规范生成代码，把传统"代码是事实、文档是说明书"反转为"**规范是事实、代码是规范的产物**"。
+
+参考实现是 GitHub 官方开源的 **[Spec Kit](https://github.com/github/spec-kit)**，CLI 工具叫 `specify`，定义了完整的软件生命周期：
+
+| 阶段 | 命令 | 作用 |
+| --- | --- | --- |
+| 立宪 | `/constitution` | 项目原则与约束（团队规范、不可破坏的红线） |
+| 规范 | `/specify` | 业务需求与用户故事（What & Why，不涉及技术栈） |
+| 澄清 | `/clarify` | 把规范里的模糊点逐条问清楚（防 AI 自由发挥） |
+| 计划 | `/plan` | 技术栈与架构选型（How） |
+| 拆解 | `/tasks` | 把 plan 拆为可执行任务清单 |
+| 实现 | `/implement` | AI 按任务清单逐步实现并自检 |
+
+> **与 Vibe Coding 的区别**：Vibe Coding 是"凭感觉对话"，适合原型与个人项目；Spec-Driven Development 是"先定规范再生成"，适合工程化、可维护、多人协作项目。前者快，后者稳，二者并非对立 —— Spec 的简版就是 IDE 里的 plan 模式。
+
+**个人实战心得**：
+- **工具就用 `specify`，不要再挑别的**：严格按照它定义的软件生命周期走，这是 GitHub 官方给的最佳实践，几乎是适配当前 AI 能力的流程规范最优解。
+- **文档体系极简化**：`Spec + README + CLAUDE.md` 几乎等同于全部文档，不用再花精力写其他文档了 —— **以后只有一个 README 是给人看的，其他所有文档都是给 AI 看的**。
+- **Spec 的简版就是 plan 模式**：简单需求也尽量先 plan 再实施，比直接写提示词强得多。看上去慢了一步，但 AI 埋坑更少，时间线拉长看反而是快了。
 
 ### Agent 的基本架构组成
 
