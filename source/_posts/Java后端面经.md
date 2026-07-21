@@ -3156,7 +3156,39 @@ AQS(AbstractQueuedSynchronizer，抽象队列同步器) 核心思想是，如果
 
 以可重入互斥锁 `ReentrantLock` 为例，其内部维护了一个使用`volatile`修饰(保证线程可见性)的`state`变量，用来表示锁的占用状态。`state` 的初始值为 0，表示锁处于未锁定状态。当线程 A 调用 `lock()` 方法时，会尝试通过 `tryAcquire()` 方法独占该锁，并让 `state` 的值加 1。如果成功了，那么线程 A 就获取到了锁。如果失败了，那么线程 A 就会被加入到一个等待队列(`CLH` 锁队列)中，直到其他线程释放该锁。假设线程 A 获取锁成功了，释放锁之前，A 线程自己是可以重复获取此锁的(`state` 会累加)。这就是可重入性的体现：一个线程可以多次获取同一个锁而不会被阻塞。但是，这也意味着，一个线程必须释放与获取的次数相同的锁，才能让 `state` 的值回到 0，也就是让锁恢复到未锁定状态。只有这样，其他等待的线程才能有机会获取该锁。
 
-> `CLH`锁是对自旋锁的一种改进，是一个虚拟的双向队列(虚拟的双向队列即不存在队列实例，仅存在结点之间的关联关系)，暂时获取不到锁的线程将被加入到该队列中。AQS 将每条请求共享资源的线程封装成一个 `CLH` 队列锁的一个结点(`Node`)来实现锁的分配。在 `CLH` 队列锁中，一个节点表示一个线程，它保存着线程的引用(`thread`)、 当前节点在队列中的状态(`waitStatus`)、前驱节点(`prev`)、后继节点(`next`)。
+#### CLH锁
+CLH（Craig, Landin, Hagersten）锁是一种经典队列自旋锁（queue spinlock）。
+
+**1. 核心特征**
+- 多个线程排队。
+- 每个线程自旋等待前驱释放。
+- 通常每个线程只关心自己前面那个人是否结束，而不是大家都激烈地 CAS 抢锁。
+
+**2. 数据结构直觉：节点链表 + 前驱等待**
+
+CLH 思想里有两个概念：自己的节点（my node）、前驱节点（pred）。典型实现里可能是：线程持有一个 `locked` 标记写入自己的节点，后继线程读前驱节点的 `locked` 值。
+
+**3. 加锁/解锁流程**（以“自旋等待前驱 unlocked”为直觉理解）
+
+加锁：
+- 自己创建/占用节点，把自己的 `locked=true`。
+- 原子方式把自己挂到队尾（得到自己的前驱节点 pred）。
+- 自旋：不断读取 `pred.locked`。
+- `pred.locked` 变成 false → 进入临界区。
+
+解锁：
+- 把自己的 `locked` 改成 false。
+- 后继通过读取它（作为前驱）发现 unlocked，就结束等待并进入临界区。
+
+**4. CLH 锁的优点**
+- 减少缓存行争用：等待读的是前驱节点字段，避免所有线程疯狂 CAS 同一个共享变量。
+- FIFO 公平性较好：队列天然按到达顺序排队。
+- 伸缩性更好：在高并发下比 naive test-and-set 自旋锁更友好。
+
+**5. CLH 的缺点/局限**
+- 它是自旋锁：等待期间线程一直占用 CPU。
+- 在锁持有时间稍长、或系统负载高时会浪费大量计算资源。
+- 因此在 Java 的大多数库中，更常用的是“队列 + 阻塞”的做法（AQS/LockSupport）。
 
 #### AQS资源共享模式
 AQS 支持两种资源共享方式：独占和共享。
@@ -3166,12 +3198,49 @@ AQS 支持两种资源共享方式：独占和共享。
 > 也可以自定义同步器同时实现独占和共享，如`ReentrantReadWriteLock`，读操作时多个线程可以同时进行，写操作时只能一个线程进行。
 
 #### StampedLock
-`StampedLock` 是 JDK 1.8 引入的性能更好的读写锁，没有实现 `Lock`或 `ReadWriteLock`接口，而是基于 `CLH` 锁独立实现的。
+StampedLock：面向读多写少的读写锁，重点是“乐观读”。
 
-提供三种访问模式：
-- 写锁：独占锁，一把锁只能被一个线程获得。当一个线程获取写锁后，其他请求读锁和写锁的线程必须等待。类似于 `ReentrantReadWriteLock` 的写锁，不过这里的写锁是不可重入的。
-- 读锁 (悲观读)：共享锁，没有线程获取写锁的情况下，多个线程可以同时持有读锁。如果己经有线程持有写锁，则其他线程请求获取该读锁会被阻塞。类似于 `ReentrantReadWriteLock` 的读锁，不过这里的读锁是不可重入的。
-- 乐观读：允许多个线程获取乐观读以及读锁。同时允许一个写线程获取写锁。(性能比`ReadWriteLock`更好的原因)
+**1. StampedLock 是什么**
+
+StampedLock 是 Java 8 提供的锁实现，设计目标是提升读多写少场景下的性能。它与 `ReentrantReadWriteLock` 的不同点：
+- 不完全依赖“读锁共享/写锁互斥”的传统模型。
+- 引入了乐观读（Optimistic Read）：读线程先不真正加读锁。
+- 用一个 **stamp（时间戳）** 来判断读期间是否发生写冲突。
+
+**2. 三种模式**
+
+StampedLock 通常有三种关键路径：
+- 乐观读（`optimisticRead`）：不阻塞写，返回一个 stamp，读完后校验 `validate(stamp)`。
+- 悲观读锁（`readLock`）：真正加读锁（多个读者可并发），阻塞写者。
+- 写锁（`writeLock`）：写独占，获取写锁需要互斥。
+
+**3. 时间戳 stamp 的意义**
+
+每次写锁成功获取/释放（或写操作发生）会让 stamp 增加/变化。乐观读拿到 stamp 后：
+- 如果写期间 stamp 没变 → 说明读期间没有写冲突 → 读结果可信。
+- 如果 stamp 变了 → 说明中间可能发生写 → 读结果需重读/升级到悲观读。
+
+**4. 乐观读的典型代码流程（理解 validate 失败）**
+
+典型用法（伪代码）：
+```
+stamp = lock.tryOptimisticRead()
+// 进行一次或多次无锁读取（读取共享数据）
+if (!lock.validate(stamp)) {
+    // 说明读期间发生了写
+    // 回退策略：加 readLock() 重新读，最后 unlockRead(stamp)
+    // （或者简单地再来一次乐观读/重试）
+}
+```
+
+**5. 升级/降级（常见坑）**
+
+StampedLock 有“写锁 → 读锁”这种降级思路，但要通过特定方法完成。它和传统读写锁相比更强调“重试”，而不是像传统锁一样依赖锁状态机做复杂升级。乐观读的核心价值在于：validate 多数情况下会成功，从而避免悲观读锁带来的开销。
+
+**6. 为什么 StampedLock 往往更快（读多写少）**
+- 乐观读几乎不需要等待：读线程不阻塞写，也不在读者之间排队竞争读锁。
+- 只有在真的发生写冲突时，才需要走悲观路径（`readLock` 或重试）。
+- 对于读远多于写且写持续时间短的场景，收益明显。
 
 
 ### 死锁✅
@@ -3216,10 +3285,10 @@ jconsole // 唤醒图形化界面，然后选择线程->检测死锁
 `ThreadLocal` 是一个线程内部的数据存储类，可以在每个线程中创建一个变量副本，各个线程之间的数据互不干扰。可以使用 `get()` 和 `set()` 方法来获取默认值或将其值更改为当前线程所存的副本的值，从而避免了线程安全问题。
 
 #### ThreadLocal原理
-`ThreadLocal` 通过 `ThreadLocalMap` 来实现线程内部的数据存储。`ThreadLocalMap` 是 `ThreadLocal` 的一个静态内部类，每个线程中都有一个 `ThreadLocalMap`，`ThreadLocal` 通过 `get()`、`set()` 方法访问 `ThreadLocalMap`。在一个线程中创造多个`ThreadLocal`对象，这个许多个`ThreadLocal`对象会被放到一个`ThreadLocalMap`中。
+`ThreadLocal` 通过 `ThreadLocalMap` 来实现线程内部的数据存储。`ThreadLocalMap` 是 `ThreadLocal` 的一个静态内部类，每个线程中都有一个 `ThreadLocalMap`，`ThreadLocal` 通过 `get()`、`set()` 方法访问 `ThreadLocalMap`。在一个线程中创造多个`ThreadLocal`对象，这许多个`ThreadLocal`对象会被放到一个`ThreadLocalMap`中。
 
 > `ThreadLocalMap`可以理解为一个定制化的 `HashMap`，`key` 是 `ThreadLocal` 对象，`value` 是存储的值。
-> 可以存在这种情况： 在线程 1 中创建了两个 `ThreadLocal` 对象，在线程 1 中只有一个 `ThreadLocal` 对象。
+> 线程 1 创建了两个 ThreadLocal：对应的两条映射会放进线程1的 ThreadLocalMap，线程 2 创建/使用了其中一个：线程2只会在自己的 ThreadLocalMap 里有对应那一条
 
 #### ThreadLocal内存泄漏
 `ThreadLocalMap` 中使用的 `key` 为 `ThreadLocal` 的弱引用，而 `value` 是强引用。所以，如果 `ThreadLocal` 没有被外部强引用的情况下，在垃圾回收的时候，`key` 会被清理掉，而 `value` 不会被清理掉。这样一来就会出现 `key` 为 `null` 的 键值对。如果不做任何措施的话，`value` 永远无法被 GC 回收，这个时候就可能会产生内存泄露。
