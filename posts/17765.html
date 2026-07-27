@@ -187,7 +187,7 @@
 <p>由此诞生了RNN。</p>
 <p>循环神经网络(Recurrent Neural Network, RNN)是一类以序列(sequence)数据为输入，在序列的演进方向进行递归(recursion)且所有节点(循环单元)按链式连接的递归神经网络。</p>
 <p><img src="/../image/RNN-LSTM-GRU-GCN/img_1.png" alt="img_1.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x 输入层 向量</span><br><span class="line">U 输入层到隐藏层的 权重矩阵</span><br><span class="line">s 隐藏层 向量</span><br><span class="line">V 隐藏层到输出层的 权重矩阵</span><br><span class="line">o 输出层 向量</span><br><span class="line">W 上一次隐藏层的值作为这一次输入的权重 权重矩阵</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">x 输入层 向量</span><br><span class="line">U 输入层到隐藏层的 权重矩阵</span><br><span class="line">s 隐藏层 向量</span><br><span class="line">V 隐藏层到输出层的 权重矩阵</span><br><span class="line">o 输出层 向量</span><br><span class="line">W 上一次隐藏层的值作为这一次输入的权重 权重矩阵</span><br></pre></td></tr></table></figure>
 <p>循环神经网络的隐藏层的值s不仅取决于当前这次的输入x，还取决于上一次隐藏层的值s。</p>
 <p><img src="/../image/RNN-LSTM-GRU-GCN/img_2.png" alt="img_2.png"></p>
 <p>具体的抽象图：<br><img src="/../image/RNN-LSTM-GRU-GCN/img.png" alt="img.png"></p>
