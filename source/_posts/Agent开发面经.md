@@ -36,7 +36,7 @@ abcjs:
 
 面试官您好，我叫陈温鹏，南京理工大学软件工程硕士，目前在阿里巴巴菜鸟集团担任 全栈开发工程师，这次应聘的是 **Agent / 全栈 / Java 开发岗位**。
 
-在菜鸟期间，我主要负责 核心人事系统与薪酬系统的迭代开发和稳定性保障，覆盖员工入离异、合同管理、审批流、社保等核心模块，日均百万级调用下保持大促零故障。同时深度参与了两个 AI Native 项目从 0 到 1 的落地：一是 HR 智能助理 Agent，；二是薪酬 AI 质检平台。
+在菜鸟期间，我主要负责 核心人事系统与薪酬系统的迭代开发和稳定性保障，日均百万级调用下保持大促零故障。同时深度参与了两个 AI Native 项目的落地：一是 HR 智能助理 Agent，；二是薪酬 AI 质检平台。
 
 在 AI 工程化方面，我拥抱并适应 AI 编程范式，AI Coding 采纳率稳定在 90% 以上，并实现个人需求吞吐量翻倍。
 除此之外，我熟练掌握 Java 基础、并发编程、以及DDD分层架构，熟练在日常开发中使用 Vibe Coding、SDD等 AI 编程范式，熟练使用MCP、Skill用于排查日常问题；另外，我对Agent开发相关知识也有一定了解。
@@ -51,7 +51,7 @@ abcjs:
 
 - 负责人事核心域（员工入离异、合同管理、审批流、组织人事主数据等）多个核心模块的迭代开发与稳定性维护，通过告警治理、热点接口缓存改造、链路压测与降级预案完善，保障核心人事链路在日均百万级调用下稳定运行，大促期间零故障。
 - 负责薪酬域核心模块社保系统的稳定性维护与日常迭代，通过ISO合规性改造，支持海外准时发薪；同时参与薪酬AI质检平台一期模块的需求落地，通过集成AI自然语言解析、六大质检环节（提报/计算/调账/报表/薪资方案/其他）全覆盖、三大规则类型（条件逻辑校验/重复数据检测/一致性校验）体系化，大幅降低薪酬质检投入。
-- 参与集团采购合规风控平台跨多仓改造，承担供应商围串标治理专项的标前布控开发
+- 参与集团采购合规风控平台、供应商平台跨多仓改造开发。
 - 深度参与 CPO 域 AI Native 建设，参与 HR 智能助理 Agent 与薪酬 AI 质检平台两个核心场景从 0 到 1 落地；同时主动拥抱 AI 编程范式，将Vibe Coding/SDD深度融入日常研发流程，通过 AI 相关能力实现个人需求吞吐量翻倍，AI Coding 采纳率稳定维持在 90% 以上。
 - 积极探索 AI 领域前沿技术并推动团队工程化沉淀，团队内最先部署 OpenClaw 并接入钉钉、沉淀为团队共享文档；2700 行代码复刻业界开源 OpenClaw 框架，覆盖 Agent Loop、Heartbeat、Workspace 契约文件、Skills 渐进式披露、Context Compaction、Multi-Agent Spawn 沙箱等核心原理；持续跟踪 AI 前沿动态（开源 Agent 框架、主流大模型版本迭代、业界落地案例等），定期输出技术分享与最佳实践沉淀。
 
@@ -107,24 +107,172 @@ abcjs:
 
 
 
-## x小蜜-企业级HR智能助理Agent
+## x小蜜-企业级员工智能助理Agent
 
-项目介绍：面向集团内部数万员工的HR领域Agent，以自然语言对话替代传统表单与人工咨询，覆盖知识问答、智能请假、证明开具、人才档案、智能问数等高频场景，日均对话数万次，显著降低HR工作量、提升用户服务体验。
+项目介绍：面向集团内部数万员工的HR领域Agent，以自然语言对话替代传统表单与人工咨询，覆盖知识问答、智能请假、证明开具、人才档案、智能问数等高频场景，日均对话数千次，显著降低HR工作量、提升用户服务体验。
 
 技术栈：PandoraBoot、RAG、Function Calling、MCP、RPA、Prompting Engineering
 
-- 多源 RAG 系统：线程池隔离 + CompletableFuture编排并发召回 4 套异构知识源（政策库/知识平台/协同文档/草稿态），单源超时 3s 熔断降级，Rerank重排后取Top-K注入上下文，保障召回相关性与主链路可用性。
-- 两段式路由引擎："规则前置拦截(本地策略模式匹配，零 LLM 调用) + LLM Function Routing" 两段式路由，保障LLM实时可用性；基于策略模式抽象 ToolExecutor，支撑 10+ 业务工具可插拔注册，新增技能零侵入主流程。
-- RPA + 定时任务双链路知识同步：主链路通过 RPA 自动抓取协同文档变更增量同步至百炼向量库，Java 侧 SchedulerX 定时任务处理 RPA 无法覆盖的 FAQ 同步与文档删除场景，保障知识库实时性与完整性。
-- 端到端流式体验：Dubbo Triple StreamObserver 实现服务端流式推送，基于 ReplayProcessor + 百炼智能体流式 API 做背压控制与中间态兜底（1.5s 无响应自动推送加载提示），首字延迟下降约 60%；智能体 AppId 不可用时自动降级到工作流 AppId，保障流式链路高可用。
+
+- 两段式路由引擎："规则前置拦截(本地策略模式匹配，零 LLM 调用) + 6 路并发 LLM 路由（1路决定路由模块 + 5路数据准备）" 两段式路由，保障LLM实时可用性；基于策略模式抽象 ToolExecutor，支撑 10+ 业务模块可插拔注册，新增模块零侵入主流程。
+- 多源 RAG 系统：三层线程池隔离（策略池/检索池/鉴权池） + CompletableFuture编排并发召回 6 套异构知识源（制度中心/政策平台/知识平台/钉钉文档/消息中心/学习平台），单知识源内部知识库×候选问题笛卡尔积并发检索，切片鉴权 3s 熔断降级，双重 Rerank（百炼粗排+应用层文档名精排）后取Top-K 注入上下文。，保障召回相关性与主链路可用性。
+- RPA + 定时任务双联路知识同步：主链路定时任务扫描钉钉空间做diff检测变更，通过 RPA 自动抓取协同文档变更增量同步至百炼向量库；辅以定时任务处理 RPA 无法覆盖的 FAQ 同步与文档删除场景，上传百炼自动完成切片向量化，保障知识库实时性与完整性。
+- 端到端流式体验：Dubbo Triple StreamObserver 实现服务端流式推送，基于 ReplayProcessor + 百炼智能体流式 API 做中间态兜底（1.5s 无响应自动推送加载提示），首字延迟下降约 60%；RAG 失败命中兜底关键词时，无缝拼接一次联网通识问答流，下游对模型切换完全无感知。
 - MCP Server 标准化对外开放：基于 MCP 协议暴露员工信息查询、知识召回、相似问匹配等标准 Tool，支持外部 Agent 通过统一协议编排调用，降低跨系统集成成本。
 - Prompt 工程化与质量闭环：Prompt 与 Tool Schema 外置到配置中心，支持分钟级热更无需发版；离线 LLM-as-a-Judge 评估任务对答案打分回流，驱动 Prompt 与召回策略持续迭代。
 
+> ReplayProcessor 是 RxJava（io.reactivex.processors）里的一种 FlowableProcessor，它同时具备两个身份：
+> 是 Subscriber：可以被上游 subscribe()，接收 onNext/onComplete/onError；
+> 也是 Publisher（Flowable）：可以被下游 subscribe()，把收到的数据继续往下发。
+> 核心特性——"Replay"（回放）：它会把已经发射过的数据缓存下来，不管订阅者是"流还没开始就订阅"还是"流已经发了一半才订阅"，都能收到从头开始（或缓存窗口内）的全部历史数据 + 后续新数据。这跟普通的"冷流"（Flowable.create 那种，订阅了才开始发）不同——它是热流，数据是主动往里推（onNext）的，跟有没有订阅者无关，订阅者只是"接进来看"。
+
+
+#### 项目的背景是什么
+菜小蜜是我们集团内部面向数万员工的智能助手。背景主要有两方面：
+
+一方面是传统HR咨询靠填表单+人工客服，效率低、体验差；
+另一方面正好赶上这两年AI发展特别快，大模型能力足够支撑复杂的自然语言理解和知识问答了，所以借助AI能力把传统人工咨询模式升级成对话式Agent，实现提效。
+
+这也是集团CPO域AI Native战略下从0到1落地的核心场景，上线后日均对话数万次，大幅降低了HR的人工工作量。
 
 
 #### 请介绍一下这个项目，你在其中主要负责什么工作？
 
 A：这是面向集团内部数万员工的 HR 领域 Agent，以自然语言对话替代传统表单与人工咨询，覆盖知识问答、智能请假、证明开具等高频场景，日均对话数万次。系统采用 DDD 分层架构，包含多源 RAG 知识检索、两段式意图路由、端到端流式输出、MCP 标准化开放、Prompt 工程化与质量闭环等核心模块。我主要负责多源 RAG 系统中一个知识源的完整召回链路——从知识切片、向量化入库到检索召回、鉴权过滤，端到端由我开发；因为要和其他知识源做 CompletableFuture 并发编排和统一 Rerank，我对整体多源召回架构也比较熟悉，包括三层线程池隔离、单源 3 秒熔断降级等设计。此外我还负责了MCP Server 部分标准化 Tool 的开发（如知识召回、相似问匹配），以及两段式路由引擎中新增业务工具的接入工作。流式推送、RPA 知识同步、Prompt 工程化与 LLM-as-a-Judge 评估体系等模块是团队其他同学主导的，我参与了方案评审和联调，也比较了解。
+
+
+#### 一次普通的对话的具体流程是怎样的？
+
+A：以最常见的知识问答场景为例，一次对话从用户发消息到收到回答，完整流转经过 7 个环节：
+
+**① 入口接收**
+用户在钉钉发一句话 → 钉钉 Stream 长连接推送到 `DingRobotListenerConfig.handleRobotMessage` 回调（该监听仅在 pre/online 且非 project 环境装配）→ `EagleEye.startTrace` 开启链路 Trace，全程用同一个 TraceId 串联日志，方便问题排查。
+
+**② 会话准备**（`CxmAiEngine.execute(RobotMessage)` 前半部分）
+- `CxmRequestValidator.validateRobotMessage` 校验消息合法性和调用权限(消息、工号非空校验，时间戳时效性校验，用户输入长度0-1000校验)；
+- `CxmSessionHelper.buildSessionId` 构建/复用会话（同一用户 24h 内复用同一个 sessionId，实现多轮对话的上下文延续）；
+- `buildToolExecuteInfo`：`getSessionInfo` 先查缓存再查 HRP 拿员工信息 → `aiChatLogDomain.addChatLog` 落库一条 `ai_chat_log` 记录 → 查询最近 5 条历史对话（过滤掉特殊指令和当前这条）用于多轮上下文 → `queryMockInfo` 查是否处于身份模拟（Mock）场景() → 异步落库 `QuestionExtendInfo`（TraceId/Mock 信息/ToolExecuteInfo）；
+- 最终组装出贯穿全链路的核心上下文对象 `ToolExecuteInfo`，后续路由、RAG 鉴权、工具执行都靠它传递员工身份、会话、改写结果等信息。
+
+> queryMockInfo查的是"当前提问工号是否配置了身份模拟关系"，用途是让后续整条链路都用"被模拟员工"的身份属性去跑，而不是用实际发消息人的身份。
+> 身份模拟场景的意义：菜小蜜很多回答是因人而异的（比如社保政策按福利地不同、请假规则按部门/地点不同、知识库权限按员工属性做鉴权过滤），HR 管理员/客服人员本身问问题拿到的是自己的答案，但他们经常需要代替某个员工去验证"这个员工问同样的问题会得到什么答案"（排查用户反馈的问题、做变更前验证等）。开通 Mock 权限后，管理员可以"模拟成"某个员工身份提问，菜小蜜会按被模拟员工的真实属性走完整的 RAG 鉴权、政策匹配、技能执行流程，返回该员工视角下应该看到的答案，而不是管理员自己的
+
+**③ 前置拦截器链**（3 个，按固定优先级顺序执行，命中即短路返回，全部不调 LLM，延迟 <50ms）
+- `SpecialCommandTool`：精确字符串匹配（`equals`）判断是否为"开启新话题"/"new chat"，命中则刷新会话(session)并回一张新会话卡片；
+- `OnlineSupportTool`：命中转人工关键词（或短时间内多次追问未解决）直接转人工客服卡片；
+- `SimilarQuestionTool`：数据库精确匹配 FAQ 表（`similarQuestionMapper.queryByQuestion`），命中后经 `crowdRuleId` 圈人过滤，返回预设答案卡片。
+  三者都返回 null（未命中）才会往下走，普通提问一般都会走到第④步。
+
+> "相似"体现在运营人员提前人工配置了同一个问题的多种说法（如"怎么请假"、"如何请假"、"请假流程"都指向同一个答案），而不是运行时做语义相似度/向量检索——它是一个纯规则化、O(1) 查表的短路层，本意就是用最低成本把最高频、最标准的问题拦掉，省下调用 LLM/RAG 的成本和延迟，语义层面的模糊匹配交给后面走不到这里的 RAG 主流程去做。
+
+**④ AI 并发路由 `aiRouting`**（核心环节，决定了这次对话最终交给哪个 Tool 处理）
+用专属线程池 `AI_ROUTING_POOL` 通过 `CompletableFuture.supplyAsync` 并发发起 4 路 LLM/查询调用（其中一路内部还嵌套 3 路，实际最多 6 个 LLM 调用同时在跑）：
+
+| 并发任务 | 方法 | 模型 | 产出 |
+|---|---|---|---|
+| 技能路由 | `aiRoutingForTool` | qwen3.6-flash | operationId（决定路由到哪个 Tool），工具列表会先按 `crowdRuleId` 圈人过滤再序列化进 Prompt |
+| 语种检测 | `cxmLangDetector.detect` | - | userLang，用于后续多语言回答 |
+| Query 改写（内部又并发 3 路） | `aiRoutingForUserInputRewrite` | qwen3.6-flash×3 | 上下文重写（补全指代）/关键词同义词扩展/用户身份信息重写，三路结果存入 `ragQueryMap` |
+| 知识库过滤标签 | `aiRoutingForKnowledgeBaseFilterCode` | qwen3.6-plus | knowledgeBaseFilterCode，恒带 `common` 兜底，用于 RAG 召回时过滤知识库范围 |
+
+这 4 路调用之间**无数据依赖**，通过 `CompletableFuture.allOf().join()` 并发等待全部完成，把路由总延迟从串行累加的 ~2s 压缩到 ~500ms（取决于最慢的那一路）。任一环节异常或路由到不存在的 operationId，都会**自动降级为默认技能 `caixiaomiKnowledgeQA`**（知识问答），保证链路不中断。
+
+**⑤ 技能分发**
+`ToolExecutorRegistry` 在 Spring 启动时已经把所有 `ToolExecutor` 实现类按 operationId 建好了 Map，这一步直接用第④步产出的 operationId 查表，拿到具体的 Tool（如 `CxmKnowledgeQATool`），交给它执行。
+
+**⑥ RAG 主流程**（`CxmKnowledgeQAServiceImpl.doKnowledgeQA`，知识问答场景下最重的一步）
+1. 先发一张"知识问答"流式卡片占位；1.5s 后若仍无内容，用 `TaskScheduler` 定时任务先展示"正在检索知识..."中间态，消除用户等待焦虑；
+2. `answerWithFallback` 主流程 `answerWithRag`：非中英文先用 `qwen-mt-flash` 翻译 query 并入 `ragQueryMap`；用 `RAG_STRATEGY_POOL`（core=30, max=50）并发跑 6 个 `AbstractKnowledgeRetrievalStrategy` 知识源召回策略（政策平台/知识平台/钉文档/制度中心/消息中心/学习平台，若命中政策制度分类则只跑政策类子集）；
+3. 每个策略内部用 `RAG_RETRIEVE_POOL`（core=100, max=150）并发调用 `BailianClient.retrieve`（知识库 × query 笛卡尔积，`denseSimilarityTopK=100`、`enableReranking=true`、rerank 模型 `qwen3-rerank-hybrid` 从 Top-100 收敛到 Top-20）；
+4. 召回结果按文档名去重后，用 `KNOWLEDGE_AUTH_POOL`（core=200, max=300）并发做文档权限鉴权，`CompletableFuture.allOf(futures).get(3, TimeUnit.SECONDS)` 总超时 3s 熔断，超时未完成的切片降级为无权限直接丢弃；
+5. `SliceHelper.reRankAndSelect` 应用层二次 Rerank：`原召回分 × 0.7 + 文档名 rerank 分 × 0.3`（`qwen3-rerank` 模型）加权，降序取 Top-K（默认 20，Diamond 可配）且有权限的切片；
+6. 组装多消息 Prompt（SYSTEM 指令 + 环境/用户信息 + 对话历史 + 知识切片）→ `BailianMultiModalModelClient.streamCall` 调 qwen3.6-plus 流式生成答案；若命中兜底关键词（如"暂时没有相关内容"），通过 RxJava `concatWith` 无缝拼接一次联网通识问答流；
+7. LLM 每吐一个 token，通过 `updateCardDateStream` 逐帧更新钉钉卡片，答案超过 10 字符后异步识别答案语种。
+
+**⑦ 收尾**
+答案语种与用户语种不一致时用 `qwen-mt-flash` 回译并保存原文/译文；`buildKnowledgeSource` 用 qwen3.6-plus 从答案中抽取引用了哪些知识切片，拼装成"知识来源"链接展示给用户；落库最终 `answerContent`；`updateChatLogAfterExecution` 记录 toolCode/结束时间/耗时等扩展信息；若答案为空或命中兜底关键词，则发送咨询工单兜底卡片，引导用户转人工。
+
+**分支说明**：若第④步路由结果是业务技能（如智能请假）而非知识问答，则第⑤步之后走 `AILeaveTool.execute`（调 qwen3-max 解析请假参数→匹配假期额度→发确认卡片），用户点击确认按钮后走**卡片回调链路**：`DingRobotListenerConfig.handleCardAction → CxmAiEngine.executeCardAction → ReturnBtnStrategyFactory.getStrategy(actionId) → 具体 Strategy.execute → AIFacade.createAiLeave` 完成提交，这是策略模式在 Action 按钮回调机制中的典型应用（目前有 20 个策略类按 `ReturnEventEnum` 19 种事件分发）。
+
+#### aiRouting是如何确定路由到哪个模块的？
+
+aiRouting 的核心思路是**把路由决策外包给模型自己判断**，不是靠规则硬编码分支，而是靠一次结构化的意图识别 LLM 调用，其余几路只是辅助信息、不参与决定路由到哪。具体是 5 路并发发起（用专门的路由线程池，避免用默认公共线程池受 CPU 核数限制）：
+
+① **技能路由（唯一决定路由到哪个模块的一路）**：把所有已注册技能的描述信息（标题、说明、参数、示例问题），按当前用户是否命中各自的圈人规则过滤一遍后，拼成一份工具清单文本放进系统提示词，再把格式化好的对话历史当作一条用户消息一起交给一个轻量快速模型，模型直接输出一份结构化结果，里面带着它认为应该调用的技能标识和从用户话里提取出的参数。这个标识就是后续路由去哪个模块的唯一依据。
+
+② **语种识别**：判断用户提问用的什么语言，和路由结果本身无关，是给后续生成阶段回译用的。
+
+③ **候选问题改写（三路并发）**：基于对话上下文做自然语句改写、做关键词同义词扩展、结合用户身份信息做改写，这三路是给知识问答的检索阶段准备候选问题用的，和决定路由到哪个模块无关。
+
+④ **知识库过滤标签识别**：结合用户所在地点、员工属性描述，识别问题应该归到哪个知识库分类标签，供命中知识问答技能后做检索过滤，同样和路由决策本身无关。
+
+这 4 路互不依赖对方结果，用 `CompletableFuture` 全部丢进同一个路由线程池并发发起，最后依次 `join()` 拿到 4 个结果后统一组装进本次请求的上下文对象里。
+
+**真正决定路由的落地机制**：拿到第①路返回的技能标识后，去一个全局的技能注册表里按这个标识查找对应的执行器实现类；如果找不到（比如模型输出了一个不存在的标识，或者第①路调用本身抛了异常），就直接抛异常，被外层统一捕获降级为默认的知识问答技能兜底，保证任何路由异常都不会导致用户拿不到任何回复。
+
+**需要注意的前置条件**：真正走到 aiRouting 之前，还有一层零 LLM 的前置拦截器（特殊指令精确匹配、FAQ 相似问题精确匹配）先跑一遍，只有都没命中，才会真正进入这里的 5 路并发路由判断——所以 aiRouting 并不是每次请求的第一道关卡，而是确定性规则兜不住之后才会用到的“智能路由”。
+
+
+#### 知识问答模块执行流程
+
+知识问答的核心实现是 `CxmKnowledgeQAServiceImpl`，对外两个入口共用一套 RAG 编排逻辑：钉钉走 `doKnowledgeQA`（自己操作卡片），Web/HSF 走 `doKnowledgeQAForWeb`（把流转发给调用方渲染）。以钉钉入口为例，完整执行流程：
+
+① **占位**：先发一张"知识问答"流式卡片占位，此时百炼侧还没开始生成；再注册一个 1.5 秒的延迟任务，如果到时候答案还没有任何内容，就先把卡片更新成“正在检索知识...”的中间态提示，消除等待焦虑。
+
+② **RAG 检索与生成（三层线程池并发，这是整条链路最重的一步）**：
+- 第一层（外层）：把改写、翻译后得到的多个候选问题准备好之后，用一个专门的“检索策略线程池”并发触发 6 个知识源（政策制度、知识平台、钉钉文档、消息中心、学习平台等）各自的召回策略，一个知识源对应一个策略实现类，谁都不等谁，全部同时发起。
+- 第二层（策略内部）：每个知识源策略内部，会把“这个知识源挂了几个知识库”和“候选问题列表”做笛卡尔积，比如 2 个知识库 × 3 个候选问题就是 6 次调用，这些调用再用另一个专门的“检索调用线程池”并发发给模型平台的检索接口，每次调用都做向量召回 Top-100 再用`rerank`模型收敛到 Top-20。
+- 第三层（鉴权）：所有知识源召回的切片汇总后按所属文档名去重，一个文档只鉴权一次，用第三个“鉴权线程池”并发校验当前用户对每篇文档有没有查看权限，同时设置一个 3 秒的总超时熔断，超时还没返回结果的文档直接降级为无权限、对应切片被丢弃，保证链路不会被慢鉴权拖死。
+- 三层线程池必须严格隔离、不能共用，否则外层任务占满线程后，内层的检索调用和鉴权调用永远抢不到线程去执行，而外层又在等内层结果，就会形成线程饥饿死锁。另外并发收集结果时必须先把所有任务收集成一个列表，再统一取结果，如果写成链式一边生成任务一边取结果，会退化成串行。
+- 汇总完所有知识源的切片后，再做一次应用层的二次`rerank`（`原召回分 × 0.7 + 文档名 rerank 分 × 0.3`（`qwen3-rerank` 模型）加权，降序取 Top-K（默认 20，Diamond 可配）且有权限的切片），然后组装一份多角色的提示词——核心指令用`role`-`system`、当前时间和用户身份信息用`role`-`user`单独传、历史对话原样保留、最后把选中的知识切片也用`role`-`tool`角色单独传（不同角色分开传是为了让模型更容易分清哪些是指令、哪些是背景信息、哪些是检索结果），交给模型流式生成答案，返回一条“热的”结果流。
+
+③ **兜底编排**：上面这条结果流不会直接交给下游，而是先包一层兜底逻辑——一边旁路监听、把每一帧内容悄悄累加成一份完整答案（不影响原始内容继续往下传递），等这条流真正结束之后，再去判断累加出来的完整答案里有没有命中“暂时没有相关内容”这类兜底关键词。（这里有个实现上的关键点：判断逻辑必须包一层“延迟求值”，否则代码跑到这一行时会立刻求值，而这时候第②步的答案可能还没生成完、累加内容还是空的，判断就会失效；包一层延迟求值之后，才能保证判断动作真正发生在第②步的流完全结束之后。）一旦命中兜底关键词，就无缝接上一次不依赖知识库、开着联网搜索的通识问答，继续把内容拼到同一条流里；没命中就什么都不做。这样处理之后，下游拿到手的始终是一条连续的流，完全感知不到背后可能悄悄多切换了一次模型调用。
+
+④ **同步消费**：用阻塞式的方式逐帧消费这条最终的流——每收到一帧就累加进最终答案变量，同步把卡片内容做增量刷新；第一次出现内容时记一个“首字展示”埋点；累加内容长度超过 10 个字符时，异步触发一次语种识别（这个识别任务和后续继续生成答案是并行跑的，不会卡住主流程）。
+
+⑤ **收尾**：流结束后，如果识别出来的答案语种和用户提问语种不一致，就调翻译模型把答案回译成用户的语种，同时保留原文；然后根据本次用到的知识切片反查出“知识来源”文案更新到卡片上；再更新钉钉侧的“场域信息”（控制这条消息是否支持转发、搜索列表里怎么展示摘要）；把最终答案落库；最后做一次质量兜底——如果答案是空的或者命中了低质量关键词，就再补发一张“提工单”卡片，引导用户转人工。
+
+`doKnowledgeQAForWeb` 中的第②③步逻辑完全复用，区别只在第④步：不去操作钉钉卡片，而是把这条热流转换成一种标准的增量返回帧格式，末尾再拼一帧知识来源和兜底链接，直接发布给自己创建的处理器，由调用方（Web/HSF 端）自己订阅渲染。
+
+
+#### 文档鉴权讲一下
+鉴权逻辑本质是策略模式——`AbstractKnowledgeRetrievalStrategy` 只定义抽象方法 `authSlice(workNo, empNo, documentName)`，每个知识源子类各自实现，直接代理调用该文档"原始归属系统"自己的权限校验接口（制度中心/Athena/知识平台/钉钉），而不是我们自己重新设计一套鉴权规则去重复判断——这样才能保证"AI 助理里能看到的文档权限"和"原系统里能看到的文档权限"永远一致，不会出现绕过原系统权限体系泄露信息的问题。只有钉钉文档这一路是真正调用的钉钉开放 API，其余几路都是各业务系统自己的权限服务。
+
+#### 三个线程池具体参数
+
+创建方式在 `ThreadPoolUtil.getThreadPool(PoolEnum)` 里统一实现：以线程池枚举值为 key，用双重检查锁 + `ConcurrentHashMap` 做懒加载单例（每种线程池全局只会被 `new` 一次），底层就是标准的 `ThreadPoolExecutor`，队列用 `LinkedBlockingQueue(queueCapacity)`（有界队列），线程命名用 `ThreadFactoryBuilder` 按枚举里配的格式统一命名（方便排查时看线程栈能一眼看出是哪个池子），拒绝策略统一用 `AbortPolicy`（队列满了直接抛异常，不会静默丢任务）。三个线程池的参数（core / max / 队列容量 / 存活时间）都在 `PoolEnum` 枚举里硬编码好，按 QPS≈3 估算：
+
+| 线程池 | corePoolSize | maxPoolSize | 队列容量 | keepAliveTime | 用途 |
+|---|---|---|---|---|---|
+| `RAG_STRATEGY_POOL`（外层） | 30 | 50 | 50 | 60s | 并发驱动多个知识源的召回策略，估算依据是 3 并发 × 若干策略，IO 密集型放大 10 倍 |
+| `RAG_RETRIEVE_POOL`（中层） | 100 | 150 | 500 | 60s | 每个策略内部，知识库 × 候选问题笛卡尔积后并发调用检索接口，估算依据是 3 并发 × 3 候选问题 × 3 知识库，IO 密集型放大 10 倍 |
+| `KNOWLEDGE_AUTH_POOL`（内层） | 200 | 300 | 500 | 60s | 并发做文档鉴权，估算依据是 3 并发 × 每次请求约 60 个切片 |
+
+三个池子队列容量和存活时间的设计思路是一致的：core 线程按估算并发量留出 2-3 倍余量常驻不销毁，max 是 core 的 1.5 倍左右应对突发流量，队列容量给到几百，短暂的排队不会立刻触发拒绝策略，60 秒空闲后 max 之外的线程会被回收，避免长期空占资源。
+
+
+#### 智能请假模块执行流程
+
+智能请假分两个阶段：发起阶段在 `AILeaveTool.execute` 里完成（LLM 解析参数→匹配假期→查额度/时长→校验必填项→发确认卡片），提交阶段在用户点击卡片确认按钮后走卡片回调链路完成。具体：
+
+① **参数解析**：把系统提示词（注入当前日期、星期几，可选再拼一份日历辅助信息）和用户原始输入一同交给 `qwen3-max` 模型，直接解析出结构化的请假参数（假期类型、开始/结束时间及各自的上/下午、请假事由、附件图片等），这一步是整个模块里唯一的 LLM 参与。
+
+② **身份代办校验**：如果解析出来的申请人不是“本人”，先校验当前操作人和被代申请人的对应关系是否合法，校验失败就发一张提示卡片直接终止流程，不会再走到后面的额度查询。
+
+③ **假期类型匹配与规则校验**：拿解析出的假期名称去匹配当前员工可用的具体假期类型（拿到假期 code、额度规则、该假期是按天计还是可以按半天计），如果这个假期只能按天计但用户选了半天（开始下午或结束上午），就直接终止流程并提示只能整天请。
+
+④ **时长查询与卡片数据组装**：再去查询实际请假时长，把额度（还剩多少天、多少天即将过期）、时长、事由、附件图片都拼进卡片数据；若是婚假/路途假/丧假等特殊假期类型，还会额外补充对应的属性字段（结婚日期、探亲地、交通工具、是否往返等）。
+
+⑤ **必填字段校验与发卡**：查这个假期类型在表单配置中哪些字段是必填的，缺哪个就发一张“缺字段”卡片让用户补充（这时还没提交）；字段齐全就发“确认卡片”，展示完整的请假信息等用户确认，到这里发起阶段的 LLM 工具调用就结束了，卡片停在钉钉侧等用户交互。
+
+⑥ **卡片回调——策略分发**：用户点击确认卡片上的“提交”按钮后，钉钉回调统一走 `DingRobotListenerConfig.handleCardAction → CxmAiEngine.executeCardAction`，内部用 `ReturnBtnStrategyFactory` 根据按钮的 actionId 找到对应的处理策略（这里对应的是 `HolidayLeaveSubmitBtnStrategy`）——这是策略模式在卡片按钮回调场景下的典型应用，目前有约 20 个策略类分别处理不同卡片的按钮事件。
+
+⑦ **真正提交**：策略内部把卡片回传的所有字段包装成请求，调用 `AIFacade.createAiLeave` 真正将请假单据提交到后端假期系统；提交失败就把错误信息做一下文案替换后发失败卡片，提交成功就拿到详情链接，更新卡片展示为“已提交”状态并带上跳转地址。
+
+**和知识问答的本质区别**：知识问答是一次性同步调用里把“检索+生成”一气跑完返回一条流；智能请假需要一次跨请求的人机交互——发确认卡片后第一次调用就结束了，真正的业务提交是等到用户点击确认按钮后，通过卡片回调这条完全不同的链路才完成，两次请求中间隔了用户的实际确认时间（可能是好几分钟）。
+
+
+
 
 #### 做项目中遇到的最大挑战是什么？
 
@@ -153,13 +301,55 @@ A：这是面向集团内部数万员工的 HR 领域 Agent，以自然语言对
 
 
 
+### 两段式路由引擎
+- 两段式路由引擎："规则前置拦截(本地策略模式匹配，零 LLM 调用) + 6 路并发 LLM 路由（1路决定路由模块 + 5路数据准备）" 两段式路由，保障LLM实时可用性；基于策略模式抽象 ToolExecutor，支撑 10+ 业务模块可插拔注册，新增模块零侵入主流程。
+
+第一段规则前置拦截按固定优先级执行：先通过 `SpecialCommandTool` 匹配特殊指令（如"开启新话题"），再通过 `SimilarQuestionTool` 在 FAQ 库中做精确匹配，命中即返回、不走 LLM，保证确定性场景的低延迟（<50ms）。前置拦截器返回 null 表示"不处理"，流程继续到第二段 LLM 路由。第二段 `aiRouting()` 并发执行 4 个 LLM 调用（实际含嵌套最多 6 个）：技能路由（将工具列表序列化为 Prompt，用 qwen-flash 快速模型识别意图）、语言识别、问题重写（又并发 3 路：上下文重写 / 关键词同义词扩展 / 用户身份信息重写，多角度扩展提高 RAG 召回率）、知识库标签识别。这 4 个调用无数据依赖，并发执行将路由延迟从串行累加的 ~2s 压缩到 ~500ms。ToolExecutor 注册通过 Spring 自动收集：`ToolExecutorRegistry` 构造器注入 `List<ToolExecutor>`，过滤掉前置拦截器后按 operationId 建映射表。新增技能只需实现接口 + 加 `@Component` + 在 Diamond 配置工具描述，对主流程零侵入。路由失败时自动降级到知识问答（最安全的兜底技能）。每个 Tool 还支持圈人配置（`crowdRuleId`），通过人群校验决定该工具是否出现在路由 Prompt 中。
+
+
+- 常用设计模式：[常用设计模式](https://www.cnblogs.com/cwp0/p/20729842)
+- 策略模式：将一组可互换的算法封装为独立类，使它们可以相互替换，算法的变化不影响使用它的客户端。核心是"面向接口编程 + 组合优于继承"。适用于支付方式选择、排序策略切换、RAG 检索策略等场景。
+
+
+#### 前置拦截器是怎么匹配的？特殊指令和相似问题分别用什么方式？
+前置拦截器有两种匹配方式，按优先级顺序执行：
+- **特殊指令匹配**：通过精确字符串匹配（equals）判断用户输入是否为固定关键词，如 `"开启新话题".equals(userInput) || "new chat".equals(userInput)`。匹配成功则刷新会话并返回提示卡片，不匹配则返回 null 继续往下走。非常轻量，延迟几乎为零。
+- **相似问题匹配**：调用 `SimilarQuestionService.getSimilarQuestion(userInput, empNo)` 进行**数据库精确匹配**（`similarQuestionMapper.queryByQuestion()`），匹配到记录后再通过 crowdRuleId 做圈人过滤，取最新的一条返回预设答案。未命中返回 null 继续走 LLM 路由。**不用语义检索的原因**：① 精确匹配延迟 <50ms，语义检索需要几百毫秒；② FAQ 库是人工标注的标准 Q&A，要求 100% 准确；③ 数据规模小（几百到几千条），精确匹配足够；④ 未命中后续还有 RAG 语义检索兜底，两者是互补关系。
+
+#### 6个LLM调用详细说下
+aiRouting() 方法通过 CompletableFuture.supplyAsync() 并发启动 4 个独立的 LLM 调用：
+- ① **技能路由**（aiRoutingForTool）：将当前用户可用的工具列表（经过圈人过滤后）序列化为 Prompt，用 qwen-flash 快速模型识别用户意图，返回匹配的 operationId。
+- ② **语言识别**（cxmLangDetector.detect）：识别用户输入的语言（中文/英文等），后续用于多语言回答。
+- ③ **问题重写**（aiRoutingForUserInputRewrite）：这一路内部又并发 3 个子 LLM 调用——上下文重写（结合历史对话补全指代和省略）、关键词同义词扩展（扩展搜索关键词提高召回率）、用户身份信息重写（结合员工工号/部门等信息补充问题上下文）。所以实际最多 6 个 LLM 调用。
+- ④ **知识库标签识别**（aiRoutingForKnowledgeBaseFilterCode）：判断问题所属的知识库分类标签，用于 RAG 召回时做知识库过滤，提高召回精准度。
+- 这 4 个调用之间无数据依赖，并发执行后通过 CompletableFuture.allOf().join() 等待全部完成，将路由总延迟从串行 ~2s 压缩到 ~500ms（取决于最慢的那一路）。
+
+#### ToolExecutor是什么？通俗解释一下
+ToolExecutor 就是一个**"技能插件"的统一接口**。每个业务技能（比如"查工资""查年假""查组织架构"）都是一个实现了 ToolExecutor 接口的 Java 类。这个接口定义了几个关键方法：
+- `getOperationId()`：返回技能的唯一标识（如 "queryPayslip"），相当于技能的"身份证号"
+- `execute()`：技能被选中后执行的核心逻辑
+- `isPreInterceptor()`：标记是否为前置拦截器（SpecialCommandTool / SimilarQuestionTool 返回 true）
+
+ToolExecutorRegistry 是"技能注册中心"。Spring 启动时，会自动发现所有加了 @Service/@Component 注解的 ToolExecutor 实现类，收集成一个列表注入到 ToolExecutorRegistry 的构造器中。Registry 把前置拦截器过滤掉，剩下的按 operationId 放进一个 Map（字典）。当 AI 路由说"用户想查工资，对应 operationId=queryPayslip"时，Registry 就能从 Map 中快速找到对应的技能类去执行。
+
+#### 具体现在有什么 Tool？
+- **前置拦截器**（零 LLM 调用）：`SpecialCommandTool`（特殊指令）、`OnlineSupportTool`（转人工）、`SimilarQuestionTool`（相似问题匹配）
+- **AI 路由技能**（LLM 调度）：`CxmKnowledgeQATool`（RAG 知识问答兜底）、`AILeaveTool` / `AILeaveRecordTool` / `AILeaveQuotaTool`（请假三件套）、`AICInsuranceTool`（商保）、`AiCertificateTool2`（证明办理）、`CxmDataQueryTool`（HR 数据查询）、`TalentProfileTool`（人才画像）、`CreateCase`（工单）、`CallHotline`（热线）、`AITransferCheck` / `AITransferSubmit`（转岗）
+
+所有技能的可见性可通过 Diamond 配置中的 `crowdRuleId` 按人群动态控制。
+
+#### 详细介绍新增Tool的流程？
+新增一个技能分代码侧和配置侧两步：
+- **代码侧**：创建新 Java 类，加 @Component 注解，实现 ToolExecutor 接口（getOperationId 返回唯一标识，execute 编写业务逻辑）。Spring 容器启动时自动扫描注册到 ToolExecutorRegistry 的映射表中。
+- **配置侧**：在 Diamond 配置中心的 AiAssistantConfigData.tools 列表中添加工具描述 JSON，包含 operationId、title、description、exampleQueries、parameters、crowdRuleId（可选，按人群灰度开放）。Diamond 推送后立即生效。
+- 全程**不需要修改 CxmAiEngine 或任何主流程代码**——"零侵入"。圈人机制：每个 Tool 配置 crowdRuleId 后，AI 路由构建工具列表时会调用 CrowdWrapper.validateMatched(empNo, crowdRuleId) 校验当前用户是否在目标人群中，只有通过的工具才出现在路由 Prompt 中。
 
 
 
-### 1. 多源 RAG 系统
-多源 RAG 系统：线程池隔离 + CompletableFuture编排并发召回 4 套异构知识源（政策库/知识平台/协同文档/草稿态），单源超时 3s 熔断降级，Rerank重排后取Top-K注入上下文，保障召回相关性与主链路可用性。
+### 多源 RAG 系统
+多源 RAG 系统：三层线程池隔离（策略池/检索池/鉴权池） + CompletableFuture 编排并发召回 6 套异构知识源（制度中心/政策平台/知识平台/钉钉文档/消息中心/学习平台），单知识源内部知识库 × 候选问题笛卡尔积并发检索，切片鉴权 3s 熔断降级，双重 Rerank（百炼粗排+应用层文档名精排）后取 Top-K 注入上下文，保障召回相关性与主链路可用性。
 
-4 套知识源各有独立的 `AbstractKnowledgeRetrievalStrategy` 子类，通过模板方法定义标准流程（构建过滤标签 → 调用百炼 retrieve API → 文档鉴权），子类只需实现差异化逻辑。并发架构采用三层线程池隔离：外层 `RAG_STRATEGY_POOL`（core=30, max=50）驱动 4 个 Strategy 并发；内层 `RAG_RETRIEVE_POOL`（core=100, max=150）处理每个 Strategy 内多 query × 多知识库的百炼 API 调用；鉴权层 `KNOWLEDGE_AUTH_POOL`（core=200, max=300）处理每个知识切片的文档权限校验。三层必须分开，否则外层任务占满线程后内层任务排队，形成线程饥饿死锁。CompletableFuture 并发有一个关键陷阱：必须先 `.collect(Collectors.toList())` 收集所有 Future，再 `.stream().flatMap(f -> f.join())` 汇总结果——如果直接链式调用，由于 Stream 惰性求值会退化为串行。单源超时通过 `CompletableFuture.allOf(futures).get(3, TimeUnit.SECONDS)` 实现，超时后只收集已完成的鉴权结果，未完成的切片降级为无权限。Rerank 分两段：百炼内部先用 `qwen3-rerank-hybrid` 模型从 Top-100 收敛到 Top-20，应用层再用 `qwen3-rerank` 模型对文档名做 rerank，按 `原召回分 × 0.7 + 文档名 rerank 分 × 0.3` 加权融合后取 Top-K（由 Diamond 配置控制，默认 20）注入 Prompt。
+6 套知识源各有独立的 `AbstractKnowledgeRetrievalStrategy` 子类（`AliRegulationRetrievalStrategy` 制度中心、`HrPolicyRetrievalStrategy` 政策平台、`KnowledgePlatformRetrievalStrategy` 知识平台、`DingDocRetrievalStrategy` 钉钉文档、`CxmMessageCenterRetrievalStrategy` 消息中心、`LearningPlatformRetrievalStrategy` 学习平台），通过模板方法定义标准流程（构建过滤标签 → 调用百炼 retrieve API → 文档鉴权），子类只需实现差异化逻辑。并发架构采用三层线程池隔离：外层 `RAG_STRATEGY_POOL`（core=30, max=50）驱动 6 个 Strategy 并发；中层 `RAG_RETRIEVE_POOL`（core=100, max=150）处理每个 Strategy 内部知识库 × 候选问题笛卡尔积后的百炼 API 调用；鉴权层 `KNOWLEDGE_AUTH_POOL`（core=200, max=300）处理每个知识切片的文档权限校验。三层必须严格隔离、不能复用，否则外层任务占满线程后内层任务永远抢不到线程去执行，而外层又在等内层结果，就会形成线程饥饿死锁。CompletableFuture 并发有一个关键陷阱：必须先把所有任务收集成一个列表，再统一取结果——如果写成链式一边生成任务一边取结果，由于惰性求值会退化为串行。单源超时通过 `CompletableFuture.allOf(futures).get(3, TimeUnit.SECONDS)` 实现，超时后只收集已完成的鉴权结果，未完成的切片降级为无权限。Rerank 分两段：百炼内部先用 `qwen3-rerank-hybrid` 模型从 Top-100 收敛到 Top-20，应用层再用 `qwen3-rerank` 模型对文档名做 rerank，按 `原召回分 × 0.7 + 文档名 rerank 分 × 0.3` 加权融合后取 Top-K（由 Diamond 配置控制，默认 20）注入 Prompt。
 
 
 - RAG（Retrieval Augmented Generation）：先从外部知识库**检索**相关信息，再把检索到的内容塞进 Prompt，让模型基于**真实数据**生成回答，而非仅凭记忆"编造"。 **为什么需要 RAG？** 模型参数知识有截止日期，且无法包含企业私有数据。RAG 让模型"查资料"而非"凭记忆"，大幅减少幻觉，是当前 Agent 开发中最常用的知识增强手段。
@@ -202,9 +392,6 @@ A：这是面向集团内部数万员工的 HR 领域 Agent，以自然语言对
 #### 知识切片的文档权限校验是什么意思？
 RAG 召回的知识切片（chunk）来自不同的原始文档，而不同文档有不同的访问权限。鉴权层做的事情是：对每个召回的知识切片，根据它所属的原始文档，校验当前提问用户是否有权查看该文档。代码中 authSlice(workNo, empNo, docName) 就是传入工号和文档名进行权限校验。不同策略子类的鉴权方式不同：政策平台通过 DocumentOpenService 校验、钉文档通过钉钉 API 校验、知识平台通过 KnowledgeAuthenticateFacade 校验。如果用户对某文档没有权限，该文档下的所有知识切片都会被过滤掉，不会注入到 Prompt 中——防止通过 AI 助理绕过文档权限体系泄露敏感信息。
 
-#### 三层线程池是否存在前后依赖关系？否则无法形成死锁
-是的，三层线程池存在严格的**嵌套依赖关系**，这正是必须分开的原因。调用链是：RAG_STRATEGY_POOL（外层）并发执行 3 个策略的 ragRetrieveKnowledgeSlice() → 每个策略内部用 RAG_RETRIEVE_POOL（内层）并发调用多个百炼 retrieve API → 召回结果返回后用 KNOWLEDGE_AUTH_POOL（最内层）并发做文档鉴权。如果三层共用一个线程池，外层 3 个策略任务占据了所有线程，内层的 retrieve 调用和鉴权调用就无法获得线程执行，但外层任务又在等内层结果——外层持有线程等内层、内层等线程被外层占着，形成经典的**线程饥饿死锁**。代码注释也明确写了"不能与 RAG_RETRIEVE_POOL 共用，否则会有线程饥饿死锁风险"。
-
 #### 3秒熔断只是针对切片鉴权吗？还是针对整个召回过程？
 根据代码，3秒熔断是**针对切片鉴权阶段**的。在 AbstractKnowledgeRetrievalStrategy 的 collectAuthResults() 方法中，对所有鉴权 Future 设置 CompletableFuture.allOf(futures).get(3, TimeUnit.SECONDS) 总超时。超时后只收集已完成的鉴权结果，未完成的切片被视为无权限直接丢弃。之所以只针对鉴权阶段设超时，是因为鉴权需要调用外部权限服务（如钉钉API、DocumentOpenService），这些外部调用延迟不可控，是整个 RAG 链路中最容易成为瓶颈的环节。召回阶段（retrieve）的超时由百炼 SDK 自身的 HTTP 超时控制。
 
@@ -230,16 +417,16 @@ RAG 召回的知识切片（chunk）来自不同的原始文档，而不同文�
 
 分五个层面迭代提升：
 - **① 查询优化**：并行跑三路 Query Rewrite——上下文消歧（解决多轮对话指代不清）、关键词同义词扩展（提高 BM25 混合检索召回）、用户身份注入（把用户工区/公司信息注入查询）。同时用 LLM 做话题分类预筛知识库，减少噪声源。
-- **② 召回增强**：7 个异构知识源 CompletableFuture 并行召回，单源 3 秒超时熔断不影响主链路。每个知识源 × 每个改写查询做笛卡尔积并发检索，最大化召回量。
+- **② 召回增强**：6 个异构知识源 CompletableFuture 并行召回，单源 3 秒超时熔断不影响主链路。每个知识源 × 每个改写查询做笛卡尔积并发检索，最大化召回量。
 - **③ 双重 Rerank**：检索层用 `qwen3-rerank-hybrid` 从 top-100 重排取 top-20（hybrid 同时结合向量语义和词频匹配）；应用层再对文档名做 rerank，混合打分 `内容分×0.7 + 文档名分×0.3`，优先选来自更相关文档的片段。
 - **④ 前置短路**：维护一张人工审核的 FAQ 表，精确匹配直接返回标准答案，绕过整个 RAG 链路，高频问题准确率 100%。
 - **⑤ 兜底+闭环**：RAG 答不出时无缝降级到通用 LLM + 联网搜索；离线用 LLM-as-a-Judge 对标准 QA 对自动评分，低于阈值的自动标记，驱动 Prompt 和召回策略持续迭代。
 
-#### 4套异构知识源分别是什么？为什么要做多源？
+#### 6套异构知识源分别是什么？为什么要做多源？
 
-4 套知识源：政策库（公司制度文档，权威性最高）、知识平台已审核内容（标准知识条目）、知识平台未审核草稿态（时效性强但未审核）、钉钉协同文档（业务团队实时编辑的工作文档）。不统一成一个向量库的原因：
-- **① 更新频率和权威性差异大**：政策库数月更新一次但权威性最高需要高权重，钉钉文档每天变更但质量参差不齐。
-- **② 鉴权模型不同**：政策库按文档路径标签做圈人鉴权，知识平台按审核状态区分可见性，钉钉文档按空间权限控制。统一存储会丢失细粒度权限语义，无法在 retrieve 阶段通过 filterTags 做权限预过滤。
+6 套知识源，均有独立的 `AbstractKnowledgeRetrievalStrategy` 子类：`AliRegulationRetrievalStrategy`（制度中心，公司规章制度文档，权威性最高）、`HrPolicyRetrievalStrategy`（政策平台，HR 政策类内容）、`KnowledgePlatformRetrievalStrategy`（知识平台，运营沉淀的标准知识条目）、`DingDocRetrievalStrategy`（钉钉协同文档，业务团队实时编辑的工作文档）、`CxmMessageCenterRetrievalStrategy`（消息中心）、`LearningPlatformRetrievalStrategy`（学习平台，培训类内容）。不统一成一个向量库的原因：
+- **① 更新频率和权威性差异大**：制度中心数月更新一次但权威性最高需要高权重，钉钉文档每天变更但质量参差不齐。
+- **② 鉴权模型不同**：政策平台按文档路径标签做圈人鉴权，知识平台按审核状态区分可见性，钉钉文档按空间权限控制，各知识源对接的都是自己"原始归属系统"的权限接口。统一存储会丢失细粒度权限语义，无法在 retrieve 阶段通过 filterTags 做权限预过滤。
 - **③ 召回策略差异**：每个源的 filterTags 构建逻辑不同，需要各自的 Strategy 子类实现差异化。
 
 #### CompletableFuture 一个知识源挂了会影响其他源吗？
@@ -255,60 +442,11 @@ RAG 召回的知识切片（chunk）来自不同的原始文档，而不同文�
 - **③ AppId 降级**：`determineAppId()` 优先使用智能体 AppId，未配置或不可用时降级到工作流 AppId，保证流式链路不中断。
 
 
-#### 线程池参数怎么算的？QPS 翻倍怎么办？
 
-基于 QPS≈3 推导：外层 4 策略 × 3 = 12 并发，core=30 留 2.5 倍余量；内层每策略 5-8 个百炼调用 × 4 × 3 ≈ 96，core=100；鉴权层 top-20 × 4 源 × 3 = 240，core=200。QPS 翻倍时外层和内层线性增长需同比扩容，但鉴权层压力增长最大，优先引入鉴权结果会话级缓存降压，而非单纯加线程。
-
-
-
-
-
-### 两段式路由引擎
-两段式路由引擎："规则前置拦截(本地策略模式匹配，零 LLM 调用) + LLM Function Routing" 两段式路由，保障LLM实时可用性；基于策略模式抽象 ToolExecutor，支撑 10+ 业务工具可插拔注册，新增技能零侵入主流程。
-
-第一段规则前置拦截按固定优先级执行：先通过 `SpecialCommandTool` 匹配特殊指令（如"开启新话题"），再通过 `SimilarQuestionTool` 在 FAQ 库中做精确匹配，命中即返回、不走 LLM，保证确定性场景的低延迟（<50ms）。前置拦截器返回 null 表示"不处理"，流程继续到第二段 LLM 路由。第二段 `aiRouting()` 并发执行 4 个 LLM 调用（实际含嵌套最多 6 个）：技能路由（将工具列表序列化为 Prompt，用 qwen-flash 快速模型识别意图）、语言识别、问题重写（又并发 3 路：上下文重写 / 关键词同义词扩展 / 用户身份信息重写，多角度扩展提高 RAG 召回率）、知识库标签识别。这 4 个调用无数据依赖，并发执行将路由延迟从串行累加的 ~2s 压缩到 ~500ms。ToolExecutor 注册通过 Spring 自动收集：`ToolExecutorRegistry` 构造器注入 `List<ToolExecutor>`，过滤掉前置拦截器后按 operationId 建映射表。新增技能只需实现接口 + 加 `@Component` + 在 Diamond 配置工具描述，对主流程零侵入。路由失败时自动降级到知识问答（最安全的兜底技能）。每个 Tool 还支持圈人配置（`crowdRuleId`），通过人群校验决定该工具是否出现在路由 Prompt 中。
-
-
-- 常用设计模式：[常用设计模式](https://www.cnblogs.com/cwp0/p/20729842)
-- 策略模式：将一组可互换的算法封装为独立类，使它们可以相互替换，算法的变化不影响使用它的客户端。核心是"面向接口编程 + 组合优于继承"。适用于支付方式选择、排序策略切换、RAG 检索策略等场景。
-
-
-#### 前置拦截器是怎么匹配的？特殊指令和相似问题分别用什么方式？
-前置拦截器有两种匹配方式，按优先级顺序执行：
-- **特殊指令匹配**：通过精确字符串匹配（equals）判断用户输入是否为固定关键词，如 `"开启新话题".equals(userInput) || "new chat".equals(userInput)`。匹配成功则刷新会话并返回提示卡片，不匹配则返回 null 继续往下走。非常轻量，延迟几乎为零。
-- **相似问题匹配**：调用 `SimilarQuestionService.getSimilarQuestion(userInput, empNo)` 进行**数据库精确匹配**（`similarQuestionMapper.queryByQuestion()`），匹配到记录后再通过 crowdRuleId 做圈人过滤，取最新的一条返回预设答案。未命中返回 null 继续走 LLM 路由。**不用语义检索的原因**：① 精确匹配延迟 <50ms，语义检索需要几百毫秒；② FAQ 库是人工标注的标准 Q&A，要求 100% 准确；③ 数据规模小（几百到几千条），精确匹配足够；④ 未命中后续还有 RAG 语义检索兜底，两者是互补关系。
-
-#### 4个LLM调用详细说下
-aiRouting() 方法通过 CompletableFuture.supplyAsync() 并发启动 4 个独立的 LLM 调用：
-- ① **技能路由**（aiRoutingForTool）：将当前用户可用的工具列表（经过圈人过滤后）序列化为 Prompt，用 qwen-flash 快速模型识别用户意图，返回匹配的 operationId。
-- ② **语言识别**（cxmLangDetector.detect）：识别用户输入的语言（中文/英文等），后续用于多语言回答。
-- ③ **问题重写**（aiRoutingForUserInputRewrite）：这一路内部又并发 3 个子 LLM 调用——上下文重写（结合历史对话补全指代和省略）、关键词同义词扩展（扩展搜索关键词提高召回率）、用户身份信息重写（结合员工工号/部门等信息补充问题上下文）。所以实际最多 6 个 LLM 调用。
-- ④ **知识库标签识别**（aiRoutingForKnowledgeBaseFilterCode）：判断问题所属的知识库分类标签，用于 RAG 召回时做知识库过滤，提高召回精准度。
-- 这 4 个调用之间无数据依赖，并发执行后通过 CompletableFuture.allOf().join() 等待全部完成，将路由总延迟从串行 ~2s 压缩到 ~500ms（取决于最慢的那一路）。
-
-#### ToolExecutor是什么？通俗解释一下
-ToolExecutor 就是一个**"技能插件"的统一接口**。每个业务技能（比如"查工资""查年假""查组织架构"）都是一个实现了 ToolExecutor 接口的 Java 类。这个接口定义了几个关键方法：
-- `getOperationId()`：返回技能的唯一标识（如 "queryPayslip"），相当于技能的"身份证号"
-- `execute()`：技能被选中后执行的核心逻辑
-- `isPreInterceptor()`：标记是否为前置拦截器（SpecialCommandTool / SimilarQuestionTool 返回 true）
-
-ToolExecutorRegistry 是"技能注册中心"。Spring 启动时，会自动发现所有加了 @Service/@Component 注解的 ToolExecutor 实现类，收集成一个列表注入到 ToolExecutorRegistry 的构造器中。Registry 把前置拦截器过滤掉，剩下的按 operationId 放进一个 Map（字典）。当 AI 路由说"用户想查工资，对应 operationId=queryPayslip"时，Registry 就能从 Map 中快速找到对应的技能类去执行。
-
-#### 具体现在有什么 Tool？
-- **前置拦截器**（零 LLM 调用）：`SpecialCommandTool`（特殊指令）、`OnlineSupportTool`（转人工）、`SimilarQuestionTool`（相似问题匹配）
-- **AI 路由技能**（LLM 调度）：`CxmKnowledgeQATool`（RAG 知识问答兜底）、`AILeaveTool` / `AILeaveRecordTool` / `AILeaveQuotaTool`（请假三件套）、`AICInsuranceTool`（商保）、`AiCertificateTool2`（证明办理）、`CxmDataQueryTool`（HR 数据查询）、`TalentProfileTool`（人才画像）、`CreateCase`（工单）、`CallHotline`（热线）、`AITransferCheck` / `AITransferSubmit`（转岗）
-
-所有技能的可见性可通过 Diamond 配置中的 `crowdRuleId` 按人群动态控制。
-
-#### 详细介绍新增Tool的流程？
-新增一个技能分代码侧和配置侧两步：
-- **代码侧**：创建新 Java 类，加 @Component 注解，实现 ToolExecutor 接口（getOperationId 返回唯一标识，execute 编写业务逻辑）。Spring 容器启动时自动扫描注册到 ToolExecutorRegistry 的映射表中。
-- **配置侧**：在 Diamond 配置中心的 AiAssistantConfigData.tools 列表中添加工具描述 JSON，包含 operationId、title、description、exampleQueries、parameters、crowdRuleId（可选，按人群灰度开放）。Diamond 推送后立即生效。
-- 全程**不需要修改 CxmAiEngine 或任何主流程代码**——"零侵入"。圈人机制：每个 Tool 配置 crowdRuleId 后，AI 路由构建工具列表时会调用 CrowdWrapper.validateMatched(empNo, crowdRuleId) 校验当前用户是否在目标人群中，只有通过的工具才出现在路由 Prompt 中。
 
 
 ### RPA + 定时任务双链路知识同步
-RPA + 定时任务双链路知识同步：主链路通过 RPA 自动抓取协同文档变更增量同步至百炼向量库，Java 侧 SchedulerX 定时任务处理 RPA 无法覆盖的 FAQ 同步与文档删除场景，保障知识库实时性与完整性。
+- RPA + 定时任务双联路知识同步：主链路定时任务扫描钉钉空间做diff检测变更，通过 RPA 自动抓取协同文档变更增量同步至百炼向量库；辅以定时任务处理 RPA 无法覆盖的 FAQ 同步与文档删除场景，上传百炼自动完成切片向量化，保障知识库实时性与完整性。
 
 双链路设计的原因是能力互补：RPA 擅长处理需要渲染/下载的普通文档（alidoc / pdf），但无法处理钉钉 FAQ 格式（able 表格）的导出和文档删除操作。Java 侧 `DingDocSyncProcessor`（SchedulerX 定时任务）专门处理这两个场景——`dealDeleteTask()` 循环取出删除任务调用百炼 API 删除文件，`dealFaqTask()` 将钉钉 FAQ 文档导出为临时文件后上传百炼。知识库变更检测由独立的 `DingDocScanProcessor` 扫描任务完成：遍历钉钉文档空间目录树生成快照，与百炼现有文件列表对比，生成变更日志（ADD / MODIFY / DELETE），检测维度包括文件名变化、修改时间 tag 变化、able 文件超过 30 天需强制刷新（因内部图片 URL 有过期风险）。扫描与同步解耦——扫描只生成变更日志，同步任务消费日志。百炼 API 有频率限制，通过 Guava RateLimiter 控制（查询 5 QPS、删除 10 QPS、上传 10 QPS）。上传时从文档路径提取圈人标签，注入为百炼文件 tag，实现基于标签的文档权限过滤。
 
@@ -331,13 +469,33 @@ RPA 本质是模拟人在浏览器/客户端上的点击操作。它擅长有明
 
 
 ### 端到端流式体验
-端到端流式体验：Dubbo Triple StreamObserver 实现服务端流式推送，基于 ReplayProcessor + 百炼智能体流式 API 做背压控制与中间态兜底（1.5s 无响应自动推送加载提示），首字延迟下降约 60%；智能体 AppId 不可用时自动降级到工作流 AppId，保障流式链路高可用。
+- 端到端流式体验：Dubbo Triple StreamObserver 实现服务端流式推送，基于 ReplayProcessor + 百炼智能体流式 API 做中间态兜底（1.5s 无响应自动推送加载提示），首字延迟下降约 60%；RAG 失败命中兜底关键词时，无缝拼接一次联网通识问答流，下游对模型切换完全无感知。
 
 HSF 接口使用 Triple 协议（基于 HTTP/2 的 gRPC 兼容协议）暴露服务端流式接口，声明为 `void callStream(ChatRequest request, StreamObserver<ChatResponse> response)`。内部核心是 `ReplayProcessor`（RxJava 热流）作为桥梁：上游百炼流式 API 产生的每一帧通过 `Flowable` 推入 ReplayProcessor，下游通过 `processor.subscribe()` 订阅并逐帧转发到 `StreamObserver.onNext()`，每帧实时更新钉钉卡片，用户体验类似 ChatGPT 逐字出现。选择 `ReplayProcessor` 而非 `PublishProcessor` 是因为它能缓存所有历史帧（带 1 分钟时间窗口），晚加入的订阅者可以回放历史数据，避免丢帧。百炼 API 设置 `incrementalOutput=true` 增量输出，每帧只传输新增内容减少带宽。1.5s 加载提示通过 Spring `TaskScheduler` 延迟调度实现：检查 `finalResult`（AtomicReference）是否仍为空，是则推送灰色加载文案，百炼第一帧到达后直接覆盖。RAG 兜底策略：如果 RAG 答案包含"暂时没有相关内容"，通过 RxJava `concatWith(Flowable.defer(...))` 无缝拼接一次通识 LLM 问答流，调用方完全透明。AppId 降级逻辑：优先使用百炼智能体 AppId，未配置或不可用时降级到工作流 AppId。
 
 
 #### 介绍下Dubbo Triple StreamObserver
 Dubbo Triple 是 Dubbo 3.0 引入的新协议，基于 HTTP/2 实现，兼容 gRPC 协议。它最大的特点是支持**服务端流式推送（Server Streaming）**——传统 RPC 是请求-响应一对一，而 Triple 允许一次请求返回多次响应。StreamObserver<ChatResponse> 是流式响应的接口，它有三个方法：onNext(data) 推送一帧数据、onError(e) 推送错误、onCompleted() 标记流结束。在代码中，CxmOpenClientImpl 用 @HSFProvider(protocols="tri") 声明 Triple 协议，callStream() 方法接收请求后，将 CxmAiEngine 返回的 ReplayProcessor 热流订阅到 StreamObserver 上：每产生一帧 ChatResponse 就调用 response.onNext() 推给调用方，流结束时调用 response.onCompleted()。这样调用方就能像 ChatGPT 一样逐字接收 AI 回答，而不是等全部生成完才一次性返回。
+
+#### Dubbo Triple StreamObserver具体是如何实现流式推送的？ 是从哪端到哪端实现流式推送？
+两个链路：
+- 钉钉机器人链路：百炼 Flowable → ReplayProcessor → blockingForEach() → 服务端累计完整答案，每收到一帧就调用钉钉卡片 OpenAPI，用当前完整内容刷新卡片。
+- 外部应用/网页端链路：百炼 Flowable → ReplayProcessor<ChatResponse> → StreamObserver.onNext() → 流式返回给调用 CxmOpenClient.callStream() 的外部应用/网页端服务。服务端不累计后再发送，而是通过 Dubbo Triple StreamObserver 将每个增量片段逐帧推给调用方，由调用方累计并渲染。
+
+
+对于外部应用/网页端链路，百炼开启 `incrementalOutput=true` 后，通过 `Flowable` 持续返回增量文本；服务内部使用 `ReplayProcessor<ChatResponse>` 桥接百炼热流并提供一分钟短时重放，再将每一帧转换为只包含当前增量片段的 `ChatResponse`。
+对外通过 `@HSFProvider(protocols="tri")` 以 Dubbo Triple 协议暴露 `callStream(ChatRequest, StreamObserver<ChatResponse>)` 服务端流式接口。调用方只发送一次 `ChatRequest`，AI 服务每收到一帧就调用 `StreamObserver.onNext()` 推给调用方，异常时调用 `onError()`，全部生成完成后调用 `onCompleted()`；调用方负责累计增量片段并渲染到页面。
+
+- CxmOpenClient：使用 StreamObserver<ChatResponse> 定义服务端流式接口。
+- CxmOpenClientImpl：@HSFProvider(protocols="tri") 指定 Triple 协议，并将 ReplayProcessor 的三类事件映射到 onNext/onError/onCompleted。
+- doKnowledgeQAForWeb：将百炼结果逐帧转换成 ChatResponse 并写入 ReplayProcessor。
+  底层 HTTP/2 编解码、连接复用和数据帧传输由 Dubbo Triple 框架实现，不在当前业务仓库源码中。业务代码最值得看的是第2个文件。
+
+
+#### 为什么使用Dubbo Triple StreamObserver实现？
+因为 LLM 回答生成时间比较长，如果使用普通 Dubbo RPC，只能等完整答案生成后一次性返回，用户首字等待时间较长。Triple 基于 HTTP/2，原生支持服务端流式 RPC，一次请求可以返回多帧响应，模型生成一段就向调用方推送一段。
+选择它还有三个原因：第一，它与现有 Dubbo/HSF 微服务体系兼容，适合应用间调用，不需要额外设计一套 WebSocket 协议；第二，onNext/onError/onCompleted 能清晰表达数据帧、异常和完成三种生命周期；第三，它与百炼返回的 RxJava Flowable 模型天然匹配，通过 ReplayProcessor.subscribe() 就能将内部模型流桥接成跨应用响应流。
+ReplayProcessor还提供一分钟短时重放，能够避免百炼热流已经产生首帧、而 Triple 下游稍晚订阅造成的帧丢失。
 
 #### 菜小蜜的流式推送是怎么实现的？
 整体链路分四层：百炼 LLM 流式生成 → ReplayProcessor 热流缓冲 → Dubbo Triple StreamObserver 推送 → 前端逐字渲染。
@@ -353,12 +511,19 @@ Dubbo Triple 是 Dubbo 3.0 引入的新协议，基于 HTTP/2 实现，兼容 gR
 #### 1.5s加载提示是什么文案？实现的具体原理是什么？
 加载提示文案是"正在搜索知识..."（灰色样式）。实现原理是利用 Spring TaskScheduler 的延迟调度：在发起百炼 API 调用的同时，调用 taskScheduler.schedule(() -> { ... }, Instant.now().plusMillis(1500)) 注册一个 1.5 秒后执行的定时任务。这个任务执行时检查 finalResult（AtomicReference<String>）是否仍为空（即百炼还没返回任何内容），如果为空则通过 cxmRobotClient.updateCardDateStream() 推送灰色加载文案到钉钉卡片。当百炼第一帧到达时，流式更新会直接覆盖掉加载文案，用户看到的效果就是：1.5 秒内如果 AI 没响应就先看到"正在搜索知识..."，AI 开始输出后立即看到实际内容逐字出现。竞争问题通过 AtomicReference.compareAndSet 原子操作保证状态转换安全。
 
-#### 具体的AppId降级逻辑是什么
-代码中通过 determineAppId() 方法实现降级。优先读取 Diamond 配置中的 bailianAgentAppId（智能体 ID），如果该字段不为空且非空字符串则使用它；如果未配置或为空，则降级使用 bailianAppId（工作流 ID）。智能体 AppId 对应的是百炼平台上的"智能体应用"（功能更丰富，支持插件/工具调用），工作流 AppId 对应的是"工作流应用"（功能较基础，但更稳定）。这种设计保证了：正常情况下用功能更强的智能体，智能体不可用时自动退回到稳定的工作流，保障流式链路始终可用。
+#### 讲一下RAG失败时，如何进行兜底
 
-#### 百炼 API 整体不可用时系统会怎样？
+核心实现在 `answerWithFallback` 方法，思路是"先跑 RAG，边跑边旁路累加内容，流结束后判断要不要无缝接上一路通识问答"，而不是等 RAG 彻底失败再重新发起一次请求：
 
-多层降级：路由 LLM 调用失败→降级到知识问答兜底技能；RAG 检索失败→answerWithFallback 降级到通识 LLM（但通识也依赖百炼）；最终兜底推送"工单提交"卡片引导转人工。坦白说百炼完全宕机时 AI 能力会不可用，但系统不会崩溃，用户可通过转人工/工单链路继续获得服务。
+① **旁路监听累加**：`answerWithRag` 返回的是一条百炼流式结果 `Flowable`，通过 `doOnNext` 在不影响原始内容继续往下传递的前提下，把每一帧新增文本悄悄累加进一个 `AtomicReference<String>`，作为"第一轮完整答案"的实时快照。
+
+② **延迟求值判断兜底关键词**：用 `concatWith(Flowable.defer(...))` 接一段"延迟求值"的逻辑——`defer` 保证这段判断代码不会在方法刚调用时就立刻执行，而是等第一轮流真正 `onComplete` 之后才执行，这时累加出来的内容才是完整的。判断逻辑是看累加内容有没有命中 Diamond 配置的 `ragFallbackKeywords`（如"暂时没有相关内容"）。
+
+③ **命中则无缝拼接通识问答流**：命中兜底关键词就调用 `answerWithGeneralLLM` 发起一次不依赖知识库、开启联网搜索（`enableSearch=true`）的通识问答，返回的新 `Flowable` 通过 `concatWith` 直接接到第一轮流的后面；没命中就返回 `Flowable.empty()`，什么都不做。
+
+④ **对下游透明**：两段（甚至一段）内容最终都通过同一个 `ReplayProcessor` 往下发布，下游订阅方（钉钉卡片更新 / Web 流式接口）拿到手的始终是一条连续的热流，完全感知不到中间可能悄悄切换过一次模型调用、多打了一次 LLM。
+
+**和其他两级降级的关系**：这只是三级容错体系里的第一级（RAG→通识 LLM）。再往上还有路由降级（`aiRoutingForTool` 失败自动兜底到知识问答技能）和 AppId 降级（智能体 AppId 不可用时退到工作流 AppId），三级降级各自独立、互不影响，任一环节故障都不会导致用户拿不到任何回复。
 
 
 
@@ -406,20 +571,61 @@ Prompt 工程化与质量闭环：Prompt 与 Tool Schema 外置到配置中心�
 
 ## 薪酬AI质检项目
 
-项目介绍：面向集团薪酬全生命周期（薪资方案 / 提报 / 计算 / 调账 / 报表）的 AI 驱动质检平台，用 LLM 把自然语言批量解析为可执行的 Groovy DSL 规则脚本，配合强弱卡控双链路与异步执行引擎，把传统"人工抽检 + 发薪后修正"升级为"发薪前自动拦截"闭环，一期实现月人工抽检工时下降 ≥50%、质检通过率 ≥95%，规则复用率 ≥ 60%。
+项目介绍：面向集团薪酬全生命周期的 AI 驱动质检平台，用 LLM 把自然语言批量解析为可执行的 Groovy DSL 规则脚本，规则经人工复核确认后入库复用，配合强弱卡控双链路与异步执行引擎，把传统"人工抽检 + 发薪后修正"升级为"发薪前自动拦截 + 异常协同处理"闭环，一期实现月人工抽检工时下降 ≥50%、质检通过率 ≥95%，规则复用率 ≥ 60%。
 
 技术栈：PandoraBoot、Self-Refine、Groovy、Redis、TDDL、MySQL、Prompt Engineering
 
+- 批量异步解析引擎：基于 CompletableFuture + Semaphore + AtomicInteger/AtomicBoolean 实现规则批量 AI 解析的并发编排，Semaphore(10) 控制大模型调用并发度防打爆下游，各子任务并发写同一个 Collections.synchronizedList 规避可见性问题，独立 daemon 线程每秒同步进度到 Redis 供前端轮询。
 - Self-Refine 自洽循环（LLM-as-Generator × 编译器-as-Verifier）：每条规则最多 3 轮"生成 → 预编译校验 → 失败反馈再生成"，错误收敛为调用失败/格式异常/编译失败/超时四态，把幻觉约束在可被编译器证伪的边界内。
-- Prompt 工程 SRE 化 + LLM 调用安全护栏：apiKey / model / systemPrompt 全外置配置中心分钟级热更，推送前做长度下限 + 关键词白名单 lint 防空 Prompt 上线；出栈日志三类正则脱敏（API Key 前缀 / 键值对 / Bearer Token）杜绝凭证落盘被检索。
-- 异步质检执行引擎（多租户隔离 + 容灾 + 双层进度）：容灾框架跨节点 Failover、同租户分布式锁限并发防打爆分片库；流式分页拉取数据后分批送入规则引擎并桶级并发执行；进度走 Tair-DB 双层，Tair 实时写给前端轮询、每 N 页持久化降 DB 压力，前端封顶 99 防误显 100。
-- 推理成本 + 限流双控：规则解析显式关闭深度思考开关省 thinking token；信号量控异步并发、同步路径独立隔离；指数退避（1s/2s/4s）仅在限流类异常重试，业务异常 fail-fast 不浪费配额。
-- 多 Agent 协同载体 + 跨仓 DDD 协同：异常分发接入协同表格作为"任务空间"，复制模板后分页写入异常明细，由业务方通过工作流催办跟进；分库分表非分片键查询通过联合索引把候选数据从十万级收敛到万级。
+- 异步质检执行引擎：质检任务落库后再提交 TaskX 异步执行，质检数据分批(每批500条)处理避免OOM，进度Redis实时写保障前端实时轮询 + DB周期持久化保障进度可恢复，30分钟熔断兜底避免长尾任务无限占用资源。
+- Prompt 工程 SRE 化：prompt获取根据不同场景路由到专属systemPrompt，外置到配置中心，调用LLM前做长度下限 + 关键词白名单 lint 防空 Prompt 上线。
 
 
 #### 请介绍一下这个项目，你在其中主要负责什么工作？
 
 A：面向集团薪酬全生命周期的 AI 驱动质检平台，用 LLM 把自然语言规则批量解析为 Groovy DSL 脚本，配合强弱卡控与异步执行引擎，把"人工抽检+发薪后修正"升级为"发薪前自动拦截"。我主要负责质检管理模块——规则的创建、编辑、启用/停用、版本管理，以及质检任务的创建、执行触发、状态流转、结果查询，涉及多租户数据隔离和分库分表场景下的非分片键查询优化；另外负责钉钉 AI 表格的异常分发链路——质检发现异常后自动复制协同表格模板、分页写入异常明细、触发工作流催办，对接钉钉开放平台 API 完成端到端落地。Self-Refine 自洽循环、异步执行引擎、Prompt SRE 化等核心模块是团队其他同学主导的，我全程参与了方案评审和联调，对实现细节比较了解。
+
+
+#### 项目的背景是什么
+
+A：背景是这样：集团薪酬业务链路很长，覆盖员工基础数据、算薪名单、薪资计算、调账和发薪等多个环节，而且不同国家、组织和员工类型都有各自的校验规则。过去主要依赖 HR 在发薪前人工抽检 Excel，存在三个问题：
+- 第一，数据量大、字段多，人工逐行核对效率低，也容易漏检；
+- 第二，规则长期散落在文档和业务人员经验中，研发每新增一条校验都要理解需求、编码、测试和发布，交付周期较长；
+- 第三，很多问题只能在发薪后被发现，再通过调账或补发处理，业务风险和沟通成本都比较高。
+
+因此我们建设了薪酬 AI 质检平台，把业务人员编写的自然语言规则批量转换成可执行的 Groovy 脚本，并通过人工预览确认保证规则可控；规则入库后可以被不同质检任务复用，再由异步执行引擎对薪酬数据进行分页校验。命中的异常既可以导出 Excel，也可以写入钉钉 AI 表格交给业务方协同处理。项目的核心目标不是让大模型直接判断薪酬数据是否正确，而是让大模型降低规则开发门槛，再由确定性的 Groovy 规则引擎执行校验，最终把原来的“人工抽检、事后修正”升级为“规则沉淀、自动质检、发薪前发现、线上协同闭环”。
+
+#### 讲一下一次完整的质检流程
+
+A：一次完整的质检流程可以分为四个阶段，分别是生成规则、发起质检、执行规则和导出结果。
+这里有两个关键关联字段：`ruleId` 连接规则与质检任务，`batchId` 连接质检任务、执行结果和结果导出。
+
+1. **AI 生成规则，确认后落库成一条独立规则**
+  - 用户在规则管理页面用自然语言描述一条校验逻辑（如"实发工资不能超过应发工资的1.5倍"）; 或者从Excel表格里批量导入自然语言描述(质检环节(数据提报/薪资计算/发起质检)、涉及字段、卡控规则文本(自然语言描述)、校验类型(强/弱卡控))
+  - 后端把每条自然语言描述转换并补充，创建异步解析任务并立即返回 `taskId`。后台通过 `CompletableFutureUtils` 为每条规则提交一个子任务，同时传递 `TenantContext` 和 EagleEye 调用链上下文；再用 `Semaphore` 限制同时调用大模型的数量，避免批量导入时触发模型限流。
+  - 解析前先根据是哪个质检环节(scope)决定去查哪个模板，然后把这个模板下的全部列字段(中文名+对应code)拼成一张表，塞进Prompt，这一步是把自然语言中涉及的字段匹配交给AI来做，AI根据字典来查字段对应的code，进而生成Groovy脚本；
+  - 然后由 `parseSingleInternal` 组装 System Prompt、自然语言规则和字段字典，调用百炼生成结构化 JSON，核心产物是 Groovy 脚本 `content`、规则名称和描述。
+  - 模型返回后，系统先校验 JSON 格式和必要字段，再对 Groovy 脚本做预编译。只有语法校验通过，才会把脚本 Base64 编码后返回。模型主动判断无法解析、返回格式错误、Groovy 编译失败或调用超时，都会形成对应的单条失败结果。然后拿到错误的信息，再次调用大模型，最多三次。
+  - 批量解析期间，后台每秒把 `total`、`parsedCount` 和每条规则的状态写入 Redis，前端用 `taskId` 轮询进度。Redis 在这里是跨节点共享的临时任务状态中心，不是规则的最终存储。
+  - AI 生成结果只是候选规则，不会直接写数据库。用户需要在预览页面检查、编辑，必要时调用 `reparseAiRule` 对尚未入库的单条规则重新生成。确认后调用 `batchAddRules`，将规则保存到 `pr_meta_rule`，生成唯一 `ruleId`。已经入库的 AI 规则如果需要修改，可以调用 `aiParseRule` 重新生成，确认后再通过 `updateRule` 更新。因此，大模型负责降低规则编写门槛，人工确认负责保证规则可控。
+
+2. **发起质检，选择规则和数据范围，创建一次质检任务**
+  - 规则保存后，用户在质检管理页面选择账期、数据用途、员工类型、部门范围、数据类型，以及一条或多条质检规则。规则下拉列表只查询 `QUALITY_CHECK_VALIDATOR` 类型的规则，避免把其他业务阶段的规则误用于发起质检。
+  - 前端将选中的规则作为 `ruleIds` 列表提交给 `startCheck`。后端完成参数和数据权限校验后创建 `QualityCheckTask`，把本次数据范围和规则集合固化下来。这里的 `QualityCheckTask.ruleIds` 对应 `pr_meta_rule.rule_id`，因此 `ruleId` 就是“AI 生成规则”和“发起质检”之间的连接点。
+  - 任务保存后，系统根据任务主键生成 `batchId = QC-{taskId}`，并通过 TaskX 提交异步任务，由 `QualityCheckTaskHandler` 执行。此时接口只完成任务创建和调度，不会在请求线程中直接执行 Groovy，因此即使质检数据量很大，也不会长时间阻塞前端请求。
+
+3. **异步执行质检，Groovy 脚本在这里第一次真正运行**
+  - TaskX 回调 `QualityCheckTaskHandler` 后，处理器先根据任务中的多个 `ruleId` 查询 `pr_meta_rule`，组装为 `List<ValidationRule>`；再根据账期、员工类型、部门等条件统计待处理数据量，并清理相同 `batchId` 下的历史结果，保证任务重跑不会直接叠加旧数据。
+  - 系统分页读取 `pr_base_data`，避免一次加载大量薪酬数据导致内存压力。对于需要跨行判断的规则，还会按员工补查同账期的全部数据，预聚合成执行上下文：`row` 表示当前数据行，`ctx` 表示当前员工的其他相关数据，脚本可以通过 `byType`、`sameType` 等能力进行重复数据或跨类型校验。
+  - 执行模型是“每一页数据 → 每一行数据 → 依次执行本次任务选择的全部规则”。例如用户选择了 5 条规则，那么每一行都会依次执行这 5 条 Groovy 脚本，不会因为第一条命中异常就停止；一行数据可以同时命中多条规则。
+  - `QualityCheckGroovyExecutor` 为当前行构造 `row + ctx + accountPeriod` Binding，再调用 `GroovyUtils.execute`。脚本返回 `null` 表示通过，返回非空字符串表示命中异常，该字符串就是异常提示。每条规则都有独立的异常兜底，一条脚本执行失败只会生成“规则执行异常”的结果，不会阻断同一行的其他规则。
+  - 同一行命中的多条规则会聚合为一条 `ValidationResult`，其 `errors` 列表分别保存每条异常的 `ruleId`、`ruleName` 和 `errorMessage`，然后以本次任务的 `batchId` 写入 `validation_result`。任务全部处理完成后，系统统计异常结果数量，并更新任务的处理进度和最终状态。
+
+4. **加工质检结果，导出 Excel 或写入钉钉 AI 表格**
+  - 结果分发不会重新执行规则，而是复用第三阶段已经落库的结果。Excel 导出和钉钉 AI 表格首先都根据 `batchId` 分页查询 `validation_result`，得到异常业务数据 ID 和异常消息，再回查 `pr_base_data` 补齐员工、组织、账期和薪资字段，只保留命中异常的数据。
+  - Excel 导出由 `QualityCheckExportHandler` 处理。它按数据类型组织多个 Sheet，并将同一行命中的多条规则提示汇总到异常提醒列，最终生成文件供用户下载。
+  - 钉钉 AI 表格由 `QualityCheckAiSheetHandler` 处理。它先获取操作人的钉钉身份，基于模板创建新的协同文档并定位目标 Sheet，然后将基础数据与异常信息映射为表格字段，通过 Notable API 分批写入。由于接口单批写入数量有限，大结果集会拆批处理，最终返回钉钉文档地址，供 HR 和业务人员在线查看、协同确认和跟进异常。
+
 
 #### 做项目中遇到的最大挑战是什么？
 
@@ -462,14 +668,34 @@ A：上线前 HR 每月薪酬质检投入约 200 人时（规则编写+数据核
 
 
 
+### 批量异步解析引擎
+- 批量异步解析引擎：基于 CompletableFuture + Semaphore + AtomicInteger/AtomicBoolean 实现规则批量 AI 解析的并发编排，Semaphore(10) 控制大模型调用并发度防打爆下游，各子任务并发写同一个结果数组时用 Collections.synchronizedList 包装容器规避可见性问题，独立 daemon 线程每秒同步进度到 Redis 供前端轮询，CompletableFuture.allOf().get(timeout) 统一收口并在超时后主动 cancel 未完成任务。
+
+入口 `submitBatchParse` 生成 taskId 后先用 `jedisCluster.setex` 写一份 PROCESSING 初始状态到 Redis，再用 `CompletableFutureUtils.supplyAsync(..., excelValidateThreadPool)` 把整批解析甩到独立线程池异步跑，接口立即返回 taskId，不阻塞请求线程。异步编排在 `executeBatchParse` 中展开：先 `new Semaphore(BATCH_CONCURRENCY=10)` 控制同时打到百炼 AI 的请求数；`AtomicInteger parsedCount` 供多线程安全累加完成数，`AtomicBoolean done` 标记整批终态；`startProgressFlusher` 起一个独立 daemon 线程，每秒把当前进度 flush 到 Redis，`done=true` 后立刻退出避免覆盖最终状态；结果容器用 `Collections.synchronizedList` 包装的 `List<ParsedRuleVO>`，各子任务按下标 `results.set(idx, ...)` 并发写入，规避普通 ArrayList 在多线程下的可见性和结构性问题。`submitParseTasks` 给每条规则单独提交一个 `CompletableFuture`，子任务内先做基于 `startTime` 的超时短路判断——整批一旦超时，还没轮到的任务直接标失败不再浪费一次 AI 调用。最后 `awaitAndFinalize` 用 `CompletableFuture.allOf(futures).get(BATCH_TIMEOUT_MINUTES, TimeUnit.MINUTES)` 统一收口，超时抛 `TimeoutException` 后 `futures.forEach(f -> f.cancel(true))` 主动打断未完成任务，并把最终 SUCCESS/FAILED 状态写回 Redis。
+
+#### CompletableFuture.allOf().get(timeout) 为什么能抛出超时异常？
+A：`allOf(futures)` 把一批子 Future 聚合成一个新的 `CompletableFuture<Void>`，只有全部输入 Future 都完成（无论成功还是异常）它才完成，本身不阻塞。真正的超时能力来自 `Future.get(timeout, unit)` 这个 JDK 标准接口方法——限时阻塞等待，到点还没 complete 就主动抛 `TimeoutException`，而不是无限等待。不加这个 timeout，只要有一条规则的 AI 调用卡死不响应，整批任务就会永远停在处理中，前端轮询也永远等不到终态；加上后能保证批次有确定的结束时间点，抛出的 `TimeoutException` 会被外层 catch 住触发 `cancel(true)` 和落终态逻辑。
+
+#### 为什么结果数组要用 Collections.synchronizedList，而不是普通 ArrayList 或 ConcurrentHashMap？
+A：多个解析子任务是并发执行的，且各自只按自己的下标 `set(idx, ...)`，天然没有写冲突，但普通 `ArrayList` 在多线程下没有同步保障，可能出现可见性问题（一个线程写的结果对另一个线程不可见）。用 `Collections.synchronizedList` 包装后，对该 List 的每个方法调用都会隐式加锁，保证跨线程可见性和安全性，成本比 `CopyOnWriteArrayList` 低（不需要每次写都整体复制数组），也不需要像 `ConcurrentHashMap` 那样引入额外的 key 映射，因为下标本身就是天然的 key。
+
+#### 独立 daemon 进度线程和子任务是怎么协同退出的？
+A：`startProgressFlusher` 起的线程是一个 `while (!done.get() && !isInterrupted())` 循环，每秒 `sleep(1000)` 后 flush 一次进度。主流程在 `executeBatchParse` 的 `finally` 块里先 `done.set(true)` 再 `progressFlusher.interrupt()`，双重保障：`done` 标志让线程下一轮循环判断时自然退出，`interrupt()` 则是为了打断可能卡在 `sleep` 中的线程，避免它在最终状态已经写入后又多等 1 秒才醒来做一次多余的（但无害的）flush。
+
+#### Collections.synchronizedList 是怎么解决可见性问题的？
+A：可见性问题指一个线程对共享变量的写，另一个线程不一定能立刻看到（CPU 缓存和指令重排导致，跟是否有写冲突无关）。
+
+`Collections.synchronizedList` 给每个方法调用都加上同一把锁，根据 Java 内存模型的 happens-before 规则：线程 A 在锁内写完并释放锁，这次写会被强制刷回主内存；线程 B 后续通过同一把锁进入时，保证能看到 A 释放锁之前的所有写入。也就是靠锁的释放-获取关系建立内存可见性的传递链，而不是依赖 CPU 缓存碰巧同步，这是它比普通 ArrayList 更可靠的根本原因。
+
+
+
 
 ### Self-Refine 自洽循环
-Self-Refine 自洽循环（LLM-as-Generator × 编译器-as-Verifier）：每条规则最多 3 轮"生成 → 预编译校验 → 失败反馈再生成"，错误收敛为调用失败/格式异常/编译失败/超时四态，把幻觉约束在可被编译器证伪的边界内。
+- Self-Refine 自洽循环（LLM-as-Generator × 编译器-as-Verifier）：每条规则最多 3 轮"生成 → 预编译校验 → 失败反馈再生成"，错误收敛为调用失败/格式异常/编译失败/超时四态，把幻觉约束在可被编译器证伪的边界内。
 
 核心实现在 `RuleBatchParseExecutor.parseSingleInternal()` 中，用 `for (attemptNo = 1; attemptNo <= 3; attemptNo++)` 硬编码 3 轮上限。每轮流程：获取信号量许可 → `buildUserMessage()` 拼装 Prompt（含规则上下文 + 字段字典 + 上一轮错误反馈）→ `callBailianApi()` 调百炼 SDK 非流式接口 → `parseAiResponse()` 校验 JSON 格式（必须含 `parseSuccess`、`content`、`ruleName`、`checkType` 等字段）→ `tryPrecompile()` 调 `GroovyUtils.precompile()` 做 Groovy 预编译语法校验。成功则返回，失败则记录 `lastAiResponse` / `lastErrorType` / `lastErrorMessage`，在下一轮 Prompt 中追加 `[上次尝试反馈]` 区块，让 LLM 看到自己的错误和编译器反馈定向修正。四种错误类型定义在 `ParseErrorType` 枚举中：`AI_CALL`（SDK 调用失败）、`AI_FORMAT`（返回非 JSON 或缺字段）、`GROOVY_COMPILE`（脚本语法错误）、`TIMEOUT`（HTTP 超时 90s）。如果 AI 主动判定不可解析（`parseSuccess=false`），直接跳出循环不浪费重试。字段字典按质检环节分路由：数据提报阶段从 Excel 模板表加载列定义，薪资计算阶段从薪酬项表按子串匹配过滤。AI 返回的 `content` 字段是 Groovy 脚本，Base64 编码后存入 `PrRule.content`。
 
 #### Self-Refine 中的错误反馈和普通重试有什么区别？
-
 A：核心区别是**"有状态反馈"vs"无状态重复"**。普通重试（如 Spring Retry）只是在相同输入上重复执行，依赖"非确定性操作偶然成功"（如网络恢复）；Self-Refine 每一轮都把上一轮的 **完整 AI 响应 + 具体错误信息** 注入到新 Prompt 的 `[上次尝试反馈]` 区块，包含三个子字段：
 - "上次输出"：AI 上一轮原始响应全文
 - "错误类型"：四态之一（AI_CALL/AI_FORMAT/GROOVY_COMPILE/TIMEOUT）
@@ -478,109 +704,49 @@ A：核心区别是**"有状态反馈"vs"无状态重复"**。普通重试（如
 LLM 能据此精确定位并修正问题，而不是随机重试。这是 **Generator-Verifier-Feedback 三元组**：LLM 生成、编译器验证（确定性、零成本）、错误回流驱动修正。不用 Spring Retry 是因为标准重试框架没有在重试间传递和转化上下文状态的能力。
 
 #### 如果做第二期，Self-Refine 你会怎么改进？
-
 A：三个方向：① **AST 安全扫描**——预编译通过后用 SecureASTCustomizer 做白名单检查，目前只靠 Prompt 约束；② **动态 Few-shot**——根据规则类目从历史成功规则中检索相似的作为示例注入 Prompt，提高首轮成功率；③ **运行时 dry-run**——预编译通过后用 mock 数据执行一轮，把 NPE 等运行时错误也拦截在生成阶段。
-
-
 
 #### 为什么是非流式接口？
 使用非流式接口（`stream(false)`）的原因：① Self-Refine 需要完整响应做 Groovy 预编译校验，流式接口逐字返回无法中途校验；② 显式设置 `enable_thinking=false` 后，非流式调用确保 content 字段一次性返回完整内容；③ 超时控制更简单——非流式 90s 超时直接触发重试。
 
-#### AI判定的parseSuccess=false是什么意思？
-不是判断 JSON 格式，而是 **AI 判断这条业务规则是否能被转化为 Groovy 脚本**。当 AI 分析后认为规则无法自动化（如涉及跨表关联、跨期比对），会主动返回 `{"parseSuccess": false, "parseErrorMessage": "..."}`，后端直接跳出重试循环返回"不可解析"——因为重试也没用。
+
+
+
+### 异步质检执行引擎
+- 异步质检执行引擎：质检任务落库后再提交 TaskX 异步执行，质检数据分批(每批500条)处理避免OOM，进度Redis实时写保障前端实时轮询 + DB周期持久化保障进度可恢复，30分钟熔断兜底避免长尾任务无限占用资源。
+
+在发起质检的时候先保存任务并生成 `batchId`(QC_TASK_ + `taskId`)，再通过 `PrTaskX.execute()` 把 `handlerContext`（租户上下文等业务数据）和 `QualityCheckTaskHandler.class`（类引用）一起落库到 TaskX 任务表，接口立即拿到 `taskId` 返回，无需等待质检完成。TaskX 是独立的调度/消费进程，轮到这条任务时反序列化出之前落库的 `handlerContext`，再反射找到 `QualityCheckTaskHandler`（实现了 `Handler<QualityCheckHandlerContext>` 接口）对应的 Spring Bean，调用其 `handle(context, anonymousId)` 方法把 context 传入——这一步才是真正的异步执行入口。Handler 在 `TenantContext` 中加载规则、统计数据量、清理同 `batchId` 的历史结果(避免结果重复)，再按 `offset/limit` 每页读取 500 条基础数据，随后逐行执行全部 Groovy 规则，更新进度条等内容。单条规则异常会被转换为该规则的质检错误，不影响当前行的其他规则和后续数据继续执行。
+
+#### TaskX 框架异步原理
+A：提交阶段只传两样东西：`handlerContext`（租户上下文等业务数据）和 `handler`（`Class<? extends Handler>` 类引用，不是函数指针也不是已实例化对象），还有一个 `requestId`（`"QC_TASK_"+taskId`，平台侧幂等键），一并交给 `batchApiClient.execute(request)` 落库到 TaskX 自己的任务表，`execute()` 立即返回，不做任何同步执行。TaskX 是独立的调度/消费进程，轮到这条任务时，从自己任务表反序列化出之前存的 `handlerContext`，再反射找到 `QualityCheckTaskHandler`（实现了 `Handler<QualityCheckHandlerContext>` 接口）对应的 Spring Bean，调用其 `handle(context, anonymousId)` 方法，把反序列化出的 context 作为参数传入。本质是“落库即提交 + 类引用反射回调 + 状态持久化”，不是注册回调函数；且这里提交时也没有接收 `execute()` 的返回值（TaskX 自己的任务id），业务完全靠自己的 `taskId`/`batchId` 体系闭环。应用进程重启后，SchedulerX 会扫描任务表中未完成的记录重新调度，保证不丢任务。
+
+#### 为什么使用 TaskX，而不是直接提交到本地线程池？
+A：本地线程池中的任务只存在于当前 JVM，接口虽然能快速返回，但应用重启后任务状态和执行上下文容易丢失。当前实现把 `requestId`、Handler 类型和 `HandlerContext` 提交给 TaskX，由平台持久化和调度，应用重启后仍可重新调度未完成任务。业务 Handler 本身不保存分页断点，被重新执行时会从头跑，因此又通过“按 `batchId` 先清理旧结果再写入”保证重跑不会叠加历史结果。
+
+#### Redis 实时写 + DB 周期持久化分别保障什么？
+A：Redis 保障进度展示的实时性，每处理完一页就写入 `qc:progress:{taskId}`，前端查询 PROCESSING 任务时优先读取；DB 提供进度持久化兜底，每 10 页更新一次 `processedCount`。Redis 读取失败或 key 不存在时，接口保留数据库中的进度值，因此进度可能变成阶梯式更新，但不会影响质检主流程。这里的 DB 进度只用于查询降级，并不是任务续跑断点；任务结束后 Redis key 会被清理，最终状态和最终进度以 DB 为准。
+
+#### Redis 写进度失败会导致质检失败吗？
+A：不会。每次写 Redis 最多重试 3 次，仍失败只记录日志，不向上抛异常，因为进度展示属于旁路能力，不应影响规则执行和结果落库。前端此时退化为读取 DB 中每 10 页持久化一次的进度。
+
+#### 30 分钟超时是如何实现的？有什么边界？
+A：`processPages()` 每次开始读取下一页前检查累计耗时，超过 `TIMEOUT_MILLIS` 就抛异常，由上层捕获后把任务标记为 FAIL。它防止任务无限处理分页数据，但属于页与页之间的硬超时检查：如果某一页内部的数据库查询或 Groovy 脚本长期阻塞，必须等该页调用返回后才能触发检查，并不是线程级强制中断。
+
+#### 任务失败或被重新调度时，如何避免结果重复？
+A：每次正式处理前都会调用 `removeByBatchId(batchId)` 删除该批次历史结果，再逐条写入本轮异常结果，所以重跑采用的是“先清理、再重建”，不是数据库 upsert。这样可以避免重复结果，但清理和重建不是一个大事务；中途失败时可能暂时留下部分结果，因此只有任务状态为 SUCCESS 时结果才应被视为完整。
+
+
+
 
 
 ### Prompt 工程 SRE 化
-Prompt 工程 SRE 化 + LLM 调用安全护栏：apiKey / model / systemPrompt 全外置配置中心分钟级热更，推送前做长度下限 + 关键词白名单 lint 防空 Prompt 上线；出栈日志三类正则脱敏（API Key 前缀 / 键值对 / Bearer Token）杜绝凭证落盘被检索。
+- Prompt 工程 SRE 化：prompt获取根据不同场景路由到专属systemPrompt，外置到配置中心，调用LLM前做长度下限 + 关键词白名单 lint 防空 Prompt 上线。
 
-两个 Diamond 配置类分别管理不同阶段：`DiamondRuleGeneratorConfig`（数据提报阶段）和 `DiamondRuleGeneratorRuntimeConfig`（薪资计算阶段）。lint 校验在 Diamond 回调 `received()` 中实现：长度校验——systemPrompt 必须超过 1000 字符；关键词白名单——必须包含"输出契约"、"checkType"、"parseSuccess"等核心关键词。校验不通过时保留旧值不更新并打印告警。日志脱敏在 `sanitizeForLog()` 中用三类正则处理：`sk-[A-Za-z0-9]{6,}` 匹配百炼 API Key 前缀、`(api[_-]?key)\s*[=:]\s*...` 匹配通用键值对 Key、`(authorization|bearer)\s*[:=]?...` 匹配认证头。
+两个 Diamond 配置类分别管理不同阶段：`DiamondRuleGeneratorConfig`（数据提报阶段）和 `DiamondRuleGeneratorRuntimeConfig`（薪资计算阶段）。lint 校验在 Diamond 回调 `received()` 中实现：长度校验——systemPrompt 必须超过 1000 字符；关键词白名单——必须包含"输出契约"、"checkType"、"parseSuccess"等核心关键词。校验不通过时保留旧值不更新并打印告警。
 
 
 #### Prompt工程SRE化中的SRE具体是什么意思？
 SRE（Site Reliability Engineering）是 Google 提出的工程实践体系，核心是**用软件工程方法解决运维和可靠性问题**。"Prompt SRE 化"意思是把 Prompt 当作"生产级配置"来管理：配置外置+热更新、推送前 lint 校验防空 Prompt 上线、灰度发布+版本回滚、日志脱敏、变更审计。
-
-#### 分钟级热更体现在哪？
-三方面：① **apiKey 热更**——Key 轮换时 Diamond 推送后立即生效；② **model 热更**——切换模型即刻生效；③ **systemPrompt 热更**——优化 Prompt 后分钟级生效，远快于传统发版流程。`received()` 中的 lint 校验保证不会误推空 Prompt。
-
-
-### 异步质检执行引擎
-异步质检执行引擎（多租户隔离 + 容灾 + 双层进度）：容灾框架跨节点 Failover、同租户分布式锁限并发防打爆分片库；流式分页拉取数据后分批送入规则引擎并桶级并发执行；进度走 Tair-DB 双层，Tair 实时写给前端轮询、每 N 页持久化降 DB 压力，前端封顶 99 防误显 100。
-
-核心类 `QualityCheckAsyncTask` 通过 `@Failover(bizType = "QUALITY_CHECK_TASK", runMode = RunMode.NEW_THREAD)` 注解接入容灾框架。多租户隔离分两层：`TenantContext.call(tenant, ...)` 包裹执行逻辑确保租户信息透传；每租户最多 2 个并发，通过"DB 查 PROCESSING 任务数 + Redis 分布式锁 `SET NX EX 30min`"双重检查实现。数据处理流程：分页拉取（`PAGE_SIZE = 1000`）→ 分批送入规则引擎（`VALIDATE_BATCH_SIZE = 200`）→ 50 桶并发执行。进度设计：Redis 层每页处理完立即写，前端轮询优先读 Redis（<1ms）；DB 层每 10 页持久化一次；前端封顶 99 防止进度先于最终状态到 100。
-
-
-- 分布式锁：在分布式系统中保证"同一时刻只有一个节点能执行某段代码"的互斥机制，通常基于 Redis/Tair/ZooKeeper 实现。
-- 流式分页：边拉取边处理的数据读取模式，用游标代替 OFFSET，每次只拉一小批，内存中始终只保留当前批次，避免 OOM 和深分页性能问题。
-- 三种常用缓存读写策略：① **旁路缓存（Cache Aside）**：读先查 cache，miss 则查 DB 回填；写先更新 DB 再删 cache。② **读写穿透（Read/Write Through）**：应用只与 cache 交互，cache 负责同步读写 DB。③ **异步写入（Write Behind）**：写只更新 cache，DB 由后台异步批量刷新。
-
-#### 分布式锁 30 分钟过期怎么定的？任务跑超了怎么办？
-
-A：根据压测数据——万级数据质检通常 10-20 分钟，30 分钟留 50%-200% 余量。跑超 30 分钟时通过 **CAS 续约机制** 解决：每隔 TTL/3（约 10 分钟）用 Tair CAS 原子操作续约过期时间，只有当前持锁者（value 匹配）才能续约成功。续约失败说明锁已被其他节点获取，当前任务应自行终止。
-
-#### Redis 挂了进度条会怎样？
-
-A：前端轮询逻辑是"优先读 Redis，缺失则 fallback 到 DB"。Redis 挂了后进度展示退化为每 10 页更新一次（DB 持久化频率），用户看到进度条跳跃式前进但功能不受影响。任务执行本身不依赖 Redis——Redis 写进度失败会 catch 并重试 3 次，不中断主流程。任务最终状态以 DB 为准。
-
-#### Failover 后新节点怎么知道从哪继续？会重复处理吗？
-
-A：新节点从 DB 读取最近一次持久化的进度断点（每 10 页持久化），从断点继续。最多重复处理 10 页（约 10000 条），但规则校验是幂等操作——同一数据对同一规则校验 N 次结果一样，写入 validation_result 按 (bizId, ruleId) 做 upsert 不产生重复记录。
-
-
-#### 容灾框架是什么？
-容灾框架（`com.cainiao.cpo.failover`）是阿里内部的**跨节点任务容灾框架**，核心是故障转移而非简单重试。参数序列化持久化到 DB，节点宕机后其他存活节点自动从 DB 取出参数重新执行。`RunMode.NEW_THREAD` 在独立线程执行，隔离对主线程的影响。
-
-#### 每个租户最多两个并发？为什么这样限制？
-对，防止打爆分片库。质检任务涉及大量分页查询和规则执行，不限并发会瞬间把分片库 IO 打满。2 个并发能覆盖正常场景（如提报+计算两个环节同时跑），压测中 3 个并发时 DB CPU 超 70%。并发控制通过"DB 查 PROCESSING 数 + Redis 分布式锁"双重检查实现。
-
-#### Tair CAD 如何保证只有持有者释放锁？
-加锁用 `SET lockKey requestId NX EX 1800`，value 是唯一 requestId。释放用 Tair `CAD(lockKey, requestId)` ——"只有当 key 当前值等于 requestId 时才删除"。如果线程 A 锁过期被线程 B 重新获取（value 变成 B 的 requestId），A 调 CAD 时值不匹配不会删除，防止误删。CAD 是 Tair 原生原子操作，比 Lua 脚本性能更好。
-
-#### 为什么既用了Tair也用了Redis？
-Tair 是阿里基于 Redis 的**增强版**，兼容所有 Redis 命令并扩展了 CAD/CAS 等原子操作。项目中用的是同一套 Tair 集群，只是调用方式不同：Redis 原生命令（`jedisCluster`）用于加锁（SET NX）和进度条（set/get/del）；Tair 扩展命令（`tairStringCluster`）仅用于释放锁（CAD）。进度条不用 Tair 扩展命令是因为简单的 set/get 完全够用。
-
-#### 什么叫桶并发执行？
-规则引擎将 200 条数据分配到 50 个"桶"中，每桶约 4 条数据，50 个桶并行执行规则校验。50 的设定考虑：充分利用多核 CPU + 平衡吞吐与线程切换开销。
-
-
-### 推理成本 + 限流双控
-推理成本 + 限流双控：规则解析显式关闭深度思考开关省 thinking token；信号量控异步并发、同步路径独立隔离；指数退避（1s/2s/4s）仅在限流类异常重试，业务异常 fail-fast 不浪费配额。
-
-qwen3 系列默认开启深度思考，会在 `reasoning_content` 字段输出推理过程（3-5 倍额外 token），且不显式关闭时 `content` 可能为空。通过 `parameter("enable_thinking", false)` 显式关闭。并发控制用两个独立信号量：批量解析 `Semaphore(10)` 最多 10 个并发 AI 调用，单条重生成 `Semaphore(1)` 独立许可，隔离原因是防止大批量挤占单条操作。指数退避在 `backoffIfRateLimited()` 中实现：`sleepMs = 2^(attemptNo-1) * 1000`（1s/2s/4s），仅在检测到 "429"/"rate limit" 等限流关键词时触发。HTTP 超时：connect 10s / write 30s / read 90s。
-
-
-#### 信号量许可是什么？如何控制并发？
-信号量（Semaphore）可以理解为"停车场车位"。Semaphore(10) 就是 10 个车位：`acquire()` 占一个车位（满则排队），`release()` 腾出车位。项目中控制的是"同时等待 AI 响应的请求数"，acquire 在 AI API 调用前，release 在 finally 中确保异常也释放。选信号量而非线程池是因为控制的是"IO 等待中的请求数"而非"工作线程数"，颗粒度更精确。
-
-```java
-Semaphore semaphore = new Semaphore(10);
-CompletableFuture.supplyAsync(() -> {
-    semaphore.acquire();
-    try {
-        return callBailianApi(userMessage);
-    } finally {
-        semaphore.release();
-    }
-}, threadPool);
-```
-
-
-### 多 Agent 协同载体
-多 Agent 协同载体 + 跨仓 DDD 协同：异常分发接入协同表格作为"任务空间"，复制模板后分页写入异常明细，由业务方通过工作流催办跟进；分库分表非分片键查询通过联合索引把候选数据从十万级收敛到万级。
-
-异常分发完整流程在 `QualityCheckAiSheetHandler.handle()` 中：工号 → 钉钉 userId → unionId 三级转换 → 基于模板创建 AI 表格文档 → 定位目标 Sheet → 分页查异常数据聚合 → `AiSheetFieldMapper` 映射 15 个字段 → 按 500 条分批写入。选协同表格而非邮件/Excel 是因为支持多人实时协作和工作流催办。跨仓架构：主仓通过 `Class.forName()` 反射加载 DMC 仓的 Handler 类，避免编译期依赖。分库分表优化：SQL 始终带分片键（租户 ID），配合联合索引，从十万级收敛到万级。
-
-
-- DDD（Domain-Driven Design）：以业务领域为核心的软件设计方法论，按分层架构组织：interfaces（协议适配）→ application（业务编排）→ domain（纯领域模型）→ infrastructure（外部依赖封装）。
-- 分库分表：将单库单表按分片键拆分到多个库/表中。查询带分片键可精确路由，不带则广播所有分片。项目中按 tenant_id 分片，配合联合索引实现非分片键查询优化。
-
-
-#### 哪里体现了多Agent协同？
-钉钉 AI 表格作为多角色协作平台：① 质检 Agent 自动写入异常数据；② HR 在同一表格查看审核；③ 工作流催办确保闭环。AI 表格不只是展示工具，而是连接自动化系统+人+工作流的"任务空间"。
-
-#### 分库分表如何从十万级收敛到万级？
-两步收敛：**第一步分片路由**——SQL 带 `WHERE tenant_id = ?`，路由到该租户所在分片库（如从 16 个分片缩到 1 个），全量百万级→单分片十万级。**第二步联合索引**——分片内对 `(tenant_id, salary_month)` 建联合索引，查询通过索引快速定位，十万级→万级。
-
-
 
 
 
@@ -592,14 +758,15 @@ CompletableFuture.supplyAsync(() -> {
 
 ## 专业技能
 
-- 熟练掌握 Java 基础与集合（HashMap / ConcurrentHashMap 等底层原理）、并发编程（线程池、JUC 锁、CAS 与 JMM 内存模型、ThreadLocal 上下文传递）、JVM 内存区域与 G1 / CMS GC 调优；熟悉 Spring（IOC、AOP、SpringBoot自动装配等）和 MyBatis（动态 SQL、拦截器机制等）；
-- 熟练使用 MySQL（索引、事务、存储引擎、行/间隙锁与MVCC）和 Redis（数据类型、线程模型、持久化与过期淘汰策略），熟悉缓存穿透 / 击穿 / 雪崩防护与分布式锁实现；熟练使用企业级开发与版本控制工具，并基于 DDD 分层完成多仓协同研发；熟悉计算机网络与操作系统等基础知识；
-- 适应全栈研发模式，覆盖「页面 Schema 拖拽编排 → 网关接口发布与权限点配置 → 后端 Facade / Controller 接口」端到端链路，能独立交付从页面到底层数据的完整需求；
-- 熟练使用 Vibe Coding、SDD等 AI 编程范式，了解 Harness Engineering 工程化理念；掌握 Prompt Engineering、Function Calling / Tool Use、MCP 协议、A2A 等 Agent 工具与协议生态，熟练在日常开发与运维中使用 MCP、Skills 等相关能力；
-- 熟悉 ReAct、Reflexion 等 Agent 主流架构模式，了解主流 Agent 框架（如 LangChain、LlamaIndex 等）的设计理念、Agent 调试技巧、Token 成本调优、RAG 等相关内容。
+- 熟练掌握Java基础与集合（HashMap/ConcurrentHashMap等底层原理）、并发编程（线程池、JUC 锁、CAS 与JMM内存模型、ThreadLocal上下文传递）、JVM 内存区域与GC流程；熟悉 Spring（IOC、AOP、SpringBoot自动装配等）和 MyBatis（动态 SQL、拦截器机制等）；
+- 熟悉MySQL（索引、事务、存储引擎、行/间隙锁与MVCC）、Redis（数据类型、线程模型、持久化与过期淘汰策略）以及缓存穿透/击穿/雪崩防护及解决方案；熟练使用企业级开发与版本控制工具，并基于DDD分层、RPC完成多仓协同研发；掌握计算机网络与操作系统等基础知识；
+- 适应全栈研发模式，覆盖「前端页面低码编排/源码开发 → 网关接口发布与权限点配置 → 后端 Facade / Controller 接口 → 底层数据库/数据开发」端到端链路，能独立交付从页面到底层数据的完整需求；
+- 熟练使用 Vibe Coding、SDD等 AI 编程范式，了解 Harness Engineering 工程化理念；掌握 Prompt Engineering、Function Calling / Tool Use、A2A / Skills 渐进式披露等 LLM 核心能力与 Agent 协议生态，熟练在日常开发与运维中使用MCP、Skills等相关能力；
+- 熟悉 ReAct、Reflexion等Agent主流架构模式，了解LangChain框架、Agent调试技巧、Token 成本调优、RAG等相关内容。
+
 
 ### Java后端/Spring
-- 熟练掌握 Java 基础与集合（HashMap / ConcurrentHashMap 等底层原理）、并发编程（线程池、JUC 锁、CAS 与 JMM 内存模型、ThreadLocal 上下文传递）、JVM 内存区域与 G1 / CMS GC 调优；熟悉 Spring（IOC、AOP、SpringBoot自动装配等）和 MyBatis（动态 SQL、拦截器机制等）；
+- 熟练掌握 Java 基础与集合（HashMap/ConcurrentHashMap等底层原理）、并发编程（线程池、JUC 锁、CAS 与JMM内存模型、ThreadLocal上下文传递）、JVM 内存区域与GC流程；熟悉 Spring（IOC、AOP、SpringBoot自动装配等）和 MyBatis（动态 SQL、拦截器机制等）；
 
 
 **HashMap / ConcurrentHashMap**
@@ -624,8 +791,8 @@ CompletableFuture.supplyAsync(() -> {
 2. 确定桶的位置。`HashMap`内部使用一个桶数组存储键值对。通过`hash`值与数组的长度n进行取模操作(`(n - 1) & hash`)找到相应的数组索引。
 3. 检查该位置是否已有元素。如果当前位置为空(`table[(n - 1) & hash] == null`)，则直接将键值对放入该位置。如果当前位置已经有元素，则需要处理哈希冲突。
 4. 处理哈希冲突。哈希冲突指的是不同的键经过哈希计算后，映射到了同一个数组位置。
-   - 拉链法：当多个键的哈希值映射到同一位置时，这些键值对以链表的形式存储在同一个桶中。`put()` 方法会遍历该链表，检查是否已经存在相同的键(通过 `equals()` 方法比较`key`的相等性)。如果找到相同的键，则更新其对应的值。如果未找到，则会在链表的末尾添加一个新节点。
-   - 红黑树：当冲突过多，链表长度超过阈值(默认为 8)时，`HashMap` 会将链表转换为红黑树，以提高查找和插入的效率。红黑树可以在 `O(log n)` 时间内进行查找和插入。如果桶中的结构是红黑树，`put()` 方法会按照红黑树的插入规则将新的键值对插入。
+  - 拉链法：当多个键的哈希值映射到同一位置时，这些键值对以链表的形式存储在同一个桶中。`put()` 方法会遍历该链表，检查是否已经存在相同的键(通过 `equals()` 方法比较`key`的相等性)。如果找到相同的键，则更新其对应的值。如果未找到，则会在链表的末尾添加一个新节点。
+  - 红黑树：当冲突过多，链表长度超过阈值(默认为 8)时，`HashMap` 会将链表转换为红黑树，以提高查找和插入的效率。红黑树可以在 `O(log n)` 时间内进行查找和插入。如果桶中的结构是红黑树，`put()` 方法会按照红黑树的插入规则将新的键值对插入。
 5. 扩容检查：每次插入新的键值对时，都会检查负载因子(当前元素数与数组大小的比值)是否超过设定的阈值(默认0.75)，如果超过则会进行扩容操作，将数组的大小扩展为原来的两倍，并重新分配已有的元素到新的桶中。
 6. 若有扩容，则扩容后重新分配元素。此时，再走一下2 3 4流程。
 7. 返回旧值。如果键已存在且值被替换，`put()` 方法会返回旧值。如果是插入新的键值对，则返回 `null`。
@@ -709,10 +876,10 @@ JDK1.8`ConcurrentHashMap`取消了 `Segment` 分段锁，采用 `Node + CAS + sy
 #### 创建线程池的方式
 - 通过`ThreadPoolExecutor`构造函数来创建 _**(推荐)**_ 。
 - 通过`Executors`工具类来创建 _**(不推荐)**_ 。通过这种方式可以创建出多种类型的线程池
-    - `FixedThreadPool`：固定大小的线程池。
-    - `SingleThreadPool`：只有一个线程的线程池。
-    - `CachedThreadPool`：可根据实际情况调整线程数量的线程池。线程池的线程数量不确定，但若有空闲线程可以复用，则会优先使用可复用的线程。
-    - `ScheduledThreadPool`：定时任务的线程池。
+  - `FixedThreadPool`：固定大小的线程池。
+  - `SingleThreadPool`：只有一个线程的线程池。
+  - `CachedThreadPool`：可根据实际情况调整线程数量的线程池。线程池的线程数量不确定，但若有空闲线程可以复用，则会优先使用可复用的线程。
+  - `ScheduledThreadPool`：定时任务的线程池。
 
 #### 为什么不推荐使用内置线程池
 - `FixedThreadPool`，`SingleThreadPool`，`ScheduledThreadPool`：使用的是无界的 `LinkedBlockingQueue`，允许的请求队列长度为 `Integer.MAX_VALUE`，可能会堆积大量的请求，从而导致 OOM。
@@ -1041,11 +1208,11 @@ Java内存模型通过定义主内存和工作内存之间的关系，以及变�
 
 #### volatile原理
 1. 可见性保证
-   - volatile关键字修饰的变量，任何一个线程对其进行修改后，都会立刻写回主内存。
-   - 其他线程在读取这个变量时，会直接从主内存中读取，而不是从线程的本地缓存中读取。因此，volatile变量的修改对所有线程都是可见的。
+  - volatile关键字修饰的变量，任何一个线程对其进行修改后，都会立刻写回主内存。
+  - 其他线程在读取这个变量时，会直接从主内存中读取，而不是从线程的本地缓存中读取。因此，volatile变量的修改对所有线程都是可见的。
 2. 禁止指令重排序
-   - 在编译和运行时，JVM会对指令进行优化，其中可能包括重排序，即改变代码中指令的执行顺序，以提高效率。
-   - 使用volatile修饰的变量，编译器和处理器在读写该变量时会添加内存屏障(Memory Barrier)，防止指令重排序，从而确保对该变量的操作按程序中的顺序执行。
+  - 在编译和运行时，JVM会对指令进行优化，其中可能包括重排序，即改变代码中指令的执行顺序，以提高效率。
+  - 使用volatile修饰的变量，编译器和处理器在读写该变量时会添加内存屏障(Memory Barrier)，防止指令重排序，从而确保对该变量的操作按程序中的顺序执行。
 
 #### 如何禁止指令重排序
 `volatile` 关键字除了可以保证变量的可见性，还有一个重要的作用就是防止 JVM 的指令重排序。 如果将变量声明为 `volatile` ，在对这个变量进行读写操作的时候，会通过插入特定的 **内存屏障** 的方式来禁止指令重排序。
@@ -1182,8 +1349,8 @@ Java中的引用类型主要分为强引用、软引用、弱引用和虚引用�
 #### 对象的内存布局
 对象在内存中的布局可以分为 3 块区域：
 - 对象头(`Header`)：
-   - 标记字段(`Mark Word`)：用于存储对象自身的运行时数据， 如哈希码(HashCode)、GC 分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等等。
-   - 类型指针(`Klass Word`)：对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。
+  - 标记字段(`Mark Word`)：用于存储对象自身的运行时数据， 如哈希码(HashCode)、GC 分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等等。
+  - 类型指针(`Klass Word`)：对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。
 - 实例数据(`Instance Data`)： 对象真正存储的有效信息，也是在程序中所定义的各种类型的字段内容。
 - 对齐填充(`Padding`)： 不是必然存在的，也没有什么特别的含义，仅仅起占位作用。
 
@@ -1260,21 +1427,21 @@ Spring AOP也集成了 AspectJ，可以使用 AspectJ 的注解来实现 AOP。
 Spring AOP(面向切面编程)是Spring框架中的一个重要模块，用于在不修改现有代码的情况下向程序中添加新的行为。基本原理和关键概念如下：
 
 1. 核心概念
-   - Target(目标)：被通知的对象
-   - Proxy(代理)：向目标对象应用通知之后创建的代理对象
-   - Join Point(连接点)：目标对象的所属类中，定义的所有方法均为连接点
-   - Pointcut(切点)：切点是用于匹配连接点的表达式。被切面拦截 / 增强的连接点(切入点一定是连接点，连接点不一定是切入点)
-   - Advice(通知)：增强的逻辑 / 代码，也即拦截到目标对象的连接点之后要做的事情。Spring AOP支持五种类型的通知：前置通知(Before)、后置通知(After)、返回通知(AfterReturning)、异常通知(AfterThrowing)和环绕通知(Around)。
-   - Aspect(切面)：切面是AOP的核心概念。切入点(Pointcut)+通知(Advice)。
-   - Weaving(织入)：将通知应用到目标对象，进而生成代理对象的过程动作。Spring AOP在运行时通过动态代理实现织入。
+  - Target(目标)：被通知的对象
+  - Proxy(代理)：向目标对象应用通知之后创建的代理对象
+  - Join Point(连接点)：目标对象的所属类中，定义的所有方法均为连接点
+  - Pointcut(切点)：切点是用于匹配连接点的表达式。被切面拦截 / 增强的连接点(切入点一定是连接点，连接点不一定是切入点)
+  - Advice(通知)：增强的逻辑 / 代码，也即拦截到目标对象的连接点之后要做的事情。Spring AOP支持五种类型的通知：前置通知(Before)、后置通知(After)、返回通知(AfterReturning)、异常通知(AfterThrowing)和环绕通知(Around)。
+  - Aspect(切面)：切面是AOP的核心概念。切入点(Pointcut)+通知(Advice)。
+  - Weaving(织入)：将通知应用到目标对象，进而生成代理对象的过程动作。Spring AOP在运行时通过动态代理实现织入。
 2. 实现机制
    Spring AOP主要通过两种方式来实现AOP功能：
-   - JDK动态代理：适用于基于接口的代理。Spring AOP使用JDK动态代理来创建实现了一个或多个接口的代理对象。
-   - CGLIB代理：适用于没有实现接口的类。Spring AOP使用CGLIB库生成目标类的子类来实现代理。
+  - JDK动态代理：适用于基于接口的代理。Spring AOP使用JDK动态代理来创建实现了一个或多个接口的代理对象。
+  - CGLIB代理：适用于没有实现接口的类。Spring AOP使用CGLIB库生成目标类的子类来实现代理。
 3. 工作流程
-   - 定义切面和通知：使用`@Aspect`注解定义切面，并在切面类中使用`@Before`、`@After`等注解定义通知。
-   - 配置AOP：在Spring配置文件中启用AOP支持，或使用`@EnableAspectJAutoProxy`注解来启用AOP自动代理。
-   - 应用切面：Spring容器根据配置和切点表达式在运行时生成代理对象，并将通知织入到目标方法的执行中。
+  - 定义切面和通知：使用`@Aspect`注解定义切面，并在切面类中使用`@Before`、`@After`等注解定义通知。
+  - 配置AOP：在Spring配置文件中启用AOP支持，或使用`@EnableAspectJAutoProxy`注解来启用AOP自动代理。
+  - 应用切面：Spring容器根据配置和切点表达式在运行时生成代理对象，并将通知织入到目标方法的执行中。
 
 Spring AOP的核心在于通过动态代理和切点表达式，实现了对横切关注点的模块化管理，使得代码更易于维护和扩展。
 
@@ -2265,7 +2432,7 @@ Token 直接关联成本和延迟，常用优化手段：
 {
   "name": "search_codebase",
   "description": "在仓库中搜索代码。当用户问'这个函数在哪定义''哪里用到了 X'时使用。
-                  不要用于读取已知文件路径——那种情况用 read_file。"
+  不要用于读取已知文件路径——那种情况用 read_file。"
 }
 ```
 
@@ -2416,12 +2583,12 @@ description: |
 > 流程：
 > 1. 客户端生成一个随机的`code_challenge`和`code_verifier`，`code_verifier`可以是明文(`plain`)SHA256哈希值(`s256`)。
 > 2. 客户端将`code_challenge`和`code_challenge_method`(`plain`或`s256`)发送给授权服务器。
->   - 如：`GET /authorize?response_type=code&client_id=CLIENT_ID&redirect_uri=REDIRECT_URI&scope=SCOPE&state=STATE&code_challenge=CODE_CHALLENGE&code_challenge_method=S256`
+     >   - 如：`GET /authorize?response_type=code&client_id=CLIENT_ID&redirect_uri=REDIRECT_URI&scope=SCOPE&state=STATE&code_challenge=CODE_CHALLENGE&code_challenge_method=S256`
 > 3. 用户在授权服务器进行身份验证，同意授权，授权服务器通过重定向URI将`code`(授权码)返回给客户端。
 > 4. 客户端将`code`(授权码)和`code_verifier`发送给授权服务器，以获取`access_token`(访问令牌)。
->   - 如：`POST /token?grant_type=authorization_code&code=AUTHORIZATION_CODE&redirect_uri=REDIRECT_URI&client_id=CLIENT_ID&code_verifier=CODE_VERIFIER`
+     >   - 如：`POST /token?grant_type=authorization_code&code=AUTHORIZATION_CODE&redirect_uri=REDIRECT_URI&client_id=CLIENT_ID&code_verifier=CODE_VERIFIER`
 > 5. 授权服务器收到客户端发送的`code`(授权码)和`code_verifier`后，使用之前保存的`code_challenge`进行验证。
->   - 如果`code_challenge_method`是`plain`，则直接比较`code_verifier`和`code_challenge`。
+     >   - 如果`code_challenge_method`是`plain`，则直接比较`code_verifier`和`code_challenge`。
 >   - 如果`code_challenge_method`是`s256`，则比较`code_verifier`的SHA256哈希值和`code_challenge`。
 > 6. 如果验证通过，授权服务器返回`access_token`(访问令牌)给客户端。
 
@@ -2502,20 +2669,20 @@ AIAgent（人工智能智能体）是一种能够感知环境、进行决策并�
 **AIAgent**则是一个"有自主意识的执行者"，它由四个核心组件构成：
 - **LLM（大脑）**：负责推理、规划和决策
 - **规划（Planning）**：将复杂任务分解为可执行的子任务
-    - ReAct 模式（Reasoning + Acting）是目前最主流的 Agent 执行框架。
+  - ReAct 模式（Reasoning + Acting）是目前最主流的 Agent 执行框架。
 - **记忆（Memory）**：短期记忆（当前会话上下文）+长期记忆（知识库存储）
 
   | 类型 | 存在哪里 | 举例 | 工程实现 |
-    | --- | --- | --- | --- |
+      | --- | --- | --- | --- |
   | **In-context** | 上下文窗口 | 当前对话历史 | 直接放入 Prompt |
   | **External** | 文件 / 数据库 | 任务计划文件、执行日志 | 读写本地文件或 DB |
   | **Semantic** | 向量数据库 | 相似代码片段、历史规范文档 | RAG 检索 |
   | **In-weights** | 模型参数 | 模型训练时学到的知识 | 微调（通常不需要） |
 
 - **工具使用（ToolUse）**：通过调用外部API、执行代码等方式与真实世界交互
-    - Tools: 大模型本身不能"执行"任何操作。它能做的，是输出一段结构化的 JSON，描述它想调用哪个函数、传什么参数。你的代码拿到这个 JSON，真正去调用对应的函数，再把结果返回给模型。这个机制就叫 Function Calling，是所有工具使用的底层基础。
-    - MCP: Anthropic 推出的工具接入标准协议，解决的是工具如何被 Agent 发现和调用的问题。
-    - Skills: Skill 是比单次工具调用更高层的抽象。类比：Tool 是函数，Skill 是封装好的模块/服务。
+  - Tools: 大模型本身不能"执行"任何操作。它能做的，是输出一段结构化的 JSON，描述它想调用哪个函数、传什么参数。你的代码拿到这个 JSON，真正去调用对应的函数，再把结果返回给模型。这个机制就叫 Function Calling，是所有工具使用的底层基础。
+  - MCP: Anthropic 推出的工具接入标准协议，解决的是工具如何被 Agent 发现和调用的问题。
+  - Skills: Skill 是比单次工具调用更高层的抽象。类比：Tool 是函数，Skill 是封装好的模块/服务。
 
 #### ReAct框架的工作原理
 
@@ -3101,17 +3268,17 @@ Anthropic / OpenAI SDK 都原生支持 AbortController / CancellationToken。
 
 1. **重试**：网络抖动、限流等瞬时错误，指数退避（1s, 2s, 4s）
 2. **备选工具**：
-    - 主搜索 API 挂了 → 用备用 API
-    - 主 LLM 超时 → 路由到备用模型
+  - 主搜索 API 挂了 → 用备用 API
+  - 主 LLM 超时 → 路由到备用模型
 3. **降级实现**：
-    - "实时股价 API 挂了" → "返回缓存的昨日价格，并说明"
+  - "实时股价 API 挂了" → "返回缓存的昨日价格，并说明"
 4. **错误回灌 + LLM 决策**：
-    - 把 error 返回给 LLM：`{"error": "API_TIMEOUT", "hint": "可尝试 cache_search"}`
-    - 让 LLM 自己选下一步
+  - 把 error 返回给 LLM：`{"error": "API_TIMEOUT", "hint": "可尝试 cache_search"}`
+  - 让 LLM 自己选下一步
 5. **部分成功**：
-    - 10 个子任务成功 8 个 → 返回 8 个结果 + 说明 2 个失败
+  - 10 个子任务成功 8 个 → 返回 8 个结果 + 说明 2 个失败
 6. **断路器**：
-    - 工具失败率超阈值（如 50%）→ 直接禁用一段时间，不再尝试
+  - 工具失败率超阈值（如 50%）→ 直接禁用一段时间，不再尝试
 
 **关键原则**：
 - **失败要让 LLM 知道**（不要静默返回空）
@@ -3235,9 +3402,9 @@ Anthropic / OpenAI SDK 都原生支持 AbortController / CancellationToken。
 5. **超时控制**：单任务有最大执行时间，超时自动取消
 6. **取消机制**：用户能 cancel，Worker 检测 cancel flag 后及时停止
 7. **结果通知**：
-    - 短任务（<5min）：轮询
-    - 长任务：WebHook 主动推
-    - 实时进度：SSE
+  - 短任务（<5min）：轮询
+  - 长任务：WebHook 主动推
+  - 实时进度：SSE
 8. **死信队列**：失败任务进 DLQ，便于人工排查
 9. **限流 + 优先级**：不同用户/任务类型分队列
 
@@ -3373,43 +3540,43 @@ Network:                   Debate:
 **防无限循环**：
 
 1. **全局熔断**：
-    - 总迭代次数上限（如 50 轮）
-    - 总 token 上限（如 200K）
-    - 总耗时上限（如 5 分钟）
+  - 总迭代次数上限（如 50 轮）
+  - 总 token 上限（如 200K）
+  - 总耗时上限（如 5 分钟）
 
 2. **明确终止条件**：
-    - 每个 Agent 知道什么时候算"完成"
-    - Supervisor 显式判断"是否结束"
+  - 每个 Agent 知道什么时候算"完成"
+  - Supervisor 显式判断"是否结束"
 
 3. **消息去重**：
-    - 同样的消息不重复处理
-    - hash(message) 进黑名单
+  - 同样的消息不重复处理
+  - hash(message) 进黑名单
 
 4. **状态不变检测**：
-    - 连续 N 轮共享状态无变化 → 强制终止
+  - 连续 N 轮共享状态无变化 → 强制终止
 
 5. **DAG 化设计**：
-    - 尽量用有向无环图，避免循环依赖
-    - 必须循环时严格控制循环上限
+  - 尽量用有向无环图，避免循环依赖
+  - 必须循环时严格控制循环上限
 
 **防通信冗余**：
 
 1. **共享黑板**：
-    - 用共享状态而非互相点对点通信
-    - A 写黑板，B 读黑板，避免重复传递
+  - 用共享状态而非互相点对点通信
+  - A 写黑板，B 读黑板，避免重复传递
 
 2. **结构化消息**：
-    - 每条消息有明确 schema：`{from, to, type, payload}`
-    - 杜绝"你确认下""我再问一遍"的客套话
+  - 每条消息有明确 schema：`{from, to, type, payload}`
+  - 杜绝"你确认下""我再问一遍"的客套话
 
 3. **摘要压缩**：
-    - Agent 间传递只传结论，不传中间过程
+  - Agent 间传递只传结论，不传中间过程
 
 4. **路由层去重**：
-    - Orchestrator 合并相同请求，统一调用一次
+  - Orchestrator 合并相同请求，统一调用一次
 
 5. **观测告警**：
-    - 通信次数/token 超阈值 → 告警人工 review
+  - 通信次数/token 超阈值 → 告警人工 review
 
 > Anthropic 在 Multi-Agent 实践中总结：**80% 的失败来自于通信失控**，不是模型能力不足。
 
@@ -3585,14 +3752,14 @@ LangGraph：
    模型路由：大流量走便宜模型，总成本降 60%-90%
    max_tokens 限制：防止输出膨胀
    批处理 API / 本地模型：离线场景半价，高频场景自部署省 80%+
-   
+
 4. 优化路径推荐（按 ROI 排序）：
    Prompt Caching（接入快、效果立竿见影）
    历史摘要压缩
    工具精简
    模型路由分级
    Continuous Batching + 量化（自建推理场景）
-   
+
 一句话总结：先做 Prompt Caching 和上下文压缩省"量"，再做模型路由省"单价"，最后做批处理/量化提升底层吞吐，三者叠加基本能覆盖 Agent 全链路的性能优化。
 
 
@@ -3746,10 +3913,10 @@ Token 消耗 = Agent 的"水电费"。监控要**实时 + 细粒度 + 可归因*
 **3. 实时 Dashboard**
 - Grafana / 自建 BI：实时 token/cost 曲线
 - 关键指标：
-    - 平均每会话 token
-    - 各模型成本占比
-    - 缓存命中率
-    - P99 单次任务 token
+  - 平均每会话 token
+  - 各模型成本占比
+  - 缓存命中率
+  - P99 单次任务 token
 
 **4. 告警规则**
 - 单用户突增（同比 5x）→ 怀疑刷量
@@ -3992,9 +4159,9 @@ Rerank 用的是 **Cross-Encoder**：query 和 doc **拼在一起**送入模型�
 2. **分层 Embedding**：粗粒度（章节摘要）+ 细粒度（段落）双索引
 3. **图文配对**：图片描述与原文关联存储，让 LLM 能引用图
 4. **表格特殊处理**：
-    - 小表 → 整表注入
-    - 大表 → 转 SQL，让 LLM 用 Text2SQL 查询
-    - 表 + 描述要一起检索
+  - 小表 → 整表注入
+  - 大表 → 转 SQL，让 LLM 用 Text2SQL 查询
+  - 表 + 描述要一起检索
 
 > **关键**：不要把所有文档"压扁"成纯文本字符串——会丢失大量语义。RAG 的天花板就在解析质量。
 
