@@ -1,0 +1,2081 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>手撕相关2 | cwp0</title><meta name="author" content="cwp0"><meta name="copyright" content="cwp0"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="手撕代码技巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手撕相关2">
+<meta property="og:url" content="https://cwp0.github.io/posts/17783.html">
+<meta property="og:site_name" content="cwp0">
+<meta property="og:description" content="手撕代码技巧">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png">
+<meta property="article:published_time" content="2024-06-13T08:18:26.000Z">
+<meta property="article:modified_time" content="2026-08-06T07:52:00.000Z">
+<meta property="article:author" content="cwp0">
+<meta property="article:tag" content="面经">
+<meta property="article:tag" content="手撕技巧">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "手撕相关2",
+  "url": "https://cwp0.github.io/posts/17783.html",
+  "image": "https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png",
+  "datePublished": "2024-06-13T08:18:26.000Z",
+  "dateModified": "2026-08-06T07:52:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "cwp0",
+      "url": "https://cwp0.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/assets/%E5%A4%B4%E5%83%8F.png"><link rel="canonical" href="https://cwp0.github.io/posts/17783.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":null,"highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":66,"languages":{"author":"Author: cwp0","link":"Link: ","source":"Source: cwp0","info":"Copyright belongs to the author. For commercial use, please contact the author for authorization. For non-commercial use, please indicate the source."}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '手撕相关2',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/url(/img/background/%E6%A8%B1%E8%8A%B12.jpg));"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">31</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://s2.loli.net/2024/06/13/YBqXTWpEVFg6hSl.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/assets/%E5%A4%B4%E5%83%8F.png" alt="Logo" loading='lazy'><span class="site-name">cwp0</span></a><a class="nav-page-title" href="/"><span class="site-name">手撕相关2</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">手撕相关2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-06-13T08:18:26.000Z" title="Created 2024-06-13 16:18:26">2024-06-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-06T07:52:00.000Z" title="Updated 2026-08-06 15:52:00">2026-08-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">8.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>38mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-08-06 15:52:00&quot;}" hidden></div><h3 id="递归删除文件夹"><a href="#递归删除文件夹" class="headerlink" title="递归删除文件夹"></a>递归删除文件夹</h3><pre><code class="java">import java.io.File;
+public class FileDeleter &#123;
+    public static void main(String[] args) &#123;
+        // 示例：删除路径为&quot;example&quot;的文件或目录
+        String path = &quot;example&quot;;
+        boolean result = deleteRecursively(new File(path));
+        if (result) &#123;
+            System.out.println(&quot;删除成功: &quot; + path);
+        &#125; else &#123;
+            System.out.println(&quot;删除失败: &quot; + path);
+        &#125;
+    &#125;
+
+    /**
+     * 递归删除文件或目录
+     * @param file 要删除的文件或目录
+     * @return 如果成功删除，则返回true；否则返回false
+     */
+    public static boolean deleteRecursively(File file) &#123;
+        if (!file.exists()) &#123;
+            System.out.println(&quot;文件不存在: &quot; + file.getAbsolutePath());
+            return false;
+        &#125;
+        // 如果是目录，则递归删除目录中的内容
+        if (file.isDirectory()) &#123;
+            File[] files = file.listFiles();
+            if (files != null) &#123;
+                for (File child : files) &#123;
+                    if (!deleteRecursively(child)) &#123;
+                        return false;
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+        // 删除文件或空目录
+        return file.delete();
+    &#125;
+&#125;
+</code></pre>
+<h3 id="判断是否是质数"><a href="#判断是否是质数" class="headerlink" title="判断是否是质数"></a>判断是否是质数</h3><pre><code class="java">class Solution &#123;
+    public boolean isPrime(int n) &#123;
+        if (n &lt; 2) return false;
+        for (int i = 2; i * i &lt;= n; i++) &#123;
+            if (n % i == 0) return false;
+        &#125;
+        return true;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="ArrayList实现最大堆"><a href="#ArrayList实现最大堆" class="headerlink" title="ArrayList实现最大堆"></a>ArrayList实现最大堆</h3><pre><code class="java">import java.util.ArrayList;
+
+public class MaxHeap &#123;
+    private ArrayList&lt;Integer&gt; heap;
+    public MaxHeap() &#123;
+        heap = new ArrayList&lt;&gt;();
+    &#125;
+    public void insert(int value) &#123;
+        heap.add(value);
+        heapifyUp(heap.size() - 1);
+    &#125;
+    public int extractMax() &#123;
+        if (heap.isEmpty()) &#123;
+            throw new IllegalStateException(&quot;Heap is empty&quot;);
+        &#125;
+        int max = heap.get(0);
+        int last = heap.remove(heap.size() - 1);
+        if (!heap.isEmpty()) &#123;
+            heap.set(0, last);
+            heapifyDown(0);
+        &#125;
+        return max;
+    &#125;
+    private void heapifyUp(int index) &#123;
+        while (index &gt; 0) &#123;
+            int parentIndex = (index - 1) / 2;
+            if (heap.get(index) &gt; heap.get(parentIndex)) &#123;
+                swap(index, parentIndex);
+                index = parentIndex;
+            &#125; else &#123;
+                break;
+            &#125;
+        &#125;
+    &#125;
+    private void heapifyDown(int index) &#123;
+        int size = heap.size();
+        while (index &lt; size) &#123;
+            int leftChildIndex = 2 * index + 1;
+            int rightChildIndex = 2 * index + 2;
+            int largestIndex = index;
+
+            if (leftChildIndex &lt; size &amp;&amp; heap.get(leftChildIndex) &gt; heap.get(largestIndex)) &#123;
+                largestIndex = leftChildIndex;
+            &#125;
+            if (rightChildIndex &lt; size &amp;&amp; heap.get(rightChildIndex) &gt; heap.get(largestIndex)) &#123;
+                largestIndex = rightChildIndex;
+            &#125;
+
+            if (largestIndex != index) &#123;
+                swap(index, largestIndex);
+                index = largestIndex;
+            &#125; else &#123;
+                break;
+            &#125;
+        &#125;
+    &#125;
+    private void swap(int index1, int index2) &#123;
+        int temp = heap.get(index1);
+        heap.set(index1, heap.get(index2));
+        heap.set(index2, temp);
+    &#125;
+    public static void main(String[] args) &#123;
+        MaxHeap maxHeap = new MaxHeap();
+        maxHeap.insert(10);
+        maxHeap.insert(20);
+        maxHeap.insert(5);
+        System.out.println(&quot;Max element: &quot; + maxHeap.extractMax()); // 输出 20
+        System.out.println(&quot;Max element: &quot; + maxHeap.extractMax()); // 输出 10
+        System.out.println(&quot;Max element: &quot; + maxHeap.extractMax()); // 输出 5
+    &#125;
+&#125;
+</code></pre>
+<h3 id="判断是否是回文串"><a href="#判断是否是回文串" class="headerlink" title="判断是否是回文串"></a>判断是否是回文串</h3><pre><code class="java">    private static boolean isPalindrome(String s) &#123;
+        for (int i = 0; i &lt; s.length()/2; i++) &#123;
+            if (s.charAt(i) != s.charAt(s.length()-1-i)) &#123;
+                return false;
+            &#125;
+        &#125;
+        return true;
+    &#125;
+</code></pre>
+<h3 id="最大公约数"><a href="#最大公约数" class="headerlink" title="最大公约数"></a>最大公约数</h3><pre><code class="java">public class GCD &#123;
+    // 方法 1：递归实现
+    public static int gcdRecursive(int a, int b) &#123;
+        if (b == 0) &#123;
+            return a;
+        &#125;
+        return gcdRecursive(b, a % b);
+    &#125;
+
+    // 方法 2：非递归实现（迭代）
+    public static int gcdIterative(int a, int b) &#123;
+        while (b != 0) &#123;
+            int temp = b;
+            b = a % b;
+            a = temp;
+        &#125;
+        return a;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="创建三个线程有序打印1-100"><a href="#创建三个线程有序打印1-100" class="headerlink" title="创建三个线程有序打印1-100"></a>创建三个线程有序打印1-100</h3><pre><code class="java">public class ConcurrentDemo &#123;
+    private static final int MAX_NUMBER = 100;  // 定义最大数字为100
+    private static int number = 1;  // 当前要打印的数字，初始值为1
+    private static final Object lock = new Object();  // 锁对象，用于线程间的通信
+    public static void main(String[] args) &#123;
+        // 创建三个线程，每个线程使用不同的threadId(0, 1, 2)
+        Thread t1 = new Thread(new PrintTask(1));
+        Thread t2 = new Thread(new PrintTask(2));
+        Thread t3 = new Thread(new PrintTask(0));
+        // 启动线程
+        t1.start();
+        t2.start();
+        t3.start();
+    &#125;
+    static class PrintTask implements Runnable &#123;
+        private int threadId;  // 线程的标识符，用于控制打印顺序
+        public PrintTask(int threadId) &#123;
+            this.threadId = threadId;
+        &#125;
+        @Override
+        public void run() &#123;
+            while (true) &#123;
+                synchronized (lock) &#123;  // 锁定lock对象，保证同一时刻只有一个线程可以访问
+                    // 如果当前数字不能被对应线程处理，则等待
+                    while (number % 3 != threadId) &#123;
+                        try &#123;
+                            lock.wait();  // 当前线程等待，释放锁
+                        &#125; catch (InterruptedException e) &#123;
+                            Thread.currentThread().interrupt();  // 处理线程中断
+                        &#125;
+                    &#125;
+                    // 如果当前数字超过最大值，通知其他线程并结束循环
+                    if (number &gt; MAX_NUMBER) &#123;
+                        lock.notifyAll();  // 通知其他所有线程
+                        break;  // 退出循环，结束线程
+                    &#125;
+                    // 打印当前数字并自增
+                    System.out.println(&quot;Thread-&quot; + threadId + &quot; prints: &quot; + number++);
+                    // 唤醒其他等待的线程
+                    lock.notifyAll();
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="SQL模拟死锁"><a href="#SQL模拟死锁" class="headerlink" title="SQL模拟死锁"></a>SQL模拟死锁</h3><p>为了展示如何在事务中引发死锁，可以创建一个简单的数据库表，然后编写两个事务，在特定的情况下导致死锁。下面以MySQL为例，假设有一张<code>users</code>表，事务1和事务2分别对不同的记录进行锁定，但由于它们相互等待对方释放锁而产生了死锁。</p>
+<ul>
+<li>创建表结构</li>
+</ul>
+<pre><code class="sql">CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    balance DECIMAL(10, 2)
+);
+</code></pre>
+<ul>
+<li>插入一些初始数据</li>
+</ul>
+<pre><code class="sql">INSERT INTO users (id, name, balance) VALUES (1, &#39;Alice&#39;, 100.00);
+INSERT INTO users (id, name, balance) VALUES (2, &#39;Bob&#39;, 200.00);
+</code></pre>
+<ul>
+<li>模拟死锁的两个事务</li>
+</ul>
+<pre><code class="sql">-- 事务1：
+-- 开启事务
+START TRANSACTION;
+
+-- 锁定用户1的记录
+UPDATE users SET balance = balance - 50 WHERE id = 1;
+
+-- 模拟某些操作的延迟
+-- 在实际场景中，这可能是业务逻辑处理时间
+DO SLEEP(5);
+
+-- 尝试更新用户2的记录
+UPDATE users SET balance = balance + 50 WHERE id = 2;
+
+-- 提交事务
+COMMIT;
+
+
+
+-- 事务2：
+-- 开启事务
+START TRANSACTION;
+
+-- 锁定用户2的记录
+UPDATE users SET balance = balance + 50 WHERE id = 2;
+
+-- 模拟某些操作的延迟
+DO SLEEP(5);
+
+-- 尝试更新用户1的记录
+UPDATE users SET balance = balance - 50 WHERE id = 1;
+
+-- 提交事务
+COMMIT;
+</code></pre>
+<ul>
+<li>死锁的过程：</li>
+</ul>
+<ol>
+<li><strong>事务1</strong> 先更新用户1的记录，此时用户1的记录被事务1锁定。</li>
+<li><strong>事务2</strong> 先更新用户2的记录，此时用户2的记录被事务2锁定。</li>
+<li><strong>事务1</strong> 尝试更新用户2的记录，但用户2的记录已被事务2锁定，所以事务1进入等待状态。</li>
+<li><strong>事务2</strong> 尝试更新用户1的记录，但用户1的记录已被事务1锁定，所以事务2也进入等待状态。</li>
+</ol>
+<p>由于两个事务互相等待对方释放锁，导致了死锁。最终数据库检测到死锁后，会主动回滚其中一个事务，以解除死锁。</p>
+<h3 id="模拟死锁"><a href="#模拟死锁" class="headerlink" title="模拟死锁"></a>模拟死锁</h3><pre><code class="java">public class DeadLockSample &#123;
+    private final Object lock1 = new Object();
+    private final Object lock2 = new Object();
+    public void createDeadLock() &#123;
+        Thread thread1 = new Thread(() -&gt; &#123;
+            synchronized (lock1) &#123;
+                System.out.println(&quot;Thread1 get lock1&quot;);
+                // 让线程1休眠，确保线程2可以获取到lock2
+                try &#123;
+                    Thread.sleep(50);
+                &#125; catch (InterruptedException e) &#123;
+                    throw new RuntimeException(e);
+                &#125;
+                synchronized (lock2) &#123;
+                    System.out.println(&quot;Thread1 try get lock2.&quot;);
+                &#125;
+            &#125;
+        &#125;);
+        Thread thread2 = new Thread(() -&gt; &#123;
+            synchronized (lock2) &#123;
+                System.out.println(&quot;Thread2 get lock2&quot;);
+                // 让线程2休眠，确保线程1可以获取到lock2
+                try &#123;
+                    Thread.sleep(50);
+                &#125; catch (InterruptedException e) &#123;
+                    throw new RuntimeException(e);
+                &#125;
+                synchronized (lock1) &#123;
+                    System.out.println(&quot;Thread2 try get lock1.&quot;);
+                &#125;
+            &#125;
+        &#125;);
+        thread1.start();
+        thread2.start();
+    &#125;
+    public static void main(String[] args) &#123;
+        DeadLockSample deadLockSample = new DeadLockSample();
+        deadLockSample.createDeadLock();
+    &#125;
+&#125;
+</code></pre>
+<h3 id="手写线程池"><a href="#手写线程池" class="headerlink" title="手写线程池"></a>手写线程池</h3><ol>
+<li>线程池的基本组成部分<ul>
+<li>任务队列：存储提交的任务。</li>
+<li>工作线程：从任务队列中取出任务并执行。</li>
+<li>线程池管理类：负责管理线程和任务的调度。</li>
+</ul>
+</li>
+<li>设计关键点<ul>
+<li>使用BlockingQueue存储任务。</li>
+<li>使用Thread或Executor实现工作线程。</li>
+<li>提供execute()方法提交任务。</li>
+<li>管理线程的生命周期（如启动和停止线程池）。</li>
+</ul>
+</li>
+</ol>
+<pre><code class="java">import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class MyThreadPool &#123;
+    // 任务队列
+    private final BlockingQueue&lt;Runnable&gt; taskQueue;
+    // 工作线程数组
+    private final WorkerThread[] workers;
+    // 线程池是否正在运行
+    private volatile boolean isRunning = true;
+
+    // 构造函数
+    public MyThreadPool(int poolSize, int queueSize) &#123;
+        taskQueue = new LinkedBlockingQueue&lt;&gt;(queueSize);
+        workers = new WorkerThread[poolSize];
+        // 初始化工作线程
+        for (int i = 0; i &lt; poolSize; i++) &#123;
+            workers[i] = new WorkerThread();
+            workers[i].start();
+        &#125;
+    &#125;
+
+    // 提交任务到线程池
+    public void execute(Runnable task) throws InterruptedException &#123;
+        if (isRunning) &#123;
+            taskQueue.put(task); // 阻塞式添加任务
+        &#125; else &#123;
+            throw new IllegalStateException(&quot;ThreadPool is not running!&quot;);
+        &#125;
+    &#125;
+
+    // 关闭线程池
+    public void shutdown() &#123;
+        isRunning = false;
+        // 中断所有工作线程
+        for (WorkerThread worker : workers) &#123;
+            worker.interrupt();
+        &#125;
+    &#125;
+
+    // 工作线程类
+    private class WorkerThread extends Thread &#123;
+        public void run() &#123;
+            while (isRunning || !taskQueue.isEmpty()) &#123;
+                try &#123;
+                    Runnable task = taskQueue.poll(); // 非阻塞取任务
+                    if (task != null) &#123;
+                        task.run();
+                    &#125;
+                &#125; catch (Exception e) &#123;
+                    // 捕获并处理线程执行中的异常
+                    System.out.println(&quot;WorkerThread interrupted: &quot; + e.getMessage());
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+
+    // 测试代码
+    public static void main(String[] args) throws InterruptedException &#123;
+        MyThreadPool pool = new MyThreadPool(3, 10);
+
+        // 提交任务
+        for (int i = 0; i &lt; 15; i++) &#123;
+            final int taskId = i;
+            pool.execute(() -&gt; &#123;
+                System.out.println(&quot;Task &quot; + taskId + &quot; is running on &quot; + Thread.currentThread().getName());
+                try &#123;
+                    Thread.sleep(1000);
+                &#125; catch (InterruptedException e) &#123;
+                    Thread.currentThread().interrupt();
+                &#125;
+            &#125;);
+        &#125;
+
+        // 等待所有任务完成
+        Thread.sleep(5000);
+        pool.shutdown();
+    &#125;
+&#125;
+</code></pre>
+<h3 id="实现生产者消费者模型"><a href="#实现生产者消费者模型" class="headerlink" title="实现生产者消费者模型"></a>实现生产者消费者模型</h3><p>使用<code>BlockingQueue</code></p>
+<pre><code class="java">public class ProducerConsumerExample &#123;
+    // 定义缓冲区的容量
+    private static final int BUFFER_CAPACITY = 10;
+    // 创建一个共享缓冲区
+    private final BlockingQueue&lt;Integer&gt; buffer = new LinkedBlockingQueue&lt;&gt;(BUFFER_CAPACITY);
+    public static void main(String[] args) &#123;
+        ProducerConsumerExample example = new ProducerConsumerExample();
+        // 启动生产者线程
+        new Thread(example.new Producer()).start();
+        // 启动消费者线程
+        new Thread(example.new Consumer()).start();
+    &#125;
+    // 生产者类
+    class Producer implements Runnable &#123;
+        @Override
+        public void run() &#123;
+            int value = 0;
+            while (true) &#123;
+                try &#123;
+                    produce(value++);
+                    Thread.sleep(1000); // 模拟生产过程
+                &#125; catch (InterruptedException e) &#123;
+                    Thread.currentThread().interrupt();
+                &#125;
+            &#125;
+        &#125;
+        private void produce(int value) throws InterruptedException &#123;
+            // 将产品放入缓冲区，若缓冲区满则等待
+            buffer.put(value);
+            System.out.println(&quot;Produced: &quot; + value);
+        &#125;
+    &#125;
+    // 消费者类
+    class Consumer implements Runnable &#123;
+        @Override
+        public void run() &#123;
+            while (true) &#123;
+                try &#123;
+                    consume();
+                    Thread.sleep(1500); // 模拟消费过程
+                &#125; catch (InterruptedException e) &#123;
+                    Thread.currentThread().interrupt();
+                &#125;
+            &#125;
+        &#125;
+        private void consume() throws InterruptedException &#123;
+            // 从缓冲区中取出产品，若缓冲区空则等待
+            int value = buffer.take();
+            System.out.println(&quot;Consumed: &quot; + value);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>使用wait()和notify()</p>
+<pre><code class="java">public class ProducerConsumerExample &#123;
+    // 定义缓冲区的容量
+    private static final int BUFFER_CAPACITY = 10;
+    // 创建一个共享缓冲区
+    private final Queue&lt;Integer&gt; buffer = new LinkedList&lt;&gt;();
+    private final Object lock = new Object();
+    public static void main(String[] args) &#123;
+        ProducerConsumerExample example = new ProducerConsumerExample();
+
+        // 启动生产者线程
+        new Thread(example.new Producer()).start();
+
+        // 启动消费者线程
+        new Thread(example.new Consumer()).start();
+    &#125;
+    // 生产者类
+    class Producer implements Runnable &#123;
+        @Override
+        public void run() &#123;
+            int value = 0;
+            while (true) &#123;
+                try &#123;
+                    produce(value++);
+                    Thread.sleep(1000); // 模拟生产过程
+                &#125; catch (InterruptedException e) &#123;
+                    Thread.currentThread().interrupt();
+                &#125;
+            &#125;
+        &#125;
+        private void produce(int value) throws InterruptedException &#123;
+            synchronized (lock) &#123;
+                // 如果缓冲区已满，等待消费者消费
+                while (buffer.size() == BUFFER_CAPACITY) &#123;
+                    System.out.println(&quot;Buffer is full, producer is waiting...&quot;);
+                    lock.wait();
+                &#125;
+                // 将产品放入缓冲区
+                buffer.add(value);
+                System.out.println(&quot;Produced: &quot; + value);
+                // 通知消费者有新的产品
+                lock.notifyAll();
+            &#125;
+        &#125;
+    &#125;
+    // 消费者类
+    class Consumer implements Runnable &#123;
+        @Override
+        public void run() &#123;
+            while (true) &#123;
+                try &#123;
+                    consume();
+                    Thread.sleep(1500); // 模拟消费过程
+                &#125; catch (InterruptedException e) &#123;
+                    Thread.currentThread().interrupt();
+                &#125;
+            &#125;
+        &#125;
+        private void consume() throws InterruptedException &#123;
+            synchronized (lock) &#123;
+                // 如果缓冲区为空，等待生产者生产
+                while (buffer.isEmpty()) &#123;
+                    System.out.println(&quot;Buffer is empty, consumer is waiting...&quot;);
+                    lock.wait();
+                &#125;
+                // 从缓冲区中取出产品
+                int value = buffer.poll();
+                System.out.println(&quot;Consumed: &quot; + value);
+                // 通知生产者有空位
+                lock.notifyAll();
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="CompletableFuture实现异步调用"><a href="#CompletableFuture实现异步调用" class="headerlink" title="CompletableFuture实现异步调用"></a>CompletableFuture实现异步调用</h3><pre><code class="java">import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+public class AsyncExample &#123;
+    public static void main(String[] args) &#123;
+        // 创建一个CompletableFuture来执行异步任务
+        CompletableFuture&lt;String&gt; future = CompletableFuture.supplyAsync(() -&gt; &#123;
+            // 模拟一个长时间运行的任务
+            try &#123;
+                Thread.sleep(2000); // 休眠2秒
+            &#125; catch (InterruptedException e) &#123;
+                e.printStackTrace();
+            &#125;
+            return &quot;任务完成&quot;;
+        &#125;);
+        // 注册一个回调函数，当任务完成时获取结果
+        future.thenAccept(result -&gt; &#123;
+            System.out.println(&quot;异步任务结果: &quot; + result);
+        &#125;);
+        // 主线程继续执行其他操作
+        System.out.println(&quot;主线程继续执行...&quot;);
+        // 阻塞主线程，直到异步任务完成(可选)
+        try &#123;
+            // 这一步会阻塞主线程，直到异步任务完成
+            String result = future.get();
+            System.out.println(&quot;异步任务完成后获取的结果: &quot; + result);
+        &#125; catch (InterruptedException | ExecutionException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="遍历HashMap"><a href="#遍历HashMap" class="headerlink" title="遍历HashMap"></a>遍历HashMap</h3><p>七种</p>
+<pre><code class="java">HashMap&lt;Integer, String&gt; map = new HashMap&lt;&gt;();
+// ForEach EntrySet
+for (Map.Entry&lt;Integer, String&gt; entry : map.entrySet()) &#123;
+    System.out.println(entry.getKey() + &quot;:&quot; + entry.getValue());
+&#125;
+// ForEach KeySet
+for (Integer key : map.keySet()) &#123;
+    System.out.println(key + &quot;:&quot; + map.get(key));
+&#125;
+// 迭代器EntrySet
+Iterator&lt;Map.Entry&lt;Integer, String&gt;&gt; iterator = map.entrySet().iterator();
+while (iterator.hasNext()) &#123;
+    Map.Entry&lt;Integer, String&gt; entry = iterator.next();
+    System.out.println(entry.getKey() + &quot;:&quot; + entry.getValue());
+&#125;
+// 迭代器KeySet
+Iterator&lt;Integer&gt; iterator = map.keySet().iterator();
+while (iterator.hasNext()) &#123;
+    Integer key = iterator.next();
+    System.out.println(key + &quot;:&quot; + map.get(key));
+&#125;
+// Lambda
+map.forEach((key, value) -&gt; &#123;
+    System.out.println(key);
+    System.out.println(value);
+&#125;);
+// Streams API 单线程
+map.entrySet().stream().forEach(entry -&gt; &#123;
+    System.out.println(entry.getKey());
+    System.out.println(entry.getValue());
+&#125;);
+// Streams API 多线程
+map.entrySet().parallelStream().forEach(entry -&gt; &#123;
+    System.out.println(entry.getKey());
+    System.out.println(entry.getValue());
+&#125;);
+</code></pre>
+<h3 id="遍历Set"><a href="#遍历Set" class="headerlink" title="遍历Set"></a>遍历Set</h3><pre><code class="java">Set&lt;Integer&gt; row = new HashSet&lt;&gt;();
+row.add(1);
+row.add(2);
+row.add(3);
+// 增强for循环
+for (Integer number : row) &#123;
+    System.out.println(number);
+&#125;
+// 迭代起
+Iterator&lt;Integer&gt; iterator = row.iterator();
+while (iterator.hasNext()) &#123;
+    Integer number = iterator.next();
+    System.out.println(number);
+&#125;
+// forEach+Lambda表达式
+row.forEach(number -&gt; System.out.println(number));
+// Streams API 单线程
+row.stream().forEach(System.out::println);
+</code></pre>
+<h3 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h3><h4 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h4><p>单例模式确保一个类只有一个实例，并提供一个全局访问点。</p>
+<ul>
+<li>饿汉式：饿汉式单例模式在类加载时就完成实例化，线程安全，简单但可能会造成资源浪费。</li>
+<li>懒汉式：懒汉式单例模式在第一次调用 <code>getInstance</code> 方法时创建实例，线程不安全，需要额外处理同步。</li>
+<li>线程安全的懒汉式<ul>
+<li>同步方法：在 <code>getInstance</code> 方法上加 <code>synchronized</code> 关键字，保证线程安全，但是效率低。</li>
+<li>双重检查锁定：在 <code>getInstance</code> 方法内部进行双重检查，保证只有第一次调用时才会加锁，提高效率。</li>
+</ul>
+</li>
+<li>静态内部类：利用静态内部类来实现懒加载和线程安全。</li>
+<li>枚举：枚举实现单例模式是最简洁、安全的实现方式，可以防止反射和序列化攻击。</li>
+</ul>
+<pre><code class="java">// 饿汉式
+public class Singleton &#123;
+    private static final Singleton instance = new Singleton();
+    private Singleton() &#123;&#125;
+    public static Singleton getInstance() &#123;
+        return instance;
+    &#125;
+&#125;
+
+// 懒汉式
+public class Singleton &#123;
+    private static Singleton instance;
+    private Singleton() &#123;&#125;
+    public static Singleton getInstance() &#123;
+        if (instance == null) &#123;
+            instance = new Singleton();
+        &#125;
+        return instance;
+    &#125;
+&#125;
+
+// 线程安全的懒汉式-同步方法
+public class Singleton &#123;
+    private static Singleton instance;
+    private Singleton() &#123;&#125;
+    public static synchronized Singleton getInstance() &#123;
+        if (instance == null) &#123;
+            instance = new Singleton();
+        &#125;
+        return instance;
+    &#125;
+&#125;
+
+// 线程安全的懒汉式-双重检查锁定
+public class Singleton &#123;
+    // 单例模式中用于保存实例的字段，被声明为volatile，确保对该变量的写入操作会立即反映到所有线程中，这样可以防止可能发生的指令重排序问题。
+    private volatile static Singleton uniqueInstance;
+    // 私有的构造方法确保该类不能在外部被初始化，只能通过getUniqueInstance()方法获取实例
+    private Singleton() &#123;
+    &#125;
+    // 双重检查锁定的机制，实现对外提供的获取单例实例的方法。
+    public static Singleton getInstance() &#123;
+        // 第一层检查：首先检查 uniqueInstance 是否为 null。如果不是 null，意味着实例已经被创建，则直接返回这个实例。
+        if (uniqueInstance == null) &#123;
+            // 类对象加锁，表示进入同步代码前要获得 Singleton类 的锁
+            synchronized (Singleton.class) &#123;
+                // 第二层检查：在同步代码块内再次检查 uniqueInstance 是否为 null。
+                // 这种双重检查是为了在等待锁的线程获取到锁后再次确认实例是否已经被创建，因为在等待锁的过程中可能有其他线程已经创建了实例。
+                if (uniqueInstance == null) &#123;
+                    uniqueInstance = new Singleton();
+                &#125;
+            &#125;
+        &#125;
+        return uniqueInstance;
+    &#125;
+    public static void main(String[] args) &#123;
+        System.out.println(getInstance());
+    &#125;
+
+&#125;
+
+// 静态内部类
+public class Singleton &#123;
+    private Singleton() &#123;&#125;
+    private static class SingletonHolder &#123;
+        private static final Singleton INSTANCE = new Singleton();
+    &#125;
+    public static Singleton getInstance() &#123;
+        return SingletonHolder.INSTANCE;
+    &#125;
+&#125;
+
+// 枚举
+public enum Singleton &#123;
+    // 注意 上面不是 class 是 enum
+    INSTANCE;
+    public void someMethod() &#123;
+        // do something
+    &#125;
+    public static void main(String[] args) &#123;
+        Singelton singleton = Singleton.INSTANCE;
+        singleton.someMethod();
+    &#125;
+&#125;
+</code></pre>
+<h4 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h4><p>工厂模式定义了一个用于创建对象的接口，但由子类决定实例化哪个类。它使得类的实例化延迟到子类。</p>
+<pre><code class="java">// 产品接口
+interface Product &#123;
+    void use();
+&#125;
+// 具体产品A
+class ProductA implements Product &#123;
+    @Override
+    public void use() &#123;
+        System.out.println(&quot;Using Product A&quot;);
+    &#125;
+&#125;
+// 具体产品B
+class ProductB implements Product &#123;
+    @Override
+    public void use() &#123;
+        System.out.println(&quot;Using Product B&quot;);
+    &#125;
+&#125;
+// 工厂类
+class ProductFactory &#123;
+    public static Product createProduct(String type) &#123;
+        if (type.equals(&quot;A&quot;)) &#123;
+            return new ProductA();
+        &#125; else if (type.equals(&quot;B&quot;)) &#123;
+            return new ProductB();
+        &#125;
+        throw new IllegalArgumentException(&quot;Unknown product type&quot;);
+    &#125;
+&#125;
+// 使用
+public class FactoryPatternDemo &#123;
+    public static void main(String[] args) &#123;
+        Product product = ProductFactory.createProduct(&quot;A&quot;);
+        product.use();
+    &#125;
+&#125;
+</code></pre>
+<h4 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h4><p>适配器模式将一个类的接口转换成客户希望的另一个接口，使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。</p>
+<pre><code class="java">// 目标接口
+interface Target &#123;
+    void request();
+&#125;
+// 需要适配的类
+class Adaptee &#123;
+    public void specificRequest() &#123;
+        System.out.println(&quot;Specific request&quot;);
+    &#125;
+&#125;
+// 适配器
+class Adapter implements Target &#123;
+    private Adaptee adaptee;
+    public Adapter(Adaptee adaptee) &#123;
+        this.adaptee = adaptee;
+    &#125;
+    @Override
+    public void request() &#123;
+        adaptee.specificRequest();
+    &#125;
+&#125;
+// 使用
+public class AdapterPatternDemo &#123;
+    public static void main(String[] args) &#123;
+        Adaptee adaptee = new Adaptee();
+        Target target = new Adapter(adaptee);
+        target.request();
+    &#125;
+&#125;
+</code></pre>
+<h4 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h4><p>装饰者模式允许向一个现有的对象添加新的功能，同时又不改变其结构。</p>
+<pre><code class="java">// 组件接口
+interface Component &#123;
+    void operation();
+&#125;
+// 具体组件
+class ConcreteComponent implements Component &#123;
+    @Override
+    public void operation() &#123;
+        System.out.println(&quot;ConcreteComponent operation&quot;);
+    &#125;
+&#125;
+// 抽象装饰者
+abstract class Decorator implements Component &#123;
+    protected Component component;
+    public Decorator(Component component) &#123;
+        this.component = component;
+    &#125;
+    @Override
+    public void operation() &#123;
+        component.operation();
+    &#125;
+&#125;
+// 具体装饰者A
+class ConcreteDecoratorA extends Decorator &#123;
+    public ConcreteDecoratorA(Component component) &#123;
+        super(component);
+    &#125;
+    @Override
+    public void operation() &#123;
+        super.operation();
+        System.out.println(&quot;ConcreteDecoratorA additional operation&quot;);
+    &#125;
+&#125;
+// 具体装饰者B
+class ConcreteDecoratorB extends Decorator &#123;
+    public ConcreteDecoratorB(Component component) &#123;
+        super(component);
+    &#125;
+    @Override
+    public void operation() &#123;
+        super.operation();
+        System.out.println(&quot;ConcreteDecoratorB additional operation&quot;);
+    &#125;
+&#125;
+// 使用
+public class DecoratorPatternDemo &#123;
+    public static void main(String[] args) &#123;
+        Component component = new ConcreteComponent();
+        Component decoratedComponentA = new ConcreteDecoratorA(component);
+        Component decoratedComponentB = new ConcreteDecoratorB(decoratedComponentA);
+        decoratedComponentB.operation();
+    &#125;
+&#125;
+</code></pre>
+<h4 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h4><p>定义一系列算法，将每个算法封装起来，并使它们可以互相替换。策略模式让算法的变化独立于使用算法的客户端。消除条件分支</p>
+<pre><code class="java">// ===================== 1. 策略接口 =====================
+public interface SignTaskStrategy &#123;
+    String getType();
+    String createSignTask(String params);
+&#125;
+
+// ===================== 2. 具体策略实现 =====================
+@Component
+public class AliSignTaskStrategy implements SignTaskStrategy &#123;
+    @Override
+    public String getType() &#123; return &quot;ALI&quot;; &#125;
+
+    @Override
+    public String createSignTask(String params) &#123;
+        return &quot;阿里签署任务: &quot; + params;
+    &#125;
+&#125;
+
+@Component
+public class OverseaSignTaskStrategy implements SignTaskStrategy &#123;
+    @Override
+    public String getType() &#123; return &quot;OVERSEA&quot;; &#125;
+
+    @Override
+    public String createSignTask(String params) &#123;
+        return &quot;海外签署任务: &quot; + params;
+    &#125;
+&#125;
+
+// ===================== 3. 策略工厂（核心） =====================
+@Component
+public class SignTaskStrategyFactory &#123;
+
+    // Spring 自动注入所有实现类，key = Bean 名称
+    // 也可以用 List&lt;SignTaskStrategy&gt; 注入后手动构建 Map
+    private final Map&lt;String, SignTaskStrategy&gt; strategyMap;
+
+    @PostConstruct
+    public SignTaskStrategyFactory(List&lt;SignTaskStrategy&gt; strategies) &#123;
+        this.strategyMap = strategies.stream()
+            .collect(Collectors.toMap(SignTaskStrategy::getType, s -&gt; s));
+    &#125;
+
+    public SignTaskStrategy getStrategy(String type) &#123;
+        SignTaskStrategy strategy = strategyMap.get(type);
+        if (strategy == null) &#123;
+            throw new IllegalArgumentException(&quot;未知策略类型: &quot; + type);
+        &#125;
+        return strategy;
+    &#125;
+&#125;
+
+// ===================== 4. 调用方 =====================
+@Service
+public class SignTaskService &#123;
+
+    @Autowired
+    private SignTaskStrategyFactory factory;
+
+    public String execute(String type, String params) &#123;
+        return factory.getStrategy(type).createSignTask(params);
+    &#125;
+&#125;
+</code></pre>
+<h4 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h4><p>观察者模式定义对象间的一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并被自动更新。</p>
+<pre><code class="java">import java.util.ArrayList;
+import java.util.List;
+// 观察者接口
+interface Observer &#123;
+    void update(String message);
+&#125;
+// 具体观察者
+class ConcreteObserver implements Observer &#123;
+    private String name;
+    public ConcreteObserver(String name) &#123;
+        this.name = name;
+    &#125;
+    @Override
+    public void update(String message) &#123;
+        System.out.println(name + &quot; received: &quot; + message);
+    &#125;
+&#125;
+// 被观察者接口
+interface Subject &#123;
+    void registerObserver(Observer observer);
+    void removeObserver(Observer observer);
+    void notifyObservers();
+&#125;
+// 具体被观察者
+class ConcreteSubject implements Subject &#123;
+    private List&lt;Observer&gt; observers = new ArrayList&lt;&gt;();
+    private String message;
+    @Override
+    public void registerObserver(Observer observer) &#123;
+        observers.add(observer);
+    &#125;
+    @Override
+    public void removeObserver(Observer observer) &#123;
+        observers.remove(observer);
+    &#125;
+    @Override
+    public void notifyObservers() &#123;
+        for (Observer observer : observers) &#123;
+            observer.update(message);
+        &#125;
+    &#125;
+    public void setMessage(String message) &#123;
+        this.message = message;
+        notifyObservers();
+    &#125;
+&#125;
+// 使用
+public class ObserverPatternDemo &#123;
+    public static void main(String[] args) &#123;
+        ConcreteSubject subject = new ConcreteSubject();
+        Observer observer1 = new ConcreteObserver(&quot;Observer 1&quot;);
+        Observer observer2 = new ConcreteObserver(&quot;Observer 2&quot;);
+        subject.registerObserver(observer1);
+        subject.registerObserver(observer2);
+        subject.setMessage(&quot;Hello Observers!&quot;);
+    &#125;
+&#125;
+</code></pre>
+<h3 id="最长重复子串-不会"><a href="#最长重复子串-不会" class="headerlink" title="最长重复子串(不会)"></a>最长重复子串(不会)</h3><pre><code class="java">class Solution &#123;
+    public String longestDupSubstring(String s) &#123;
+        Random random = new Random();
+        // 生成两个进制
+        int a1 = random.nextInt(75) + 26;
+        int a2 = random.nextInt(75) + 26;
+        // 生成两个模
+        int mod1 = random.nextInt(Integer.MAX_VALUE - 1000000007 + 1) + 1000000007;
+        int mod2 = random.nextInt(Integer.MAX_VALUE - 1000000007 + 1) + 1000000007;
+        int n = s.length();
+        // 先对所有字符进行编码
+        int[] arr = new int[n];
+        for (int i = 0; i &lt; n; ++i) &#123;
+            arr[i] = s.charAt(i) - &#39;a&#39;;
+        &#125;
+        // 二分查找的范围是[1, n-1]
+        int l = 1, r = n - 1;
+        int length = 0, start = -1;
+        while (l &lt;= r) &#123;
+            int m = l + (r - l + 1) / 2;
+            int idx = check(arr, m, a1, a2, mod1, mod2);
+            if (idx != -1) &#123;
+                // 有重复子串，移动左边界
+                l = m + 1;
+                length = m;
+                start = idx;
+            &#125; else &#123;
+                // 无重复子串，移动右边界
+                r = m - 1;
+            &#125;
+        &#125;
+        return start != -1 ? s.substring(start, start + length) : &quot;&quot;;
+    &#125;
+    public int check(int[] arr, int m, int a1, int a2, int mod1, int mod2) &#123;
+        int n = arr.length;
+        long aL1 = pow(a1, m, mod1);
+        long aL2 = pow(a2, m, mod2);
+        long h1 = 0, h2 = 0;
+        for (int i = 0; i &lt; m; ++i) &#123;
+            h1 = (h1 * a1 % mod1 + arr[i]) % mod1;
+            h2 = (h2 * a2 % mod2 + arr[i]) % mod2;
+            if (h1 &lt; 0) &#123;
+                h1 += mod1;
+            &#125;
+            if (h2 &lt; 0) &#123;
+                h2 += mod2;
+            &#125;
+        &#125;
+        // 存储一个编码组合是否出现过
+        Set&lt;Long&gt; seen = new HashSet&lt;Long&gt;();
+        seen.add(h1 * mod2 + h2);
+        for (int start = 1; start &lt;= n - m; ++start) &#123;
+            h1 = (h1 * a1 % mod1 - arr[start - 1] * aL1 % mod1 + arr[start + m - 1]) % mod1;
+            h2 = (h2 * a2 % mod2 - arr[start - 1] * aL2 % mod2 + arr[start + m - 1]) % mod2;
+            if (h1 &lt; 0) &#123;
+                h1 += mod1;
+            &#125;
+            if (h2 &lt; 0) &#123;
+                h2 += mod2;
+            &#125;
+            long num = h1 * mod2 + h2;
+            // 如果重复，则返回重复串的起点
+            if (!seen.add(num)) &#123;
+                return start;
+            &#125;
+        &#125;
+        // 没有重复，则返回-1
+        return -1;
+    &#125;
+    public long pow(int a, int m, int mod) &#123;
+        long ans = 1;
+        long contribute = a;
+        while (m &gt; 0) &#123;
+            if (m % 2 == 1) &#123;
+                ans = ans * contribute % mod;
+                if (ans &lt; 0) &#123;
+                    ans += mod;
+                &#125;
+            &#125;
+            contribute = contribute * contribute % mod;
+            if (contribute &lt; 0) &#123;
+                contribute += mod;
+            &#125;
+            m /= 2;
+        &#125;
+        return ans;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="A-算法"><a href="#A-算法" class="headerlink" title="A*算法"></a>A*算法</h3><p>A*(A-star)算法是一种启发式搜索算法，常用于图搜索和路径规划问题。它结合了广度优先搜索和贪心最佳优先搜索的优点，使用启发式估计函数来指导搜索路径。</p>
+<p>下面是一个简单的A*算法的Java实现，用于在二维网格上寻找从起点到终点的最短路径。假设网格中的每个节点是一个单元格，可以是可通行或不可通行的。</p>
+<pre><code class="java">import java.util.*;
+// 表示网格中的一个节点，包含节点的坐标、g 值(从起点到该节点的代价)、h 值(启发式估计值)和指向父节点的引用。
+class Node implements Comparable&lt;Node&gt; &#123;
+    public int x, y;
+    public int g, h;
+    public Node parent; // 指向父节点的引用
+    public Node(int x, int y, int g, int h, Node parent) &#123;
+        this.x = x;
+        this.y = y;
+        this.g = g;
+        this.h = h;
+        this.parent = parent;
+    &#125;
+    public int getF() &#123;
+        return g + h;
+    &#125;
+    @Override
+    public int compareTo(Node other) &#123;
+        return Integer.compare(this.getF(), other.getF());
+    &#125;
+&#125;
+public class AStarAlgorithm &#123;
+    private static final int[] DIR_X = &#123;-1, 1, 0, 0&#125;;
+    private static final int[] DIR_Y = &#123;0, 0, -1, 1&#125;;
+    // aStar 方法执行 A* 搜索。它使用优先队列(基于节点的 F 值排序)来选择当前节点，并检查四个可能的移动方向(上下左右)。
+    public List&lt;Node&gt; aStar(int[][] grid, Node start, Node goal) &#123;
+        PriorityQueue&lt;Node&gt; openList = new PriorityQueue&lt;&gt;();
+        Set&lt;Node&gt; closedList = new HashSet&lt;&gt;();
+        openList.add(start);
+        while (!openList.isEmpty()) &#123;
+            Node current = openList.poll();
+            if (current.x == goal.x &amp;&amp; current.y == goal.y) &#123;
+                return constructPath(current);
+            &#125;
+            closedList.add(current);
+            for (int i = 0; i &lt; 4; i++) &#123;
+                int newX = current.x + DIR_X[i];
+                int newY = current.y + DIR_Y[i];
+                if (isValid(grid, newX, newY) &amp;&amp; !isInClosedList(closedList, newX, newY)) &#123;
+                    int newG = current.g + 1;
+                    int newH = heuristic(newX, newY, goal.x, goal.y);
+                    Node neighbor = new Node(newX, newY, newG, newH, current);
+                    if (!isInOpenList(openList, neighbor)) &#123;
+                        openList.add(neighbor);
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+        return Collections.emptyList(); // No path found
+    &#125;
+    // isValid 方法检查移动是否在网格范围内且该位置可通行。
+    private boolean isValid(int[][] grid, int x, int y) &#123;
+        return x &gt;= 0 &amp;&amp; y &gt;= 0 &amp;&amp; x &lt; grid.length &amp;&amp; y &lt; grid[0].length &amp;&amp; grid[x][y] == 0;
+    &#125;
+    // isInClosedList 方法检查节点是否在 closedList 中。
+    private boolean isInClosedList(Set&lt;Node&gt; closedList, int x, int y) &#123;
+        return closedList.stream().anyMatch(node -&gt; node.x == x &amp;&amp; node.y == y);
+    &#125;
+    // isInOpenList 方法检查节点是否在 openList 中。
+    private boolean isInOpenList(PriorityQueue&lt;Node&gt; openList, Node node) &#123;
+        return openList.stream().anyMatch(n -&gt; n.x == node.x &amp;&amp; n.y == node.y);
+    &#125;
+    // heuristic 方法计算节点到目标节点的启发式估计值。这里使用的是曼哈顿距离。
+    private int heuristic(int x1, int y1, int x2, int y2) &#123;
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2); // Manhattan distance
+    &#125;
+    // constructPath 方法从目标节点回溯构建路径。
+    private List&lt;Node&gt; constructPath(Node node) &#123;
+        List&lt;Node&gt; path = new ArrayList&lt;&gt;();
+        while (node != null) &#123;
+            path.add(node);
+            node = node.parent;
+        &#125;
+        Collections.reverse(path);
+        return path;
+    &#125;
+    // Main 方法：定义网格、起点和终点，运行 A* 算法并打印路径。
+    public static void main(String[] args) &#123;
+        int[][] grid = &#123;
+            &#123;0, 1, 0, 0, 0&#125;,
+            &#123;0, 1, 0, 1, 0&#125;,
+            &#123;0, 0, 0, 1, 0&#125;,
+            &#123;0, 1, 0, 0, 0&#125;,
+            &#123;0, 0, 0, 1, 0&#125;
+        &#125;;
+        Node start = new Node(0, 0, 0, 0, null);
+        Node goal = new Node(4, 4, 0, 0, null);
+        AStarAlgorithm aStar = new AStarAlgorithm();
+        List&lt;Node&gt; path = aStar.aStar(grid, start, goal);
+        for (Node node : path) &#123;
+            System.out.println(&quot;Node: (&quot; + node.x + &quot;, &quot; + node.y + &quot;)&quot;);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="漏桶算法"><a href="#漏桶算法" class="headerlink" title="漏桶算法"></a>漏桶算法</h3><p>漏桶算法是一种流量整形(Traffic Shaping)和速率限制算法，用于控制数据传输速率。它通过固定容量的桶来限制数据的传输速率，当数据到达时，将数据放入桶中，然后以固定速率从桶中取出数据进行传输。</p>
+<pre><code class="java">import java.util.concurrent.atomic.AtomicInteger;
+
+public class LeakyBucket &#123;
+    private final int capacity;
+    private final int rate;
+    private AtomicInteger water;
+
+    public LeakyBucket(int capacity, int rate) &#123;
+        this.capacity = capacity;
+        this.rate = rate;
+        this.water = new AtomicInteger(0);
+
+        // 定期漏水
+        new Thread(() -&gt; &#123;
+            while (true) &#123;
+                try &#123;
+                    Thread.sleep(1000 / rate);
+                &#125; catch (InterruptedException e) &#123;
+                    Thread.currentThread().interrupt();
+                &#125;
+                water.decrementAndGet();
+            &#125;
+        &#125;).start();
+    &#125;
+
+    public boolean grant() &#123;
+        int currentWater = water.get();
+        if (currentWater &lt; capacity) &#123;
+            water.incrementAndGet();
+            return true;
+        &#125;
+        return false;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="令牌桶算法"><a href="#令牌桶算法" class="headerlink" title="令牌桶算法"></a>令牌桶算法</h3><p>令牌桶算法是一种流量整形(Traffic Shaping)和速率限制算法，用于控制数据传输速率。它通过固定容量的桶来限制数据的传输速率，当数据到达时，需要获取令牌才能进行传输。</p>
+<pre><code class="java">import java.util.concurrent.atomic.AtomicInteger;
+
+public class TokenBucket &#123;
+    private final int capacity;
+    private final int refillRate;
+    private AtomicInteger tokens;
+    private final long refillInterval;
+
+    public TokenBucket(int capacity, int refillRate) &#123;
+        this.capacity = capacity;
+        this.refillRate = refillRate;
+        this.tokens = new AtomicInteger(capacity);
+        this.refillInterval = 1000 / refillRate;
+
+        // 定期添加令牌
+        new Thread(() -&gt; &#123;
+            while (true) &#123;
+                try &#123;
+                    Thread.sleep(refillInterval);
+                &#125; catch (InterruptedException e) &#123;
+                    Thread.currentThread().interrupt();
+                &#125;
+                tokens.updateAndGet(current -&gt; Math.min(capacity, current + 1));
+            &#125;
+        &#125;).start();
+    &#125;
+
+    public boolean grant() &#123;
+        int currentTokens = tokens.get();
+        if (currentTokens &gt; 0) &#123;
+            tokens.decrementAndGet();
+            return true;
+        &#125;
+        return false;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="限流队列"><a href="#限流队列" class="headerlink" title="限流队列"></a>限流队列</h3><p>结合漏桶算法和消息队列，实现一个限流队列，用于控制任务的执行速率。</p>
+<pre><code class="java">import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class RateLimiterQueue &#123;
+    private final LeakyBucket rateLimiter;
+    private final BlockingQueue&lt;Runnable&gt; taskQueue;
+
+    public RateLimiterQueue(int capacity, int rate, int queueSize) &#123;
+        this.rateLimiter = new LeakyBucket(capacity, rate);
+        this.taskQueue = new LinkedBlockingQueue&lt;&gt;(queueSize);
+        
+        new Thread(() -&gt; &#123;
+            while (true) &#123;
+                try &#123;
+                    Runnable task = taskQueue.take();
+                    if (rateLimiter.grant()) &#123;
+                        new Thread(task).start();
+                    &#125; else &#123;
+                        // 限流，重新加入队列
+                        taskQueue.offer(task);
+                    &#125;
+                &#125; catch (InterruptedException e) &#123;
+                    Thread.currentThread().interrupt();
+                &#125;
+            &#125;
+        &#125;).start();
+    &#125;
+    public void submitTask(Runnable task) &#123;
+        if (!taskQueue.offer(task)) &#123;
+            System.out.println(&quot;任务队列已满，拒绝任务&quot;);
+        &#125;
+    &#125;
+    public static void main(String[] args) &#123;
+        RateLimiterQueue rateLimiterQueue = new RateLimiterQueue(100, 10, 1000);
+
+        for (int i = 0; i &lt; 10000; i++) &#123;
+            final int taskId = i;
+            rateLimiterQueue.submitTask(() -&gt; &#123;
+                System.out.println(&quot;处理任务：&quot; + taskId);
+                // 模拟任务处理时间
+                try &#123;
+                    Thread.sleep(100);
+                &#125; catch (InterruptedException e) &#123;
+                    Thread.currentThread().interrupt();
+                &#125;
+            &#125;);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="ab-cd元组个数"><a href="#ab-cd元组个数" class="headerlink" title="ab&#x3D;cd元组个数"></a>a<em>b&#x3D;c</em>d元组个数</h3><p>一个数组没有重复数字，求a<em>b&#x3D;c</em>d的元组的个数</p>
+<pre><code class="java">import java.util.HashMap;
+
+public class TupleCount &#123;
+    public static int countTuples(int[] nums) &#123;
+        int n = nums.length;
+        HashMap&lt;Integer, Integer&gt; productMap = new HashMap&lt;&gt;();
+        int count = 0;
+
+        // 遍历所有的 (a, b) 对，计算乘积并存入哈希表
+        for (int i = 0; i &lt; n; i++) &#123;
+            for (int j = i + 1; j &lt; n; j++) &#123;
+                int product = nums[i] * nums[j];
+                productMap.put(product, productMap.getOrDefault(product, 0) + 1);
+            &#125;
+        &#125;
+
+        // 遍历哈希表，计算每个乘积的组合数
+        for (int k : productMap.values()) &#123;
+            if (k &gt; 1) &#123;
+                count += k * (k - 1) / 2;  // C(k, 2) = k * (k - 1) / 2
+            &#125;
+        &#125;
+
+        return count;
+    &#125;
+
+    public static void main(String[] args) &#123;
+        int[] nums = &#123;2, 3, 4, 6&#125;;
+        System.out.println(countTuples(nums));  // 输出符合条件的元组个数
+    &#125;
+&#125;
+</code></pre>
+<h3 id="轮船最小载重"><a href="#轮船最小载重" class="headerlink" title="轮船最小载重"></a>轮船最小载重</h3><p>给定一个货物数组int[]weight，使用轮船运往对岸，不可更改顺序,天数d，要求在d天恰好能够将货物运送完毕，请求出能在d天将货物运送完毕的轮船最小载重量。</p>
+<p>思路：<br>二分查找：通过二分查找来找到最小的最大载重。</p>
+<ul>
+<li>左边界：最小载重应该是货物中最大的一项，因为一天至少需要能承载最大的货物。</li>
+<li>右边界：最大载重应该是所有货物的总和，假如一天能运送所有货物。<br>判断是否可行：给定一个载重 x，我们可以计算出需要多少天才能完成运输。每次尽量多装一些货物，如果当前船的载重不够，就新的一天继续运输，直到所有货物都运送完或者天数超过 d。</li>
+</ul>
+<pre><code class="java">public class Solution &#123;
+    public int shipWithinDays(int[] weights, int d) &#123;
+        int left = 0, right = 0;
+        
+        // 计算左边界和右边界
+        for (int weight : weights) &#123;
+            left = Math.max(left, weight); // 左边界为最大单个货物重量
+            right += weight; // 右边界为所有货物总重
+        &#125;
+        
+        // 使用二分查找来查找最小的船只最大载重
+        while (left &lt; right) &#123;
+            int mid = left + (right - left) / 2;
+            
+            // 判断在最大载重为 mid 的情况下，是否可以在 d 天内运送完所有货物
+            if (canShip(weights, d, mid)) &#123;
+                right = mid; // 如果可以运送完，尝试更小的载重
+            &#125; else &#123;
+                left = mid + 1; // 如果不能运送完，载重太小，增大载重
+            &#125;
+        &#125;
+        
+        return left;
+    &#125;
+    
+    // 判断在最大载重为 cap 的情况下，是否能在 d 天内运送所有货物
+    private boolean canShip(int[] weights, int d, int cap) &#123;
+        int daysRequired = 1, currentWeight = 0;
+        
+        for (int weight : weights) &#123;
+            // 如果当前货物加上已装载货物超过最大载重，则需要新的一天
+            if (currentWeight + weight &gt; cap) &#123;
+                daysRequired++;  // 新的一天
+                currentWeight = 0; // 重置当前船的负重
+            &#125;
+            currentWeight += weight; // 装载货物
+        &#125;
+        
+        return daysRequired &lt;= d; // 如果需要的天数小于等于 d 天，则可以运送完
+    &#125;
+&#125;
+</code></pre>
+<h3 id="将数组变锯齿数组的最小操作次数。"><a href="#将数组变锯齿数组的最小操作次数。" class="headerlink" title="将数组变锯齿数组的最小操作次数。"></a>将数组变锯齿数组的最小操作次数。</h3><p>给一个数组int[] num，每次操作可以将数组任一元素减一，求将数组改变为锯齿状数组的最小操作数量。</p>
+<pre><code class="java">public class ZigzagArray &#123;
+    public static int minOperationsToZigzag(int[] nums) &#123;
+        int n = nums.length;
+        // 两种模式的操作次数
+        int cost1 = 0; // 波峰模式
+        int cost2 = 0; // 波谷模式
+
+        for (int i = 0; i &lt; n; i++) &#123;
+            // 获取左右相邻的值，如果越界，设为Integer.MAX_VALUE
+            int left = (i &gt; 0) ? nums[i - 1] : Integer.MAX_VALUE;
+            int right = (i &lt; n - 1) ? nums[i + 1] : Integer.MAX_VALUE;
+
+            // 如果在波峰模式中，当前值需要大于左右相邻值
+            if (i % 2 == 0) &#123;
+                int reduce = Math.max(0, nums[i] - Math.min(left, right) + 1);
+                cost1 += reduce;
+            &#125; else &#123; // 波谷模式
+                int reduce = Math.max(0, nums[i] - Math.min(left, right) + 1);
+                cost2 += reduce;
+            &#125;
+        &#125;
+
+        // 返回两种模式的较小操作数
+        return Math.min(cost1, cost2);
+    &#125;
+
+    public static void main(String[] args) &#123;
+        int[] nums = &#123;9, 6, 1, 6, 2&#125;;
+        System.out.println(&quot;Minimum operations: &quot; + minOperationsToZigzag(nums));
+    &#125;
+&#125;
+</code></pre>
+<h3 id="空间复杂度O-1-判断数组是否有重复元素"><a href="#空间复杂度O-1-判断数组是否有重复元素" class="headerlink" title="空间复杂度O(1)判断数组是否有重复元素"></a>空间复杂度O(1)判断数组是否有重复元素</h3><pre><code class="java">public class DuplicateChecker &#123;
+    public static boolean hasDuplicate(int[] nums) &#123;
+        int n = nums.length;
+        for (int i = 0; i &lt; n; i++) &#123;
+            for (int j = i + 1; j &lt; n; j++) &#123;
+                if (nums[i] == nums[j]) &#123;
+                    return true;
+                &#125;
+            &#125;
+        &#125;
+        return false;
+    &#125;
+    public static void main(String[] args) &#123;
+        int[] nums = &#123;1, 2, 3, 4, 5&#125;;
+        System.out.println(hasDuplicate(nums)); // 输出 false
+    &#125;
+&#125;
+</code></pre>
+<h3 id="给一个二进制补码数组，求十进制数字"><a href="#给一个二进制补码数组，求十进制数字" class="headerlink" title="给一个二进制补码数组，求十进制数字"></a>给一个二进制补码数组，求十进制数字</h3><ol>
+<li>判断符号位：补码表示中，最高位是符号位。0 表示正数，1 表示负数。</li>
+<li>处理正数：如果符号位是 0，直接将剩余位的二进制部分转为十进制。</li>
+<li>处理负数：如果符号位是 1，将整个补码取反（0-&gt;1，1-&gt;0）后加 1 得到对应的绝对值，然后将其转为负数。</li>
+</ol>
+<pre><code class="java">public class Main &#123;
+    public static void main(String[] args) &#123;
+        // 示例补码数组：-6 的补码表示
+        int[] binary = &#123;1, 1, 1, 1, 1, 0&#125;; 
+        
+        // 计算十进制值
+        int decimalValue = convertToDecimal(binary);
+        System.out.println(decimalValue); // 输出 -6
+    &#125;
+
+    public static int convertToDecimal(int[] binary) &#123;
+        int n = binary.length;
+        boolean isNegative = binary[0] == 1; // 判断符号位
+        int result = 0;
+        
+        if (!isNegative) &#123;
+            // 处理正数
+            for (int i = 0; i &lt; n; i++) &#123;
+                result = result * 2 + binary[i];
+            &#125;
+        &#125; else &#123;
+            // 处理负数
+            // 1. 取反
+            int[] inverted = new int[n];
+            for (int i = 0; i &lt; n; i++) &#123;
+                inverted[i] = binary[i] == 0 ? 1 : 0;
+            &#125;
+            // 2. 加 1
+            int carry = 1; // 表示进位
+            for (int i = n - 1; i &gt;= 0; i--) &#123;
+                int sum = inverted[i] + carry;
+                inverted[i] = sum % 2;
+                carry = sum / 2;
+            &#125;
+            // 3. 计算绝对值
+            for (int i = 0; i &lt; n; i++) &#123;
+                result = result * 2 + inverted[i];
+            &#125;
+            result = -result; // 转为负数
+        &#125;
+        return result;
+    &#125;
+&#125;
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://cwp0.github.io">cwp0</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://cwp0.github.io/posts/17783.html">https://cwp0.github.io/posts/17783.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a><a class="post-meta__tags" href="/tags/%E6%89%8B%E6%92%95%E6%8A%80%E5%B7%A7/">手撕技巧</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.JPG" target="_blank"><img class="post-qr-code-img" src="/img/wechat.JPG" alt="wechat"/ loading='lazy'></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.JPG" target="_blank"><img class="post-qr-code-img" src="/img/alipay.JPG" alt="alipay"/ loading='lazy'></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/17772.html" title="手撕相关"><img class="cover" src="https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post" loading='lazy'><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">手撕相关</div></div><div class="info-2"><div class="info-item-1">Agent开发手撕手写一个简单的ReAct Agent核心就是一个 for 循环： 思考、行动、观察 package agent.react;  import java.util.*; import java.util.function.Function;  public class ReActAgent &#123;      private final Map&lt;String, Function&lt;Map&lt;String, String&gt;, String&gt;&gt; tools = new HashMap&lt;&gt;();     private final int maxRounds;      public ReActAgent(int maxRounds) &#123;         this.maxRounds = maxRounds;     &#125;      public void registerTool(String name, Function&lt;Map&lt;String, String&gt;, String&gt;...</div></div></div></a><a class="pagination-related" href="/posts/17771.html" title="框架"><img class="cover" src="https://s2.loli.net/2024/06/12/tSWPZr1EQH6XRAm.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post" loading='lazy'><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">框架</div></div><div class="info-2"><div class="info-item-1"> 本文参考 JavaGuide  Spring什么是SpringSpring 是一款基于 Java 的轻量级开源开发框架，旨在提高开发人员的开发效率以及系统的可维护性。 Spring 框架(Spring Framework)是很多模块的集合，使用这些模块可以很方便地协助进行开发。Spring 支持控制反转(Inversion of Control, IOC) 和 面向切面编程(Aspect-Oriented Programming, AOP)、可以很方便地对数据库进行访问、可以很方便地集成第三方组件(电子邮件，任务，调度，缓存等等)、对单元测试支持比较好、支持 RESTful Java 应用程序的开发。 Spring的核心功能主要是 IoC 和 AOP，核心思想是不重新造轮子，开箱即用，提高开发效率。 Spring模块 Spring5.x 版本中 Web 模块的 Portlet 组件已经被废弃掉，同时增加了用于异步响应式处理的 WebFlux 组件。  Core Container：Spring 框架的核心模块、基础模块，主要提供 IoC 依赖注入功能的支持。Spring 其他所...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/17772.html" title="手撕相关"><img class="cover" src="https://s2.loli.net/2024/06/13/pjr3CuksNxU9ZJK.png" alt="cover" loading='lazy'><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-13</div><div class="info-item-2">手撕相关</div></div><div class="info-2"><div class="info-item-1">Agent开发手撕手写一个简单的ReAct Agent核心就是一个 for 循环： 思考、行动、观察 package agent.react;  import java.util.*; import java.util.function.Function;  public class ReActAgent &#123;      private final Map&lt;String, Function&lt;Map&lt;String, String&gt;, String&gt;&gt; tools = new HashMap&lt;&gt;();     private final int maxRounds;      public ReActAgent(int maxRounds) &#123;         this.maxRounds = maxRounds;     &#125;      public void registerTool(String name, Function&lt;Map&lt;String, String&gt;, String&gt;...</div></div></div></a><a class="pagination-related" href="/posts/17767.html" title="前端&amp;移动端面经"><img class="cover" src="https://s2.loli.net/2024/05/27/QygHftOujrEodTW.png" alt="cover" loading='lazy'><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-27</div><div class="info-item-2">前端&amp;移动端面经</div></div><div class="info-2"><div class="info-item-1">虚拟列表实现原理虚拟列表(Virtual List)是一种在数据量较大时，优化显示性能和用户体验的技术。其核心思想是在渲染和显示过程中只加载和显示当前视窗内的部分数据，而不是一次性加载和渲染全部数据。这样可以显著减少内存消耗和提高渲染速度。虚拟列表通常用于长列表或表格组件中，特别是在Web应用和移动应用中。  实现原理   可视区域(Viewport)：虚拟列表只渲染用户当前可见区域内的列表项。用户滚动时，更新可视区域内的列表项。 缓冲区(Buffer)：为了防止滚动时的卡顿，虚拟列表通常会在可视区域上下增加一定数量的缓冲区列表项。这些缓冲区项可以在用户快速滚动时提前加载，保证平滑滚动。 位置计算(Position Calculation)：通过计算每个列表项在整个列表中的位置，只渲染可视区域和缓冲区内的项。使用绝对定位或CSS变换属性将这些项放置在正确的位置。 事件监听(Event Listener)：监听滚动事件，根据滚动位置更新可视区域和缓冲区内的列表项。   具体实现步骤   初始设置：确定列表项的高度(或宽度)，以及可视区域的高度(或宽度)。如果列表项高度不一致，需要预...</div></div></div></a><a class="pagination-related" href="/posts/17768.html" title="测开面经"><img class="cover" src="https://s2.loli.net/2024/05/27/drCF3NnMKboz1AQ.png" alt="cover" loading='lazy'><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-27</div><div class="info-item-2">测开面经</div></div><div class="info-2"><div class="info-item-1"> 注：下面内容一部分来自于我舍友的博客  测开自我介绍面试官您好，我叫陈温鹏，就读于南京理工大学软件工程专业，学位是学硕，这次应聘的是 测试开发岗位。 我呢，研一的时候积极参加开源社区建设，先参加了Casbin社区一个线上实习，担任社区维护者，日常工作会解决社区 issue，跟踪解决用户需求，修bug以及完善相关文档；然后在研一暑假三个月时间中了一个中科院和 casbin 社区联合举办的一个开源项目，主要的工作是完善社区整个大前端系统，包括 web，移动端功能完善，以及为社区开发了一款支持通用2FA的移动端app。除此之外，我还参与过国家电网经济研究院的一个项目。 这几段项目实习经历锻炼了我文档阅读、编写的能力，并在代码规范、开发流程等技能上获得提升。 其实在开源项目也做过关于测试相关的工作，也激发了我对测试开发的兴趣，所以就应聘了测试开发这个岗位。 然后我呢，我评价觉得自己是一个学习能力很强的人，可以比较快速的学习并适应新的环境和技术栈。 最后感谢 饿了么 给我这次面试机会，我也十分希望能进入 饿了么 ，与公司共同成长进步！ 为什么选择测开之前在社区的一个开发经历让我对软件质量...</div></div></div></a><a class="pagination-related" href="/posts/17776.html" title="Python知识点"><img class="cover" src="https://s2.loli.net/2024/06/27/RATGUg5c6FXC7mH.png" alt="cover" loading='lazy'><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-27</div><div class="info-item-2">Python知识点</div></div><div class="info-2"><div class="info-item-1">Python内存模型Python 的内存模型包括几个重要的概念和机制，帮助解释如何管理和操作内存。以下是关键点：  对象模型：在 Python 中，一切皆对象。变量实际上是对对象的引用。对象分为可变对象(如列表、字典等)和不可变对象(如整数、字符串、元组等)。 引用计数：Python 使用引用计数来管理内存。每个对象都有一个引用计数器，当对象被引用时计数加1，当引用被删除时计数减1。当引用计数为0时，对象被回收。 垃圾回收：除了引用计数，Python 还使用垃圾回收机制来处理循环引用。Python 的垃圾回收器会定期检查并回收那些不再被引用的对象。 内存分配器：Python 使用私有堆来管理内存。Python 内存分配器负责从操作系统获取内存并将其分配给对象。常用的内存分配器包括 PyObject_Malloc 和 PyMem_Malloc。 小对象池化：Python 对小对象(通常是小于256字节的对象)进行池化，以提高内存分配和释放的效率。这意味着相同的小对象可能会被多次重用。 全局解释器锁(GIL)：GIL 是 Python 的一个机制，用于保护 Python 对象的访问，...</div></div></div></a><a class="pagination-related" href="/posts/17777.html" title="智力题"><img class="cover" src="https://s2.loli.net/2024/06/27/9KWGke8lsJaM1fi.png" alt="cover" loading='lazy'><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-27</div><div class="info-item-2">智力题</div></div><div class="info-2"><div class="info-item-1">8个外形一样的球，其中有一个偏重，如何只通过两次测量找到重球为了在只使用两次测量的情况下找到8个球中偏重的那个球，可以采用以下方法：  将8个球分成3组： 第一组：A、B、C 第二组：D、E、F 第三组：G、H   第一次测量： 将第一组(A、B、C)放在天平的左边，第二组(D、E、F)放在天平的右边。可能的结果有三种： 左边重(A、B、C中有一个是重球) 右边重(D、E、F中有一个是重球) 两边一样重(G、H中有一个是重球)   第二次测量： 如果第一次测量左边重：从A、B、C中任选两个球进行测量，例如A和B。 如果A和B重量相等，则重球是C。 如果A和B不等，则重球是较重的那个。   如果第一次测量右边重：从D、E、F中任选两个球进行测量，例如D和E。 如果D和E重量相等，则重球是F。 如果D和E不等，则重球是较重的那个。   如果第一次测量两边一样重：对G和H进行测量。 如果G和H重量相等，则重球不存在(但由于题意重球必存在，所以这个情况不会出现)。 如果G和H不等，则重球是较重的那个。      通过这种方法，可以在两次测量内准确找到8个球中偏重的那个球。 </div></div></div></a><a class="pagination-related" href="/posts/20002.html" title="Agent开发知识点总结"><img class="cover" src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" alt="cover" loading='lazy'><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-22</div><div class="info-item-2">Agent开发知识点总结</div></div><div class="info-2"><div class="info-item-1"> 本文档分三段：第〇部分是术语速查表（按主题分组）；第一部分是核心知识体系（10 章主体面试题）；第二部分是框架与生态（Java&#x2F;Spring 栈）。新增内容请按主题归位到对应章节末尾。   第〇部分：术语速查上下文窗口上下文窗口 是指AI模型每次处理时能”看到”和记住的最大文本长度限制，超出这个范围的内容就会被”遗忘”。 tokenToken 是AI模型处理文本的基本单位，大约对应一个单词或几个汉字，模型的计费和上下文长度都以token数量来衡量。  一个汉字约1.5-2 token，一个英文单词约1 token。  KV Cache&#x2F;Prompt Caching模型在推理时，会把已经计算过的 Token 的中间结果（Key-Value 矩阵）缓存起来，下次遇到相同前缀时直接复用不需要重新计算。  好处：  减少重复计算，提升推理速度 减少成本。模型对命中KV Cache的token收费更低(1&#x2F;10)   温度&#x2F;Temperature控制模型输出随机性的参数，范围0-2，值越大，模型越随机。一般Agent的temperature设置为0...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Valine</span><span id="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="author-info-name">cwp0</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">31</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cwp0"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/cwp0" target="_blank" title="Github"><i class="fab fa-github" style="color: #9F9F9F;"></i></a><a class="social-icon" href="mailto:wenpengchen@njust.edu.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: 9F9F9F;"></i></a><a class="social-icon" href="/img/alipay.JPG" target="_blank" title="QQ"><i class="fa-brands fa-qq" style="color: #9F9F9F;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This site is under construction...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">1.</span> <span class="toc-text">递归删除文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E6%98%AF%E8%B4%A8%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">判断是否是质数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ArrayList%E5%AE%9E%E7%8E%B0%E6%9C%80%E5%A4%A7%E5%A0%86"><span class="toc-number">3.</span> <span class="toc-text">ArrayList实现最大堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E6%98%AF%E5%9B%9E%E6%96%87%E4%B8%B2"><span class="toc-number">4.</span> <span class="toc-text">判断是否是回文串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%A4%A7%E5%85%AC%E7%BA%A6%E6%95%B0"><span class="toc-number">5.</span> <span class="toc-text">最大公约数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%89%E4%B8%AA%E7%BA%BF%E7%A8%8B%E6%9C%89%E5%BA%8F%E6%89%93%E5%8D%B01-100"><span class="toc-number">6.</span> <span class="toc-text">创建三个线程有序打印1-100</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E6%A8%A1%E6%8B%9F%E6%AD%BB%E9%94%81"><span class="toc-number">7.</span> <span class="toc-text">SQL模拟死锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E6%AD%BB%E9%94%81"><span class="toc-number">8.</span> <span class="toc-text">模拟死锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%86%99%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="toc-number">9.</span> <span class="toc-text">手写线程池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B"><span class="toc-number">10.</span> <span class="toc-text">实现生产者消费者模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CompletableFuture%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8"><span class="toc-number">11.</span> <span class="toc-text">CompletableFuture实现异步调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%8D%E5%8E%86HashMap"><span class="toc-number">12.</span> <span class="toc-text">遍历HashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%8D%E5%8E%86Set"><span class="toc-number">13.</span> <span class="toc-text">遍历Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">14.</span> <span class="toc-text">设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">14.1.</span> <span class="toc-text">单例模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-number">14.2.</span> <span class="toc-text">工厂模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">14.3.</span> <span class="toc-text">适配器模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">14.4.</span> <span class="toc-text">装饰者模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="toc-number">14.5.</span> <span class="toc-text">策略模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">14.6.</span> <span class="toc-text">观察者模式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E9%95%BF%E9%87%8D%E5%A4%8D%E5%AD%90%E4%B8%B2-%E4%B8%8D%E4%BC%9A"><span class="toc-number">15.</span> <span class="toc-text">最长重复子串(不会)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#A-%E7%AE%97%E6%B3%95"><span class="toc-number">16.</span> <span class="toc-text">A*算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95"><span class="toc-number">17.</span> <span class="toc-text">漏桶算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95"><span class="toc-number">18.</span> <span class="toc-text">令牌桶算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%90%E6%B5%81%E9%98%9F%E5%88%97"><span class="toc-number">19.</span> <span class="toc-text">限流队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ab-cd%E5%85%83%E7%BB%84%E4%B8%AA%E6%95%B0"><span class="toc-number">20.</span> <span class="toc-text">ab&#x3D;cd元组个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AE%E8%88%B9%E6%9C%80%E5%B0%8F%E8%BD%BD%E9%87%8D"><span class="toc-number">21.</span> <span class="toc-text">轮船最小载重</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E6%95%B0%E7%BB%84%E5%8F%98%E9%94%AF%E9%BD%BF%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0%E3%80%82"><span class="toc-number">22.</span> <span class="toc-text">将数组变锯齿数组的最小操作次数。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6O-1-%E5%88%A4%E6%96%AD%E6%95%B0%E7%BB%84%E6%98%AF%E5%90%A6%E6%9C%89%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0"><span class="toc-number">23.</span> <span class="toc-text">空间复杂度O(1)判断数组是否有重复元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%99%E4%B8%80%E4%B8%AA%E4%BA%8C%E8%BF%9B%E5%88%B6%E8%A1%A5%E7%A0%81%E6%95%B0%E7%BB%84%EF%BC%8C%E6%B1%82%E5%8D%81%E8%BF%9B%E5%88%B6%E6%95%B0%E5%AD%97"><span class="toc-number">24.</span> <span class="toc-text">给一个二进制补码数组，求十进制数字</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/20002.html" title="Agent开发知识点总结"><img src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Agent开发知识点总结"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/20002.html" title="Agent开发知识点总结">Agent开发知识点总结</a><time datetime="2026-06-22T14:43:58.000Z" title="Created 2026-06-22 22:43:58">2026-06-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20001.html" title="Agent开发面经"><img src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Agent开发面经"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/20001.html" title="Agent开发面经">Agent开发面经</a><time datetime="2026-06-22T14:43:58.000Z" title="Created 2026-06-22 22:43:58">2026-06-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17782.html" title="学车小记"><img src="https://s2.loli.net/2025/03/19/eVRF7JMl4yjrzhQ.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="学车小记"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/17782.html" title="学车小记">学车小记</a><time datetime="2025-03-19T07:04:48.000Z" title="Created 2025-03-19 15:04:48">2025-03-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17781.html" title="华为笔试/手撕"><img src="https://s2.loli.net/2025/03/19/kAcZ5yKPDwizuMN.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="华为笔试/手撕"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/17781.html" title="华为笔试/手撕">华为笔试/手撕</a><time datetime="2024-11-15T03:51:23.000Z" title="Created 2024-11-15 11:51:23">2024-11-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17780.html" title="分布式/高性能/高可用"><img src="https://s2.loli.net/2024/09/03/Mjecv3GDVUYPBJ1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分布式/高性能/高可用"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/17780.html" title="分布式/高性能/高可用">分布式/高性能/高可用</a><time datetime="2024-09-03T09:21:00.000Z" title="Created 2024-09-03 17:21:00">2024-09-03</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By cwp0</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional and Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nfRxTBEmIAeb6gP2K0LOdLqw-gzGzoHsz',
+      appKey: 'vmeDN8k58dVdPv5Yz7NEkvSN',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('/js/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/posts/17783.html'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'https://cwp0.github.io/posts/17783.html'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = '手撕相关2'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=&api_key=&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Valine' === 'Disqus' || !true) {
+    if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      GLOBAL_CONFIG_SITE.pageType === 'post' && getCount()
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
