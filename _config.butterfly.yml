@@ -922,9 +922,11 @@ css_prefix: true
 inject:
   head:
   # - <link rel="stylesheet" href="/xxx.css">
-  # 代码块强制换行：裸 pre 默认不换行且无 overflow 裁剪，长行会撑开整个页面宽度，
-  # 导致 iOS Safari 渲染缓存超出单页内存上限而白屏
-   - '<style>#article-container pre{white-space:pre-wrap;overflow-wrap:break-word;overflow-x:auto}</style>'
+  # 代码块强制折行：不折行时每个代码块都是横向可滚动的溢出容器，
+  # iOS Safari 需按内容宽度为每个滚动区分配渲染缓存，叠加后超出单页内存上限而白屏。
+  # 开启高亮时代码被包在 table>tr>td 里，表格单元格会按最长行撑开导致折行失效，
+  # 故需同时把表格结构拉平为块级（仅在 line_number 关闭、无 gutter 列时适用）
+   - '<style>#article-container pre{white-space:pre-wrap;overflow-wrap:break-word;overflow-x:auto}#article-container figure.highlight table,#article-container figure.highlight tbody,#article-container figure.highlight tr,#article-container figure.highlight td{display:block;width:100%;max-width:100%}</style>'
   bottom:
   # - <script src="xxxx"></script>
   # 樱花飘落效果

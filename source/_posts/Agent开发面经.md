@@ -2448,36 +2448,6 @@ Token 直接关联成本和延迟，常用优化手段：
 
 > 反模式：description 留空、参数随便取名、所有参数都设 required、错误返回纯字符串 stacktrace。
 
-#### 什么是AgentSkills？SKILL.md的设计模式是什么？
-
-**Agent Skills** = Anthropic 提出的概念，把"特定专业能力"打包成**自包含的文件夹**，按需被 Agent 加载，遵循**渐进式披露**原则。
-
-**SKILL.md 的标准结构**：
-```markdown
----
-name: pdf-analysis
-description: |
-  Use when the user asks to extract text, tables, or
-  metadata from PDF files. Skip for plain text or
-  Word documents.
----
-
-# PDF Analysis Skill
-
-## When to use
-- 用户提到 PDF 文件
-- 需要从 PDF 抽取表格、图片、文字
-
-## How to use
-1. 先用 `pdfplumber` 读取页面
-2. 表格用 `extract_tables()`
-
-## Avoid
-- 不要用于扫描件（需用 OCR）
-```
-
-
-**对比 Tool**：Tool = 单一原子操作（如 `read_file`）；Skill = 复合能力 = 多 Tool 协同 + 业务逻辑 + 模板。
 
 #### Skills渐进式披露
 
