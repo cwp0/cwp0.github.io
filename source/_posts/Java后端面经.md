@@ -2032,6 +2032,20 @@ JDK1.8`ConcurrentHashMap`取消了 `Segment` 分段锁，采用 `Node + CAS + sy
 - `ConcurrentHashMap`是线程安全的，可以保证多个线程同时对它进行读写操作，不会出现数据不一致的情况，也不会导致 JDK1.7 及之前版本的 `HashMap` 多线程操作导致死循环问题。
 - `ConcurrentHashMap` 提供了一些原子性的复合操作，如 `putIfAbsent`、`compute`、`computeIfAbsent` 、`computeIfPresent`、`merge`等。这些方法都可以接受一个函数作为参数，根据给定的 `key` 和 `value` 来计算一个新的 `value`，并且将其更新到 `map` 中。
 
+### ConcurrentHashMap的key和value可以为null吗？✅
+- `HashMap`：允许**一个 `null` key 和多个 `null` value**。
+- `ConcurrentHashMap`：**`key` 和 `value` 都不允许为 `null`**，传入 `null` 会抛出 `NullPointerException`（源码 `putVal` 第一行即 `if (key == null || value == null) throw new NullPointerException();`）。
+
+**为什么 value 不能为 null？——并发下的二义性问题**
+
+当调用 `map.get(key)` 返回 `null` 时，无法区分”这个 `key` 不存在”还是”这个 `key` 存在但 `value` 就是 `null`”。在单线程的 `HashMap` 中可以紧接着调 `containsKey(key)` 消歧；但 `ConcurrentHashMap` 是并发容器，`get` 和 `containsKey` 是两次独立操作，其间 map 可能已被其他线程修改（比如刚 `get` 完就被另一线程 `put` 或 `remove`），所以这种”两步消歧”在并发下不可靠。Doug Lea 为从根源上杜绝这一歧义，直接禁止 `null` value。
+
+**为什么 key 不能为 null？——哈希计算与定位桶的安全性**
+
+`ConcurrentHashMap` 内部通过 `spread(key.hashCode())` 来计算桶位置，`null` key 无法调用 `hashCode()` 会直接 NPE。`HashMap` 之所以能支持 `null` key，是因为它在源码里对 `null` 做了特判（`hash` 方法中 `key == null ? 0 : ...`），将 `null` key 固定放在 table[0]。而 `ConcurrentHashMap` 的并发写入依赖 CAS + `synchronized` 锁定特定桶首节点，如果也给 `null` key 做特殊处理，会增加并发控制的复杂度且带来上面同样的二义性问题，因此一并禁止。
+
+> 对比总结：`Hashtable` 同样不允许 `null` key 和 `null` value；`TreeMap` 不允许 `null` key（Comparator/Comparable 对 `null` 无法比较会 NPE），但允许 `null` value。
+
 ### 什么是LinkedHashMap
 继承了 `HashMap` 的所有属性和方法，在 `HashMap` 基础上在各个节点之间维护一条双向链表，使得原本散列在不同 `bucket` 上的节点、链表、红黑树有序关联起来。具备如下特性：
 - 支持遍历时会按照插入顺序有序进行迭代
@@ -3004,6 +3018,29 @@ Java 中，每个对象都有一个与之关联的监视器(`monitor`)，也叫�
 
 这些锁机制可以根据具体的应用场景选择，以实现高效、安全的并发控制。
 
+#### Java中的Lock是怎么实现的？
+`Lock` 是 `java.util.concurrent.locks` 包中的接口，其最核心的实现类是 `ReentrantLock`。Lock 的底层依赖 **AQS（AbstractQueuedSynchronizer，抽象队列同步器）** 框架，实现原理可以拆解为三个核心部分：
+
+**1. state 变量（volatile int）——表示锁状态**
+
+AQS 内部维护一个 `volatile` 修饰的 `state` 字段。对于独占锁，`state = 0` 代表未锁定，线程调用 `lock()` 时通过 CAS 将 `state` 从 0 改为 1，成功即获取锁并记录当前持有线程（`exclusiveOwnerThread`）。同一线程重入时 `state` 累加，释放时递减，减到 0 才真正释放锁，其他等待线程才有机会竞争。
+
+**2. CLH 变体等待队列——管理排队线程**
+
+获取锁失败的线程会被封装为 `Node` 节点，加入一个基于 CLH 锁思想改造的 FIFO 双向队列。与原始 CLH 自旋锁不同，AQS 中排队的线程通过 `LockSupport.park()` 阻塞挂起（而非忙等），当前持有锁的线程释放锁时调用 `LockSupport.unpark()` 唤醒队列中的后继节点。
+
+**3. CAS + volatile——保证原子性与可见性**
+
+`state` 的修改全部通过 `Unsafe.compareAndSwapInt()`（CAS）完成，配合 `volatile` 语义保证多线程间的可见性，整个加锁/释放过程无需依赖 `synchronized` 关键字。
+
+**公平锁与非公平锁的区别**
+
+`ReentrantLock` 内部有一个 `Sync` 抽象类继承 AQS，又派生出两个子类：
+- `NonfairSync`（默认）：新线程尝试获取锁时先直接 CAS 抢一次，失败了再进队列排队。吞吐量更高，但可能导致已排队线程"饿死"。
+- `FairSync`：新线程获取锁前先检查队列中是否有前驱节点在等待，如果有就老老实实排队，保证 FIFO 顺序，但上下文切换更频繁，性能略低。
+
+> 简而言之：`Lock` 的实现 = **volatile state（锁标记）+ CAS（原子抢锁）+ CLH 队列（排队阻塞/唤醒）**，这三者构成 AQS 的骨架，`ReentrantLock`、`Semaphore`、`CountDownLatch`、`ReentrantReadWriteLock` 等都是基于 AQS 实现的。
+
 #### 锁升级原理了解吗
 锁主要存在四种状态，依次是：无锁状态、偏向锁状态、轻量级锁状态、重量级锁状态，他们会随着竞争的激烈而逐渐升级。注意锁可以升级不可降级，这种策略是为了提高获得锁和释放锁的效率。
 
@@ -3155,6 +3192,39 @@ public class PessimisticLock {
 AQS(AbstractQueuedSynchronizer，抽象队列同步器) 核心思想是，如果被请求的共享资源空闲，则将当前请求资源的线程设置为有效的工作线程，并且将共享资源设置为锁定状态。如果被请求的共享资源被占用，使用基于`CLH`锁实现的一套线程阻塞等待以及被唤醒时锁分配机制。
 
 以可重入互斥锁 `ReentrantLock` 为例，其内部维护了一个使用`volatile`修饰(保证线程可见性)的`state`变量，用来表示锁的占用状态。`state` 的初始值为 0，表示锁处于未锁定状态。当线程 A 调用 `lock()` 方法时，会尝试通过 `tryAcquire()` 方法独占该锁，并让 `state` 的值加 1。如果成功了，那么线程 A 就获取到了锁。如果失败了，那么线程 A 就会被加入到一个等待队列(`CLH` 锁队列)中，直到其他线程释放该锁。假设线程 A 获取锁成功了，释放锁之前，A 线程自己是可以重复获取此锁的(`state` 会累加)。这就是可重入性的体现：一个线程可以多次获取同一个锁而不会被阻塞。但是，这也意味着，一个线程必须释放与获取的次数相同的锁，才能让 `state` 的值回到 0，也就是让锁恢复到未锁定状态。只有这样，其他等待的线程才能有机会获取该锁。
+
+#### AQS独占模式的加锁/解锁流程
+AQS 把"能否拿到锁"这一步(`tryAcquire`/`tryRelease`)交给子类实现，自己则负责"抢不到就排队阻塞、释放后唤醒后继"这套通用逻辑，采用的是**模板方法模式**。以独占锁为例，完整调用链如下：
+
+**加锁 `acquire(int arg)`：**
+```java
+public final void acquire(int arg) {
+    if (!tryAcquire(arg) &&
+        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+        selfInterrupt();
+}
+```
+1. `tryAcquire(arg)`：由子类实现，尝试用 CAS 修改 `state` 抢锁。成功直接返回，方法结束。
+2. `addWaiter(Node.EXCLUSIVE)`：抢锁失败，把当前线程包装成独占模式的 `Node`，通过 CAS 加入 CLH 队列尾部。
+3. `acquireQueued(node, arg)`：进入队列后自旋——如果自己的前驱是头节点，就再 `tryAcquire` 试一次；否则通过 `shouldParkAfterFailedAcquire` 把前驱状态置为 `SIGNAL`，再调用 `parkAndCheckInterrupt`(底层 `LockSupport.park()`)阻塞挂起，等待被唤醒。
+4. `selfInterrupt()`：如果排队期间被中断过，这里补一个中断标记。
+
+**解锁 `release(int arg)`：**
+```java
+public final boolean release(int arg) {
+    if (tryRelease(arg)) {
+        Node h = head;
+        if (h != null && h.waitStatus != 0)
+            unparkSuccessor(h);
+        return true;
+    }
+    return false;
+}
+```
+1. `tryRelease(arg)`：由子类实现，递减 `state`，减到 0 表示锁彻底释放。
+2. `unparkSuccessor(head)`：找到头节点的后继(有效)节点，用 `LockSupport.unpark()` 唤醒它。被唤醒的线程回到第 3 步的自旋中重新竞争锁。
+
+> 记忆口诀：`acquire → tryAcquire → addWaiter → acquireQueued(shouldParkAfterFailedAcquire → parkAndCheckInterrupt)`；释放侧 `release → tryRelease → unparkSuccessor`。`tryAcquire`/`tryRelease` 是子类的活，其余是 AQS 的活。
 
 #### CLH锁
 CLH（Craig, Landin, Hagersten）锁是一种经典队列自旋锁（queue spinlock）。

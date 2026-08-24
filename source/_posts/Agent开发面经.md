@@ -301,7 +301,7 @@ aiRouting 的核心思路是**把路由决策外包给模型自己判断**，不
 
 
 
-### 两段式路由引擎
+#### 两段式路由引擎✅
 - 两段式路由引擎："规则前置拦截(本地策略模式匹配，零 LLM 调用) + 6 路并发 LLM 路由（1路决定路由模块 + 5路数据准备）" 两段式路由，保障LLM实时可用性；基于策略模式抽象 ToolExecutor，支撑 10+ 业务模块可插拔注册，新增模块零侵入主流程。
 
 第一段规则前置拦截按固定优先级执行：先通过 `SpecialCommandTool` 匹配特殊指令（如"开启新话题"），再通过 `SimilarQuestionTool` 在 FAQ 库中做精确匹配，命中即返回、不走 LLM，保证确定性场景的低延迟（<50ms）。前置拦截器返回 null 表示"不处理"，流程继续到第二段 LLM 路由。第二段 `aiRouting()` 并发执行 4 个 LLM 调用（实际含嵌套最多 6 个）：技能路由（将工具列表序列化为 Prompt，用 qwen-flash 快速模型识别意图）、语言识别、问题重写（又并发 3 路：上下文重写 / 关键词同义词扩展 / 用户身份信息重写，多角度扩展提高 RAG 召回率）、知识库标签识别。这 4 个调用无数据依赖，并发执行将路由延迟从串行累加的 ~2s 压缩到 ~500ms。ToolExecutor 注册通过 Spring 自动收集：`ToolExecutorRegistry` 构造器注入 `List<ToolExecutor>`，过滤掉前置拦截器后按 operationId 建映射表。新增技能只需实现接口 + 加 `@Component` + 在 Diamond 配置工具描述，对主流程零侵入。路由失败时自动降级到知识问答（最安全的兜底技能）。每个 Tool 还支持圈人配置（`crowdRuleId`），通过人群校验决定该工具是否出现在路由 Prompt 中。
@@ -346,7 +346,7 @@ ToolExecutorRegistry 是"技能注册中心"。Spring 启动时，会自动发�
 
 
 
-### 多源 RAG 系统
+#### 多源RAG系统✅
 多源 RAG 系统：三层线程池隔离（策略池/检索池/鉴权池） + CompletableFuture 编排并发召回 6 套异构知识源（制度中心/政策平台/知识平台/钉钉文档/消息中心/学习平台），单知识源内部知识库 × 候选问题笛卡尔积并发检索，切片鉴权 3s 熔断降级，双重 Rerank（百炼粗排+应用层文档名精排）后取 Top-K 注入上下文，保障召回相关性与主链路可用性。
 
 6 套知识源各有独立的 `AbstractKnowledgeRetrievalStrategy` 子类（`AliRegulationRetrievalStrategy` 制度中心、`HrPolicyRetrievalStrategy` 政策平台、`KnowledgePlatformRetrievalStrategy` 知识平台、`DingDocRetrievalStrategy` 钉钉文档、`CxmMessageCenterRetrievalStrategy` 消息中心、`LearningPlatformRetrievalStrategy` 学习平台），通过模板方法定义标准流程（构建过滤标签 → 调用百炼 retrieve API → 文档鉴权），子类只需实现差异化逻辑。并发架构采用三层线程池隔离：外层 `RAG_STRATEGY_POOL`（core=30, max=50）驱动 6 个 Strategy 并发；中层 `RAG_RETRIEVE_POOL`（core=100, max=150）处理每个 Strategy 内部知识库 × 候选问题笛卡尔积后的百炼 API 调用；鉴权层 `KNOWLEDGE_AUTH_POOL`（core=200, max=300）处理每个知识切片的文档权限校验。三层必须严格隔离、不能复用，否则外层任务占满线程后内层任务永远抢不到线程去执行，而外层又在等内层结果，就会形成线程饥饿死锁。CompletableFuture 并发有一个关键陷阱：必须先把所有任务收集成一个列表，再统一取结果——如果写成链式一边生成任务一边取结果，由于惰性求值会退化为串行。单源超时通过 `CompletableFuture.allOf(futures).get(3, TimeUnit.SECONDS)` 实现，超时后只收集已完成的鉴权结果，未完成的切片降级为无权限。Rerank 分两段：百炼内部先用 `qwen3-rerank-hybrid` 模型从 Top-100 收敛到 Top-20，应用层再用 `qwen3-rerank` 模型对文档名做 rerank，按 `原召回分 × 0.7 + 文档名 rerank 分 × 0.3` 加权融合后取 Top-K（由 Diamond 配置控制，默认 20）注入 Prompt。
@@ -445,7 +445,7 @@ RAG 召回的知识切片（chunk）来自不同的原始文档，而不同文�
 
 
 
-### RPA + 定时任务双链路知识同步
+#### RPA+定时任务双链路知识同步✅
 - RPA + 定时任务双联路知识同步：主链路定时任务扫描钉钉空间做diff检测变更，通过 RPA 自动抓取协同文档变更增量同步至百炼向量库；辅以定时任务处理 RPA 无法覆盖的 FAQ 同步与文档删除场景，上传百炼自动完成切片向量化，保障知识库实时性与完整性。
 
 双链路设计的原因是能力互补：RPA 擅长处理需要渲染/下载的普通文档（alidoc / pdf），但无法处理钉钉 FAQ 格式（able 表格）的导出和文档删除操作。Java 侧 `DingDocSyncProcessor`（SchedulerX 定时任务）专门处理这两个场景——`dealDeleteTask()` 循环取出删除任务调用百炼 API 删除文件，`dealFaqTask()` 将钉钉 FAQ 文档导出为临时文件后上传百炼。知识库变更检测由独立的 `DingDocScanProcessor` 扫描任务完成：遍历钉钉文档空间目录树生成快照，与百炼现有文件列表对比，生成变更日志（ADD / MODIFY / DELETE），检测维度包括文件名变化、修改时间 tag 变化、able 文件超过 30 天需强制刷新（因内部图片 URL 有过期风险）。扫描与同步解耦——扫描只生成变更日志，同步任务消费日志。百炼 API 有频率限制，通过 Guava RateLimiter 控制（查询 5 QPS、删除 10 QPS、上传 10 QPS）。上传时从文档路径提取圈人标签，注入为百炼文件 tag，实现基于标签的文档权限过滤。
@@ -468,7 +468,7 @@ RAG 召回的知识切片（chunk）来自不同的原始文档，而不同文�
 RPA 本质是模拟人在浏览器/客户端上的点击操作。它擅长有明确 UI 交互流程的操作（如打开文档→下载）。但有两类操作 RPA 做不了：① **FAQ 导出**——钉钉 FAQ 文档是 able 表格格式，没有"下载"按钮，需要通过钉钉开放平台 API 编程导出；② **文档删除**——删除百炼向量库中的文件需要调用百炼 API（bailianClient.deleteFile()），这是后端 API 操作而非前端 UI 操作。所以这两个场景由 Java 定时任务通过编程方式直接调用 API 处理。
 
 
-### 端到端流式体验
+#### 端到端流式体验✅
 - 端到端流式体验：Dubbo Triple StreamObserver 实现服务端流式推送，基于 ReplayProcessor + 百炼智能体流式 API 做中间态兜底（1.5s 无响应自动推送加载提示），首字延迟下降约 60%；RAG 失败命中兜底关键词时，无缝拼接一次联网通识问答流，下游对模型切换完全无感知。
 
 HSF 接口使用 Triple 协议（基于 HTTP/2 的 gRPC 兼容协议）暴露服务端流式接口，声明为 `void callStream(ChatRequest request, StreamObserver<ChatResponse> response)`。内部核心是 `ReplayProcessor`（RxJava 热流）作为桥梁：上游百炼流式 API 产生的每一帧通过 `Flowable` 推入 ReplayProcessor，下游通过 `processor.subscribe()` 订阅并逐帧转发到 `StreamObserver.onNext()`，每帧实时更新钉钉卡片，用户体验类似 ChatGPT 逐字出现。选择 `ReplayProcessor` 而非 `PublishProcessor` 是因为它能缓存所有历史帧（带 1 分钟时间窗口），晚加入的订阅者可以回放历史数据，避免丢帧。百炼 API 设置 `incrementalOutput=true` 增量输出，每帧只传输新增内容减少带宽。1.5s 加载提示通过 Spring `TaskScheduler` 延迟调度实现：检查 `finalResult`（AtomicReference）是否仍为空，是则推送灰色加载文案，百炼第一帧到达后直接覆盖。RAG 兜底策略：如果 RAG 答案包含"暂时没有相关内容"，通过 RxJava `concatWith(Flowable.defer(...))` 无缝拼接一次通识 LLM 问答流，调用方完全透明。AppId 降级逻辑：优先使用百炼智能体 AppId，未配置或不可用时降级到工作流 AppId。
@@ -527,7 +527,7 @@ ReplayProcessor还提供一分钟短时重放，能够避免百炼热流已经�
 
 
 
-### MCP Server 标准化
+#### MCP Server标准化✅
 MCP Server 标准化对外开放：基于 MCP 协议暴露员工信息查询、知识召回、相似问匹配等标准 Tool，支持外部 Agent 通过统一协议编排调用，降低跨系统集成成本。
 
 使用 `@alibaba/mcp-lite` 框架，通过 `@Tool` 注解声明 3 个 MCP Tool：`getCxmEmployeeInfo`（获取用户身份信息）、`knowledgeRecall`（知识检索，指定三个知识源并发召回，返回鉴权后的原始知识切片列表）、`similarQuestion`（相似问题匹配）。`@McpContextAware` 注解自动注入 MCP 上下文，通过 `McpContext.getUser()` 获取调用者身份。设计上只暴露原子能力，不包含 LLM 总结步骤——外部 Agent（如集团悟空平台）有自己的 System Prompt 和回答策略，Tool 内部做总结会限制调用方的二次推理能力。`knowledgeRecall` 内部复用 `RecallServiceImpl` 和 RAG 策略链，避免重复建设。会话标识加 `wukong_` 前缀区分来源，便于后续的流量分析和问题排查。
@@ -540,7 +540,7 @@ MCP Server 标准化对外开放：基于 MCP 协议暴露员工信息查询、�
 MCP（Model Context Protocol）是 Anthropic 提出的一套标准协议，用于 LLM 与外部工具/数据源的标准化交互。@alibaba/mcp-lite 是阿里内部对 MCP 协议的轻量级 Java 实现框架。原理是：框架在 Spring 容器启动时扫描所有带 @Tool 注解的方法，自动将方法签名转换为 MCP 协议定义的 Tool Schema（JSON 格式），注册到 MCP Server 中。当外部 Agent 通过 MCP 协议发起 Tool 调用时，框架根据 tool name 路由到对应的 Java 方法，自动做参数反序列化、调用方法、序列化返回值。开发者只需在方法上加 @Tool 注解，就完成了一个 MCP Tool 的声明。
 
 
-### Prompt 工程化与质量闭环
+#### Prompt 工程化与质量闭环
 Prompt 工程化与质量闭环：Prompt 与 Tool Schema 外置到配置中心，支持分钟级热更无需发版；离线 LLM-as-a-Judge 评估任务对答案打分回流，驱动 Prompt 与召回策略持续迭代。
 
 所有 Prompt 模板通过阿里 Diamond 配置中心管理，每个 Prompt 是一个独立的 `@DiamondListener` 类（如 `PromptToolRouting`、`PromptRagAnswerInstruction` 等，共 17 个独立 dataId），收到推送后更新 `volatile` 静态变量，调用方通过 `buildPrompt()` 做占位符替换获取最新模板。Tool Schema 同理，`AiAssistantConfigData.tools` 列表配置在 Diamond，包含 operationId、title、description、exampleQueries、parameters 和 crowdRuleId，热更新即可添加/修改/禁用工具。LLM-as-a-Judge 评估流程：SchedulerX 定时任务触发 `CxmAnswerScoreServiceImpl.evaluateAnswerScore()`，从云灵知识平台采集标准 Q&A 对作为评估基线；5 线程固定池并发处理——每条记录先用灰度环境的 AI 助理回答标准问题，再用 LLM（评分 Prompt 也外置在 Diamond）比对标准答案和 AI 助理答案给出分数（BigDecimal 存储）；下一轮只重新评估 4 小时前且准确率低于 0.85 的记录，持续改进低分项。低分记录按类目聚合，针对性调整该类目的 RAG 召回策略或 Prompt 模板。
@@ -668,7 +668,7 @@ A：上线前 HR 每月薪酬质检投入约 200 人时（规则编写+数据核
 
 
 
-### 批量异步解析引擎
+#### 批量异步解析引擎✅
 - 批量异步解析引擎：基于 CompletableFuture + Semaphore + AtomicInteger/AtomicBoolean 实现规则批量 AI 解析的并发编排，Semaphore(10) 控制大模型调用并发度防打爆下游，各子任务并发写同一个结果数组时用 Collections.synchronizedList 包装容器规避可见性问题，独立 daemon 线程每秒同步进度到 Redis 供前端轮询，CompletableFuture.allOf().get(timeout) 统一收口并在超时后主动 cancel 未完成任务。
 
 入口 `submitBatchParse` 生成 taskId 后先用 `jedisCluster.setex` 写一份 PROCESSING 初始状态到 Redis，再用 `CompletableFutureUtils.supplyAsync(..., excelValidateThreadPool)` 把整批解析甩到独立线程池异步跑，接口立即返回 taskId，不阻塞请求线程。异步编排在 `executeBatchParse` 中展开：先 `new Semaphore(BATCH_CONCURRENCY=10)` 控制同时打到百炼 AI 的请求数；`AtomicInteger parsedCount` 供多线程安全累加完成数，`AtomicBoolean done` 标记整批终态；`startProgressFlusher` 起一个独立 daemon 线程，每秒把当前进度 flush 到 Redis，`done=true` 后立刻退出避免覆盖最终状态；结果容器用 `Collections.synchronizedList` 包装的 `List<ParsedRuleVO>`，各子任务按下标 `results.set(idx, ...)` 并发写入，规避普通 ArrayList 在多线程下的可见性和结构性问题。`submitParseTasks` 给每条规则单独提交一个 `CompletableFuture`，子任务内先做基于 `startTime` 的超时短路判断——整批一旦超时，还没轮到的任务直接标失败不再浪费一次 AI 调用。最后 `awaitAndFinalize` 用 `CompletableFuture.allOf(futures).get(BATCH_TIMEOUT_MINUTES, TimeUnit.MINUTES)` 统一收口，超时抛 `TimeoutException` 后 `futures.forEach(f -> f.cancel(true))` 主动打断未完成任务，并把最终 SUCCESS/FAILED 状态写回 Redis。
@@ -690,7 +690,7 @@ A：可见性问题指一个线程对共享变量的写，另一个线程不一�
 
 
 
-### Self-Refine 自洽循环
+#### Self-Refine 自洽循环✅
 - Self-Refine 自洽循环（LLM-as-Generator × 编译器-as-Verifier）：每条规则最多 3 轮"生成 → 预编译校验 → 失败反馈再生成"，错误收敛为调用失败/格式异常/编译失败/超时四态，把幻觉约束在可被编译器证伪的边界内。
 
 核心实现在 `RuleBatchParseExecutor.parseSingleInternal()` 中，用 `for (attemptNo = 1; attemptNo <= 3; attemptNo++)` 硬编码 3 轮上限。每轮流程：获取信号量许可 → `buildUserMessage()` 拼装 Prompt（含规则上下文 + 字段字典 + 上一轮错误反馈）→ `callBailianApi()` 调百炼 SDK 非流式接口 → `parseAiResponse()` 校验 JSON 格式（必须含 `parseSuccess`、`content`、`ruleName`、`checkType` 等字段）→ `tryPrecompile()` 调 `GroovyUtils.precompile()` 做 Groovy 预编译语法校验。成功则返回，失败则记录 `lastAiResponse` / `lastErrorType` / `lastErrorMessage`，在下一轮 Prompt 中追加 `[上次尝试反馈]` 区块，让 LLM 看到自己的错误和编译器反馈定向修正。四种错误类型定义在 `ParseErrorType` 枚举中：`AI_CALL`（SDK 调用失败）、`AI_FORMAT`（返回非 JSON 或缺字段）、`GROOVY_COMPILE`（脚本语法错误）、`TIMEOUT`（HTTP 超时 90s）。如果 AI 主动判定不可解析（`parseSuccess=false`），直接跳出循环不浪费重试。字段字典按质检环节分路由：数据提报阶段从 Excel 模板表加载列定义，薪资计算阶段从薪酬项表按子串匹配过滤。AI 返回的 `content` 字段是 Groovy 脚本，Base64 编码后存入 `PrRule.content`。
@@ -712,7 +712,7 @@ A：三个方向：① **AST 安全扫描**——预编译通过后用 SecureAST
 
 
 
-### 异步质检执行引擎
+#### 异步质检执行引擎✅
 - 异步质检执行引擎：质检任务落库后再提交 TaskX 异步执行，质检数据分批(每批500条)处理避免OOM，进度Redis实时写保障前端实时轮询 + DB周期持久化保障进度可恢复，30分钟熔断兜底避免长尾任务无限占用资源。
 
 在发起质检的时候先保存任务并生成 `batchId`(QC_TASK_ + `taskId`)，再通过 `PrTaskX.execute()` 把 `handlerContext`（租户上下文等业务数据）和 `QualityCheckTaskHandler.class`（类引用）一起落库到 TaskX 任务表，接口立即拿到 `taskId` 返回，无需等待质检完成。TaskX 是独立的调度/消费进程，轮到这条任务时反序列化出之前落库的 `handlerContext`，再反射找到 `QualityCheckTaskHandler`（实现了 `Handler<QualityCheckHandlerContext>` 接口）对应的 Spring Bean，调用其 `handle(context, anonymousId)` 方法把 context 传入——这一步才是真正的异步执行入口。Handler 在 `TenantContext` 中加载规则、统计数据量、清理同 `batchId` 的历史结果(避免结果重复)，再按 `offset/limit` 每页读取 500 条基础数据，随后逐行执行全部 Groovy 规则，更新进度条等内容。单条规则异常会被转换为该规则的质检错误，不影响当前行的其他规则和后续数据继续执行。
@@ -739,7 +739,7 @@ A：每次正式处理前都会调用 `removeByBatchId(batchId)` 删除该批次
 
 
 
-### Prompt 工程 SRE 化
+#### Prompt工程SRE化✅
 - Prompt 工程 SRE 化：prompt获取根据不同场景路由到专属systemPrompt，外置到配置中心，调用LLM前做长度下限 + 关键词白名单 lint 防空 Prompt 上线。
 
 两个 Diamond 配置类分别管理不同阶段：`DiamondRuleGeneratorConfig`（数据提报阶段）和 `DiamondRuleGeneratorRuntimeConfig`（薪资计算阶段）。lint 校验在 Diamond 回调 `received()` 中实现：长度校验——systemPrompt 必须超过 1000 字符；关键词白名单——必须包含"输出契约"、"checkType"、"parseSuccess"等核心关键词。校验不通过时保留旧值不更新并打印告警。
