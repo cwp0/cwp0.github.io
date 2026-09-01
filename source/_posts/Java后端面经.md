@@ -10,7 +10,7 @@ keywords:
 description: Java后端面经
 abbrlink: 17766
 date: 2024-05-27 19:58:53
-updated: 2024-07-06 15:52:00
+updated: 2026-09-01 15:52:00
 top_img: https://s2.loli.net/2024/05/27/ytcdAHzliRquNM2.png
 comments:
 cover: https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png
@@ -3387,6 +3387,18 @@ jconsole // 唤醒图形化界面，然后选择线程->检测死锁
 - 调用`semaphore.acquire()`，线程尝试获取许可证，如果 `state >= 0` 的话，则表示可以获取成功。如果获取成功的话，使用 CAS 操作去修改 `state` 的值 `state=state-1`。如果 `state<0` 的话，则表示许可证数量不足。此时会创建一个 `Node` 节点加入阻塞队列，挂起当前线程。
 - 调用`semaphore.release()`，线程尝试释放许可证，并使用 CAS 操作去修改 `state` 的值 `state=state+1`。释放许可证成功之后，同时会唤醒阻塞队列中的一个线程。被唤醒的线程会重新尝试去修改 `state` 的值 `state=state-1`，如果 `state>=0` 则获取令牌成功，否则重新进入阻塞队列，挂起线程。
 
+### 原子变量AtomicInteger
+
+原子变量位于`java.util.concurrent.atomic`包中，用于对单个共享变量执行线程安全的原子操作。常见实现包括基本类型原子类`AtomicInteger`、`AtomicLong`、`AtomicBoolean`，引用类型原子类`AtomicReference`，以及适合高并发计数的`LongAdder`等。
+
+`AtomicInteger`、`AtomicLong`等原子类的核心是 **volatile + CAS + 自旋重试**：内部值使用`volatile`修饰，保证一个线程的修改对其他线程可见；执行`incrementAndGet()`、`getAndAdd()`等复合操作时，不是普通地先读再写，而是通过 JVM 提供的 CAS 原子操作比较旧值并更新新值。
+
+以自增为例，其逻辑等价于：先读取旧值并计算新值，再执行`compareAndSet(旧值, 新值)`。如果期间没有其他线程修改，CAS 成功；如果值已变化，说明发生了并发竞争，当前线程读取最新值后重新计算并重试。因此，多个线程同时更新时只有一个线程能成功写入，其他线程不会覆盖它的结果，从而避免`i++`的丢失更新问题。
+
+这种方式属于无锁并发：竞争失败的线程通常自旋重试，而不是像`synchronized`一样阻塞和唤醒线程，所以低竞争时开销较小。但它只能保证原子类单次方法调用的原子性，`get()`后再单独`set()`、跨多个变量维护一致性等复合逻辑仍需加锁或将整体状态封装后通过`AtomicReference`更新；竞争激烈时频繁自旋也会消耗 CPU，纯计数场景可以考虑`LongAdder`。
+
+> 面试总结：原子类通过`volatile`保证可见性，通过 CAS 保证“比较并更新”不可分割，CAS 失败后自旋重试，以无锁方式保证单个共享变量的线程安全。
+
 ### 异步调用Future类
 
 `Future` 类是异步思想的典型运用，主要用在一些需要执行耗时任务的场景，具体来说是这样的：当主线程执行某一耗时的任务时，可以将这个耗时任务交给一个子线程去异步执行，同时主线程做其他事情，不用等待耗时任务执行完成。等事情干完后，再通过 `Future` 类获取到耗时任务的执行结果。这样一来，程序的执行效率就明显提高了。
@@ -3774,6 +3786,40 @@ Java应用使用的内存不仅仅包括堆内存，还可能涉及以下几个�
 - 调整JVM参数：通过调整JVM参数来优化内存和GC的表现。例如：
   - `-XX:+UseStringDeduplication`：减少重复字符串的内存占用(仅在G1 GC下有效)。
   - `-XX:+UseCompressedOops`：在64位JVM中压缩对象指针，减少内存占用。
+
+### 线上Full GC频繁怎么排查处理
+**回答思路**：先定性(是泄漏还是分配过快)，再取证(GC 日志 + heap dump)，最后按根因对症，不要一上来就调参——调参会把内存泄漏掩盖成"频率变低了"，过几天照样复发。
+
+**第一步：按现象定性**。只看 Full GC 次数没有意义，关键是**每次 Full GC 之后老年代的占用**，三种现象对应完全不同的处理方向：
+
+| 现象 | 判断 | 方向 |
+|------|------|------|
+| Full GC 后老年代占用**基本不降** | 有强引用一直持有对象，内存泄漏或常驻数据本身就超过堆 | 抓 dump 查支配树 |
+| 回收后降得很干净，但**很快又满** | 不是泄漏，是分配速率高或对象晋升过快 | 调新生代/晋升阈值 + 优化代码 |
+| 老年代占用不高但仍频繁 Full GC | 元空间不足、显式 `System.gc()`、堆外内存、CMS 碎片导致的 promotion failed | 看 GC 日志里的触发原因(Cause) |
+
+```bash
+jstat -gcutil <pid> 1000 20   # 每秒采样：EU/OU/MU 各代使用率、YGC/FGC 次数与累计耗时
+jstat -gccause <pid> 1000     # 直接看本次/上次 GC 的触发原因，比猜快得多
+jmap -dump:live,format=b,file=/tmp/heap.hprof <pid>   # 取证；live 会先触发一次 Full GC，线上单点慎用
+```
+
+**第二步：dump 分析套路**。MAT 打开后先看 Leak Suspects，再看 **Dominator Tree** 找最大支配者，对可疑对象查 **Path to GC Roots(排除弱/软引用)**，就能定位到是哪个静态字段或哪个线程栈在持有它。
+
+**第三步：按根因对症**，线上高频的就这几类：
+- **无界缓存/静态集合**：本地 Map 当缓存却没有淘汰和容量上限——换 Caffeine/Guava 设 `maximumSize` + TTL。
+- **ThreadLocal 未 remove**：线程池里线程常驻，value 强引用永远不回收，必须 finally 里 `remove()`。
+- **大对象直入老年代**：一次查全表、大 List 序列化、超过 `-XX:PretenureSizeThreshold` 的数组——改分页/流式处理，这类问题改代码比调 JVM 有效得多。
+- **晋升过快**：Survivor 太小导致对象放不下直接进老年代，或触发动态年龄判定(Survivor 中同龄对象总和超一半，年龄大于等于该年龄的直接晋升)——调 `-XX:SurvivorRatio`、`-XX:MaxTenuringThreshold`，并用 `-XX:+PrintTenuringDistribution` 验证。
+- **元空间/类加载爆炸**：动态代理、脚本引擎(如 Groovy)反复编译新类且 ClassLoader 不释放——脚本要按内容缓存编译结果，同时设 `-XX:MaxMetaspaceSize` 防止无限膨胀。
+- **显式 `System.gc()`**：常见于 RMI 定时调用和 DirectByteBuffer 的 Cleaner，GC 日志 Cause 会写 `System.gc()`；可加 `-XX:+DisableExplicitGC`，但要注意堆外内存从此只能靠 Full GC 之外的机制释放，NIO 场景要同时配 `-XX:MaxDirectMemorySize` 并监控。
+- **CMS 特有**：并发模式失败(concurrent mode failure)和碎片导致的 promotion failed，会退化成单线程 Serial Old 全程 STW，停顿从几十毫秒跳到数秒——降低 `-XX:CMSInitiatingOccupancyFraction` 提前启动回收，或直接换 G1。
+
+**第四步：止血和根治分开做**。止血是先摘掉这台机器的流量或重启，但**重启前一定要留 dump**，否则现场没了只能等下次复发；根治是改代码或调参后灰度一台观察对比。生产上标配 `-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=...`，让 OOM 自动留证。
+
+**日常预防**：GC 日志常开并滚动(`-Xlog:gc*:file=gc.log:time,uptime:filecount=5,filesize=50m`，JDK 8 是 `-XX:+PrintGCDetails -Xloggc:`)；`-Xms` 与 `-Xmx` 设成相等避免堆反复伸缩；监控告警不要只报 Full GC 次数，更要报**单次 STW 时长**和**Full GC 后老年代水位**，后者才是泄漏的早期信号。
+
+
 
 ### 什么操作会触发堆的初始化
 堆的初始化主要依赖于JVM的启动和对象的动态创建，通常这些操作会在程序的初始阶段就发生。

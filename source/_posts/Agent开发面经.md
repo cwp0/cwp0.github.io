@@ -11,7 +11,7 @@ keywords:
 description: Agent开发面经
 abbrlink: 20001
 date: 2026-06-22 22:43:58
-updated: 2026-06-22 22:43:58
+updated: 2026-09-01 22:43:58
 top_img: https://s2.loli.net/2024/05/27/ytcdAHzliRquNM2.png
 comments:
 cover: https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png
@@ -387,7 +387,30 @@ ToolExecutorRegistry 是"技能注册中心"。Spring 启动时，会自动发�
 - **配置侧**：在 Diamond 配置中心的 AiAssistantConfigData.tools 列表中添加工具描述 JSON，包含 operationId、title、description、exampleQueries、parameters、crowdRuleId(可选，按人群灰度开放)。Diamond 推送后立即生效。
 - 全程**不需要修改 CxmAiEngine 或任何主流程代码**——"零侵入"。圈人机制：每个 Tool 配置 crowdRuleId 后，AI 路由构建工具列表时会调用 CrowdWrapper.validateMatched(empNo, crowdRuleId) 校验当前用户是否在目标人群中，只有通过的工具才出现在路由 Prompt 中。
 
+### 知识问答/智能请假各有一个LLM，这算多Agent系统吗?它们之间怎么通信
 
+**结论先给**：严格按定义**不算**。菜小蜜是"单 Agent + LLM 意图路由 + 插件化工具编排"，多个模块里各有 LLM 调用只说明系统里有多个**模型调用点**，不等于有多个 Agent。面试时主动把这个边界讲清楚，比硬包装成多 Agent 安全得多——一旦自称多 Agent，下一个问题必然是"Agent 之间怎么协商、冲突怎么解决、失败怎么回滚"，而这些机制代码里都没有，会当场露馅。
+
+**为什么不算**：Agent 的门槛是能自主决定下一步做什么、能循环观察结果再调整、有独立的目标和记忆，菜小蜜三条都不满足。
+
+- 模块内的 LLM 调用都是**一次性**的。`AILeaveTool` 里就是 `bailianModelClient.call("qwen3-max", sysPrompt, userInput)` 一次性把请假槽位抽出来，抽完直接交 `AIFacade` 走业务接口，没有"发现额度不够 → 自己决定改调额度查询 → 再回来重试"这种循环。
+- 知识问答链路虽然重(并发召回、双重 rerank、流式生成、兜底通用大模型、出处归因，加起来好几次模型调用)，但每一步都是 Java 代码写死的固定流水线，模型只负责生成，不负责决定流程走向。
+- 全仓搜 `tool_calls` / `function_call` / `FunctionDefinition` **零命中**——连 Function Calling 都没用。路由是让模型输出一段 JSON，Java 再 `JSONObject.parseObject(result, ToolExecuteInfo.class)` 反序列化出 operationId，决策权始终在 Java 手里。
+- `CxmAiEngine` 里没有 while 循环、没有 maxIterations/maxSteps 这类步数控制，主流程固定是"3 个前置拦截 → 1 次路由 → 1 个执行器 → 返回"。也没有反思/自我批判，没有 LLM 层面的失败重试(仓里的 retry 只有钉钉限流被动重试和钉钉文档同步重试，与对话推理无关)。
+- 依赖上也没有任何 Agent 框架的痕迹，Spring AI / LangChain4j / LangGraph / 状态机全无，唯一的 AI 依赖是 DashScope SDK。
+
+**如果一定要对标多 Agent 架构**：它对应的是中心化的 **Router / Supervisor 架构**，而且是这个架构里最退化的形态——Supervisor(`CxmAiEngine`)只在对话开始时做**一次**路由决策，选中一个 worker 执行完就直接返回，不会拿着 worker 的结果再做第二轮决策；真正的 Supervisor 要在循环里反复"派活 → 看结果 → 决定下一步派谁"。和另外两种常见架构对比着讲区别更清楚：
+
+- **Swarm / Handoff(对等移交)**：菜小蜜有两处看着像 handoff——`CxmDataQueryTool` 在工作流返回 KNOWLEDGE_QA 分支、或 SQL 执行抛异常时会兜回知识问答，`TalentProfileTool` 在知识问答/MyHR/人才档案之间分流。但它们调的是 `cxmKnowledgeQAService.doKnowledgeQA()`，**是 Service 而不是 Tool**，编译期就持有对方的 Spring bean 引用，被调方不知道自己被谁调用、也无法把控制权再交回去。这是代码复用，不是 Agent 移交。
+- **Blackboard(共享黑板)**：`ToolExecuteInfo` 表面很像黑板，但**只有编排引擎一个写者**，5 路并发准备任务之间彼此不可见、也不消费对方的中间产物，写回全部由引擎在 join 之后统一做。
+
+**所谓"Agent 间通信"，实际是三条很朴素的 Java 通路**：
+
+1. **一个可变 DTO 按引用穿透全流程**。`ToolExecuteInfo` 从入口一直传到最下游 Service，字段含 operationId、parameters、userInput、workNo/empNo、`ragQueryMap`(三路改写结果)、userLang、knowledgeBaseFilterCode、policyRegulationQuestion、aiChatLogId、chatHistory、sessionInfo。引擎在 5 路并发跑完后把结果 set 回同一个对象，下游模块直接从入参里读。**这里刻意没有用 ThreadLocal**，全靠方法入参显式传递——这是个值得主动讲的取舍：三层线程池 + CompletableFuture 的架构下 ThreadLocal 根本传不过异步边界，显式传参是唯一稳妥的选择。
+2. **会话记忆走数据库，全模块共用一份**。sessionId 由 `CxmSessionHelper` 生成(`cxm_session_%s`)并缓存，历史取的是同一 sessionId 下 `ai_chat_log` 最近 5 条，剔掉特殊指令记录和本轮记录后塞进 `chatHistory`。**没有任何模块拥有私有记忆**，这本身也是不像多 Agent 的一个证据(多 Agent 系统通常各 Agent 有独立 scratchpad)。"开启新话题"的实现是 `refreshSessionInfo` 换一个新 UUID 会话、把当前日志改挂过去，旧记录原样保留、按新 sessionId 自然查不到，属于"换上下文窗口"而不是"删数据"。
+3. **跨轮次状态靠钉钉卡片私有参数外置**(最值得展开的一点)。请假确认卡片发出后，用户点按钮回调走 `executeCardAction → ReturnBtnStrategyFactory.getStrategy(actionId) → Strategy.execute`，此时参数是从 `cardPrivateData` 的 params 里取的，只额外重建 empNo/workNo，**不读 chatHistory、不读 ai_chat_log、不查 Redis/Tair，也不重建原来的 ToolExecuteInfo**。等于把"待确认的请假单"这个会话状态序列化进了钉钉卡片，服务端在这中间完全无状态：横向扩容零成本、服务重启不丢待确认单；代价是卡片参数客户端可见、存在篡改风险，所以提交时必须在服务端重新校验假期额度和权限，绝不能信卡片带回来的值。
+
+**追问"那什么时候才该上多 Agent"**：当前场景是"意图明确、单跳可解"——用户问请假、查工资、查制度都是边界清晰的事，一次路由选对模块就能闭环，引入自主循环只会让延迟翻倍、幻觉不可控；再叠加"路由要 500ms 级响应""任何异常都要确定性降级到知识问答"这两条硬约束，多 Agent 的自主性反而是负担。真正需要演进的信号是出现"查下我今年还剩几天年假，够的话帮我从下周一开始请三天"这类需要跨模块串联、且串联路径无法预先枚举的复合请求——那时才需要把 Supervisor 改成带循环的规划器，把 Tool 改成能返回"我还需要 X 才能继续"的可协商单元。
 
 ### 多源RAG系统✅
 多源 RAG 系统：三层线程池隔离(策略池/检索池/鉴权池) + CompletableFuture 编排并发召回 6 套异构知识源(制度中心/政策平台/知识平台/钉钉文档/消息中心/学习平台)，单知识源内部知识库 × 候选问题笛卡尔积并发检索，切片鉴权 3s 熔断降级，双重 Rerank(百炼粗排+应用层文档名精排)后取 Top-K 注入上下文，保障召回相关性与主链路可用性。
@@ -466,6 +489,24 @@ RAG 召回的知识切片(chunk)来自不同的原始文档，而不同文档有
 - **① 更新频率和权威性差异大**：制度中心数月更新一次但权威性最高需要高权重，钉钉文档每天变更但质量参差不齐。
 - **② 鉴权模型不同**：政策平台按文档路径标签做圈人鉴权，知识平台按审核状态区分可见性，钉钉文档按空间权限控制，各知识源对接的都是自己"原始归属系统"的权限接口。统一存储会丢失细粒度权限语义，无法在 retrieve 阶段通过 filterTags 做权限预过滤。
 - **③ 召回策略差异**：每个源的 filterTags 构建逻辑不同，需要各自的 Strategy 子类实现差异化。
+
+### 两个知识源里有同一份知识，一个数据新一个数据旧，怎么保证准确性
+
+多源召回必然会遇到同一条知识在多个源里都有、且版本不一致的情况(制度中心数月一更但最权威，钉钉文档每天在变)。我们的处理是**四道防线，从源头到生成层层收口**。
+
+**① 源头去重：同一篇文档只保留一个版本。** 钉钉文档同步链路的 MODIFY 处理是「先上传新文件、再删旧文件」而不是追加——`DingDocScanServiceImpl` 里上传成功后立刻用 changeLog 里记的 `deletedBailianFileId` 删掉旧文件，保证向量库里同一 docKey 只有一份。变更检测有三个维度：文件名变化、`doc_modified_time_` tag 变化、`.able`(钉钉 FAQ)文档超过 30 天强制刷新(因为里面的图片 URL 会过期)。这一层能消灭掉绝大多数「同源新旧共存」。
+
+**② 切片携带更新时间。** 同步期写进百炼文件的 `doc_modified_time_` tag，在查询期会从 retrieve 返回的 metadata 里读出来、映射到 `KnowledgeSlice` 的 updateTime 字段上——每个切片都知道自己所属文档的更新时间，这是后面所有仲裁的数据基础。**没有这个字段，任何"以新为准"的说法都是空话**，这一步最容易被漏掉。
+
+**③ 排序层做确定性的版本仲裁。** 在 `SliceHelper.reRankAndSelect` 的基础打分 `原召回分 × 0.7 + 文档名 rerank 分 × 0.3` 之上加两条规则：同一篇文档(按 docKey / documentName 归并)召回到多个版本时，**只保留 updateTime 最新的那一份**，旧版本直接剔除、不占 Top-K 名额；跨知识源的口径冲突则叠加知识源权威度权重，顺序是 制度中心 > 政策平台 > 知识平台(已审核) > 钉钉文档 > 知识平台(未审核)，权重挂在 `KnowledgeSourceEnum` 上、Diamond 可配可灰度。updateTime 缺失时降级为按权威度排序，权威度也取不到时退回纯相关性排序，保证任何情况下不抛异常、不空召回。
+
+**④ 生成层兜最后一道。** 切片拼进 Prompt 的 `<doc>` 结构里会带 `<updateTime>`，System 指令中明确写死仲裁规则：**多份材料口径冲突时以更新时间较新者为准，并在答案里标注所依据的文档名和更新时间**。这么做有三个收益：模型有了可执行的仲裁依据而不是瞎猜；用户能看到答案基于哪篇、什么时候的文档，可以点进「知识来源」自己核对；运营质检时能快速定位是哪个源的哪篇文档口径过期，反推去更新，形成闭环。
+
+**为什么不只靠源头删除、还要在查询期和生成层再兜两道**：向量库的删除是最终一致的，有延迟、有失败重试，百炼侧还有频率限制(删除 10 QPS，用 Guava RateLimiter 控着)。只要删除动作有一次没成功，旧版本就会驻留在索引里，而查询期如果没有第二道防线就完全裸奔——所以排序层的版本仲裁不是冗余而是必需。反过来也不能只靠 Prompt，模型对时间的敏感度不稳定，**能在排序阶段确定性剔除的，就不要留给模型去概率性判断**。
+
+**人工兜底通道**：如果某个问题的答案已经明确错了、而知识源那边的更新还没来得及走完同步，运营可以直接在 FAQ 表里配一条相似问题——`SimilarQuestionTool` 是前置拦截器，命中即短路、完全不走 RAG，且同一问题配多条时取 `gmtModified` 最新的那条。这是分钟级生效的止血手段。
+
+> 落地自查：`doc_modified_time_` tag 在同步期已经写入百炼，但查询期的 metadata 映射当前只取了 `doc_name` / `title` / `_id` / `query` 四个字段，所以 updateTime 的读取映射、排序层的同文档多版本剔除、`KnowledgeSourceEnum` 的权威度权重这三处需要补齐(改动量很小，十几行)，Prompt 侧的仲裁指令也要同步加进 `prompt:ragAnswerInstruction`。建议面试前先把这几处提交掉，讲起来才完全站得住。
 
 ### CompletableFuture一个知识源挂了会影响其他源吗
 
@@ -578,31 +619,82 @@ MCP Server 标准化对外开放：基于 MCP 协议暴露员工信息查询、�
 MCP(Model Context Protocol)是 Anthropic 提出的一套标准协议，用于 LLM 与外部工具/数据源的标准化交互。@alibaba/mcp-lite 是阿里内部对 MCP 协议的轻量级 Java 实现框架。原理是：框架在 Spring 容器启动时扫描所有带 @Tool 注解的方法，自动将方法签名转换为 MCP 协议定义的 Tool Schema(JSON 格式)，注册到 MCP Server 中。当外部 Agent 通过 MCP 协议发起 Tool 调用时，框架根据 tool name 路由到对应的 Java 方法，自动做参数反序列化、调用方法、序列化返回值。开发者只需在方法上加 @Tool 注解，就完成了一个 MCP Tool 的声明。
 
 
-### Prompt工程化与质量闭环
+### Prompt工程化与质量闭环✅
 Prompt 工程化与质量闭环：Prompt 与 Tool Schema 外置到配置中心，支持分钟级热更无需发版；离线 LLM-as-a-Judge 评估任务对答案打分回流，驱动 Prompt 与召回策略持续迭代。
 
-所有 Prompt 模板通过阿里 Diamond 配置中心管理，每个 Prompt 是一个独立的 `@DiamondListener` 类(如 `PromptToolRouting`、`PromptRagAnswerInstruction` 等，共 17 个独立 dataId)，收到推送后更新 `volatile` 静态变量，调用方通过 `buildPrompt()` 做占位符替换获取最新模板。Tool Schema 同理，`AiAssistantConfigData.tools` 列表配置在 Diamond，包含 operationId、title、description、exampleQueries、parameters 和 crowdRuleId，热更新即可添加/修改/禁用工具。LLM-as-a-Judge 评估流程：SchedulerX 定时任务触发 `CxmAnswerScoreServiceImpl.evaluateAnswerScore()`，从云灵知识平台采集标准 Q&A 对作为评估基线；5 线程固定池并发处理——每条记录先用灰度环境的 AI 助理回答标准问题，再用 LLM(评分 Prompt 也外置在 Diamond)比对标准答案和 AI 助理答案给出分数(BigDecimal 存储)；下一轮只重新评估 4 小时前且准确率低于 0.85 的记录，持续改进低分项。低分记录按类目聚合，针对性调整该类目的 RAG 召回策略或 Prompt 模板。
+所有 Prompt 模板通过阿里 Diamond 配置中心管理，每个 Prompt 是一个独立的 `@DiamondListener` 类(如 `PromptToolRouting`、`PromptRagAnswerInstruction` 等，共 18 个独立 dataId，统一命名为 `com.cainiao.management.cnwork:prompt:{name}`)，收到推送后更新 `volatile` 静态变量，调用方通过 `buildPrompt()` 做占位符替换获取最新模板。Tool Schema 同理，`AiAssistantConfigData.tools` 列表配置在 Diamond，包含 operationId、title、description、exampleQueries、parameters 和 crowdRuleId，热更新即可添加/修改/禁用工具。
+
+质量闭环由**离线基线评测**和**在线全量打标**两套口径组成，二者数据源和公式都不一样，面试时要分清：离线是 `cxm_answer_score` 表上的 LLM-as-a-Judge 单条打分，用来验证"标准问题答得对不对"；在线是 `message_mark` 表上的自动打标，用来算真实流量的周准确率 `(PV - failCount) / PV`。离线链路的流程是：SchedulerX 触发 `CxmAnswerScoreServiceImpl.evaluateAnswerScore()`，从 `cxm_answer_score` 捞出待评记录(标准 Q&A 对来自云灵知识平台，含类目路径、标准问题、标准答案)，5 线程固定池并发处理——每条先调 AI 助理回答标准问题，再用 `PromptEvaluateAnswerScore`(同样外置在 Diamond)把标准答案和 AI 答案送进百炼 `deepseek-v3` 打分，分数以 `BigDecimal` 回写 `accuracy_rate`；低分记录留在队列里下一轮继续重评，运营按类目聚合低分项，针对性调整该类目的 RAG 召回策略或 Prompt 模板。
 
 
 ### 为什么需要多个Prompt模板
-因为 AI 助理的不同环节需要**完全不同的指令和输出格式**。代码中有 17 个独立的 Prompt 模板，各司其职：PromptToolRouting(技能路由)、PromptQueryRewriteWithContext(上下文重写)、PromptQueryRewriteWithKeywords(关键词扩展)、PromptQueryRewriteWithUserInfo(用户信息重写)、PromptKnowledgeFilterTag(知识库标签识别)、PromptRagAnswerInstruction(RAG 回答指令)、PromptLangDetect(语言识别)、PromptEvaluateAnswerScore(答案评分)等。每个 Prompt 的 System Prompt、输出契约、Few-shot 示例都不同，拆分成独立模板才能各自独立迭代优化，互不干扰。
+因为 AI 助理的不同环节需要**完全不同的指令和输出格式**。代码里是 18 个独立的 Prompt 类，按环节分成五组：
+
+- **路由与改写(5 个)**：`toolsRouting`(技能路由)、`queryRewriteWithContext`(上下文重写)、`queryRewriteWithKeywords`(关键词同义词扩展)、`queryRewriteWithUserInfo`(用户身份重写)、`langDetect`(语言识别)
+- **RAG 回答(4 个)**：`ragAnswerInstruction`(回答指令)、`ragAnswerKnowledge`(知识切片拼装)、`ragAnswerUserInfo`(用户信息注入)、`generalLLMSystem`(无知识兜底的通识回答)
+- **知识路由(3 个)**：`knowledgeFilterTag`(知识库标签识别)、`knowledgeSource`(知识源描述)、`policyRegulationClassifier`(政策制度问题分类)
+- **在线打标(3 个)**：`aiMarkRole`(打标员角色)、`aiMarkCategory`(业务域选项)、`aiMarkRule`(准确性判定规则)
+- **离线评估(3 个)**：`evaluateAnswerScore`(答案打分)、`evaluateSolvedTalk`(是否已解决)、`evaluateRepeatTalk`(重复咨询识别)
+
+拆分的理由是这几组的 System Prompt、输出契约、Few-shot 完全不同，还各自迭代节奏不同——路由 Prompt 一周可能调好几次，打标规则一旦改动会影响历史指标可比性，必须单独灰度。代价是拆散后模板之间容易漂移，比如打标的三段 System Prompt 里对"什么算答对"的定义要和评分 Prompt 保持一致，所以口径类的描述都收敛到 `aiMarkRule` 一个 dataId 里，其他模板只引用不复写。
 
 ### LLM-as-a-Judge评估具体的流程是什么
-完整流程：① SchedulerX 定时任务触发 → ② 从数据库查询需要评估的记录(未评估过的 + 4小时前且低于0.85分的) → ③ 5线程固定池并发处理：先调灰度环境 AI 助理用标准问题提问获取回答 → ④ 用评分 Prompt 将标准答案和 AI 回答送入 LLM 做对比评分 → ⑤ 分数(BigDecimal)写入数据库 → ⑥ 低分记录按类目聚合，反馈给运营人员优化 Prompt 或召回策略。
+六步：① SchedulerX 定时触发 `CxmAnswerScoreProcessor`，任务参数默认 `timeLine = now - 4h`、`accuracyRateLine = 0.85`、`countLimit = 200`；② 从 `cxm_answer_score` 按条件捞出本轮待评的 200 条(条件见下一问)；③ 5 线程固定池并发，每条先用标准问题去问 AI 助理拿到 `aiAnswer`，拿不到就只刷新 `gmt_modified` 跳过，避免死循环重试；④ 用 `PromptEvaluateAnswerScore` 把标准答案和 AI 答案拼成裁判 Prompt，调百炼 `deepseek-v3` 输出分数；⑤ 分数以 `BigDecimal` 写回 `accuracy_rate`，`aiAnswer` 一起落库便于人工回看；⑥ 低分记录按 `xl_category_name_path` 类目聚合，定位是这一类知识缺失还是 Prompt 指令问题，再针对性调召回策略或模板。
+
+标准 Q&A 对本身由 `collectQAFromXl()` 从云灵知识平台采集：按类目分页拉 ONLINE 状态的知识点，答案优先级是"机器人个性化答案 > 通用答案 > 知识点自带答案"，超过 3 万字符的直接跳过。
+
+> **落地自查**：裁判分数目前是 `new BigDecimal(score)` 裸解析，没有 JSON schema 约束、没有 0～1 区间 clamp，模型多输出一句解释就会抛异常被 catch 成"跳过"，属于静默漏评；`collectQAFromXl` 的调用在 Processor 里已被注释，当前只评存量数据；另外仓库里没有任何把 `accuracy_rate` 汇总成达标率并告警的代码，"离线达标率"目前靠人工查表。这三点是真要补的。
+
+### 准确率的分子分母到底是什么
+这题必须分清两套口径，混着说一定被追问穿：
+
+| 口径 | 数据源 | 分子/分母 | 用途 |
+|---|---|---|---|
+| 离线基线 | `cxm_answer_score` | 单条 0～1 分数，`accuracy_rate ≥ 0.85` 记达标 | 验证标准问题答得对不对，变更前后对比 |
+| 在线周报 | `message_mark` | `(PV - failCount) / PV` | 真实流量的周准确率，推给业务方看 |
+
+在线口径的细节是：`PV = COUNT(id)`，按 `module_code = '101'`(知识问答)和业务域 `category_code` 分组统计；`failCount` 的判定是"人工 `result = 'FAIL'`，或人工未给结论时 `ai_mark_result = 'FAIL'`"。这里有个必须主动承认的采样偏差：`result` 为 `INIT`(待打标)或 `INVALID`(无效问题)的记录会进分母但不计失败，等于默认算对，所以这个数字偏乐观；被人工判为无效问题的对话本来就不该进准确率的分母，更严谨的做法是把 `INVALID` 和未打标记录从分母里剔掉。
 
 ### 灰度环境和正式环境的配置是相同的吗
-灰度和正式使用**不同的 Diamond 配置空间**，按环境隔离(daily/pre/online 各有独立配置集)。评估任务专门调用灰度环境的 AI 助理，因为灰度环境部署了最新的 Prompt 和召回策略，评估的目的就是验证变更效果。同步策略是**人工发布流程**：灰度调整 → 评估验证 → 达标后手动同步到正式环境。
+可以确认的是 Diamond 配置**按环境隔离**：daily/pre/online 各有独立配置集，同一个 dataId 在不同环境推不同内容，代码里也能看到按环境分叉的逻辑(比如 daily 环境直接跳过钉钉消息发送)。所以调 Prompt 是"先在预发/灰度配置上改，验证过再推线上"，不需要发版。
+
+> **待确认**：评估任务注入的 Bean 字段名叫 `caixiaomiGrayAssistantClient`，但按类型注入的是 `CaixiaomiAssistantClient`，助理实例的 `assistantId` 来自 Diamond 配置，从代码本身看不出它连的到底是灰度还是线上助理；而且这个 client 已被标 `@Deprecated`(注释写"菜小蜜AI助理已下线")。要确认得去查 Diamond 上 `caixiaomiAssistant` 这一项的 assistantId 实际指向哪个机器人。面试时稳妥的说法是"Prompt 配置按环境隔离、先预发验证再推线上"，不要把"评估专打灰度助理"讲成既成事实。
 
 ### 为什么只评估4小时前且低于0.85的记录
-两个条件各有依据：**4小时前**——避免重复评估刚处理过的记录，留时间给运营人员查看低分、调整策略，调整生效后下次评估才有意义。**低于0.85**——≥0.85 视为达标不再重复评估(节省 LLM 调用成本)，低于 0.85 持续跟踪直到改善。
+先把 SQL 条件说准，它不是"全量评一遍"，而是一条**低分重评队列**：
+
+```sql
+where gmt_modified < #{timeLine}          -- 默认 now - 4h
+  and (ai_answer is null                  -- 从没评过
+       or accuracy_rate is null           -- 评过但打分失败
+       or accuracy_rate < #{accuracyRateLine})  -- 评过但低分
+order by gmt_modified, id
+limit #{countLimit}                       -- 默认 200
+```
+
+三类记录进队列：从没评过的、打分失败的、以及分数低于 0.85 的。达标(≥0.85)的记录直接出队不再复评，省裁判模型的 token。`gmt_modified < now - 4h` 起两个作用：一是给运营留出查看低分、调 Prompt 或补知识的时间窗，改动没生效前重评没意义；二是配合 `order by gmt_modified` 形成天然的轮转队列——每轮只处理最久没动过的 200 条，不会卡在同一批记录上反复烧钱。
+
+要注意这个设计的副作用：因为达标记录不再复评，一旦某次 Prompt 改动让原本达标的问题回归变差，这套机制**发现不了**。真正防回归得靠固定的全量回归集跑对比，而不是这个增量队列。
 
 ### 除了LLM-as-a-Judge还有哪些评估机制
-还有**三层实时评估**：
-- **用户反馈**：钉钉卡片"有用/没用"按钮，点"没用"会强制覆盖 AI 打标结果
-- **AI 自动打标**：`MessageAiMarker` 用 qwen3.6-plus 对历史对话批量评估，按用户分组并行处理，返回 markResult + categoryCode
-- **人工复核**：运营人员通过管理后台对 AI 打标结果复核修正
+线上主力其实是 `MessageAiMarker` 的**多轮对话自动打标**，离线 Judge 只是基线校验。这套机制的做法是：
 
-优先级：用户反馈 > 人工打标 > AI打标。周报卡片自动推送 UV、PV、准确率等指标。
+- **动态窗口取数**：先捞出未打标记录(`category_code` 为空或 `ai_mark_result` 不在终态)，按 `empNo` 分组，取每个用户最早一条 pending 的时间作为锚点，再以锚点为中心往前取 5 条已打标上下文、往后取 10 条待评，一次性组成对话窗口。这样做的原因是单轮问答脱离上下文没法判对错——用户上一句问"年假几天"、下一句只说"那病假呢"，切开看第二句 AI 的回答完全无法评估。
+- **一次 LLM 同时出两个结论**：3 条 System(`aiMarkRole` 角色 + `aiMarkCategory` 业务域选项 + `aiMarkRule` 判定规则) + 1 条 User(XML 格式的对话窗口，待评记录标 `evaluate="true"`，已评记录带上历史结论供参考)，调 `qwen3.6-plus` 返回 `[{id, categoryCode, markResult, reason}]`，业务域分类和准确性打标一次完成。业务域选项还会先过人群规则 `crowdRuleId` 过滤，只给这个用户可能命中的域。
+- **固定规则后置覆盖**：LLM 结论出来后再按三条确定性规则改判——问答卡片(`moduleCode = 1001`)直接记 SUCCESS、`output` 是 JSON 且 `success = true` 记 SUCCESS、有用户反馈时以反馈为准(USEFUL → SUCCESS，USELESS → FAIL)。
+- **人工复核与跟进闭环**：判 FAIL 且 `follow_status = INIT` 的自动置 PROCESSING 进运营待跟进列表，运营在后台改判会写 `result` 字段；改判回 SUCCESS 时 `follow_status` 退回 INIT。
+
+**真实优先级是"人工 `result` > 用户反馈 > 固定规则 > LLM 打标"**，因为 `getFinalResult()` 的逻辑是人工 `result` 到终态就直接返回它，否则才取 `ai_mark_result`；用户反馈和固定规则都是写 `ai_mark_result`(打标类型分别记为 `USER_FEEDBACK`/`AI_MULTI_TURN`)，所以它们高于 LLM 但低于人工。
+
+在此之上还有周报：按业务域算 UV、PV、本周准确率和历史问题解决率，附最近三条重复最多的未解决问题，通过钉钉卡片推给各域管理员，用 `innerBizId` 幂等防重推。
+
+### 当前评测体系有什么缺陷?你会怎么优化
+
+一是**准确率只有一个总数，缺过程指标**。答错了到底是知识库没有、还是召回没排上来、还是路由走错了技能，现在只能靠人工翻 `ai_chat_log` 里的 `knowledge_slices` 和 `tool_code` 一条条看。我会补一层过程可观测：空召回率、通识兜底率、路由降级率、AppId 降级率、超时率、转人工工单率——这些指标每一个都直接对应一条已有代码分支，埋点成本很低，但能把"准确率掉了"定位到具体环节。
+
+二是**裁判本身没被评测**。`deepseek-v3` 打的分没有人工抽检校准，也没算过和人工判定的一致率，裁判自己漂了都不知道。低成本做法是每轮抽 5% 交人工复核，统计 Kappa 一致性；再对同一条记录做一次位置互换的双向打分，抵消裁判对文本长度和顺序的偏好。
+
+如果要再往上一层，还缺按知识类目和业务域的分层准确率趋势——现在周报是按 `category_code` 分组的，但没有跨周趋势对比，Prompt 改动的效果好不好只能凭感觉。
 
 
 
@@ -2844,8 +2936,51 @@ LLM 应用的敏感信息泄露风险点：用户输入 → Prompt → 模型 �
 - Multi-Agent Spawn + 安全沙箱：Agent 间独立 workspace / Brain / 上下文，可通过 `spawn_agent` 委派子任务；`spawn_depth` 到上限直接不注册 spawn 工具，比工具内报错更优雅地防递归爆炸；Hands 对文件操作做路径遍历校验，杜绝越权读写。
 
 
-> 暂存这里
-## 面试怎么考查 AI Coding 能力
+## aiCoding
+
+### 面试怎么考查 AI Coding 能力
 工作需要，跟候选人聊AICoding，总结一些心得：一看做品，二看他写过的最牛逼的 Prompt。
 首先：最主要是看作品，让他讲完整的VibeCoding经历，讲 + 演示作品。没作品的话至少也要讲一个完整的 Case，而且要完完全全带入产品和PMO视角，因为AICoding代替了体力劳动，一定会有大量的脑力思考从代码细节中抽离出来到产品设计、架构、方法和理念上，这部分脑力活动占据整个YOLO过程的至少一大半以上，所以按理说要对自己作品的形态、理念、目标、演示和完整性这些信息描述很清晰才对。
 再者：剩下一半的精力是被死磕模型和提示词消耗掉的，看候选人都触碰到过哪些大模型的能力边界，即某个难题让模型解决，一次不行，二次不行，三次四次，最后终于成功，怎么引导大模型从失败走向成功的，但凡有过这类触碰过模型极限的场景，很容易沉淀出方法和经验，这种"摸高"的编程体验很重要！
+
+### 你觉得 AI Coding 有什么问题
+
+核心判断：AI Coding 改变的是**成本结构**，不只是提速——写代码变便宜了，但阅读、验证、维护一点没变便宜，瓶颈整体后移到了后三者上。
+
+| 问题 | 说明 |
+|------|------|
+| **产出速度超过理解速度** | 日产出从 200 行涨到 2000 行，但 review 的速度没变；代码库增长快于团队对它的认知，是复利型技术债 |
+| **"看起来对"强于"确实对"** | 风格统一、命名规范、能编译、demo 能跑——所有廉价的正确性信号都齐了，唯独缺真实数据与边界条件下的正确性，而人 review 恰恰依赖那些廉价信号做快速判断 |
+| **没有"不知道"这个状态** | 人遇到不确定会去查、去问、或留 TODO；模型默认补一个合理答案继续往下走。在业务规则、内部约定、历史包袱这些无法从代码推断的地方，产出的是自洽但错误的实现，比直接报错更难发现 |
+| **注释与实现同步漂移** | 生成的注释比原作者写得更自信，一旦实现演进（如策略实现类由 3 个变 7 个），这份注释会变成误导性最强的文档 |
+| **倾向加而不是减** | 修 bug 加一层判断、加功能新建一个类，很少说"这两处该合并"或"这层抽象本不该存在"；长期往臃肿、重复、多一层间接的方向漂 |
+| **削弱人的调试能力** | debug 的本质是在脑中维护系统的因果模型，只能靠自己被卡住再找出来练成；每次卡住都直接交给模型，短期高效，但那个模型不会长在自己脑子里 |
+
+落地原则：把它当成**手速极快但没有责任感的实习生**。
+
+- 适合交给它：有明确规格且输出可验证的活——写测试、样板代码改造、语言/框架翻译、对拍验证、陌生代码库探索
+- 不适合它单独做：定架构、动核心数据流，以及任何"对错要等三个月后才知道"的改动
+- 关键动作：验证环节必须留在人手里，别让它自己宣布"已完成"
+
+> 一句话：**AI 把写代码的边际成本打到接近零，但验证与维护的成本一点没降，用得好不好取决于有没有把省下来的时间投回到验证上。**
+
+### aiCoding如何确保线上代码质量
+
+核心判断：**不是想办法让 Agent 永远写对，而是把它当成不可信的代码生产者，让错误改动尽量无法穿过流水线。** Workflow Agent 的价值恰恰不是更自主，而是把 Spec → Coding → Verify → Review → Release 固化成状态机；每一步都有明确输入、输出和准入条件，校验失败就退回上一步，不能由 Agent 自己解释一句"问题不大"继续往下走。
+
+| 阶段 | Agent 做什么 | 必须卡住的质量门禁 |
+|------|-------------|-------------------|
+| **任务定义** | 把需求拆成验收条件、非目标、影响范围和回滚方案 | 需求有歧义、缺少验收标准就 fail closed；先按数据变更、权限、资金、核心链路划分风险等级 |
+| **编码** | 在独立分支/worktree 中生成最小 patch | 限制改动文件和 diff 大小，禁止顺手重构、私自加依赖；高风险目录只允许生成方案，不能自动改 |
+| **验证** | 执行编译、Lint、类型检查、单测、集成测试、契约测试和安全扫描 | 退出码、覆盖率、静态扫描结果必须由 CI 判定，Agent 无权修改阈值或跳过失败项 |
+| **审查** | 另一个 Agent 基于需求、diff 和测试证据做独立 review | 生成代码和生成测试不能是同一份思路自证；核心数据流、并发、兼容性和数据库变更必须人工审批 |
+| **发布** | 自动生成变更说明、风险点和回滚步骤 | 必须走 Feature Flag、灰度/金丝雀和分批放量；数据库采用 expand-contract，支持新旧版本兼容运行 |
+| **线上观察** | 汇总错误率、延迟、资源水位和业务成功率 | 指标相对基线恶化自动暂停或回滚，观察窗口结束后才能全量，不能以"发布成功"代替"运行正确" |
+
+这里最容易踩的坑是**让同一个 Agent 写实现、补测试、跑测试，最后再总结自己已经完成**。它如果一开始就误解了需求，后面很可能会写出一套和错误实现完美匹配的测试；即便换成多个 Agent，只要共享同一份错误上下文，也只是多人一致地犯错。真正独立的证据应该来自需求方预先给出的验收用例、历史回归集、契约约束、生产基线和人工 review，而不是模型自己生成的解释。
+
+落地时我会坚持四条原则：**不允许自证正确、失败默认阻断、一次只做最小改动、任何发布都必须可回滚**。每个节点还要保存完整证据，包括 Prompt/模型版本、代码 diff、执行命令、测试结果、审批记录和发布批次，出了问题才能回答"哪一步放过去的"，而不是只看到一句笼统的 Agent 执行成功。
+
+线上事故和人工驳回也不能只修当前代码，而要沉淀成新的回归用例、静态规则或 Workflow 门禁。这样质量体系才会越跑越严；否则 Agent 只是把代码生产提速了，缺陷同样也会被批量生产。
+
+> 一句话：**Agent 负责生产候选改动，CI/CD 负责提供客观证据，人负责风险决策，灰度和回滚负责兜住未知问题。线上质量来自这四层相互制约，而不是来自某个更强的模型。**
