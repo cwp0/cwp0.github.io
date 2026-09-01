@@ -2081,12 +2081,22 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
 ```
 
 ### HashMap/TreeMap区别
-- `HashMap` 是基于哈希表实现的，`TreeMap` 是基于红黑树实现的。
-- `HashMap` 是无序的，`TreeMap` 是有序的。
-- `HashMap` 的键值对允许有一个 `null` key 和多个 `null` value，`TreeMap` 不允许有 `null` key，但允许有 `null` value。
-- `HashMap` 的查询、插入、删除操作的时间复杂度是 O(1)，而 `TreeMap` 的时间复杂度是 O(logn)。
+- **底层结构**：`HashMap` 基于数组+链表/红黑树（JDK1.8），`TreeMap` 基于红黑树。
+- **有序性**：`HashMap` 不保证任何顺序；`TreeMap` 按键的自然顺序（`Comparable`）或自定义 `Comparator` 排序。
+- **接口**：`HashMap` 实现 `Map` 接口；`TreeMap` 实现 `NavigableMap`（继承 `SortedMap`），额外提供 `firstKey()`、`lastKey()`、`headMap()`、`subMap()` 等范围操作。
+- **null 处理**：`HashMap` 允许一个 `null` key 和多个 `null` value；`TreeMap` 不允许 `null` key（比较时会 NPE），但允许 `null` value。
+- **时间复杂度**：
 
-相比于`HashMap`，`TreeMap` 主要多了对集合中的元素根据键排序的能力以及对集合内元素的搜索的能力。
+  | 操作 | HashMap（平均） | HashMap（最坏） | TreeMap |
+  |------|----------------|----------------|---------|
+  | `get` | O(1) | O(n) / O(log n)* | O(log n) |
+  | `put` | O(1) | O(n) / O(log n)* | O(log n) |
+
+  > *JDK1.8 中，当链表长度≥8 且数组长度≥64 时链表转红黑树，此时最坏退化为 O(log n) 而非 O(n)。
+
+- **线程安全**：两者都不是线程安全的。并发场景下 `HashMap` 推荐替换为 `ConcurrentHashMap`，`TreeMap` 可用 `Collections.synchronizedSortedMap()` 包装或使用 `ConcurrentSkipListMap`。
+
+**选型建议**：只需要快速键值存取、不关心顺序时用 `HashMap`；需要按键排序遍历或进行范围查询时用 `TreeMap`。
 
 ### Set✅
 ### HashSet/LinkedHashSet/TreeSet
@@ -3423,39 +3433,136 @@ public interface Future<V> {
 5. `ExecutorService`类：`ExecutorService` 是一个接口，它是 `Executor` 的子接口，它提供了更丰富的线程池功能，可以提交任务、执行任务、关闭线程池等。
 6. `ForkJoinPool`、`ScheduledExecutorService`等。
 
-### CompletableFuture类有什么用？
+### CompletableFuture类
 `CompletableFuture` 类是 Java 8 中引入的一个增强版 `Future`，它不仅可以代表一个异步计算的结果，还提供了强大的方法链和回调机制，用于构建复杂的异步逻辑和并行操作。与 `Future` 相比，`CompletableFuture` 更加灵活和强大，支持函数式编程、异步任务编排组合等能力。
 
-#### CompletableFuture类异步调用实现
+#### 创建异步任务：supplyAsync/runAsync
+这是启动一个异步任务的两个入口方法，区别只在于「有没有返回值」。
+
+| 方法 | 入参 | 返回类型 | 适用场景 |
+| --- | --- | --- | --- |
+| `supplyAsync(Supplier<U>)` | `Supplier`，有返回值 | `CompletableFuture<U>` | 异步任务需要产出一个结果给下游使用 |
+| `runAsync(Runnable)` | `Runnable`，无返回值 | `CompletableFuture<Void>` | 异步任务只执行动作、不需要返回结果 |
+
+两者都提供了带 `Executor` 参数的重载版本，用于指定自定义线程池。选择哪个只看一点：后续链路需不需要拿到这个任务的结果。
+
+```java
+// 有返回值
+CompletableFuture<String> f1 = CompletableFuture.supplyAsync(() -> "result");
+// 无返回值
+CompletableFuture<Void> f2 = CompletableFuture.runAsync(() -> System.out.println("done"));
+```
+
+#### 不指定线程池时用的是哪个线程池？
+当调用 `supplyAsync` / `runAsync` 等方法不传 `Executor` 参数时，默认使用全局共享的 `ForkJoinPool.commonPool()`，其处理机制需要注意几点：
+
+- **并行度**：`commonPool` 的并行度默认为 `CPU 核数 - 1`（至少为 1），可通过 `-Djava.util.concurrent.ForkJoinPool.common.parallelism` 调整。
+- **单核降级**：如果 `commonPool` 并行度小于等于 1（如单核机器），CompletableFuture 不会使用 `commonPool`，而是为每个异步任务创建一个新线程执行（内部的 `ThreadPerTaskExecutor`）。
+- **守护线程的坑**：`commonPool` 中的线程都是守护线程（daemon），主线程结束后 JVM 会直接退出，正在其中执行的异步任务会被杀掉。所以用默认池跑异步逻辑时，若不通过 `join()` / `get()` 等待，任务可能还没跑完就丢了。
+- **全局共享**：`commonPool` 被整个 JVM 共享，`parallelStream` 等也在抢同一批线程。某个任务若发生阻塞（如 IO 等待）会拖累所有使用者。
+
+**因此生产环境强烈建议传入自定义线程池**，做到业务隔离、合理设置线程数、并给线程命名方便排查。
+
+#### 结果处理与链式调用：thenApply / thenAccept / thenRun
+CompletableFuture 的核心是链式调用：**每个 then 方法都会返回一个新的 `CompletableFuture`**，因此可以像链条一样一节一节接下去。三个最基础的回调方法区别如下：
+
+| 方法 | 入参 | 是否拿到上游结果 | 是否返回新结果 | 场景 |
+| --- | --- | --- | --- | --- |
+| `thenApply(Function)` | `Function` | 是 | 是 | 转换结果，继续往下传 |
+| `thenAccept(Consumer)` | `Consumer` | 是 | 否（返回 `Void`） | 消费结果，链路到此结束 |
+| `thenRun(Runnable)` | `Runnable` | 否 | 否（返回 `Void`） | 不关心结果，只在完成后触发一个动作 |
+
+**能不能接 `thenApply` / `thenAccept`，取决于「上游这一步有没有返回值」，而不是取决于开头是 `supplyAsync` 还是 `runAsync`**。`runAsync` 的结果是 `Void`，所以后面只能接 `thenRun`；而 `supplyAsync` 一旦接了 `thenAccept` 变成 `Void`，后面同样也只能接 `thenRun` 了。判断标准始终是当前这个 `CompletableFuture` 的泛型是不是 `Void`。
+
+此外，`then` 方法只在上一步「正常完成」后才触发；若上一步抛异常，回调会被跳过，异常继续向下传递（交给下面的异常处理方法接住）。
+
+```java
+CompletableFuture.supplyAsync(() -> "abc")        // CompletableFuture<String>
+    .thenApply(s -> s.toUpperCase())              // 转换 -> "ABC"
+    .thenApply(String::length)                    // 再转换 -> 3
+    .thenAccept(len -> System.out.println(len));  // 消费，链路到头
+```
+
+#### 多任务编排：thenCombine/allOf/anyOf
+这是 CompletableFuture 相比 `Future` 最有价值的能力——把多个异步任务组合起来。
+
+| 方法 | 含义 | 典型场景 |
+| --- | --- | --- |
+| `thenCombine(other, BiFunction)` | 两个任务都完成后合并结果 | 同时查用户和订单，都拿到后拼装 |
+| `allOf(cf...)` | 等所有任务完成，返回 `CompletableFuture<Void>` | 并发调多个下游，全部成功才继续 |
+| `anyOf(cf...)` | 任一任务完成即返回 | 请求多个镜像地址，谁快用谁 |
+
+注意 `allOf` 返回的是 `Void`，只表示「都完成了」，各任务的结果需要再各自 `join()` 去取。用 `thenCombine` / `allOf` 并发执行时，总耗时约等于最慢的那个任务，而非各任务耗时之和。
+
+#### 异常处理：exceptionally / handle / whenComplete
+异步链路中的异常不会直接抛到主线程，而是被包装进 `CompletionException`，直到 `join()` / `get()` 时才暴露。三个处理方法的区别：
+
+| 方法 | 触发时机 | 能否拿到正常结果 | 能否改变最终结果 | 场景 |
+| --- | --- | --- | --- | --- |
+| `exceptionally(Function)` | 仅异常时 | 否 | 是（给兜底默认值） | 出错时返回默认值 |
+| `handle(BiFunction)` | 成功或异常都触发 | 是（结果, 异常 两个入参） | 是 | 统一处理，把异常转成正常结果 |
+| `whenComplete(BiConsumer)` | 成功或异常都触发 | 是（结果, 异常 两个入参） | 否，只做副作用 | 打日志、埋点；不吞异常，异常继续往下抛 |
+
+#### 获取结果：join/get 的区别
+异步任务丢到线程池后主线程不会停下等待，`join()` / `get()` 用于**阻塞当前线程直到任务完成并返回结果**。两者的主要区别在异常处理：
+
+| 方法 | 异常类型 | 是否强制 try-catch |
+| --- | --- | --- |
+| `get()` | 受检异常 `InterruptedException` / `ExecutionException` | 是 |
+| `join()` | 运行时异常 `CompletionException` | 否，写在链式调用里更顺手 |
+
+#### thenApply/thenApplyAsync 的区别
+所有 `then` 系列方法都有对应的 `xxxAsync` 版本，区别在于**任务在哪个线程执行**：
+
+- `thenApply`（不带 Async）：不额外向线程池提交，通常复用上一步完成时所在的线程执行，甚至可能在主线程执行。
+- `thenApplyAsync`：一定重新提交到线程池执行（可指定 `Executor`，不指定则用 `commonPool`）。
+
+`thenAccept` / `thenRun` 等同理。想让某一步明确切换到指定线程池执行时，就用 `Async` 版本。
+
+#### 综合示例
+下面以「并发查询用户与订单，合并结果」为例，把自定义线程池、任务编排与异常兜底串起来：
+
 ```java
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-public class AsyncExample {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class OrderExample {
+
+    // 自定义线程池：生产环境优先用它，而非默认的 commonPool
+    static final ExecutorService POOL = Executors.newFixedThreadPool(4);
+
     public static void main(String[] args) {
-        // 创建一个CompletableFuture来执行异步任务
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
-            // 模拟一个长时间运行的任务
-            try {
-                Thread.sleep(2000); // 休眠2秒
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return "任务完成";
-        });
-        // 注册一个回调函数，当任务完成时获取结果
-        future.thenAccept(result -> {
-            System.out.println("异步任务结果: " + result);
-        });
-        // 主线程继续执行其他操作
-        System.out.println("主线程继续执行...");
-        // 阻塞主线程，直到异步任务完成(可选)
+        // 1. 并发发起两个远程调用（都提交到自定义线程池）
+        CompletableFuture<String> userF = CompletableFuture
+                .supplyAsync(() -> rpc("查用户", 300), POOL)
+                .exceptionally(ex -> "默认用户");              // 单个任务失败时兜底
+
+        CompletableFuture<Integer> amountF = CompletableFuture
+                .supplyAsync(() -> rpc("查订单", 500), POOL)
+                .thenApply(String::length);                    // 转换：把订单结果映射成金额
+
+        // 2. 两个任务都完成后合并
+        CompletableFuture<String> resultF = userF.thenCombine(amountF,
+                (user, amount) -> user + " 下单金额=" + amount);
+
+        // 3. 阻塞取最终结果，整体异常再兜一层
+        String result = resultF
+                .handle((r, ex) -> ex == null ? r : "订单查询失败: " + ex.getMessage())
+                .join();
+        System.out.println(result);
+
+        POOL.shutdown();   // 用完关闭自定义线程池，避免 JVM 无法退出
+    }
+
+    // 模拟一次远程调用
+    static String rpc(String name, long ms) {
         try {
-            // 这一步会阻塞主线程，直到异步任务完成
-            String result = future.get();
-            System.out.println("异步任务完成后获取的结果: " + result);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
+        return name + "-ok";
     }
 }
 ```
