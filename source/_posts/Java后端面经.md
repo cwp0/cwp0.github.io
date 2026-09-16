@@ -1996,7 +1996,7 @@ JDK1.8`ConcurrentHashMap`取消了 `Segment` 分段锁，采用 `Node + CAS + sy
 
 ### ConcurrentHashMap的key和value可以为null吗？✅
 - `HashMap`：允许**一个 `null` key 和多个 `null` value**。
-- `ConcurrentHashMap`：**`key` 和 `value` 都不允许为 `null`**，传入 `null` 会抛出 `NullPointerException`（源码 `putVal` 第一行即 `if (key == null || value == null) throw new NullPointerException();`）。
+- `ConcurrentHashMap`： **`key`和`value`都不允许为`null`** ，传入 `null` 会抛出 `NullPointerException`（源码 `putVal` 第一行即 `if (key == null || value == null) throw new NullPointerException();`）。
 
 **为什么 value 不能为 null？——并发下的二义性问题**
 
@@ -3509,7 +3509,7 @@ CompletableFuture<Void> f2 = CompletableFuture.runAsync(() -> System.out.println
 **因此生产环境强烈建议传入自定义线程池**，做到业务隔离、合理设置线程数、并给线程命名方便排查。
 
 #### 结果处理与链式调用：thenApply / thenAccept / thenRun
-CompletableFuture 的核心是链式调用：**每个 then 方法都会返回一个新的 `CompletableFuture`**，因此可以像链条一样一节一节接下去。三个最基础的回调方法区别如下：
+CompletableFuture 的核心是链式调用： **每个 then 方法都会返回一个新的 `CompletableFuture`** ，因此可以像链条一样一节一节接下去。三个最基础的回调方法区别如下：
 
 | 方法 | 入参 | 是否拿到上游结果 | 是否返回新结果 | 场景 |
 | --- | --- | --- | --- | --- |
@@ -3517,7 +3517,7 @@ CompletableFuture 的核心是链式调用：**每个 then 方法都会返回一
 | `thenAccept(Consumer)` | `Consumer` | 是 | 否（返回 `Void`） | 消费结果，链路到此结束 |
 | `thenRun(Runnable)` | `Runnable` | 否 | 否（返回 `Void`） | 不关心结果，只在完成后触发一个动作 |
 
-**能不能接 `thenApply` / `thenAccept`，取决于「上游这一步有没有返回值」，而不是取决于开头是 `supplyAsync` 还是 `runAsync`**。`runAsync` 的结果是 `Void`，所以后面只能接 `thenRun`；而 `supplyAsync` 一旦接了 `thenAccept` 变成 `Void`，后面同样也只能接 `thenRun` 了。判断标准始终是当前这个 `CompletableFuture` 的泛型是不是 `Void`。
+能不能接 `thenApply` / `thenAccept`，取决于 **「上游这一步有没有返回值」** ，而不是取决于开头是 `supplyAsync` 还是 `runAsync`。`runAsync` 的结果是 `Void`，所以后面只能接 `thenRun`；而 `supplyAsync` 一旦接了 `thenAccept` 变成 `Void`，后面同样也只能接 `thenRun` 了。判断标准始终是当前这个 `CompletableFuture` 的泛型是不是 `Void`。
 
 此外，`then` 方法只在上一步「正常完成」后才触发；若上一步抛异常，回调会被跳过，异常继续向下传递（交给下面的异常处理方法接住）。
 
@@ -4085,12 +4085,12 @@ CMS(Concurrent Mark-Sweep)收集器是一种以最小化停顿时间为目标的
 Young GC(Minor GC)
 - 作用范围：只回收 **年轻代(Young Generation)** 中的内存。
 - 触发条件：当年轻代中的 **Eden 区** 填满时触发，回收 Eden 区中的无用对象，并将存活对象移动到 Survivor 区。
-- 回收算法：一般使用 **复制算法(Copying Algorithm)**，将存活对象从 Eden 区复制到 Survivor 区，或者将存活对象晋升到老年代(Old Generation)中。
+- 回收算法：一般使用 **复制算法(Copying Algorithm)** ，将存活对象从 Eden 区复制到 Survivor 区，或者将存活对象晋升到老年代(Old Generation)中。
 - 执行速度：因为年轻代对象大多数是短生命周期的，所以回收速度较快，回收频繁。
 - 影响：对应用的暂停时间较短(STW，Stop the World)，回收效率高。
 
 Full GC(Major GC)
-- 作用范围：回收整个堆内存，包括 **年轻代** 和 **老年代**，以及 **元空间(Metaspace)**。
+- 作用范围：回收整个堆内存，包括 **年轻代** 和 **老年代**，以及 **元空间(Metaspace)** 。
 - 触发条件：
    - 老年代空间不足。
    - 显式调用 `System.gc()`。
@@ -4333,7 +4333,7 @@ Java 分为字符流和字节流是为了更好地处理不同类型的数据、
 `select` 是最早的 I/O 多路复用机制，使用起来较为简单，但存在性能问题。
 
 **数据结构**
-- `select` 的核心数据结构是**三个位图(bitmask)**，每个位图用来存储不同的文件描述符集合：
+- `select` 的核心数据结构是 **三个位图(bitmask)** ，每个位图用来存储不同的文件描述符集合：
    - `fd_set readfds`: 监控是否可以读取数据。
    - `fd_set writefds`: 监控是否可以写入数据。
    - `fd_set exceptfds`: 监控异常情况(如带外数据)。
