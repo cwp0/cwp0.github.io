@@ -3410,6 +3410,114 @@ jconsole // 唤醒图形化界面，然后选择线程->检测死锁
 
 此外，`ThreadLocalMap`是线程私有结构，不需要并发控制，并针对弱引用 key、过期条目清理和小容量场景做了专门设计，因此没有直接复用通用的 `HashMap`。
 
+### TransmittableThreadLocal
+
+`TransmittableThreadLocal`简称 TTL，是阿里开源的线程上下文传递组件。它继承自 `InheritableThreadLocal`，主要解决线程池复用场景下，提交任务的线程无法把 `ThreadLocal`上下文正确传递给工作线程的问题，常用于传递用户、租户、语言、TraceId、灰度标识和数据权限等请求级上下文。
+
+普通 `ThreadLocal`中的值只属于当前线程，异步任务切换到其他线程后无法读取。`InheritableThreadLocal`虽然能在线程创建时把父线程的值复制给子线程，但线程池中的工作线程通常早已创建并被反复复用，不能在每次提交任务时重新继承上下文，还可能残留上一个任务的数据。因此 TTL 的关键不是简单换一个变量类型，而是在**任务提交时捕获上下文，执行前恢复上下文，执行后还原工作线程原来的上下文**。
+
+完整过程如下：
+
+```text
+请求线程set
+  -> 提交任务时捕获上下文
+  -> 工作线程执行前恢复上下文
+  -> 异步代码get
+  -> 任务结束后还原工作线程原上下文
+  -> 请求结束finally remove
+```
+
+#### 为什么需要TTL
+
+在理解 TTL 之前，必须先了解 JDK 原生提供的两种 `ThreadLocal` 的局限性：
+
+| 类型 | 作用域 | 在线程池中的表现 | 痛点 |
+| :--- | :--- | :--- | :--- |
+| **`ThreadLocal`** | 当前线程 | 子线程/线程池无法获取父线程的值 | 异步任务中丢失上下文（如 TraceId、用户登录态）。 |
+| **`InheritableThreadLocal` (ITL)** | 当前线程及**创建时**的子线程 | **仅在 new Thread() 时拷贝一次**。如果子线程被线程池复用，后续任务拿不到新值，甚至拿到脏数据。 | 无法解决**线程池复用**场景下的上下文传递问题。 |
+
+**核心矛盾**：在现代 Java 开发中（特别是到 2026 年的今天），我们极少手动 `new Thread()`，而是大量使用**线程池**（ThreadPoolExecutor）、**异步编排**（CompletableFuture）、**流处理**（Parallel Stream）。在这些场景下，ITL 完全失效。
+
+
+#### TTL的核心原理
+
+TTL 的核心思想是：**在任务提交时捕获（Capture）上下文，在任务执行前重放（Replay）上下文，在任务执行后恢复（Restore）原上下文。**
+
+具体流程如下：
+1. **注册**：当创建一个 `TransmittableThreadLocal` 变量并 set 值时，它会将自己注册到当前线程的一个全局 Holder 中。
+2. **Capture（捕获）**：当任务（Runnable/Callable）被包装并提交给线程池时，TTL 会抓取当前线程所有注册的 TTL 变量的值，生成一个快照（Snapshot）。
+3. **Replay（重放）**：当线程池中的工作线程真正开始执行该任务前，TTL 会将快照中的值设置到当前工作线程的 TTL 变量中，同时备份工作线程原有的值。
+4. **Restore（恢复）**：任务执行完毕后（无论成功还是异常），TTL 会将工作线程的 TTL 变量恢复为执行前的备份值，防止线程复用时发生“数据串扰”（脏读）。
+
+#### TTL使用方式
+
+1. 引入依赖（Maven）
+
+    ```xml
+    <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>transmittable-thread-local</artifactId>
+        <!-- 截至 2026 年，建议使用 2.14.x 或更新的稳定版本 -->
+        <version>2.14.5</version>
+    </dependency>
+    ```
+
+2. 替换 ThreadLocal
+
+    将代码中的 `ThreadLocal` 或 `InheritableThreadLocal` 替换为 `TransmittableThreadLocal`。
+
+    ```java
+    // 1. 声明 TTL
+    TransmittableThreadLocal<String> context = new TransmittableThreadLocal<>();
+    context.set("User-Trace-Id-2026");
+
+    // 2. 包装任务 (方式一：手动包装)
+    Runnable task = () -> {
+        System.out.println("子线程获取的值: " + context.get());
+    };
+    Runnable ttlTask = TtlRunnable.get(task);
+
+    // 3. 提交给普通线程池
+    executorService.submit(ttlTask);
+    ```
+
+3. 进阶与工程化最佳实践
+
+    在实际企业级开发中，手动用 `TtlRunnable.get()` 包装每一个任务是不现实的。TTL 提供了更优雅的集成方案：
+
+    使用 `TtlExecutors` 包装线程池，直接对线程池进行装饰，这样提交的任务会自动被包装。
+
+    ```java
+    ExecutorService executor = Executors.newFixedThreadPool(5);
+    // 包装线程池
+    ExecutorService ttlExecutor = TtlExecutors.getTtlExecutorService(executor);
+
+    ttlExecutor.submit(() -> {
+        // 这里可以直接获取到父线程的 TTL 值
+        System.out.println(context.get());
+    });
+    ```
+
+4. 使用Java Agent无侵入模式
+
+    这是 TTL 最强大的特性。通过 Java Agent 字节码增强技术，可以**无需修改任何业务代码**，自动将 JDK 的 `ThreadPoolExecutor`、`ForkJoinPool`、`Timer` 等进行拦截和增强。
+
+    启动时添加 JVM 参数：
+
+    ```bash
+    java -javaagent:path/to/transmittable-thread-local-2.x.x.jar -jar your-app.jar
+    ```
+
+    *注：在 2026 年的云原生环境中，这通常通过在 Dockerfile 或 K8s 部署 YAML 的 `JAVA_OPTS` 中配置实现。*
+
+5. 与 Spring / 框架的集成
+
+    **Spring Async (`@Async`)** ：结合 `TtlExecutors` 自定义 `AsyncConfigurer`。
+
+    **Spring WebFlux / Reactor** ：由于响应式编程中线程切换极其频繁，TTL 提供了专门的 Hook 机制（`Hooks.onEachOperator`）来支持 Context 传播。
+
+    **分布式链路追踪** ：SkyWalking、OpenTelemetry 等主流 APM 工具底层均深度依赖或兼容 TTL 来实现 TraceId 的跨线程传递。
+
 ### Semaphore
 `Semaphore` 是一个计数信号量，用于控制同时访问特定资源的线程数量，通过协调各个线程，以保证合理的使用资源。其中的`state`表示许可数(>=1)，当一个线程调用 `acquire()` 方法时，会首先尝试获取一个许可，如果成功，该线程就可以继续执行，否则就会被阻塞。当一个线程调用 `release()` 方法时，会释放一个许可，这样就会唤醒一个被阻塞的线程。
 
