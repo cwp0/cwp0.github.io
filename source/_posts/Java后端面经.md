@@ -3340,9 +3340,15 @@ StampedLock 有“写锁 → 读锁”这种降级思路，但要通过特定方
 这些场景的表现不同，但本质相同：线程之间形成了循环等待关系，并且谁都无法主动释放已经持有的资源。
 
 #### 如何检测死锁
+
 - 死锁通常会让CPU使用率降低（甚至接近0%），而不是飙升。相关线程通常长期处于 `BLOCKED`(`synchronized`)或`WAITING`(`ReentrantLock` 时通常通过 `LockSupport.park()`)状态，可以先获取线程转储，再分析线程之间的锁持有和等待关系。
 - jConsole： 可以检测死锁，查看线程的状态。
 - jstack： 如有死锁，会输出`Found one Java-level deadlock: `线程的状态信息
+
+数据库死锁： 
+1. 执行 `SHOW ENGINE INNODB STATUS` 命令，输出会清晰地显示死锁信息，哪两个事务产生了死锁，每个事务执行了哪个SQL，争抢的是哪种类型的锁，最后数据库回滚了哪条SQL，一目了然。
+2. 拿着死锁日志里的两个SQL去对应的业务代码里找问题，通常都是事务执行顺序反了，比如事务A先锁表1，再锁表2；事务B先锁表2，再锁表1，这样就会形成死锁。
+3. 检查是否加了不必要的锁或者锁的粒度太大了，比如应该加行锁，但是字段没加索引导致锁住了整张表的所有行记录，效果等同于表锁。或者普通查询里加了不必要的悲观锁，比如 `SELECT * FROM table WHERE id = 1 FOR UPDATE`，导致锁范围变大，更容易产生冲突。
 
 ```java
 jps -l // 查找当前正在运行的 Java 进程及其对应的 PID
@@ -3388,7 +3394,11 @@ jconsole // 唤醒图形化界面，然后选择线程->检测死锁
 > 不安全状态：不存在一个安全序列的状态称为不安全状态。不安全状态不一定导致死锁，但有可能发展为死锁。
 
 ### ThreadLocal✅
-`ThreadLocal` 是一个线程内部的数据存储类，可以在每个线程中创建一个变量副本，各个线程之间的数据互不干扰。可以使用 `get()` 和 `set()` 方法来获取默认值或将其值更改为当前线程所存的副本的值，从而避免了线程安全问题。
+`ThreadLocal` 是一个线程内部的数据存储类，核心就干了一件事，就是线程隔离。其可以在每个线程中创建一个变量副本，各个线程之间的数据互不干扰。可以使用 `get()` 和 `set()` 方法来获取默认值或将其值更改为当前线程所存的副本的值，从而避免了线程安全问题。
+
+使用场景：
+- 登录信息的传递，拦截器里将用户的登录信息存储到ThreadLocal中，在后续的业务中通过ThreadLocal获取登录信息。
+- traceId，日志追踪，在日志中添加 traceId，方便排查问题。
 
 #### ThreadLocal原理
 `ThreadLocal` 通过 `ThreadLocalMap` 来实现线程内部的数据存储。`ThreadLocalMap` 是 `ThreadLocal` 的一个静态内部类，每个线程中都有一个 `ThreadLocalMap`，`ThreadLocal` 通过 `get()`、`set()` 方法访问 `ThreadLocalMap`。在一个线程中创造多个`ThreadLocal`对象，这许多个`ThreadLocal`对象会被放到一个`ThreadLocalMap`中。
@@ -3399,7 +3409,7 @@ jconsole // 唤醒图形化界面，然后选择线程->检测死锁
 #### ThreadLocal内存泄漏
 `ThreadLocalMap` 中使用的 `key` 为 `ThreadLocal` 的弱引用，而 `value` 是强引用。所以，如果 `ThreadLocal` 没有被外部强引用的情况下，在垃圾回收的时候，`key` 会被清理掉，而 `value` 不会被清理掉。这样一来就会出现 `key` 为 `null` 的 键值对。如果不做任何措施的话，`value` 无法被 GC 回收，这个时候就可能会产生内存泄露。
 
-其实`ThreadLocalMap`实现中已经考虑了内存泄漏问题，在调用 `set()`、`get()`、`remove()` 会在相关位置顺带清理掉 `key` 为 `null` 的记录。但不是每次都扫描并清理整个 Map，因此不能完全依赖自动清理，在使用完 `ThreadLocal`方法后最好手动调用`remove()`方法。
+其实`ThreadLocalMap`实现中(JDK 1.8+)已经考虑了内存泄漏问题，在调用 `set()`、`get()`、`remove()` 会在相关位置顺带清理掉 `key` 为 `null` 的记录。但不是每次都扫描并清理整个 Map，因此不能完全依赖自动清理，在使用完 `ThreadLocal`方法后最好手动调用`remove()`方法。另外就是将 `ThreadLocal` 设为 `static final`，避免线程池中的线程重复创建，从源头减少以及避免。
 
 > `HashMap` 的 `key` 和 `value` 都是强引用，因此不会存在弱引用导致的内存泄漏问题。
 
