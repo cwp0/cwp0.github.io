@@ -879,11 +879,32 @@ MCP(Model Context Protocol)是 Anthropic 提出的一套标准协议，用于 LL
 
 我们用的是 `@alibaba/mcp-lite`，它把一个 MCP Server 实现成一个 HSF 服务 `LiteMcpServer`，对外只有两个方法：`listTools` 负责发现，`callTool` 负责调用。整条链路分两个面。
 
-发现面：应用启动时，框架扫描所有 Spring `@Component`，用 `AopUtils.getTargetClass` 穿透代理拿到真实类，遍历方法找出带 `@Tool` 的。对每个工具方法，用 `JsonSchemaGenerator` 反射方法签名，结合 `@ToolParam` 的 required 和 description 生成 inputSchema，连同 name、description 打包成一份 Tool 元数据，再配一个反射调用的回调，组成 `SyncToolSpecification`，注册进 HSF Provider（hessian2 序列化）。MCP 网关调 `listTools` 拿到这批 Schema，注入大模型上下文，模型据此做 Function Calling 决策。
+发现面：应用启动的时候，框架会把 Spring 容器里所有 `@Component` 扫一遍，找出带 `@Tool(name='xxx_tool', description='这是xxx工具''")` 注解的方法。对每个方法，反射读它的签名，结合 `@ToolParam(description = '参数描述', required = true)` 上的描述和必填标记生成一份 JSON Schema，再跟工具名、工具描述打包成 Tool 元数据，同时配好一个负责反射执行的回调，注册到 HSF Provider 上。之后 MCP 网关调一次 `listTools` 就能拿到所有工具的 Schema，注入大模型上下文——模型就是靠这份 Schema 决定调哪个工具、传什么参数的。
 
-调用面：模型决定调用后，网关把它翻译成一次 HSF 调用 `callTool(CallToolRequest)`，请求里带工具名、已经反序列化好的 arguments（一个 Map）、调用者身份和 headers。服务端先做客户端应用白名单校验，再按名字路由到对应工具，设置 ToolContext，跑拦截器 preHandle；然后执行回调：把 arguments 按参数名逐个绑定、用 Jackson 做类型转换，反射 invoke 目标方法，把返回值序列化成 JSON 包成 `CallToolResult`，最后逆序跑 postHandle 并清理 ThreadLocal。业务异常不会抛成 HSF 异常，而是被 catch 成 isError=true 的结果，这样模型能读到错误信息自行纠正。
+调用面：模型决定要调某个工具后，网关把这次 Function Calling 翻译成一次 `callTool` 的 HSF 调用，请求里带着工具名、参数 Map 和调用者身份。服务端的处理顺序是这样：先校验调用方应用在不在白名单里；然后按工具名路由到启动期注册好的那个回调；把会话和身份放进框架的 ToolContext，经过 `preHandle`/`postHandle` 拦截器扩展点；接着才真正执行——回调把参数 Map 按参数名绑定到方法入参，用 Jackson 做类型转换，再反射调用我们的 `@Tool` 方法。
+
+这里有个关键点：方法上的 `@McpContextAware` 是一层 AOP 环绕切面，它在方法体执行前把调用者身份解析出来，补全工号和租户，塞进 `McpContext` 这个 ThreadLocal——我们业务代码里 `McpContext.getUser()` 拿到的就是它，方法执行完切面会自动清理。方法返回后，结果序列化成 JSON 包进 `CallToolResult` 原路返回；中间如果抛异常，不会变成 HSF 异常，而是被包成 isError=true 的结果，模型能读到错误文本自己纠正。
 
 一句话收尾：`@Tool` 只在启动期声明能力、生成 Schema，不负责解析模型传来的 JSON；解析、路由、反射执行、结果封装都发生在运行期的 `callTool` 里。
+
+### 如果Tool执行出错了怎么办
+
+先说结论：这套框架里，工具执行错误不会以 HSF 异常的形式抛出去，而是统一被包成 isError=true 的 `CallToolResult` 返回——错误是「给模型看的数据」，不是「传输层故障」。
+
+分层看，错误可能在三个地方被兜住。一是参数绑定阶段：缺必填参数，框架直接抛 Missing required argument；类型转换失败，`JsonParser` 抛转换异常。二是业务方法内部：我们代码里抛的业务异常，反射调用时会被包成 `InvocationTargetException`。三是拦截器阶段：`preHandle` 抛的异常也一样被外层兜住。这三类最终都走同一个出口：回调里的 catch 把异常转成 textError，也就是 isError=true 加一段错误描述文本。
+
+这个设计的意义在于：MCP 把工具错误当成模型可以消费的上下文。模型读到错误文本后，能自己决定是换个参数重试，还是如实告诉用户失败了——错误处理本身就闭环在对话里。代价也要说清楚：错误不触发 HSF 层的异常告警，所以监控要在业务侧自己补。另外我们的 Tool 方法内部也会 try-catch 后返回 `NormalResult.error`，等于在框架兜底之上再加一层业务兜底。
+
+### 大模型Function Calling参数传错了怎么办
+
+要分两种情况：格式上就错的，框架能直接拦住；格式对但语义错的，得靠业务侧兜底。
+
+格式错误由框架层自动处理。缺必填参数，`buildMethodArguments` 直接抛 Missing required argument，错误文本里带着参数名；类型不对，比如要数字传了字母，Jackson 转型失败抛异常。这两种都会变成 isError 结果回到模型。还有一种是多传了参数，会被静默忽略，而且这里有两层机制：顶层多传的 key 根本不会被读到，因为绑定是按方法声明的参数遍历、按名字去 Map 里取值，不是遍历 Map 的所有 key；复杂类型参数内部多传的字段，则靠 ObjectMapper 关掉了 FAIL_ON_UNKNOWN_PROPERTIES，反序列化时跳过未知字段。两层都不产生异常，模型完全无感知——这是有意为之，容忍模型多给参数。但有个代价：参数名拼错也会被静默吞掉，如果它是必填参数，最终会以「缺参」的形式间接暴露。这些错误信息都会原样回到模型，模型下一轮能看到「哪个参数、什么问题」，通常能自己修正后重试。所以这条链路天然内置了「报错—自纠—重试」的循环，前提是错误文案要有指导性。
+
+语义错误框架管不了。参数类型对但值不对，比如账期格式传错、工号不存在，只能靠工具方法里自己做校验：格式断言、枚举白名单、查不到数据就抛带明确提示的异常。
+
+更根本的思路是把错误挡在前面。第一，Schema 就是模型唯一的说明书，`@ToolParam` 的 description 要把格式、枚举值、示例写清楚，required 标准确，模型填参全靠它。第二，写操作设计成幂等、支持 dryRun，模型重试也不会造成副作用。第三，错误文案告诉模型「怎么改」，而不只是「错了」。一句话：格式错靠框架拦、语义错靠业务校验拦，拦下来都以 isError 文本回给模型自纠；而最好的处理，是让 Schema 写得足够清楚，让模型第一次就传对。
+
 
 ### MCP Tool 从注册到调用的整体执行流程
 
@@ -937,9 +958,9 @@ MCP(Model Context Protocol)是 Anthropic 提出的一套标准协议，用于 LL
 1. `isAuthorizedCall`：校验 `RequestCtxUtil.getAppNameOfClient` 是否在授权应用列表里（框架内置放行 MCP 网关与运维应用），不通过直接返回 textError。这是「哪个应用能调我」的客户端级鉴权。
 2. 按 `request.getName` 在工具列表里 filter 找到目标 spec，找不到返回 tool not found。
 3. `ToolContextHolder.setToolContext`：把 sessionKey、user、headers、query 放进框架级 ThreadLocal。
-4. `preCallTool`：正序遍历拦截器 preHandle（我们的拦截器在这里断言 user 非空、落审计日志）；每个拦截器异常单独 catch，循环结束再抛第一个，所以一个拦截器失败不会中断其余拦截器。
+4. `preCallTool`：正序遍历拦截器 preHandle，这是框架的前后置扩展点（我们没有注册自定义拦截器，调用者身份由 `@McpContextAware` 切面处理）；每个拦截器异常单独 catch，循环结束再抛第一个，所以一个拦截器失败不会中断其余拦截器。
 5. `spec.getCall().apply(arguments, request)` 进入回调：
-    - `buildMethodArguments`：对每个方法参数用 `parameter.getName` 从 arguments Map 取值；缺失且 required 抛 `IllegalArgumentException`，缺失且基本类型给默认值，否则用 `JsonParser.toTypedObject` 转型（String、基本类型、枚举直接 parse，复杂对象和泛型先转 JSON 再按 Type 反序列化，且关掉 FAIL_ON_UNKNOWN_PROPERTIES，模型多传字段不报错）。
+    - `buildMethodArguments`：对每个方法参数用 `parameter.getName` 从 arguments Map 取值——注意这是「参数驱动」绑定，模型多传的顶层 key 不会被读到，直接丢弃；缺失且 required 抛 `IllegalArgumentException`，缺失且基本类型给默认值，否则用 `JsonParser.toTypedObject` 转型（String、基本类型、枚举直接 parse，复杂对象和泛型先转 JSON 再按 Type 反序列化，且关掉 FAIL_ON_UNKNOWN_PROPERTIES，对象内部多传的字段也跳过不报错）。
     - `method.invoke` 反射调用目标 bean 方法。这里 `@McpContextAware` 是另一层独立的 Spring AOP 环绕切面：在方法体执行前从 HSF RpcContext 解析调用者、补全工号与租户后塞进 `McpContext` 的 ThreadLocal，方法结束 finally remove。
     - 返回值用 ObjectMapper 序列化成 JSON，包成 TextContent，返回 `CallToolResult(content, structuredContent, isError=false)`。
     - `InvocationTargetException` 和其他异常都被 catch 成 `CallToolResult.textError`，即 isError=true。
@@ -2307,8 +2328,43 @@ MCP 的开放生态带来了新型攻击面——**第三方 MCP Server 不可�
 
 > 趋势:2026 年主流 Agent 平台(OpenAI、Anthropic、Google)都在向"MCP 管工具 + A2A 管协作"的双协议架构靠拢。
 
+### MCP 2026-07-28规范核心变化(无状态化)
 
+**一句话**:MCP 史上最大更新，从"双向有状态长连接"转向"无状态、自描述的 HTTP 工作负载"，去掉会话和握手，让协议可路由、可缓存、可水平扩展。
 
+**口述版**:新规范的核心变化可以概括为一个词:无状态化。旧版 MCP 要先走 `initialize` 握手，并全程维护 `Mcp-Session-Id`，请求被绑定在固定的会话实例上，很难做负载均衡和横向扩展；新规范直接取消了握手和会话头，每个请求自带协议版本、客户端身份与能力(放在 `_meta` 里)，经过普通负载均衡就能落到任意实例，不再需要共享存储。原来必须保持长连接的服务端反向请求(elicitation、sampling、roots)改为 MRTR 多轮往返:服务端返回 `input_required`，客户端带上 `inputResponses` 重新发起原请求。传输层请求必须携带 `Mcp-Method`、`Mcp-Name` 头，网关不用解析 JSON 正文就能做路由、鉴权和计量；列表类结果新增 `ttlMs` 缓存语义。动机就是旧的有状态设计在 serverless、LB 这类基础设施上不好部署，新设计让它像普通 HTTP 一样可缓存、可路由、易运维。
+
+**新旧规范对比**:
+
+| 维度 | 旧规范(2025-06-18及以前) | 新规范(2026-07-28) |
+|------|--------------------------|--------------------|
+| **连接模型** | 双向有状态，需 `initialize`/`initialized` 握手 | 无状态核心，无握手 |
+| **会话** | `Mcp-Session-Id` 头，需会话粘滞 | 无会话头，每个请求自描述，可落到任意实例 |
+| **能力发现** | 建连时必须经 `initialize` 交换能力 | 可选调用 `server/discover` 获取服务端能力 |
+| **服务端→客户端请求** | 需维持长连接(elicitation/sampling/roots) | MRTR 多轮往返:返回 `input_required`，客户端带 `inputResponses` 重发 |
+| **路由与可观测** | 须解析正文才能识别方法与资源 | 强制带 `Mcp-Method`、`Mcp-Name` 头，网关/WAF 按头路由、鉴权、计量 |
+| **列表缓存** | 无缓存语义 | 响应带 `ttlMs` 与 `cacheScope`，列表确定性排序，利于 prompt 缓存 |
+| **授权** | OAuth 2.1 + PKCE + DCR | 新增 RFC 9207 `iss` 校验；弃用 DCR 转向 CIMD；凭据绑定签发者，不跨授权服务器复用 |
+| **异步任务** | 无协议层任务原语 | 移入 `io.modelcontextprotocol/tasks` 扩展:`tasks/get`、`tasks/update`、`subscriptions/listen` 按类型订阅 |
+| **Roots/Sampling/Logging** | 内置能力 | 弃用，但至少保留 12 个月过渡 |
+| **传输** | stdio、Streamable HTTP、HTTP+SSE 并存 | HTTP+SSE 进入弃用(约一年过渡期)，Streamable HTTP 为主 |
+
+> **MRTR(Multi Round-Trip Requests)详解**:为无状态化而生的机制，解决"服务端执行到一半，需要反过来向客户端要输入"的场景。
+它替代的是什么:旧规范里服务端可以主动向客户端发 JSON-RPC 请求，如 `elicitation/create`(向用户要补充输入)、`sampling/createMessage`(让客户端的 LLM 生成内容)、`roots/list`(查客户端根目录)，这要求连接一直活着且双向可写，与"任意实例可处理、处理完即结束"直接冲突。
+流程:
+> 1. 客户端发起工具调用(`tools/call`)；
+> 2. 服务端执行到需要输入时，不反向调客户端，而是直接返回 `input_required` 结果，描述"我需要什么输入"；
+> 3. 客户端自行完成输入(弹窗问用户、调本地 LLM 等)，然后**重新发起原请求**，用 `inputResponses` 字段把答案带回去；
+> 4. 服务端接着执行；若还缺输入可再返回 `input_required`，如此多轮往返，即名字里 Multi Round-Trip 的由来。
+   类比:像 HTTP 重定向或 OAuth 授权码流程——服务端不主动找你，而是告诉你"缺个东西，补齐了再来一次"。每一轮都是独立的、自描述的普通请求，负载均衡到任意实例都可以。
+
+> 代价:交互场景往返次数变多；服务端要把工具执行设计成**可续接**的——跨轮次的中间状态不能放内存，必须变成工具返回的显式句柄，由客户端下一轮带回。
+
+> 项目关联:菜小蜜的 MCP Lite over HSF 是同步 `NormalResult` 一次返回，本质是单轮往返；如果以后某个 Tool 需要"执行到一半让用户确认"，MRTR 就是协议层给出的标准做法，而不是自建回调或轮询。
+
+**代价与迁移影响**:这次升级不是免费的。依赖会话标识的实现(粘滞会话、内存态)要重构；跨调用状态必须改为工具返回的显式句柄；MRTR 给交互场景带来额外往返。TS、Python、Go、C# 四个 Tier 1 SDK 已支持新版，C# SDK 同步发布 v2.0(stateless by default)，Rust SDK 为 beta 支持。
+
+> 后续路线图(2026-08-22 发布):Progressive Discovery(服务端先给小入口，按对话需要渐进展开能力，解决工具列表过长撑爆上下文)、Agent Identity(DPoP、Workload Identity Federation、令牌交换等，建立智能体可信授权)、HTTP 传输统一延伸到本地场景、服务端主动推送事件减少轮询。
 
 ### Skills✅
 
