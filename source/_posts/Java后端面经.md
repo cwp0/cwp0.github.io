@@ -1822,8 +1822,8 @@ public enum Singleton {
 ### ArrayList和LinkedList插入/删除效率
 `ArrayList`
 - 头部插入/删除：O(n)，需要移动元素。
-- 指定位置插入/删除：O(n)，需要移动元素。
 - 尾部插入/删除：O(1)，直接在尾部添加或删除元素。尾部插入时，当容量已到极限并需扩容时，需执行一次 O(n) 的操作将原数组复制到新的更大的数组中，然后再执行 O(1) 的操作添加元素。
+- 指定位置插入/删除：O(n)，需要移动元素。
 
 `LinkedList`
 - 头部插入/删除：O(1)，只需改变指针指向。
@@ -1995,7 +1995,7 @@ JDK1.8`ConcurrentHashMap`取消了 `Segment` 分段锁，采用 `Node + CAS + sy
 - `ConcurrentHashMap` 提供了一些原子性的复合操作，如 `putIfAbsent`、`compute`、`computeIfAbsent` 、`computeIfPresent`、`merge`等。这些方法都可以接受一个函数作为参数，根据给定的 `key` 和 `value` 来计算一个新的 `value`，并且将其更新到 `map` 中。
 
 ### ConcurrentHashMap的key和value可以为null吗？✅
-- `HashMap`：允许**一个 `null` key 和多个 `null` value**。
+- `HashMap`：允许**一个 `null` key 和多个 `null` value**。`HashMap` 对 `null key` 有特殊处理，当 `key` 为 `null` 时 `hashcode` 会被设置为 0 ，不会调用 `hashCode()`。
 - `ConcurrentHashMap`： **`key`和`value`都不允许为`null`** ，传入 `null` 会抛出 `NullPointerException`（源码 `putVal` 第一行即 `if (key == null || value == null) throw new NullPointerException();`）。
 
 **为什么 value 不能为 null？——并发下的二义性问题**
@@ -2042,19 +2042,28 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
 }
 ```
 
+### TreeMap原理
+`TreeMap`是基于红黑树实现的有序 Map。每个节点都保存 `key`、`value`、左子节点、右子节点、父节点和颜色；红黑树通过颜色约束、旋转和变色维持近似平衡，使树的高度始终为 O(log n)，因此查询、插入和删除的时间复杂度都是 O(log n)。
+
+`TreeMap`不是通过 `hashCode()`和 `equals()`定位 key，而是通过比较结果决定节点位置：创建时传入了 `Comparator`就使用定制排序，否则要求 key 实现 `Comparable`并使用自然排序。比较结果小于 0 时向左子树查找，大于 0 时向右子树查找，等于 0 时认为是同一个 key，`put()`会覆盖原来的 value。因此排序规则最好与 `equals()`保持一致，否则可能出现两个 `equals()`不相等的对象被 `TreeMap`当成同一个 key。
+
+`get()`从根节点开始比较并沿左、右子树查找；`put()`先按二叉搜索树规则找到插入位置，首次插入的根节点直接设为黑色，后续新节点先作为红色叶子插入，再通过旋转和变色修复红黑树；`remove()`先找到节点，有两个子节点时通常用后继节点替换，再删除节点并通过旋转和变色恢复平衡。
+
+因为中序遍历红黑树可以得到按 key 升序排列的结果，所以 `TreeMap`能够提供 `firstKey()`、`lastKey()`、`lowerKey()`、`floorKey()`、`ceilingKey()`、`higherKey()`和 `subMap()`等有序、邻近及范围查询能力。它适合需要按 key 排序或范围查询的场景，但不是线程安全的。
+
 ### HashMap/TreeMap区别
 - **底层结构**：`HashMap` 基于数组+链表/红黑树（JDK1.8），`TreeMap` 基于红黑树。
 - **有序性**：`HashMap` 不保证任何顺序；`TreeMap` 按键的自然顺序（`Comparable`）或自定义 `Comparator` 排序。
 - **接口**：`HashMap` 实现 `Map` 接口；`TreeMap` 实现 `NavigableMap`（继承 `SortedMap`），额外提供 `firstKey()`、`lastKey()`、`headMap()`、`subMap()` 等范围操作。
-- **null 处理**：`HashMap` 允许一个 `null` key 和多个 `null` value；`TreeMap` 不允许 `null` key（比较时会 NPE），但允许 `null` value。
+- **null 处理**：`HashMap` 允许一个 `null` key 和多个 `null` value；`TreeMap` 允许 `null` value。使用自然排序时不允许 `null` key；只有自定义 `Comparator`明确支持比较 `null`时，才可能使用 `null` key，通常不建议这样做。
 - **时间复杂度**：
 
   | 操作 | HashMap（平均） | HashMap（最坏） | TreeMap |
   |------|----------------|----------------|---------|
-  | `get` | O(1) | O(n) / O(log n)* | O(log n) |
-  | `put` | O(1) | O(n) / O(log n)* | O(log n) |
+  | `get` | O(1) | O(n)，树化桶通常为 O(log n) | O(log n) |
+  | `put` | 均摊 O(1) | O(n)，树化桶通常为 O(log n) | O(log n) |
 
-  > *JDK1.8 中，当链表长度≥8 且数组长度≥64 时链表转红黑树，此时最坏退化为 O(log n) 而非 O(n)。
+  > JDK1.8 中，当桶内已有 8 个节点并继续插入第 9 个节点时会触发树化判断；如果数组长度至少为 64，则链表树化为红黑树，否则优先扩容。树化可以改善严重哈希冲突下的性能，但扩容、未达到树化条件以及极端冲突等情况仍可能出现 O(n)，因此不能笼统地说 `HashMap`最坏一定是 O(log n)。
 
 - **线程安全**：两者都不是线程安全的。并发场景下 `HashMap` 推荐替换为 `ConcurrentHashMap`，`TreeMap` 可用 `Collections.synchronizedSortedMap()` 包装或使用 `ConcurrentSkipListMap`。
 
