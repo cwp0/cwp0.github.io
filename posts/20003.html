@@ -1,0 +1,1198 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Agent开发知识点 | cwp0</title><meta name="author" content="cwp0"><meta name="copyright" content="cwp0"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Agent开发知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent开发知识点">
+<meta property="og:url" content="https://cwp0.github.io/posts/20003.html">
+<meta property="og:site_name" content="cwp0">
+<meta property="og:description" content="Agent开发知识点">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png">
+<meta property="article:published_time" content="2026-10-08T09:16:00.000Z">
+<meta property="article:modified_time" content="2026-10-08T09:16:00.000Z">
+<meta property="article:author" content="cwp0">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent开发">
+<meta property="article:tag" content="知识点">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Agent开发知识点",
+  "url": "https://cwp0.github.io/posts/20003.html",
+  "image": "https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png",
+  "datePublished": "2026-10-08T09:16:00.000Z",
+  "dateModified": "2026-10-08T09:16:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "cwp0",
+      "url": "https://cwp0.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/assets/%E5%A4%B4%E5%83%8F.png"><link rel="canonical" href="https://cwp0.github.io/posts/20003.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":66,"languages":{"author":"Author: cwp0","link":"Link: ","source":"Source: cwp0","info":"Copyright belongs to the author. For commercial use, please contact the author for authorization. For non-commercial use, please indicate the source."}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Agent开发知识点',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style>#article-container pre{white-space:pre-wrap;overflow-wrap:break-word;overflow-x:auto}#article-container figure.highlight table,#article-container figure.highlight tbody,#article-container figure.highlight tr,#article-container figure.highlight td{display:block;width:100%;max-width:100%}</style><meta name="generator" content="Hexo 6.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/url(/img/background/%E6%A8%B1%E8%8A%B12.jpg));"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">32</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://s2.loli.net/2024/05/27/ytcdAHzliRquNM2.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/assets/%E5%A4%B4%E5%83%8F.png" alt="Logo" loading='lazy'><span class="site-name">cwp0</span></a><a class="nav-page-title" href="/"><span class="site-name">Agent开发知识点</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/pictures/"><i class="fa-fw fas fa-image"></i><span> Picture</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Agent开发知识点</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-10-08T09:16:00.000Z" title="Created 2026-10-08 17:16:00">2026-10-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-10-08T09:16:00.000Z" title="Updated 2026-10-08 17:16:00">2026-10-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">10.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>35mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2026-10-08 17:16:00&quot;}" hidden></div><h1 id="Agent开发知识点"><a href="#Agent开发知识点" class="headerlink" title="Agent开发知识点"></a>Agent开发知识点</h1><p>本文按《大厂Agent面试题库·分类整理》的 T1~T11 主题体系整理 Agent 开发知识点。各章标题为「专业技能(Agent)」章节已有标题与题库主题的合并结果：已有知识标题保留在前，题库新增主题列在其后，内容逐章填入。T12 Java 后端八股不在此文，见《Java后端面经》与《计算机基础》等。</p>
+<p>当前为标题骨架，内容待整理。</p>
+<h2 id="Agent范式与架构"><a href="#Agent范式与架构" class="headerlink" title="Agent范式与架构"></a>Agent范式与架构</h2><h3 id="什么是AIAgent-与传统LLM区别"><a href="#什么是AIAgent-与传统LLM区别" class="headerlink" title="什么是AIAgent?与传统LLM区别"></a>什么是AIAgent?与传统LLM区别</h3><p>AIAgent(人工智能智能体)是一种能够感知环境、进行决策并执行动作以实现特定目标的autonomous系统。与传统的LLM(大语言模型)相比，核心区别在于:</p>
+<p><strong>传统LLM</strong>本质上是一个”静态的文本生成器”，它接收输入文本并生成输出文本，整个过程是一次性的、无状态的(除了当前的上下文窗口)。可以将其认为是一个专业顾问，你问它问题，它给你建议，但它不能去执行任何操作。</p>
+<p><strong>AIAgent</strong>则是一个”有自主意识的执行者”，它由四个核心组件构成:</p>
+<ul>
+<li><p><strong>LLM(大脑)</strong>:负责推理、规划和决策</p>
+</li>
+<li><p><strong>规划(Planning)</strong>:将复杂任务分解为可执行的子任务</p>
+<ul>
+<li>ReAct 模式(Reasoning + Acting)是目前最主流的 Agent 执行框架。</li>
+</ul>
+</li>
+<li><p><strong>记忆(Memory)</strong>:短期记忆(当前会话上下文)+长期记忆(知识库存储)</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>存在哪里</th>
+<th>举例</th>
+<th>工程实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>In-context</strong></td>
+<td>上下文窗口</td>
+<td>当前对话历史</td>
+<td>直接放入 Prompt</td>
+</tr>
+<tr>
+<td><strong>External</strong></td>
+<td>文件 &#x2F; 数据库</td>
+<td>任务计划文件、执行日志</td>
+<td>读写本地文件或 DB</td>
+</tr>
+<tr>
+<td><strong>Semantic</strong></td>
+<td>向量数据库</td>
+<td>相似代码片段、历史规范文档</td>
+<td>RAG 检索</td>
+</tr>
+<tr>
+<td><strong>In-weights</strong></td>
+<td>模型参数</td>
+<td>模型训练时学到的知识</td>
+<td>微调(通常不需要)</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>工具使用(ToolUse)</strong>:通过调用外部API、执行代码等方式与真实世界交互</p>
+<ul>
+<li>Tools: 大模型本身不能”执行”任何操作。它能做的，是输出一段结构化的 JSON，描述它想调用哪个函数、传什么参数。你的代码拿到这个 JSON，真正去调用对应的函数，再把结果返回给模型。这个机制就叫 Function Calling，是所有工具使用的底层基础。</li>
+<li>MCP: Anthropic 推出的工具接入标准协议，解决的是工具如何被 Agent 发现和调用的问题。</li>
+<li>Skills: Skill 是比单次工具调用更高层的抽象。类比:Tool 是函数，Skill 是封装好的模块&#x2F;服务。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Agent的基本架构组成"><a href="#Agent的基本架构组成" class="headerlink" title="Agent的基本架构组成"></a>Agent的基本架构组成</h3><p>Agent 在能力层面可以概括为”一个大脑 + 四个外挂”，在工程层面可以概括为”接入 &#x2F; 编排 &#x2F; 工具 &#x2F; 存储 &#x2F; 可观测”五层。概念题用能力组件视角答，系统设计题用工程分层视角展开。</p>
+<p><strong>能力组件视角：一个大脑 + 四个外挂</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">            LLM (大脑 / 决策中枢)</span><br><span class="line">                    │</span><br><span class="line">                    │ 驱动</span><br><span class="line">    ┌─────────┬─────┴─────┬─────────┐</span><br><span class="line">    ▼         ▼           ▼         ▼</span><br><span class="line">Planning   Memory      Tools   Perception/IO</span><br><span class="line">任务拆解   短/长期记忆  MCP/工具调用   输入/输出</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>LLM</strong></td>
+<td>推理、决策，是整个系统的”思考中枢”</td>
+</tr>
+<tr>
+<td><strong>Planning</strong></td>
+<td>把复杂任务拆解成子任务，决定执行顺序（ReAct &#x2F; Plan-and-Execute）</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>短期（上下文窗口）+ 长期（向量库 &#x2F; 数据库）的状态保留</td>
+</tr>
+<tr>
+<td><strong>Tools</strong></td>
+<td>与外部世界交互的能力，通过 Function Calling &#x2F; MCP 暴露</td>
+</tr>
+<tr>
+<td><strong>Perception &#x2F; Action</strong></td>
+<td>感知输入（文本 &#x2F; 图片 &#x2F; 语音），执行输出（API &#x2F; UI &#x2F; 文件）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>一句话总结：<strong>Agent &#x3D; LLM 做大脑，Planning 给路线图，Memory 当笔记本，Tools 是手脚。</strong></p>
+</blockquote>
+<p><strong>工程分层视角：五层</strong></p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>职责</th>
+<th>常见实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>接入层</strong></td>
+<td>接收用户输入、流式返回</td>
+<td>IM &#x2F; Web 入口、SSE 流式</td>
+</tr>
+<tr>
+<td><strong>编排层</strong></td>
+<td>意图路由、任务拆解、循环调度</td>
+<td>路由引擎、Agent Loop &#x2F; 状态机</td>
+</tr>
+<tr>
+<td><strong>工具层</strong></td>
+<td>工具注册、调用、异常治理</td>
+<td>ToolExecutor、MCP Server</td>
+</tr>
+<tr>
+<td><strong>存储层</strong></td>
+<td>会话状态、长期记忆、知识库</td>
+<td>Redis 会话、向量库、关系库</td>
+</tr>
+<tr>
+<td><strong>可观测层</strong></td>
+<td>埋点、评测、告警</td>
+<td>分环节埋点、在线 &#x2F; 离线评测</td>
+</tr>
+</tbody></table>
+<p>LLM 是决策核心，决定能力上限；但工程上最容易出问题、最体现功力的是编排与记忆——模型能力是地基，任务拆解和上下文管理决定长任务能不能稳定跑完。</p>
+<h3 id="Workflows与自主Agent区别"><a href="#Workflows与自主Agent区别" class="headerlink" title="Workflows与自主Agent区别"></a>Workflows与自主Agent区别</h3><p><strong>Workflow 是开发者画好路线让 LLM 走，Autonomous Agent 是 LLM 自己边走边画路线。</strong>前者用灵活性换可预测性，后者用可预测性换灵活性。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Workflows</th>
+<th>Autonomous Agents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>控制流</strong></td>
+<td>开发者预定义（if&#x2F;else、DAG）</td>
+<td>LLM 动态决策</td>
+</tr>
+<tr>
+<td><strong>可预测性</strong></td>
+<td>高，路径固定</td>
+<td>低，每次可能不同</td>
+</tr>
+<tr>
+<td><strong>灵活性</strong></td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>调试难度</strong></td>
+<td>容易，按节点排查</td>
+<td>难，需要 Trace 还原决策</td>
+</tr>
+<tr>
+<td><strong>成本</strong></td>
+<td>可控</td>
+<td>易失控（循环、重试）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>流程稳定、规则明确（订单审批、请假审核）</td>
+<td>任务多变、需要探索（Coding Agent、调研报告）</td>
+</tr>
+</tbody></table>
+<p><strong>选型</strong>：</p>
+<ol>
+<li>流程能不能完全枚举？能 → 固定 DAG Workflow，路径写死，可预测、好排查。</li>
+<li>下一步是否依赖中间结果？是 → 在分叉点引入 LLM 决策节点。</li>
+<li>解空间是否开放、需要探索试错？是 → 才上自主 Agent，用状态图承载循环与分支。</li>
+</ol>
+<p><strong>演进路径</strong>：不要一上来就做全自主 Agent。先用 Workflow 把流程跑通，观察哪些节点经常需要临场处理，再把自主权逐步下放给这些节点，从确定性流程渐进过渡到 Agent。</p>
+<p><strong>混合实践</strong>：生产系统通常两者混用——确定性环节（校验、审批、写数据）用 Workflow 钉死，只把真正需要临场判断的节点（意图理解、方案生成）交给 Agent。</p>
+<blockquote>
+<p>Anthropic 的建议：<strong>能用 Workflow 解决的就别上 Agent</strong>。先评估任务复杂度，不要为了”显得高级”硬上 Autonomous Agent。</p>
+</blockquote>
+<h3 id="Todo工具在Agent中的作用"><a href="#Todo工具在Agent中的作用" class="headerlink" title="Todo工具在Agent中的作用"></a>Todo工具在Agent中的作用</h3><p>Todo 工具让 Agent 把<strong>任务计划显式持久化</strong>到外部，是长任务 Agent 的”任务清单 + 进度条”。</p>
+<p><strong>作用机制</strong>：计划不只存在于上下文里，而是写进外部工具 &#x2F; 文件，Agent 每轮先重读 Todo 再决定下一步——即使上下文被压缩或截断，目标也不会丢。这就是它同时能抗 Context Rot、支持中断恢复的原因。</p>
+<p><strong>核心作用</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>作用</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>防止跑偏</strong></td>
+<td>强制 Agent 先列计划再执行，约束推理路径</td>
+</tr>
+<tr>
+<td><strong>进度可见</strong></td>
+<td>用户能看到 Agent 当前在干什么、下一步是什么</td>
+</tr>
+<tr>
+<td><strong>抗 Context Rot</strong></td>
+<td>计划写在外部文件&#x2F;工具中，不怕被压缩丢失</td>
+</tr>
+<tr>
+<td><strong>支持中断恢复</strong></td>
+<td>任务跑一半挂了，下次根据 Todo 继续</td>
+</tr>
+<tr>
+<td><strong>Compaction 友好</strong></td>
+<td>即使上下文被压缩，Todo 还在，任务不丢</td>
+</tr>
+</tbody></table>
+<p><strong>典型工作流</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">用户: 帮我重构这个模块</span><br><span class="line">  ↓</span><br><span class="line">Agent → TodoWrite([</span><br><span class="line">   &quot;1. 分析现有代码结构&quot;,</span><br><span class="line">   &quot;2. 列出需要拆分的类&quot;,</span><br><span class="line">   &quot;3. 编写新结构&quot;,</span><br><span class="line">   &quot;4. 迁移测试&quot;,</span><br><span class="line">   &quot;5. 跑通 CI&quot;</span><br><span class="line">])</span><br><span class="line">  ↓</span><br><span class="line">Agent → 执行 step 1 → 完成后 TodoUpdate (1 → completed)</span><br><span class="line">  ↓</span><br><span class="line">... 循环 ...</span><br></pre></td></tr></table></figure>
+
+<p><strong>与 checkpoint 的分工</strong>：Todo 外化的是”要做什么”（计划），checkpoint 外化的是”做到哪了”（执行状态），两者互补——Todo 保证任务目标不丢，checkpoint 保证执行能从断点恢复。</p>
+<blockquote>
+<p>Claude Code 的 TaskCreate&#x2F;TaskUpdate 就是典型 Todo 工具。Anthropic 的设计经验:<strong>有 Todo 的 Agent，长任务完成率提升明显</strong>。</p>
+</blockquote>
+<h3 id="ReAct框架"><a href="#ReAct框架" class="headerlink" title="ReAct框架"></a>ReAct框架</h3><p><strong>原理</strong>：ReAct（Reasoning + Acting）让大模型在思考和行动之间交替循环，每一步都先推理再执行，而不是一股脑输出最终答案。核心循环为 Thought（分析当前状态，决定下一步）→ Action（调用工具&#x2F;执行操作）→ Observation（获取工具返回结果）→ 判断是否足够 → 不够则回到 Thought，足够则输出 Final Answer。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────┐</span><br><span class="line">│                  用户输入 Query                   │</span><br><span class="line">└──────────────────────┬──────────────────────────┘</span><br><span class="line">                       ▼</span><br><span class="line">          ┌───→ Thought(思考)    ← 分析当前状态，决定下一步该做什么</span><br><span class="line">          │          │</span><br><span class="line">          │          ▼</span><br><span class="line">          │    Action(行动)     ← 调用工具 / 执行操作</span><br><span class="line">          │          │</span><br><span class="line">          │          ▼</span><br><span class="line">          │   Observation(观察) ← 获取工具返回的结果</span><br><span class="line">          │          │</span><br><span class="line">          │          ▼</span><br><span class="line">          │     ┌──────────┐</span><br><span class="line">          │ 否  │ 够了吗？   │</span><br><span class="line">          └──── └────┬─────┘</span><br><span class="line">                     │ 是</span><br><span class="line">                     ▼</span><br><span class="line">              ┌──────────────┐</span><br><span class="line">              │ Final Answer │  ← 输出最终结果</span><br><span class="line">              └──────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>一个典型交互示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Question: &quot;iPhone 16 的电池容量是多少毫安时？&quot;</span><br><span class="line"></span><br><span class="line">Thought 1: 我需要查找 iPhone 16 的电池规格，让我搜索一下。</span><br><span class="line">Action 1:  search(&quot;iPhone 16 电池容量 mAh&quot;)</span><br><span class="line">Observation 1: 搜索结果显示 iPhone 16 配备 3561mAh 电池...</span><br><span class="line"></span><br><span class="line">Thought 2: 我已经拿到了准确数据，可以回答了。</span><br><span class="line">Action 2:  finish(&quot;iPhone 16 的电池容量为 3561mAh。&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优点：可解释性强，每一步都有 Thought，能看到推理过程、方便调试；通过实际调用工具获取事实，减少幻觉；根据每步 Observation 动态调整策略，灵活迭代。</li>
+<li>缺点：每步都要一次 LLM 调用，长任务延迟和 Token 成本累积；局部决策缺乏全局规划，任务一长容易跑偏、绕圈甚至死循环；效果依赖工具 Observation 的质量，工具报错会把推理带偏。</li>
+</ul>
+<p><strong>适用任务与场景</strong>：问答、搜索、工具调用、Coding Agent 等需要与外部环境交互的任务；绝大多数生产 Agent 的默认范式。</p>
+<p><strong>解决了什么问题</strong>：解决纯推理模型”凭记忆编造、无法与外部世界交互”的问题，让思考和行动同步推进——即”怎么把当前这一次任务做完”。</p>
+<h3 id="Plan-Execute框架"><a href="#Plan-Execute框架" class="headerlink" title="Plan-Execute框架"></a>Plan-Execute框架</h3><p><strong>原理</strong>：把规划和执行拆成两个阶段。先由 Planner 一次性产出完整任务计划（步骤列表），再由 Executor 逐步执行；执行结果可以回传给 Replanner 动态修订剩余计划（Plan → Execute → Replan 循环）。与 ReAct”走一步看一步”不同，Plan-Execute 是”先画完整路线图再出发”。</p>
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优点：计划显式可见，便于人工审查、断点续跑和进度追踪；规划与执行分离，Planner 可以用强模型、Executor 用便宜模型，成本结构更优；对长任务有全局结构，不容易像 ReAct 那样中途跑偏。</li>
+<li>缺点：计划赶不上变化，前期规划与实际不符时必须靠 Replan 兜底，否则整条计划作废；多了一个规划环节，首 Token 延迟更高；任务高度动态、信息不全时，一次性规划的质量有限。</li>
+</ul>
+<p><strong>适用任务与场景</strong>：步骤依赖清晰、链路较长的任务，例如多步数据处理、报告生成、项目级代码改造；需要向用户展示计划或支持中断恢复的场景。</p>
+<p><strong>解决了什么问题</strong>：解决 ReAct 局部决策缺全局结构、长任务易跑偏的问题，把”做什么”（规划）和”怎么做”（执行）解耦。</p>
+<h3 id="Reflexion框架"><a href="#Reflexion框架" class="headerlink" title="Reflexion框架"></a>Reflexion框架</h3><p><strong>原理</strong>：Reflexion（Shinn et al. 2023，Northeastern + MIT）在 ReAct 基础上引入”失败反思 + 经验复用”机制——Agent 把每次尝试失败的教训以自然语言反思的形式存进长期记忆，下一轮重试时把反思作为上下文输入，避免重复同样的错误。本质是用 Verbal Reinforcement Learning（语言强化学习）替代传统 RL 的权重更新。核心三组件：Actor（执行 Agent，通常就是一个 ReAct Agent，产出轨迹）、Evaluator（规则&#x2F;LLM&#x2F;外部信号打分，返回 reward 或成功标记）、Self-Reflection（失败时产出语言反思，写入长期记忆），配合短期记忆（当前轨迹）与长期记忆（反思档案）双层结构。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│                   用户输入 Task                       │</span><br><span class="line">└──────────────────────┬───────────────────────────────┘</span><br><span class="line">                       ▼</span><br><span class="line">       ┌──────────────────────────────┐</span><br><span class="line">       │ Long-Term Memory(反思档案)     │ ← 历次失败的反思文本</span><br><span class="line">       │ &quot;上次因为 X 出错，下次先做 Y&quot;    │</span><br><span class="line">       └──────────────┬───────────────┘</span><br><span class="line">                      │ 注入到下次尝试的上下文</span><br><span class="line">                      ▼</span><br><span class="line">       ┌──────────────────────────────┐</span><br><span class="line">       │ ① Actor(执行 Agent)          │ ← 通常就是一个 ReAct Agent</span><br><span class="line">       │   产出 Trajectory(轨迹)       │</span><br><span class="line">       └──────────────┬───────────────┘</span><br><span class="line">                      ▼</span><br><span class="line">       ┌──────────────────────────────┐</span><br><span class="line">       │ Short-Term Memory(当前轨迹)    │</span><br><span class="line">       └──────────────┬───────────────┘</span><br><span class="line">                      ▼</span><br><span class="line">       ┌──────────────────────────────┐</span><br><span class="line">       │ ② Evaluator(评估器)           │ ← 规则 / LLM / 外部信号打分</span><br><span class="line">       │   返回 reward / success flag   │</span><br><span class="line">       └──────────────┬───────────────┘</span><br><span class="line">                成功  │  失败</span><br><span class="line">              ┌──────┴──────┐</span><br><span class="line">              ▼             ▼</span><br><span class="line">            返回      ┌──────────────────────────┐</span><br><span class="line">                      │ ③ Self-Reflection(反思)   │</span><br><span class="line">                      │   产出语言反思: &quot;我哪里错   │</span><br><span class="line">                      │   了，下次该怎么改进&quot;       │</span><br><span class="line">                      └────────────┬─────────────┘</span><br><span class="line">                                   │ 追加到 Long-Term Memory</span><br><span class="line">                                   └──→ 回到 Actor 重试(带反思)</span><br></pre></td></tr></table></figure>
+
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优点：无需微调，用自然语言反思替代权重更新，零训练成本；跨 trial 学习，能从历次失败中积累经验而不只在单次轨迹内推理；反思本身是自然语言、可解释、可审计；小样本即生效，常常 2~3 轮反思就显著提升成功率（HumanEval、AlfWorld、HotpotQA 论文均有验证）。</li>
+<li>缺点：必须有可靠的 Evaluator 信号（自动评分器&#x2F;单元测试&#x2F;人工标注），否则反思方向会错；反思文本要做长度控制，否则长期记忆越积越多撑爆上下文；不适合单次性任务（没机会重试）或没有客观评测指标的开放生成场景。</li>
+</ul>
+<p><strong>适用任务与场景</strong>：有重试机会且可量化评测的场景——代码生成（跑测试）、刷题（看对错）、博弈（看胜负）、需要多次尝试的决策任务。</p>
+<p><strong>解决了什么问题</strong>：解决”多次尝试怎么越做越好”的问题——把失败教训沉淀为可复用的语言经验，下次少踩坑；与 ReAct 是上下层关系而非替代：ReAct 管单次任务内怎么执行，Reflexion 在外面包一层”评估 → 反思 → 重试”的元循环。</p>
+<h3 id="Self-Refine框架"><a href="#Self-Refine框架" class="headerlink" title="Self-Refine框架"></a>Self-Refine框架</h3><p><strong>原理</strong>：Self-Refine（Madaan et al. 2023）是”生成 → 自评 → 修改”的三段循环：Generator 先产出初稿，同一个 LLM 扮演 Critic 对初稿给出批评意见，Refiner 再根据批评修订；如此迭代 2~3 轮后输出终稿。全程在单次任务内完成，不调用外部工具，也不需要外部 Evaluator——模型自己当裁判。</p>
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优点：不需要外部评分信号，落地成本低，加一段 Prompt 就能实现；对写作、报告、代码 Review 这类”输出质量型”任务增益明显；批评和修订都是自然语言，过程可解释。</li>
+<li>缺点：自评自改存在盲区，模型发现不了自己认知之外的事实性错误，幻觉改不掉；提升有边际递减，通常 2 ~ 3 轮后收益趋零；每轮自评加修改，Token 成本约为 2 ~ 3 倍；在调工具的 Agent 链路里，其功能常被 ReAct 的工具 Observation 覆盖，额外收益有限。</li>
+</ul>
+<p><strong>适用任务与场景</strong>：单次产出、无外部评测信号但希望提升质量的场景：文案写作、报告生成、代码 Review、翻译润色。</p>
+<p><strong>解决了什么问题</strong>：解决”一次性生成质量不够、又没有外部评分器”的问题，让模型在单轮内自评自改。与 Reflexion 的关键区别：Self-Refine 留在单次任务内、不需要外部 Evaluator；Reflexion 跨多次 trial、必须有外部 reward。</p>
+<h3 id="CoT框架"><a href="#CoT框架" class="headerlink" title="CoT框架"></a>CoT框架</h3><p><strong>原理</strong>：Chain-of-Thought（Wei et al. 2022，Google）让模型先显式输出推理过程、再给最终答案，把”一步到位”改成”逐步推导”。触发方式很轻：Prompt 里加一句”Let’s think step by step”（Zero-shot CoT），或在示例里带上推理过程（Few-shot CoT，两者可叠加）。</p>
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优点：实现成本极低，一句提示词即可；对数学、逻辑、多步推理类任务准确率提升显著；推理链可见，便于排查模型在哪一步想错。</li>
+<li>缺点：输出变长，Token 成本和延迟上升；对简单任务是浪费；推理链本身也可能错（中间步骤幻觉）；强模型（Opus、GPT-4 级别）已内化 CoT 能力，显式提示词可以省略。</li>
+</ul>
+<p><strong>适用任务与场景</strong>：数学题、逻辑推理、代码调试、多步决策等推理过程重要的任务；也常作为其他范式（ReAct 的 Thought、ToT 的分支）的底层思考方式。</p>
+<p><strong>解决了什么问题</strong>：解决大模型”直接给答案容易错”的问题——通过强制展示中间推理步骤，把复杂问题拆成若干简单步骤，提高准确率。</p>
+<h3 id="ToT框架"><a href="#ToT框架" class="headerlink" title="ToT框架"></a>ToT框架</h3><p><strong>原理</strong>：Tree of Thoughts（Yao et al. 2023，Princeton + Google DeepMind）把 CoT 的”单条线性推理链”升级为”多分支推理树 + 自评 + 搜索回溯”。核心三件套：Thought Generator（每步采样 N 个候选 thought，典型 N&#x3D;3 ~ 5）、State Evaluator（LLM 给每个候选打分，如 sure&#x2F;maybe&#x2F;impossible 三档或 1 ~ 10 分）、Search Algorithm（BFS 每层保留 Top-K，或 DFS 深度优先 + 回溯），遇到死胡同可以回到上一步换分支。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CoT(单条链):               ToT(多分支树 + 搜索):</span><br><span class="line"></span><br><span class="line">  Q                              Q</span><br><span class="line">  ↓                          ┌───┼───┐</span><br><span class="line">Thought 1                   T1a T1b T1c    ← 每步生成多个候选</span><br><span class="line">  ↓                          ↓   ↓   ↓</span><br><span class="line">Thought 2                   评分 8  3  6   ← LLM 自评</span><br><span class="line">  ↓                          剪枝:保留 Top-2 → T1a, T1c</span><br><span class="line">Answer                       ↓       ↓</span><br><span class="line">                          ┌──┼──┐ ┌──┼──┐</span><br><span class="line">                          T2a T2b T2c T2d  ← 继续展开</span><br><span class="line">                          ↓</span><br><span class="line">                       ... 遇死胡同则回溯换分支 ...</span><br><span class="line">                          ↓</span><br><span class="line">                         Answer(从最优路径产出)</span><br></pre></td></tr></table></figure>
+
+<p><strong>优缺点</strong>：</p>
+<ul>
+<li>优点：多候选 + 自评 + 选优，对需要规划、探索、试错的复杂问题效果最好；支持回溯，走错能回头换分支；ToT 是 CoT 的严格泛化——分支数 N&#x3D;1 且不做评分时就退化为 CoT。</li>
+<li>缺点：Token 成本 10~100 倍（每步 N 倍候选 + 评分 + 搜索）；延迟高，多次串行调用 LLM；工程复杂度高，需自行实现 Generator、Evaluator、Search 三件套；适用条件苛刻，任务必须有明确对错标准且解空间可离散化。</li>
+</ul>
+<p><strong>适用任务与场景</strong>：24 点、填字游戏、复杂规划、博弈决策等需要多解空间探索的任务。工业界实际落地极少，通常被 Self-Consistency（多次采样 CoT 投票）、Best-of-N（生成 N 个选最优）等简化方案替代。</p>
+<p><strong>解决了什么问题</strong>：解决 CoT”一条路走到黑、错了无法回头”的问题，用搜索和回溯换取复杂问题上的更高正确率。</p>
+<h3 id="ReAct-Plan-Execute-Reflexion-Self-Refine-CoT-ToT对比"><a href="#ReAct-Plan-Execute-Reflexion-Self-Refine-CoT-ToT对比" class="headerlink" title="ReAct&#x2F;Plan-Execute&#x2F;Reflexion&#x2F;Self-Refine&#x2F;CoT&#x2F;ToT对比"></a>ReAct&#x2F;Plan-Execute&#x2F;Reflexion&#x2F;Self-Refine&#x2F;CoT&#x2F;ToT对比</h3><p>六个概念的一句话总结表：</p>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>核心循环</th>
+<th>解决的问题</th>
+<th>主要优点</th>
+<th>主要缺点</th>
+<th>典型场景</th>
+<th>Token 成本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ReAct</strong></td>
+<td>Thought → Action → Observation</td>
+<td>思考 + 行动同步推进，完成任务</td>
+<td>可解释、减幻觉、灵活迭代</td>
+<td>长任务易跑偏、成本累积</td>
+<td>问答、工具调用、Coding Agent</td>
+<td>中</td>
+</tr>
+<tr>
+<td><strong>Plan-Execute</strong></td>
+<td>Plan → Execute → Replan</td>
+<td>先全局规划再逐步执行</td>
+<td>结构清晰、可断点续跑、规划执行分离</td>
+<td>计划失准需重规划、首 Token 延迟高</td>
+<td>长链路多步任务、项目级改造</td>
+<td>中</td>
+</tr>
+<tr>
+<td><strong>Reflexion</strong></td>
+<td>Trial → Evaluate → Reflect → Retry</td>
+<td>从失败中积累经验、跨任务越做越好</td>
+<td>无需微调、跨 trial 学习、可解释</td>
+<td>必须有可靠 Evaluator、反思需控长</td>
+<td>代码生成（带测试）、博弈、可重试任务</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>Self-Refine</strong></td>
+<td>Generate → Critique → Refine</td>
+<td>单次输出质量自校</td>
+<td>无需外部评分器、落地简单</td>
+<td>自评盲区、收益边际递减</td>
+<td>写作、报告、代码 Review</td>
+<td>中–高</td>
+</tr>
+<tr>
+<td><strong>CoT</strong></td>
+<td>单条 Thought 链 → Answer</td>
+<td>显式推理提高准确率</td>
+<td>一句提示词即可、推理可见</td>
+<td>输出变长、强模型已内化</td>
+<td>数学、逻辑、多步推理</td>
+<td>1x（基准）</td>
+</tr>
+<tr>
+<td><strong>ToT</strong></td>
+<td>多分支 Thought 树 → 自评 → 搜索</td>
+<td>复杂规划 &#x2F; 探索 &#x2F; 试错</td>
+<td>多候选 + 回溯、正确率上限高</td>
+<td>成本 10~100x、工程复杂</td>
+<td>24 点、填字、复杂规划</td>
+<td>10~100x</td>
+</tr>
+</tbody></table>
+<p>按”作用层 × 改进时机 × 工程成本”横向对比：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th><strong>ReAct</strong></th>
+<th><strong>Plan-Execute</strong></th>
+<th><strong>Reflexion</strong></th>
+<th><strong>Self-Refine</strong></th>
+<th><strong>CoT</strong></th>
+<th><strong>ToT</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>提出时间&#x2F;来源</strong></td>
+<td>Yao et al. 2022（Princeton + Google）</td>
+<td>工程界通用模式（LangGraph Plan-and-Execute 模板）</td>
+<td>Shinn et al. 2023（NEU + MIT）</td>
+<td>Madaan et al. 2023（CMU 等）</td>
+<td>Wei et al. 2022（Google）</td>
+<td>Yao et al. 2023（Princeton + Google DeepMind）</td>
+</tr>
+<tr>
+<td><strong>作用层</strong></td>
+<td>推理 + 行动（执行层）</td>
+<td>任务编排（规划层）</td>
+<td>经验复用（元学习层）</td>
+<td>输出质量（自校验层）</td>
+<td>推理结构（思考层）</td>
+<td>推理结构（思考层）</td>
+</tr>
+<tr>
+<td><strong>改进时机</strong></td>
+<td>单步内（边想边做）</td>
+<td>执行前规划 + 执行中重规划</td>
+<td>跨 trial（多次尝试间复盘）</td>
+<td>单次任务内（生成后自评自改）</td>
+<td>单次推理内（线性展开）</td>
+<td>单次推理内（多分支并行）</td>
+</tr>
+<tr>
+<td><strong>是否调工具</strong></td>
+<td>✅ 核心</td>
+<td>✅（执行步骤通常调工具）</td>
+<td>✅（Actor 通常是 ReAct）</td>
+<td>❌（纯文本生成）</td>
+<td>❌（纯思考）</td>
+<td>❌（纯思考）</td>
+</tr>
+<tr>
+<td><strong>是否多候选</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅（每步 N 个）</td>
+</tr>
+<tr>
+<td><strong>是否需 Evaluator</strong></td>
+<td>❌（依赖工具 Observation）</td>
+<td>❌（靠 Replan 判断）</td>
+<td>✅（必须可靠的外部 reward）</td>
+<td>❌（LLM 自评）</td>
+<td>❌</td>
+<td>✅（LLM 自评）</td>
+</tr>
+<tr>
+<td><strong>是否能回溯</strong></td>
+<td>❌（错了往前走或停）</td>
+<td>✅（Replan 修订剩余计划）</td>
+<td>❌（trial 内不回溯，靠下次重试）</td>
+<td>❌（线性改）</td>
+<td>❌（一条路走到底）</td>
+<td>✅（可换分支）</td>
+</tr>
+<tr>
+<td><strong>Token 成本</strong></td>
+<td>中（每步 1 次 LLM）</td>
+<td>中（规划 1 次 + 每步执行）</td>
+<td>高（trial × N + 反思）</td>
+<td>中–高（自评 + 修改 2~3 次）</td>
+<td>1x（基准）</td>
+<td>10~100x</td>
+</tr>
+</tbody></table>
+<p><strong>关系图（叠加关系）</strong>：六种范式不是互斥选项，而是不同层次的机制，生产系统通常叠加使用——</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────┐</span><br><span class="line">│      跨任务经验层(元学习)          │</span><br><span class="line">│   Reflexion = 外层 Evaluator      │</span><br><span class="line">│              + 反思档案          │</span><br><span class="line">└─────────────────────────────────┘</span><br><span class="line">              ▲ 包裹</span><br><span class="line">┌─────────────────────────────────┐</span><br><span class="line">│     任务编排层(先规划再执行)        │</span><br><span class="line">│        Plan-Execute             │</span><br><span class="line">└─────────────────────────────────┘</span><br><span class="line">              ▲ 拆解为步骤</span><br><span class="line">┌─────────────────────────────────┐</span><br><span class="line">│     单任务执行层(Agent Loop)      │</span><br><span class="line">│           ReAct                 │</span><br><span class="line">│   (Thought → Action → Obs)      │</span><br><span class="line">└─────────────────────────────────┘</span><br><span class="line">              ▲ 调用</span><br><span class="line">┌─────────────────────────────────┐</span><br><span class="line">│       单次推理层(怎么想)           │</span><br><span class="line">│       CoT / ToT                 │</span><br><span class="line">│       (单链 vs 多分支搜索)        │</span><br><span class="line">└─────────────────────────────────┘</span><br><span class="line">              ▲ 输出后</span><br><span class="line">┌─────────────────────────────────┐</span><br><span class="line">│       输出自校层(轻量改写)         │</span><br><span class="line">│       Self-Refine                │</span><br><span class="line">│  (Generate → Critique → Refine)  │</span><br><span class="line">└─────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>选型决策树（按场景一句话挑）</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">要让 Agent 用工具完成任务                   → ReAct</span><br><span class="line">任务长、步骤依赖清晰、要先出计划             → Plan-Execute(配 Replan)</span><br><span class="line">有重试机会 + 可量化评测(如代码跑测试)     → ReAct + Reflexion 叠加</span><br><span class="line">单次输出想要更高质量，没有外部 Evaluator     → Self-Refine</span><br><span class="line">让模型&quot;显式推理&quot;提高数学/逻辑题准确率        → CoT</span><br><span class="line">任务需要规划/试错/多解空间探索               → ToT(或 Self-Consistency 简化版)</span><br><span class="line">日常 Agent 默认选                            → ReAct + CoT 内化(强模型自带)</span><br></pre></td></tr></table></figure>
+
+<p><strong>工业实战经验</strong>：</p>
+<ul>
+<li>80% 的生产 Agent 用 ReAct + 强模型自带 CoT 就够，不需要显式叠加其他范式。</li>
+<li>Reflexion 适合代码、博弈这种”有客观对错”的场景——编译器、单测、胜负都是天然 Evaluator；薪酬 AI 质检项目里的”Self-Refine + 编译器 Verifier”循环其实就是 Reflexion 的轻量变体（把跨 trial 压缩到单次任务内 3 轮）。</li>
+<li>ToT 实际生产落地极少，多数被 Self-Consistency（多次采样 CoT 投票）和 Best-of-N（生成 N 个选最优）替代，工程实现简单一个量级且效果接近。</li>
+<li>Self-Refine 在写作、报告生成场景增益明显；但在 Agent 调工具的链路里，通常被 ReAct 的工具 Observation 覆盖了同样功能。</li>
+<li>Plan-Execute 与 ReAct 的取舍：任务结构稳定、需要用户确认计划或断点续跑时选 Plan-Execute；任务高度动态、信息边走边明时选 ReAct。两者也可组合——外层 Plan-Execute 出计划，每个步骤内部用 ReAct 执行。</li>
+</ul>
+<h3 id="什么是Agent-Loop"><a href="#什么是Agent-Loop" class="headerlink" title="什么是Agent Loop"></a>什么是Agent Loop</h3><p>Agent Loop 是 Agent 执行引擎的主循环：组装上下文 → 调用 LLM → 解析输出 → 若有工具调用就执行工具并把结果写回上下文 → 再调 LLM，如此循环，直到模型给出最终答案或触发终止条件。它就是 ReAct 范式的执行载体——Thought &#x2F; Action &#x2F; Observation 分别对应循环里的”模型思考 &#x2F; 输出 tool_call &#x2F; 工具结果写回”。</p>
+<p><strong>构造一个 Loop 需要六个模块</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>上下文组装器</strong></td>
+<td>把 system prompt、历史消息、工具结果拼成 messages，溢出时先压缩 &#x2F; 截断</td>
+</tr>
+<tr>
+<td><strong>LLM 调用层</strong></td>
+<td>屏蔽模型协议差异（tool_result 嵌套 vs 独立 tool 角色），支持流式</td>
+</tr>
+<tr>
+<td><strong>输出解析器</strong></td>
+<td>区分文本回复与 tool_call；JSON 解析失败要有修复 &#x2F; 重试兜底</td>
+</tr>
+<tr>
+<td><strong>工具注册表 + 执行器</strong></td>
+<td>按 schema 注册工具，参数校验、调用、异常捕获</td>
+</tr>
+<tr>
+<td><strong>循环控制器</strong></td>
+<td>终止条件：无 tool_call、最大轮数、超时、token 预算</td>
+</tr>
+<tr>
+<td><strong>状态持久化</strong></td>
+<td>消息历史 &#x2F; checkpoint 落盘，中断后可恢复（短任务可省）</td>
+</tr>
+</tbody></table>
+<p>三个容易漏掉的设计点：</p>
+<ul>
+<li>工具异常不要抛出中断循环，而是把错误信息当成结果写回上下文，让模型自己决定换参数重试还是放弃；</li>
+<li>max_rounds 是必须的熔断，否则模型反复调同一个工具会一直空转，烧 token 也烧时间；</li>
+<li>终止信号要显式：要么靠”无 tool_call”，要么设一个 finish 工具，不要靠猜文本语气。</li>
+</ul>
+<p>MiniClaw 就是按这个结构做的最小实现：Brain → Hands → Brain 工具循环（最多 10 轮防死循环），Brain 抽象层屏蔽 Anthropic <code>tool_result</code> 嵌套与 OpenAI 独立 <code>tool</code> 角色的协议差异，上层统一 Message &#x2F; ToolCall 数据结构。</p>
+<h3 id="手写最小可用Agent循环"><a href="#手写最小可用Agent循环" class="headerlink" title="手写最小可用Agent循环"></a>手写最小可用Agent循环</h3><p><strong>手写最小循环</strong>（核心十几行）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">agent_loop</span>(<span class="params">user_input, tools, max_rounds=<span class="number">10</span></span>):</span><br><span class="line">    messages = [</span><br><span class="line">        &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: SYSTEM_PROMPT&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: user_input&#125;,</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(max_rounds):</span><br><span class="line">        resp = llm_chat(messages, tools=[t.schema <span class="keyword">for</span> t <span class="keyword">in</span> tools])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 没有工具调用 = 最终答案，退出循环</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> resp.tool_calls:</span><br><span class="line">            <span class="keyword">return</span> resp.content</span><br><span class="line"></span><br><span class="line">        messages.append(resp.to_message())</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 逐个执行工具，结果写回上下文供下一轮决策</span></span><br><span class="line">        <span class="keyword">for</span> call <span class="keyword">in</span> resp.tool_calls:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                result = tools[call.name].run(**call.args)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                result = <span class="string">f&quot;工具调用失败: <span class="subst">&#123;e&#125;</span>&quot;</span></span><br><span class="line">            messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;tool&quot;</span>, <span class="string">&quot;tool_call_id&quot;</span>: call.<span class="built_in">id</span>,</span><br><span class="line">                             <span class="string">&quot;content&quot;</span>: <span class="built_in">str</span>(result)&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;达到最大轮数，任务终止&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Agent完整执行链路"><a href="#Agent完整执行链路" class="headerlink" title="Agent完整执行链路"></a>Agent完整执行链路</h3><p>完整链路一般分七个环节（以菜小蜜的实现为例）：</p>
+<ol>
+<li><strong>入口接收</strong>：协议接入（IM &#x2F; Web &#x2F; HTTP），开启 Trace，全程用同一个 TraceId 串联日志。</li>
+<li><strong>会话准备</strong>：输入校验、会话构建 &#x2F; 复用、加载历史对话、组装请求级上下文对象（身份、会话、历史贯穿全链路）。</li>
+<li><strong>前置拦截</strong>：规则链把高频标准问题短路掉（特殊指令、转人工、FAQ 精确匹配），不调 LLM、毫秒级延迟，未命中才放行。</li>
+<li><strong>意图路由</strong>：决定这次请求交给哪个能力处理（技能路由、语种检测、Query 改写可并发跑）。</li>
+<li><strong>技能分发</strong>：按路由结果查注册表，拿到具体工具 &#x2F; 技能实现。</li>
+<li><strong>主执行</strong>：Agent Loop &#x2F; RAG &#x2F; 业务工具执行，最重的一步。</li>
+<li><strong>收尾</strong>：语种回译、引用来源整理、落库、空答案兜底（转人工 &#x2F; 工单卡片）。</li>
+</ol>
+<h3 id="每轮LLM调用的预处理和后置校验"><a href="#每轮LLM调用的预处理和后置校验" class="headerlink" title="每轮LLM调用的预处理和后置校验"></a>每轮LLM调用的预处理和后置校验</h3><p><strong>每轮 LLM 调用前的预处理</strong>：</p>
+<ul>
+<li>上下文组装：system prompt + 历史消息 + 工具结果，按角色规范拼好顺序；</li>
+<li>上下文治理：历史超阈值先压缩 &#x2F; 截断（compaction）再进模型；</li>
+<li>工具列表收敛：按权限和场景过滤工具（圈人过滤、渐进式披露），别把所有工具都塞进 prompt；</li>
+<li>输入校验：长度、合法性、敏感内容；</li>
+<li>预算检查：token 预算、轮数是否超限，超了先熔断。</li>
+</ul>
+<p><strong>每轮 LLM 调用后的后置校验</strong>：</p>
+<ul>
+<li>格式校验：结构化输出能否解析，失败则重试、修复提示或降级；</li>
+<li>工具调用校验：工具是否存在、参数是否过 schema、危险操作是否要审批；</li>
+<li>内容安全：输出侧过滤（敏感信息、诱导注入内容）；</li>
+<li>终止条件判断：是否最终答案、是否该结束循环；</li>
+<li>可观测落盘：轮数、token 消耗、模型决策，关联 TraceId。</li>
+</ul>
+<h3 id="Agent任务状态机怎么设计"><a href="#Agent任务状态机怎么设计" class="headerlink" title="Agent任务状态机怎么设计"></a>Agent任务状态机怎么设计</h3><p>为什么需要状态机：长任务动辄跑几分钟到几小时，进程崩溃、人工审批、网络抖动都可能中断；纯内存执行一旦中断只能从头再来，写操作还可能做了一半。</p>
+<p><strong>状态定义</strong>：CREATED → PLANNING → RUNNING → WAITING_TOOL &#x2F; WAITING_HUMAN → COMPLETED &#x2F; FAILED &#x2F; CANCELLED，每次流转必须有明确事件，不允许随意跳转；按需支持 PAUSED。</p>
+<p><strong>四个能力的实现要点</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>实现要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>可追溯</strong></td>
+<td>状态流转做成 append-only 日志（状态 + 事件 + 时间戳 + 触发者）；每步保留完整证据：prompt、模型版本、工具输入输出、审批记录，出问题能回答”哪一步放过去的”</td>
+</tr>
+<tr>
+<td><strong>可暂停</strong></td>
+<td>危险操作（删数据、对外发送、转账）前设 INTERRUPT 中断点，等人工审批（HITL）；支持外部暂停信号</td>
+</tr>
+<tr>
+<td><strong>可续跑</strong></td>
+<td>步骤边界把状态持久化到 checkpoint（DB &#x2F; Redis），恢复时从最近 checkpoint 继续，不重跑已完成步骤；步骤设计要幂等，重复执行无副作用</td>
+</tr>
+<tr>
+<td><strong>可回滚</strong></td>
+<td>写操作记录快照或补偿操作，失败时按序回滚或标记人工介入；非幂等工具要防重放（去重键）</td>
+</tr>
+</tbody></table>
+<p><strong>实现选型</strong>：LangGraph 用 <code>interrupt()</code> + Checkpointer（MemorySaver 开发、PostgresSaver 生产）；重场景用 Temporal &#x2F; Step Functions 这类工作流引擎；自研就是状态表 + 事件日志 + 步骤边界持久化。</p>
+<p>两个工程细节：只在步骤边界持久化，不要在步骤中间存，否则恢复逻辑会很复杂；恢复时要校验状态版本兼容——Agent 代码升级后，旧 state 要能被解析。</p>
+<h3 id="用户指令不明确时Agent如何自主拆任务补全信息"><a href="#用户指令不明确时Agent如何自主拆任务补全信息" class="headerlink" title="用户指令不明确时Agent如何自主拆任务补全信息"></a>用户指令不明确时Agent如何自主拆任务补全信息</h3><p>三层处理，按优先级依次来：</p>
+<ol>
+<li><strong>能补的先补</strong>：先查上下文——历史对话、用户画像、长期记忆。典型工程实现是 Query 改写：补全指代（”那这个呢？”→ 前文提到的具体对象）、关键词扩展、身份信息补全。</li>
+<li><strong>能拆的就拆</strong>：让 LLM 把目标拆成子任务清单（Todo &#x2F; Plan），逐步执行，中间结果出来再修正拆解（Plan-Execute + Replan）。拆解时标注依赖和优先级，独立子任务并行执行。</li>
+<li><strong>该问的才问</strong>：关键信息缺失且无法可靠推断时，向用户反问。两个细节：一次把要问的合并问完，别一句一打断；设置置信度阈值，高于阈值直接执行，低于阈值再问或转人工。</li>
+</ol>
+<p>工程红线：</p>
+<ul>
+<li>默认值要显式：推断出的信息要告知用户”按默认值 X 执行”并允许修改，不能静默假设；</li>
+<li>写操作必须确认：数据订正、提交、发送这类危险操作，执行前必须让用户确认参数。菜小蜜智能请假就是这个流程——解析请假参数 → 匹配假期额度 → 发确认卡片 → 用户点确认才真正提交；</li>
+<li>宁停不编：信息不足时降级（反问 &#x2F; 转人工），不要脑补，fail-close。</li>
+</ul>
+<h3 id="Agent-开发流程有几个环节"><a href="#Agent-开发流程有几个环节" class="headerlink" title="Agent 开发流程有几个环节?"></a>Agent 开发流程有几个环节?</h3><p>六个环节：</p>
+<ol>
+<li><strong>需求定义</strong>：明确任务边界、验收标准、哪些环节自动化、哪些留给人；先判断 Workflow 能不能解决，别硬上 Agent。</li>
+<li><strong>能力设计</strong>：工具清单、Prompt 结构、上下文与记忆方案、模型选型（路由小模型 &#x2F; 主力大模型）。</li>
+<li><strong>原型实现</strong>：最小 Loop 先跑通主链路，先硬编码后动态化，先单工具后多工具。</li>
+<li><strong>评测建设</strong>：评测集 + 指标（任务完成率、工具调用准确率、幻觉率）；先有自动打分的裁判，再谈优化。</li>
+<li><strong>迭代优化</strong>：bad case 驱动改进，调 Prompt &#x2F; 工具 &#x2F; 流程；A&#x2F;B 或灰度验证后再放量。</li>
+<li><strong>生产上线</strong>：可观测（埋点、告警）、成本与限流、安全防护（注入、权限）、兜底与人工接管入口。</li>
+</ol>
+<p>两点区别于传统开发的认知：一是评测先于优化，没有评测集，调 Prompt 就是盲调，改完不知道是变好还是变坏；二是上线不是终点，bad case 回流和持续迭代才是 Agent 的常态。</p>
+<h3 id="本地-Agent-为什么会空转-怎么解决"><a href="#本地-Agent-为什么会空转-怎么解决" class="headerlink" title="本地 Agent 为什么会空转?怎么解决?"></a>本地 Agent 为什么会空转?怎么解决?</h3><h3 id="Planner和Critic的分工-Critic如何识别幻觉和工具无效结果"><a href="#Planner和Critic的分工-Critic如何识别幻觉和工具无效结果" class="headerlink" title="Planner和Critic的分工?Critic如何识别幻觉和工具无效结果?"></a>Planner和Critic的分工?Critic如何识别幻觉和工具无效结果?</h3><h3 id="多诉求任务拆分与调用拆分取舍"><a href="#多诉求任务拆分与调用拆分取舍" class="headerlink" title="多诉求任务拆分与调用拆分取舍"></a>多诉求任务拆分与调用拆分取舍</h3><h3 id="快慢任务兼容-对话式快任务-vs-复杂慢任务"><a href="#快慢任务兼容-对话式快任务-vs-复杂慢任务" class="headerlink" title="快慢任务兼容(对话式快任务 vs 复杂慢任务)"></a>快慢任务兼容(对话式快任务 vs 复杂慢任务)</h3><h3 id="Workflow-首任务错误放大问题"><a href="#Workflow-首任务错误放大问题" class="headerlink" title="Workflow 首任务错误放大问题"></a>Workflow 首任务错误放大问题</h3><h2 id="上下文工程与记忆"><a href="#上下文工程与记忆" class="headerlink" title="上下文工程与记忆"></a>上下文工程与记忆</h2><h3 id="为什么”记忆”对Agent至关重要"><a href="#为什么”记忆”对Agent至关重要" class="headerlink" title="为什么”记忆”对Agent至关重要"></a>为什么”记忆”对Agent至关重要</h3><h3 id="假如让你设计记忆管理你会如何设计"><a href="#假如让你设计记忆管理你会如何设计" class="headerlink" title="假如让你设计记忆管理你会如何设计"></a>假如让你设计记忆管理你会如何设计</h3><h3 id="上下文溢出-分层记忆-Compaction"><a href="#上下文溢出-分层记忆-Compaction" class="headerlink" title="上下文溢出&#x2F;分层记忆&#x2F;Compaction"></a>上下文溢出&#x2F;分层记忆&#x2F;Compaction</h3><h3 id="什么是ContextRot-如何防止"><a href="#什么是ContextRot-如何防止" class="headerlink" title="什么是ContextRot?如何防止"></a>什么是ContextRot?如何防止</h3><h3 id="上下文压缩放在loop哪一步-触发机制-具体策略"><a href="#上下文压缩放在loop哪一步-触发机制-具体策略" class="headerlink" title="上下文压缩放在loop哪一步?触发机制?具体策略"></a>上下文压缩放在loop哪一步?触发机制?具体策略</h3><h3 id="多轮对话如何保证记忆一致性、避免前后矛盾-信息丢失"><a href="#多轮对话如何保证记忆一致性、避免前后矛盾-信息丢失" class="headerlink" title="多轮对话如何保证记忆一致性、避免前后矛盾&#x2F;信息丢失"></a>多轮对话如何保证记忆一致性、避免前后矛盾&#x2F;信息丢失</h3><h3 id="记忆覆盖问题如何解决"><a href="#记忆覆盖问题如何解决" class="headerlink" title="记忆覆盖问题如何解决"></a>记忆覆盖问题如何解决</h3><h3 id="长期Memory应该在什么条件下写入"><a href="#长期Memory应该在什么条件下写入" class="headerlink" title="长期Memory应该在什么条件下写入"></a>长期Memory应该在什么条件下写入</h3><h3 id="Redis在Agent系统里存什么-会话状态-缓存-记忆-checkpoint-限流怎么区分"><a href="#Redis在Agent系统里存什么-会话状态-缓存-记忆-checkpoint-限流怎么区分" class="headerlink" title="Redis在Agent系统里存什么?会话状态&#x2F;缓存&#x2F;记忆&#x2F;checkpoint&#x2F;限流怎么区分?"></a>Redis在Agent系统里存什么?会话状态&#x2F;缓存&#x2F;记忆&#x2F;checkpoint&#x2F;限流怎么区分?</h3><h3 id="多用户高并发时会话隔离和记忆隔离怎么做"><a href="#多用户高并发时会话隔离和记忆隔离怎么做" class="headerlink" title="多用户高并发时会话隔离和记忆隔离怎么做?"></a>多用户高并发时会话隔离和记忆隔离怎么做?</h3><h3 id="记忆库持续膨胀、检索精度下降怎么迭代"><a href="#记忆库持续膨胀、检索精度下降怎么迭代" class="headerlink" title="记忆库持续膨胀、检索精度下降怎么迭代?"></a>记忆库持续膨胀、检索精度下降怎么迭代?</h3><h3 id="怎么沉淀部门级记忆-知识库-怎么解决”经验随人走”"><a href="#怎么沉淀部门级记忆-知识库-怎么解决”经验随人走”" class="headerlink" title="怎么沉淀部门级记忆&#x2F;知识库?怎么解决”经验随人走”?"></a>怎么沉淀部门级记忆&#x2F;知识库?怎么解决”经验随人走”?</h3><h3 id="Skill和Memory的沉淀怎么设计"><a href="#Skill和Memory的沉淀怎么设计" class="headerlink" title="Skill和Memory的沉淀怎么设计?"></a>Skill和Memory的沉淀怎么设计?</h3><h3 id="多Agent间上下文传递：全量还是核心结论-状态同步怎么避免信息错乱"><a href="#多Agent间上下文传递：全量还是核心结论-状态同步怎么避免信息错乱" class="headerlink" title="多Agent间上下文传递：全量还是核心结论?状态同步怎么避免信息错乱?"></a>多Agent间上下文传递：全量还是核心结论?状态同步怎么避免信息错乱?</h3><h3 id="Agent会话上下文怎么存储-MySQL瓶颈怎么优化-Redis会话丢失怎么办"><a href="#Agent会话上下文怎么存储-MySQL瓶颈怎么优化-Redis会话丢失怎么办" class="headerlink" title="Agent会话上下文怎么存储?MySQL瓶颈怎么优化?Redis会话丢失怎么办?"></a>Agent会话上下文怎么存储?MySQL瓶颈怎么优化?Redis会话丢失怎么办?</h3><h3 id="为什么限制上下文长度-长文档如何优化"><a href="#为什么限制上下文长度-长文档如何优化" class="headerlink" title="为什么限制上下文长度?长文档如何优化?"></a>为什么限制上下文长度?长文档如何优化?</h3><h3 id="Memory与上下文工程的边界"><a href="#Memory与上下文工程的边界" class="headerlink" title="Memory与上下文工程的边界"></a>Memory与上下文工程的边界</h3><h3 id="记忆有效性与质量-事实vs推断-噪声过滤"><a href="#记忆有效性与质量-事实vs推断-噪声过滤" class="headerlink" title="记忆有效性与质量(事实vs推断&#x2F;噪声过滤)"></a>记忆有效性与质量(事实vs推断&#x2F;噪声过滤)</h3><h3 id="记忆注入与检索重排机制"><a href="#记忆注入与检索重排机制" class="headerlink" title="记忆注入与检索重排机制"></a>记忆注入与检索重排机制</h3><h3 id="历史记忆复用降本"><a href="#历史记忆复用降本" class="headerlink" title="历史记忆复用降本"></a>历史记忆复用降本</h3><h2 id="工具与协议"><a href="#工具与协议" class="headerlink" title="工具与协议"></a>工具与协议</h2><h3 id="Function-Calling-MCP区别"><a href="#Function-Calling-MCP区别" class="headerlink" title="Function Calling&#x2F;MCP区别"></a>Function Calling&#x2F;MCP区别</h3><h3 id="Tool-Calling的JSONSchema设计最佳实践"><a href="#Tool-Calling的JSONSchema设计最佳实践" class="headerlink" title="Tool Calling的JSONSchema设计最佳实践"></a>Tool Calling的JSONSchema设计最佳实践</h3><h3 id="Tool-Handler-工具调度器-的设计原则"><a href="#Tool-Handler-工具调度器-的设计原则" class="headerlink" title="Tool Handler(工具调度器)的设计原则"></a>Tool Handler(工具调度器)的设计原则</h3><h3 id="工具调用失败后如何降级"><a href="#工具调用失败后如何降级" class="headerlink" title="工具调用失败后如何降级"></a>工具调用失败后如何降级</h3><h3 id="如何保证ToolCalling的可靠性"><a href="#如何保证ToolCalling的可靠性" class="headerlink" title="如何保证ToolCalling的可靠性"></a>如何保证ToolCalling的可靠性</h3><h3 id="Agent为什么会陷入死循环-如何检测和解决"><a href="#Agent为什么会陷入死循环-如何检测和解决" class="headerlink" title="Agent为什么会陷入死循环?如何检测和解决"></a>Agent为什么会陷入死循环?如何检测和解决</h3><h3 id="MCP-Tools-Skills在Context中的引入顺序"><a href="#MCP-Tools-Skills在Context中的引入顺序" class="headerlink" title="MCP&#x2F;Tools&#x2F;Skills在Context中的引入顺序"></a>MCP&#x2F;Tools&#x2F;Skills在Context中的引入顺序</h3><h3 id="MCP的OAuth2-1授权流程"><a href="#MCP的OAuth2-1授权流程" class="headerlink" title="MCP的OAuth2.1授权流程"></a>MCP的OAuth2.1授权流程</h3><h3 id="MCP生态的Prompt-Injection与工具描述污染"><a href="#MCP生态的Prompt-Injection与工具描述污染" class="headerlink" title="MCP生态的Prompt Injection与工具描述污染"></a>MCP生态的Prompt Injection与工具描述污染</h3><h3 id="MCP-A2A区别"><a href="#MCP-A2A区别" class="headerlink" title="MCP&#x2F;A2A区别"></a>MCP&#x2F;A2A区别</h3><h3 id="MCP-2026-07-28规范核心变化-无状态化"><a href="#MCP-2026-07-28规范核心变化-无状态化" class="headerlink" title="MCP 2026-07-28规范核心变化(无状态化)"></a>MCP 2026-07-28规范核心变化(无状态化)</h3><h3 id="Skills渐进式披露"><a href="#Skills渐进式披露" class="headerlink" title="Skills渐进式披露"></a>Skills渐进式披露</h3><h3 id="如何设计高质量的SKILL-md-有哪些常见反模式"><a href="#如何设计高质量的SKILL-md-有哪些常见反模式" class="headerlink" title="如何设计高质量的SKILL.md?有哪些常见反模式"></a>如何设计高质量的SKILL.md?有哪些常见反模式</h3><h3 id="Agent系统中如何实现Skill的动态发现与编排"><a href="#Agent系统中如何实现Skill的动态发现与编排" class="headerlink" title="Agent系统中如何实现Skill的动态发现与编排"></a>Agent系统中如何实现Skill的动态发现与编排</h3><h3 id="skill和tool的区别"><a href="#skill和tool的区别" class="headerlink" title="skill和tool的区别"></a>skill和tool的区别</h3><h3 id="Function-Calling-完整执行链路-模型输出-JSON-不规范-解析失败怎么兜底"><a href="#Function-Calling-完整执行链路-模型输出-JSON-不规范-解析失败怎么兜底" class="headerlink" title="Function Calling 完整执行链路?模型输出 JSON 不规范&#x2F;解析失败怎么兜底?"></a>Function Calling 完整执行链路?模型输出 JSON 不规范&#x2F;解析失败怎么兜底?</h3><h3 id="配置十多个工具时如何避免模型选错-误调用-怎么保障按需调用"><a href="#配置十多个工具时如何避免模型选错-误调用-怎么保障按需调用" class="headerlink" title="配置十多个工具时如何避免模型选错&#x2F;误调用?怎么保障按需调用?"></a>配置十多个工具时如何避免模型选错&#x2F;误调用?怎么保障按需调用?</h3><h3 id="Agent-是怎么选择工具的"><a href="#Agent-是怎么选择工具的" class="headerlink" title="Agent 是怎么选择工具的?"></a>Agent 是怎么选择工具的?</h3><h3 id="FC、MCP、Skill、Rules-的区别-MCP-解决什么问题-使用场景"><a href="#FC、MCP、Skill、Rules-的区别-MCP-解决什么问题-使用场景" class="headerlink" title="FC、MCP、Skill、Rules 的区别?MCP 解决什么问题&#x2F;使用场景?"></a>FC、MCP、Skill、Rules 的区别?MCP 解决什么问题&#x2F;使用场景?</h3><h3 id="工具的动态注册怎么做-Coding-Agent-最初如何挂载工具"><a href="#工具的动态注册怎么做-Coding-Agent-最初如何挂载工具" class="headerlink" title="工具的动态注册怎么做?Coding Agent 最初如何挂载工具?"></a>工具的动态注册怎么做?Coding Agent 最初如何挂载工具?</h3><h3 id="权限校验怎么做-权限规则是硬编码的吗"><a href="#权限校验怎么做-权限规则是硬编码的吗" class="headerlink" title="权限校验怎么做?权限规则是硬编码的吗?"></a>权限校验怎么做?权限规则是硬编码的吗?</h3><h3 id="工具调用不做限制有什么风险-参数校验-命令注入-SSRF-怎么防"><a href="#工具调用不做限制有什么风险-参数校验-命令注入-SSRF-怎么防" class="headerlink" title="工具调用不做限制有什么风险?参数校验&#x2F;命令注入&#x2F;SSRF 怎么防?"></a>工具调用不做限制有什么风险?参数校验&#x2F;命令注入&#x2F;SSRF 怎么防?</h3><h3 id="大量无效调用拉高成本拖慢QPS：限流和拦截怎么做"><a href="#大量无效调用拉高成本拖慢QPS：限流和拦截怎么做" class="headerlink" title="大量无效调用拉高成本拖慢QPS：限流和拦截怎么做?"></a>大量无效调用拉高成本拖慢QPS：限流和拦截怎么做?</h3><h3 id="如何区分模型输出问题与下游工具-接口问题，快速定位根因"><a href="#如何区分模型输出问题与下游工具-接口问题，快速定位根因" class="headerlink" title="如何区分模型输出问题与下游工具&#x2F;接口问题，快速定位根因?"></a>如何区分模型输出问题与下游工具&#x2F;接口问题，快速定位根因?</h3><h3 id="Agent-结构化输出是什么-怎么做"><a href="#Agent-结构化输出是什么-怎么做" class="headerlink" title="Agent 结构化输出是什么&#x2F;怎么做?"></a>Agent 结构化输出是什么&#x2F;怎么做?</h3><h3 id="数据实时更新时，如何避免-Agent-调用过期工具、输出过时信息"><a href="#数据实时更新时，如何避免-Agent-调用过期工具、输出过时信息" class="headerlink" title="数据实时更新时，如何避免 Agent 调用过期工具、输出过时信息?"></a>数据实时更新时，如何避免 Agent 调用过期工具、输出过时信息?</h3><h3 id="怎么理解-RAG、MCP、FC、Skills-四者的关系"><a href="#怎么理解-RAG、MCP、FC、Skills-四者的关系" class="headerlink" title="怎么理解 RAG、MCP、FC、Skills 四者的关系?"></a>怎么理解 RAG、MCP、FC、Skills 四者的关系?</h3><h3 id="Skill-自进化流水线与生命周期"><a href="#Skill-自进化流水线与生命周期" class="headerlink" title="Skill 自进化流水线与生命周期"></a>Skill 自进化流水线与生命周期</h3><h3 id="工具动态分发与结果合并"><a href="#工具动态分发与结果合并" class="headerlink" title="工具动态分发与结果合并"></a>工具动态分发与结果合并</h3><h3 id="LLM-调用限流-RPM-TPM-双令牌桶-与任务排队"><a href="#LLM-调用限流-RPM-TPM-双令牌桶-与任务排队" class="headerlink" title="LLM 调用限流(RPM&#x2F;TPM&#x2F;双令牌桶)与任务排队"></a>LLM 调用限流(RPM&#x2F;TPM&#x2F;双令牌桶)与任务排队</h3><h2 id="RAG-与知识库"><a href="#RAG-与知识库" class="headerlink" title="RAG 与知识库"></a>RAG 与知识库</h2><h3 id="除了阿里内部的向量库，你还了解哪些RAG向量库-如何选型"><a href="#除了阿里内部的向量库，你还了解哪些RAG向量库-如何选型" class="headerlink" title="除了阿里内部的向量库，你还了解哪些RAG向量库?如何选型?"></a>除了阿里内部的向量库，你还了解哪些RAG向量库?如何选型?</h3><h3 id="Graph-RAG和传统RAG的区别是什么"><a href="#Graph-RAG和传统RAG的区别是什么" class="headerlink" title="Graph RAG和传统RAG的区别是什么?"></a>Graph RAG和传统RAG的区别是什么?</h3><h3 id="RAG的局限性"><a href="#RAG的局限性" class="headerlink" title="RAG的局限性"></a>RAG的局限性</h3><h3 id="如何设计一个支持百万级文档、检索延迟"><a href="#如何设计一个支持百万级文档、检索延迟" class="headerlink" title="如何设计一个支持百万级文档、检索延迟&lt;200ms的RAG系统?"></a>如何设计一个支持百万级文档、检索延迟&lt;200ms的RAG系统?</h3><h3 id="文档切片-Chunking-策略"><a href="#文档切片-Chunking-策略" class="headerlink" title="文档切片(Chunking)策略"></a>文档切片(Chunking)策略</h3><h3 id="表格-PDF-图片等非结构化文档如何做RAG"><a href="#表格-PDF-图片等非结构化文档如何做RAG" class="headerlink" title="表格&#x2F;PDF&#x2F;图片等非结构化文档如何做RAG"></a>表格&#x2F;PDF&#x2F;图片等非结构化文档如何做RAG</h3><h3 id="混合检索-HybridRetrieval-是什么"><a href="#混合检索-HybridRetrieval-是什么" class="headerlink" title="混合检索(HybridRetrieval)是什么"></a>混合检索(HybridRetrieval)是什么</h3><h3 id="如何避免检索到无关片段导致回答跑偏"><a href="#如何避免检索到无关片段导致回答跑偏" class="headerlink" title="如何避免检索到无关片段导致回答跑偏"></a>如何避免检索到无关片段导致回答跑偏</h3><h3 id="多轮对话中如何自动触发检索"><a href="#多轮对话中如何自动触发检索" class="headerlink" title="多轮对话中如何自动触发检索"></a>多轮对话中如何自动触发检索</h3><h3 id="Rerank-重排序-为什么需要"><a href="#Rerank-重排序-为什么需要" class="headerlink" title="Rerank(重排序)&#x2F;为什么需要"></a>Rerank(重排序)&#x2F;为什么需要</h3><h3 id="什么是”长文档中间丢失”问题"><a href="#什么是”长文档中间丢失”问题" class="headerlink" title="什么是”长文档中间丢失”问题?"></a>什么是”长文档中间丢失”问题?</h3><h3 id="知识库内容频繁更新如何保证一致性"><a href="#知识库内容频繁更新如何保证一致性" class="headerlink" title="知识库内容频繁更新如何保证一致性"></a>知识库内容频繁更新如何保证一致性</h3><h3 id="RAG-整体流程"><a href="#RAG-整体流程" class="headerlink" title="RAG 整体流程?"></a>RAG 整体流程?</h3><h3 id="Agentic-RAG-和传统-RAG-的区别-Agent-如何自主判断检索次数、动态改写-query-为何做成检索策略-放知识库还是上层"><a href="#Agentic-RAG-和传统-RAG-的区别-Agent-如何自主判断检索次数、动态改写-query-为何做成检索策略-放知识库还是上层" class="headerlink" title="Agentic RAG 和传统 RAG 的区别?Agent 如何自主判断检索次数、动态改写 query?为何做成检索策略&#x2F;放知识库还是上层?"></a>Agentic RAG 和传统 RAG 的区别?Agent 如何自主判断检索次数、动态改写 query?为何做成检索策略&#x2F;放知识库还是上层?</h3><h3 id="召回时分片不完整怎么办"><a href="#召回时分片不完整怎么办" class="headerlink" title="召回时分片不完整怎么办?"></a>召回时分片不完整怎么办?</h3><h3 id="Embedding-选型：BGE-还是自训-维度多少-微调负样本怎么采"><a href="#Embedding-选型：BGE-还是自训-维度多少-微调负样本怎么采" class="headerlink" title="Embedding 选型：BGE 还是自训?维度多少?微调负样本怎么采?"></a>Embedding 选型：BGE 还是自训?维度多少?微调负样本怎么采?</h3><h3 id="提升-RAG-检索质量的技术"><a href="#提升-RAG-检索质量的技术" class="headerlink" title="提升 RAG 检索质量的技术?"></a>提升 RAG 检索质量的技术?</h3><h3 id="召回不理想优先排查哪些环节"><a href="#召回不理想优先排查哪些环节" class="headerlink" title="召回不理想优先排查哪些环节?"></a>召回不理想优先排查哪些环节?</h3><h3 id="低质-Query-模糊诉求怎么避免空召回错召回"><a href="#低质-Query-模糊诉求怎么避免空召回错召回" class="headerlink" title="低质 Query&#x2F;模糊诉求怎么避免空召回错召回?"></a>低质 Query&#x2F;模糊诉求怎么避免空召回错召回?</h3><h3 id="知识库数据隔离：物理-vs-逻辑-对索引和检索性能影响"><a href="#知识库数据隔离：物理-vs-逻辑-对索引和检索性能影响" class="headerlink" title="知识库数据隔离：物理 vs 逻辑?对索引和检索性能影响?"></a>知识库数据隔离：物理 vs 逻辑?对索引和检索性能影响?</h3><h3 id="通用知识库-vs-业务定制-怎么判断能力做成平台还是交给业务-会不会被成熟开源产品替代"><a href="#通用知识库-vs-业务定制-怎么判断能力做成平台还是交给业务-会不会被成熟开源产品替代" class="headerlink" title="通用知识库 vs 业务定制?怎么判断能力做成平台还是交给业务?会不会被成熟开源产品替代?"></a>通用知识库 vs 业务定制?怎么判断能力做成平台还是交给业务?会不会被成熟开源产品替代?</h3><h3 id="知识库还可以用在哪些场景-除文档检索"><a href="#知识库还可以用在哪些场景-除文档检索" class="headerlink" title="知识库还可以用在哪些场景(除文档检索)?"></a>知识库还可以用在哪些场景(除文档检索)?</h3><h3 id="RAG-vs-塞-Prompt-RAG-vs-微调的选型"><a href="#RAG-vs-塞-Prompt-RAG-vs-微调的选型" class="headerlink" title="RAG vs 塞 Prompt &#x2F; RAG vs 微调的选型"></a>RAG vs 塞 Prompt &#x2F; RAG vs 微调的选型</h3><h3 id="云端-RAG-vs-端侧-RAG-差异"><a href="#云端-RAG-vs-端侧-RAG-差异" class="headerlink" title="云端 RAG vs 端侧 RAG 差异"></a>云端 RAG vs 端侧 RAG 差异</h3><h3 id="多模态-视频知识库处理链路"><a href="#多模态-视频知识库处理链路" class="headerlink" title="多模态 &#x2F; 视频知识库处理链路"></a>多模态 &#x2F; 视频知识库处理链路</h3><h2 id="多-Agent"><a href="#多-Agent" class="headerlink" title="多 Agent"></a>多 Agent</h2><h3 id="常见Multi-Agent协作模式"><a href="#常见Multi-Agent协作模式" class="headerlink" title="常见Multi-Agent协作模式"></a>常见Multi-Agent协作模式</h3><h3 id="多Agent怎么保证其比单Agent强"><a href="#多Agent怎么保证其比单Agent强" class="headerlink" title="多Agent怎么保证其比单Agent强"></a>多Agent怎么保证其比单Agent强</h3><h3 id="何时用多Agent比单Agent更合理"><a href="#何时用多Agent比单Agent更合理" class="headerlink" title="何时用多Agent比单Agent更合理"></a>何时用多Agent比单Agent更合理</h3><h3 id="如何解决多Agent的”无限循环”或”通信冗余”"><a href="#如何解决多Agent的”无限循环”或”通信冗余”" class="headerlink" title="如何解决多Agent的”无限循环”或”通信冗余”"></a>如何解决多Agent的”无限循环”或”通信冗余”</h3><h3 id="多Agent系统设计范式"><a href="#多Agent系统设计范式" class="headerlink" title="多Agent系统设计范式"></a>多Agent系统设计范式</h3><h3 id="设计一个多Agent协作系统"><a href="#设计一个多Agent协作系统" class="headerlink" title="设计一个多Agent协作系统"></a>设计一个多Agent协作系统</h3><h3 id="设计一个多Agent辩论系统"><a href="#设计一个多Agent辩论系统" class="headerlink" title="设计一个多Agent辩论系统"></a>设计一个多Agent辩论系统</h3><h3 id="分布式多Agent状态流转设计"><a href="#分布式多Agent状态流转设计" class="headerlink" title="分布式多Agent状态流转设计"></a>分布式多Agent状态流转设计</h3><h3 id="什么是Subagent-子智能体-模式-解决了什么问题"><a href="#什么是Subagent-子智能体-模式-解决了什么问题" class="headerlink" title="什么是Subagent(子智能体)模式?解决了什么问题"></a>什么是Subagent(子智能体)模式?解决了什么问题</h3><h3 id="子-Agent-失败整体怎么兜底-重试-降级-输出结论冲突怎么仲裁"><a href="#子-Agent-失败整体怎么兜底-重试-降级-输出结论冲突怎么仲裁" class="headerlink" title="子 Agent 失败整体怎么兜底&#x2F;重试&#x2F;降级?输出结论冲突怎么仲裁?"></a>子 Agent 失败整体怎么兜底&#x2F;重试&#x2F;降级?输出结论冲突怎么仲裁?</h3><h3 id="多-Agent-争抢哪些资源-怎么隔离"><a href="#多-Agent-争抢哪些资源-怎么隔离" class="headerlink" title="多 Agent 争抢哪些资源?怎么隔离?"></a>多 Agent 争抢哪些资源?怎么隔离?</h3><h3 id="海量任务下多-Agent-分片、并发调度、避免抢占"><a href="#海量任务下多-Agent-分片、并发调度、避免抢占" class="headerlink" title="海量任务下多 Agent 分片、并发调度、避免抢占?"></a>海量任务下多 Agent 分片、并发调度、避免抢占?</h3><h3 id="多-Agent-怎么实现责任追溯-错误能否定位到具体节点和工具调用"><a href="#多-Agent-怎么实现责任追溯-错误能否定位到具体节点和工具调用" class="headerlink" title="多 Agent 怎么实现责任追溯?错误能否定位到具体节点和工具调用?"></a>多 Agent 怎么实现责任追溯?错误能否定位到具体节点和工具调用?</h3><h3 id="多-Agent-成本怎么控-token-预算超限先砍记忆、检索还是规划"><a href="#多-Agent-成本怎么控-token-预算超限先砍记忆、检索还是规划" class="headerlink" title="多 Agent 成本怎么控?token 预算超限先砍记忆、检索还是规划?"></a>多 Agent 成本怎么控?token 预算超限先砍记忆、检索还是规划?</h3><h3 id="多-Agent-之间如何通信"><a href="#多-Agent-之间如何通信" class="headerlink" title="多 Agent 之间如何通信?"></a>多 Agent 之间如何通信?</h3><h3 id="主-Agent-与子-Agent-的模型分配"><a href="#主-Agent-与子-Agent-的模型分配" class="headerlink" title="主 Agent 与子 Agent 的模型分配"></a>主 Agent 与子 Agent 的模型分配</h3><h2 id="评估与质量"><a href="#评估与质量" class="headerlink" title="评估与质量"></a>评估与质量</h2><h3 id="怎么设计评价-Agent-系统好坏的指标体系-业务指标和技术指标-任务完成率-工具准确率-幻觉率怎么量化"><a href="#怎么设计评价-Agent-系统好坏的指标体系-业务指标和技术指标-任务完成率-工具准确率-幻觉率怎么量化" class="headerlink" title="怎么设计评价 Agent 系统好坏的指标体系?业务指标和技术指标?任务完成率&#x2F;工具准确率&#x2F;幻觉率怎么量化?"></a>怎么设计评价 Agent 系统好坏的指标体系?业务指标和技术指标?任务完成率&#x2F;工具准确率&#x2F;幻觉率怎么量化?</h3><h3 id="评测集和-Ground-Truth-怎么构造-如何从海量线上日志构建有限离线评测集"><a href="#评测集和-Ground-Truth-怎么构造-如何从海量线上日志构建有限离线评测集" class="headerlink" title="评测集和 Ground Truth 怎么构造?如何从海量线上日志构建有限离线评测集?"></a>评测集和 Ground Truth 怎么构造?如何从海量线上日志构建有限离线评测集?</h3><h3 id="评测是人工还是机器"><a href="#评测是人工还是机器" class="headerlink" title="评测是人工还是机器?"></a>评测是人工还是机器?</h3><h3 id="LLM-as-a-Judge-的位置偏见-长度偏见怎么规避"><a href="#LLM-as-a-Judge-的位置偏见-长度偏见怎么规避" class="headerlink" title="LLM-as-a-Judge 的位置偏见&#x2F;长度偏见怎么规避?"></a>LLM-as-a-Judge 的位置偏见&#x2F;长度偏见怎么规避?</h3><h3 id="线上大量用户反馈任务失败，怎么排查和迭代-bad-case-怎么回流"><a href="#线上大量用户反馈任务失败，怎么排查和迭代-bad-case-怎么回流" class="headerlink" title="线上大量用户反馈任务失败，怎么排查和迭代?bad case 怎么回流?"></a>线上大量用户反馈任务失败，怎么排查和迭代?bad case 怎么回流?</h3><h3 id="大模型幻觉的成因-怎么解决"><a href="#大模型幻觉的成因-怎么解决" class="headerlink" title="大模型幻觉的成因?怎么解决?"></a>大模型幻觉的成因?怎么解决?</h3><h3 id="置信度通过什么规则判断-什么情况二次确认用户"><a href="#置信度通过什么规则判断-什么情况二次确认用户" class="headerlink" title="置信度通过什么规则判断?什么情况二次确认用户?"></a>置信度通过什么规则判断?什么情况二次确认用户?</h3><h3 id="Prompt-调优到瓶颈后，降幻觉的优化优先级怎么排"><a href="#Prompt-调优到瓶颈后，降幻觉的优化优先级怎么排" class="headerlink" title="Prompt 调优到瓶颈后，降幻觉的优化优先级怎么排?"></a>Prompt 调优到瓶颈后，降幻觉的优化优先级怎么排?</h3><h3 id="模型-Prompt-迭代后怎么基线对比和灰度验证-版本迭代怎么保稳定"><a href="#模型-Prompt-迭代后怎么基线对比和灰度验证-版本迭代怎么保稳定" class="headerlink" title="模型&#x2F;Prompt 迭代后怎么基线对比和灰度验证?版本迭代怎么保稳定?"></a>模型&#x2F;Prompt 迭代后怎么基线对比和灰度验证?版本迭代怎么保稳定?</h3><h3 id="Eval、Trace、Guardrail-分别解决什么问题-为什么只靠-Prompt-优化不行"><a href="#Eval、Trace、Guardrail-分别解决什么问题-为什么只靠-Prompt-优化不行" class="headerlink" title="Eval、Trace、Guardrail 分别解决什么问题?为什么只靠 Prompt 优化不行?"></a>Eval、Trace、Guardrail 分别解决什么问题?为什么只靠 Prompt 优化不行?</h3><h3 id="怎么保证-Agent-产出达到之前人工制作的质量"><a href="#怎么保证-Agent-产出达到之前人工制作的质量" class="headerlink" title="怎么保证 Agent 产出达到之前人工制作的质量?"></a>怎么保证 Agent 产出达到之前人工制作的质量?</h3><h3 id="如何评估小模型抽取结果-复杂样本怎么处理"><a href="#如何评估小模型抽取结果-复杂样本怎么处理" class="headerlink" title="如何评估小模型抽取结果?复杂样本怎么处理?"></a>如何评估小模型抽取结果?复杂样本怎么处理?</h3><h3 id="过程评估与贡献归因分析"><a href="#过程评估与贡献归因分析" class="headerlink" title="过程评估与贡献归因分析"></a>过程评估与贡献归因分析</h3><h3 id="数据回流与自迭代"><a href="#数据回流与自迭代" class="headerlink" title="数据回流与自迭代"></a>数据回流与自迭代</h3><h3 id="工程质量提升手段-无微调高准确率-AI-代码质量"><a href="#工程质量提升手段-无微调高准确率-AI-代码质量" class="headerlink" title="工程质量提升手段(无微调高准确率 &#x2F; AI 代码质量)"></a>工程质量提升手段(无微调高准确率 &#x2F; AI 代码质量)</h3><h2 id="生产工程与安全"><a href="#生产工程与安全" class="headerlink" title="生产工程与安全"></a>生产工程与安全</h2><h3 id="Human-in-the-Loop中断点与可恢复执行"><a href="#Human-in-the-Loop中断点与可恢复执行" class="headerlink" title="Human-in-the-Loop中断点与可恢复执行"></a>Human-in-the-Loop中断点与可恢复执行</h3><h3 id="如何设计防注入的Prompt结构"><a href="#如何设计防注入的Prompt结构" class="headerlink" title="如何设计防注入的Prompt结构"></a>如何设计防注入的Prompt结构</h3><h3 id="首Token延迟和整体吞吐量如何优化"><a href="#首Token延迟和整体吞吐量如何优化" class="headerlink" title="首Token延迟和整体吞吐量如何优化"></a>首Token延迟和整体吞吐量如何优化</h3><h3 id="Agent性能优化常见手段"><a href="#Agent性能优化常见手段" class="headerlink" title="Agent性能优化常见手段"></a>Agent性能优化常见手段</h3><h3 id="如何减少Token消耗"><a href="#如何减少Token消耗" class="headerlink" title="如何减少Token消耗"></a>如何减少Token消耗</h3><h3 id="Token消耗成本如何控制"><a href="#Token消耗成本如何控制" class="headerlink" title="Token消耗成本如何控制"></a>Token消耗成本如何控制</h3><h3 id="如何防止恶意刷Token"><a href="#如何防止恶意刷Token" class="headerlink" title="如何防止恶意刷Token"></a>如何防止恶意刷Token</h3><h3 id="如何监控Agent的Token消耗"><a href="#如何监控Agent的Token消耗" class="headerlink" title="如何监控Agent的Token消耗"></a>如何监控Agent的Token消耗</h3><h3 id="Agent开发中敏感信息如何防泄露"><a href="#Agent开发中敏感信息如何防泄露" class="headerlink" title="Agent开发中敏感信息如何防泄露"></a>Agent开发中敏感信息如何防泄露</h3><h3 id="多用户高并发任务堆积-卡死-资源耗尽怎么设计"><a href="#多用户高并发任务堆积-卡死-资源耗尽怎么设计" class="headerlink" title="多用户高并发任务堆积&#x2F;卡死&#x2F;资源耗尽怎么设计?"></a>多用户高并发任务堆积&#x2F;卡死&#x2F;资源耗尽怎么设计?</h3><h3 id="大促高峰咨询暴增，批量任务堆积卡顿怎么优化调度-哪些场景强制切规则链路"><a href="#大促高峰咨询暴增，批量任务堆积卡顿怎么优化调度-哪些场景强制切规则链路" class="headerlink" title="大促高峰咨询暴增，批量任务堆积卡顿怎么优化调度?哪些场景强制切规则链路?"></a>大促高峰咨询暴增，批量任务堆积卡顿怎么优化调度?哪些场景强制切规则链路?</h3><h3 id="SSE-如何边生成边推送-SSE-vs-WebSocket"><a href="#SSE-如何边生成边推送-SSE-vs-WebSocket" class="headerlink" title="SSE 如何边生成边推送?SSE vs WebSocket?"></a>SSE 如何边生成边推送?SSE vs WebSocket?</h3><h3 id="Agent-沙箱机制怎么设计-E2B-了解吗"><a href="#Agent-沙箱机制怎么设计-E2B-了解吗" class="headerlink" title="Agent 沙箱机制怎么设计?E2B 了解吗?"></a>Agent 沙箱机制怎么设计?E2B 了解吗?</h3><h3 id="Checkpoint-底层怎么实现-MemorySaver-vs-PostgresSaver-状态序列化版本兼容-存量会话迁移"><a href="#Checkpoint-底层怎么实现-MemorySaver-vs-PostgresSaver-状态序列化版本兼容-存量会话迁移" class="headerlink" title="Checkpoint 底层怎么实现?MemorySaver vs PostgresSaver?状态序列化版本兼容&#x2F;存量会话迁移?"></a>Checkpoint 底层怎么实现?MemorySaver vs PostgresSaver?状态序列化版本兼容&#x2F;存量会话迁移?</h3><h3 id="Coding-Agent-运行中用户发消息打断，怎么处理"><a href="#Coding-Agent-运行中用户发消息打断，怎么处理" class="headerlink" title="Coding Agent 运行中用户发消息打断，怎么处理?"></a>Coding Agent 运行中用户发消息打断，怎么处理?</h3><h3 id="Agent-实例池怎么设计-千级-Agent-扩容、亲和路由、实例淘汰重建"><a href="#Agent-实例池怎么设计-千级-Agent-扩容、亲和路由、实例淘汰重建" class="headerlink" title="Agent 实例池怎么设计?千级 Agent 扩容、亲和路由、实例淘汰重建?"></a>Agent 实例池怎么设计?千级 Agent 扩容、亲和路由、实例淘汰重建?</h3><h3 id="Agent-多租户隔离怎么做"><a href="#Agent-多租户隔离怎么做" class="headerlink" title="Agent 多租户隔离怎么做?"></a>Agent 多租户隔离怎么做?</h3><h3 id="AI-代码工程化：单测生成-补丁应用-沙箱执行-版本回滚哪步最易出生产事故-怎么防控"><a href="#AI-代码工程化：单测生成-补丁应用-沙箱执行-版本回滚哪步最易出生产事故-怎么防控" class="headerlink" title="AI 代码工程化：单测生成&#x2F;补丁应用&#x2F;沙箱执行&#x2F;版本回滚哪步最易出生产事故?怎么防控?"></a>AI 代码工程化：单测生成&#x2F;补丁应用&#x2F;沙箱执行&#x2F;版本回滚哪步最易出生产事故?怎么防控?</h3><h3 id="系统线上稳定性保障的落地思路-监控告警体系"><a href="#系统线上稳定性保障的落地思路-监控告警体系" class="headerlink" title="系统线上稳定性保障的落地思路?监控告警体系?"></a>系统线上稳定性保障的落地思路?监控告警体系?</h3><h3 id="ZSet-限流瓶颈"><a href="#ZSet-限流瓶颈" class="headerlink" title="ZSet 限流瓶颈?"></a>ZSet 限流瓶颈?</h3><h3 id="生产可用-vs-Demo-的判断标准"><a href="#生产可用-vs-Demo-的判断标准" class="headerlink" title="生产可用 vs Demo 的判断标准"></a>生产可用 vs Demo 的判断标准</h3><h2 id="框架与-Harness"><a href="#框架与-Harness" class="headerlink" title="框架与 Harness"></a>框架与 Harness</h2><h3 id="LangChain"><a href="#LangChain" class="headerlink" title="LangChain"></a>LangChain</h3><h3 id="LangGraph"><a href="#LangGraph" class="headerlink" title="LangGraph"></a>LangGraph</h3><h3 id="LangChain-vs-LangGraph-vs-LlamaIndex"><a href="#LangChain-vs-LangGraph-vs-LlamaIndex" class="headerlink" title="LangChain vs LangGraph vs LlamaIndex"></a>LangChain vs LangGraph vs LlamaIndex</h3><h3 id="Harness-Engineering"><a href="#Harness-Engineering" class="headerlink" title="Harness Engineering"></a>Harness Engineering</h3><h3 id="SDD-Spec-Driven-Development"><a href="#SDD-Spec-Driven-Development" class="headerlink" title="SDD&#x2F;Spec-Driven Development"></a>SDD&#x2F;Spec-Driven Development</h3><h3 id="自研-vs-OpenAI-SDK-vs-LangGraph-AutoGen-CrewAI-OpenManus-怎么选-讲清-trade-off-不用框架原生写过吗"><a href="#自研-vs-OpenAI-SDK-vs-LangGraph-AutoGen-CrewAI-OpenManus-怎么选-讲清-trade-off-不用框架原生写过吗" class="headerlink" title="自研 vs OpenAI SDK vs LangGraph&#x2F;AutoGen&#x2F;CrewAI&#x2F;OpenManus 怎么选?讲清 trade-off?不用框架原生写过吗?"></a>自研 vs OpenAI SDK vs LangGraph&#x2F;AutoGen&#x2F;CrewAI&#x2F;OpenManus 怎么选?讲清 trade-off?不用框架原生写过吗?</h3><h3 id="LangGraph-子图复用-动态子Agent注册-热更新图定义"><a href="#LangGraph-子图复用-动态子Agent注册-热更新图定义" class="headerlink" title="LangGraph 子图复用&#x2F;动态子Agent注册&#x2F;热更新图定义?"></a>LangGraph 子图复用&#x2F;动态子Agent注册&#x2F;热更新图定义?</h3><h3 id="Prompt-Context-Harness-Engineering-三者关系"><a href="#Prompt-Context-Harness-Engineering-三者关系" class="headerlink" title="Prompt&#x2F;Context&#x2F;Harness Engineering 三者关系?"></a>Prompt&#x2F;Context&#x2F;Harness Engineering 三者关系?</h3><h3 id="Claude-Code-Codex-类-harness-的执行思路-agent-md、skills-文件怎么落地-Claude-Code-上下文管理优缺点"><a href="#Claude-Code-Codex-类-harness-的执行思路-agent-md、skills-文件怎么落地-Claude-Code-上下文管理优缺点" class="headerlink" title="Claude Code&#x2F;Codex 类 harness 的执行思路?agent.md、skills 文件怎么落地?Claude Code 上下文管理优缺点?"></a>Claude Code&#x2F;Codex 类 harness 的执行思路?agent.md、skills 文件怎么落地?Claude Code 上下文管理优缺点?</h3><h3 id="AI-代码助手怎么高效输入整个仓库上下文-全量灌还是分层检索"><a href="#AI-代码助手怎么高效输入整个仓库上下文-全量灌还是分层检索" class="headerlink" title="AI 代码助手怎么高效输入整个仓库上下文?全量灌还是分层检索?"></a>AI 代码助手怎么高效输入整个仓库上下文?全量灌还是分层检索?</h3><h3 id="是否-fork-过-deep-agent-upstream-冲突怎么处理"><a href="#是否-fork-过-deep-agent-upstream-冲突怎么处理" class="headerlink" title="是否 fork 过 deep-agent?upstream 冲突怎么处理?"></a>是否 fork 过 deep-agent?upstream 冲突怎么处理?</h3><h3 id="LangChain-Trace-链路追踪"><a href="#LangChain-Trace-链路追踪" class="headerlink" title="LangChain Trace 链路追踪"></a>LangChain Trace 链路追踪</h3><h2 id="模型与意图识别"><a href="#模型与意图识别" class="headerlink" title="模型与意图识别"></a>模型与意图识别</h2><h3 id="多模型调度策略如何设计"><a href="#多模型调度策略如何设计" class="headerlink" title="多模型调度策略如何设计"></a>多模型调度策略如何设计</h3><h3 id="Agent-SystemPrompt的最佳结构是什么"><a href="#Agent-SystemPrompt的最佳结构是什么" class="headerlink" title="Agent SystemPrompt的最佳结构是什么?"></a>Agent SystemPrompt的最佳结构是什么?</h3><h3 id="Prompt-Template在生产中的实践"><a href="#Prompt-Template在生产中的实践" class="headerlink" title="Prompt Template在生产中的实践?"></a>Prompt Template在生产中的实践?</h3><h3 id="意图识别：规则、分类模型、LLM-三种方案怎么取舍-轻量模型和规则怎么协同"><a href="#意图识别：规则、分类模型、LLM-三种方案怎么取舍-轻量模型和规则怎么协同" class="headerlink" title="意图识别：规则、分类模型、LLM 三种方案怎么取舍?轻量模型和规则怎么协同?"></a>意图识别：规则、分类模型、LLM 三种方案怎么取舍?轻量模型和规则怎么协同?</h3><h3 id="意图歧义-置信度低的兜底-结合真实-bad-case"><a href="#意图歧义-置信度低的兜底-结合真实-bad-case" class="headerlink" title="意图歧义&#x2F;置信度低的兜底?结合真实 bad case"></a>意图歧义&#x2F;置信度低的兜底?结合真实 bad case</h3><h3 id="意图模型线上漂移怎么发现-bad-case-怎么回流-在线蒸馏"><a href="#意图模型线上漂移怎么发现-bad-case-怎么回流-在线蒸馏" class="headerlink" title="意图模型线上漂移怎么发现?bad case 怎么回流?在线蒸馏?"></a>意图模型线上漂移怎么发现?bad case 怎么回流?在线蒸馏?</h3><h3 id="对大模型底层原理了解多少-Transformer-attention"><a href="#对大模型底层原理了解多少-Transformer-attention" class="headerlink" title="对大模型底层原理了解多少(Transformer&#x2F;attention)?"></a>对大模型底层原理了解多少(Transformer&#x2F;attention)?</h3><h3 id="Text-to-SQL-怎么保证-SQL-准确"><a href="#Text-to-SQL-怎么保证-SQL-准确" class="headerlink" title="Text-to-SQL 怎么保证 SQL 准确?"></a>Text-to-SQL 怎么保证 SQL 准确?</h3><h3 id="信息抽取适合什么模型"><a href="#信息抽取适合什么模型" class="headerlink" title="信息抽取适合什么模型?"></a>信息抽取适合什么模型?</h3><h3 id="端云协同怎么设计-哪些任务放端侧哪些上云"><a href="#端云协同怎么设计-哪些任务放端侧哪些上云" class="headerlink" title="端云协同怎么设计?哪些任务放端侧哪些上云?"></a>端云协同怎么设计?哪些任务放端侧哪些上云?</h3><h3 id="构建高质量数据集怎么保证质量"><a href="#构建高质量数据集怎么保证质量" class="headerlink" title="构建高质量数据集怎么保证质量?"></a>构建高质量数据集怎么保证质量?</h3><h3 id="Agentic-RL-与模型训练-RL-loss-GRPO-GSPO-OPD-SFT-rollout"><a href="#Agentic-RL-与模型训练-RL-loss-GRPO-GSPO-OPD-SFT-rollout" class="headerlink" title="Agentic RL 与模型训练(RL loss &#x2F; GRPO &#x2F; GSPO &#x2F; OPD &#x2F; SFT &#x2F; rollout)"></a>Agentic RL 与模型训练(RL loss &#x2F; GRPO &#x2F; GSPO &#x2F; OPD &#x2F; SFT &#x2F; rollout)</h3><h3 id="模型接入协议与推理强度控制"><a href="#模型接入协议与推理强度控制" class="headerlink" title="模型接入协议与推理强度控制"></a>模型接入协议与推理强度控制</h3><h3 id="ASR-选型评估"><a href="#ASR-选型评估" class="headerlink" title="ASR 选型评估"></a>ASR 选型评估</h3><h2 id="场景设计题"><a href="#场景设计题" class="headerlink" title="场景设计题"></a>场景设计题</h2><blockquote>
+<p>答法框架：澄清需求→分层架构→关键设计→降级与评测。</p>
+</blockquote>
+<h3 id="设计旅游咨询-Agent：机票-退改-酒店-攻略混合提问，怎么拆多意图、并行调度、聚合结果"><a href="#设计旅游咨询-Agent：机票-退改-酒店-攻略混合提问，怎么拆多意图、并行调度、聚合结果" class="headerlink" title="设计旅游咨询 Agent：机票&#x2F;退改&#x2F;酒店&#x2F;攻略混合提问，怎么拆多意图、并行调度、聚合结果?"></a>设计旅游咨询 Agent：机票&#x2F;退改&#x2F;酒店&#x2F;攻略混合提问，怎么拆多意图、并行调度、聚合结果?</h3><h3 id="设计小爱个人助理：日程-天气-本地文件-多轮-SSE-多租户，端云协同架构与难点"><a href="#设计小爱个人助理：日程-天气-本地文件-多轮-SSE-多租户，端云协同架构与难点" class="headerlink" title="设计小爱个人助理：日程&#x2F;天气&#x2F;本地文件&#x2F;多轮&#x2F;SSE&#x2F;多租户，端云协同架构与难点"></a>设计小爱个人助理：日程&#x2F;天气&#x2F;本地文件&#x2F;多轮&#x2F;SSE&#x2F;多租户，端云协同架构与难点</h3><h3 id="设计-AI-面试助手：上传简历自动生成问题并模拟面试"><a href="#设计-AI-面试助手：上传简历自动生成问题并模拟面试" class="headerlink" title="设计 AI 面试助手：上传简历自动生成问题并模拟面试"></a>设计 AI 面试助手：上传简历自动生成问题并模拟面试</h3><h3 id="用-AI-做游戏-UI-自动化测试怎么设计"><a href="#用-AI-做游戏-UI-自动化测试怎么设计" class="headerlink" title="用 AI 做游戏 UI 自动化测试怎么设计?"></a>用 AI 做游戏 UI 自动化测试怎么设计?</h3><h3 id="售后-Agent-对接订单-物流-退款多工具，怎么保证多步骤闭环不遗漏"><a href="#售后-Agent-对接订单-物流-退款多工具，怎么保证多步骤闭环不遗漏" class="headerlink" title="售后 Agent 对接订单&#x2F;物流&#x2F;退款多工具，怎么保证多步骤闭环不遗漏?"></a>售后 Agent 对接订单&#x2F;物流&#x2F;退款多工具，怎么保证多步骤闭环不遗漏?</h3><h3 id="时间检索工具怎么设计-模糊时间怎么规范化"><a href="#时间检索工具怎么设计-模糊时间怎么规范化" class="headerlink" title="时间检索工具怎么设计?模糊时间怎么规范化?"></a>时间检索工具怎么设计?模糊时间怎么规范化?</h3><h3 id="交易流程最核心关注哪些点-对接第三方支付还是统一封装"><a href="#交易流程最核心关注哪些点-对接第三方支付还是统一封装" class="headerlink" title="交易流程最核心关注哪些点?对接第三方支付还是统一封装?"></a>交易流程最核心关注哪些点?对接第三方支付还是统一封装?</h3><h3 id="影视二创高光片段-Agent-设计"><a href="#影视二创高光片段-Agent-设计" class="headerlink" title="影视二创高光片段 Agent 设计"></a>影视二创高光片段 Agent 设计</h3><h3 id="从零设计企业级-AI-Agent-应用-全模块"><a href="#从零设计企业级-AI-Agent-应用-全模块" class="headerlink" title="从零设计企业级 AI Agent 应用(全模块)"></a>从零设计企业级 AI Agent 应用(全模块)</h3><h3 id="智能客服机器人设计"><a href="#智能客服机器人设计" class="headerlink" title="智能客服机器人设计"></a>智能客服机器人设计</h3><h2 id="开放题与HR"><a href="#开放题与HR" class="headerlink" title="开放题与HR"></a>开放题与HR</h2><h3 id="Vibe-Coding"><a href="#Vibe-Coding" class="headerlink" title="Vibe Coding"></a>Vibe Coding</h3><h3 id="Agent-行业概念泡沫-真实落地价值和瓶颈"><a href="#Agent-行业概念泡沫-真实落地价值和瓶颈" class="headerlink" title="Agent 行业概念泡沫?真实落地价值和瓶颈?"></a>Agent 行业概念泡沫?真实落地价值和瓶颈?</h3><h3 id="智能化越高不确定性越强，怎么平衡智能性和业务可控性"><a href="#智能化越高不确定性越强，怎么平衡智能性和业务可控性" class="headerlink" title="智能化越高不确定性越强，怎么平衡智能性和业务可控性?"></a>智能化越高不确定性越强，怎么平衡智能性和业务可控性?</h3><h3 id="未来更看好工程落地还是模型能力升级"><a href="#未来更看好工程落地还是模型能力升级" class="headerlink" title="未来更看好工程落地还是模型能力升级?"></a>未来更看好工程落地还是模型能力升级?</h3><h3 id="Agent-的局限性"><a href="#Agent-的局限性" class="headerlink" title="Agent 的局限性?"></a>Agent 的局限性?</h3><h3 id="为什么从后端-深度学习转-Agent"><a href="#为什么从后端-深度学习转-Agent" class="headerlink" title="为什么从后端&#x2F;深度学习转 Agent?"></a>为什么从后端&#x2F;深度学习转 Agent?</h3><h3 id="怎么建立技术判断力-没成熟经验时依据什么信号决定投入"><a href="#怎么建立技术判断力-没成熟经验时依据什么信号决定投入" class="headerlink" title="怎么建立技术判断力?没成熟经验时依据什么信号决定投入?"></a>怎么建立技术判断力?没成熟经验时依据什么信号决定投入?</h3><h3 id="近半年深耕的最难论文-开源源码"><a href="#近半年深耕的最难论文-开源源码" class="headerlink" title="近半年深耕的最难论文&#x2F;开源源码?"></a>近半年深耕的最难论文&#x2F;开源源码?</h3><h3 id="怎么看-AI-发展阶段-对工作产品的影响-基础架构团队做到什么程度才信任-AI"><a href="#怎么看-AI-发展阶段-对工作产品的影响-基础架构团队做到什么程度才信任-AI" class="headerlink" title="怎么看 AI 发展阶段&#x2F;对工作产品的影响?基础架构团队做到什么程度才信任 AI?"></a>怎么看 AI 发展阶段&#x2F;对工作产品的影响?基础架构团队做到什么程度才信任 AI?</h3><h3 id="学习新领域的方法-怎么判断技术值得深学还是了解"><a href="#学习新领域的方法-怎么判断技术值得深学还是了解" class="headerlink" title="学习新领域的方法?怎么判断技术值得深学还是了解?"></a>学习新领域的方法?怎么判断技术值得深学还是了解?</h3><h3 id="怎么证明你思考深度比别人深-AI-时代的潜力怎么定义"><a href="#怎么证明你思考深度比别人深-AI-时代的潜力怎么定义" class="headerlink" title="怎么证明你思考深度比别人深?AI 时代的潜力怎么定义?"></a>怎么证明你思考深度比别人深?AI 时代的潜力怎么定义?</h3><h3 id="项目最大缺陷-重构怎么改-业务指标长期不提升怎么办"><a href="#项目最大缺陷-重构怎么改-业务指标长期不提升怎么办" class="headerlink" title="项目最大缺陷?重构怎么改?业务指标长期不提升怎么办?"></a>项目最大缺陷?重构怎么改?业务指标长期不提升怎么办?</h3><h3 id="算法和后端同学对-Agent-边界认知不一致怎么处理-技术方案和业务方分歧怎么沟通"><a href="#算法和后端同学对-Agent-边界认知不一致怎么处理-技术方案和业务方分歧怎么沟通" class="headerlink" title="算法和后端同学对 Agent 边界认知不一致怎么处理?技术方案和业务方分歧怎么沟通?"></a>算法和后端同学对 Agent 边界认知不一致怎么处理?技术方案和业务方分歧怎么沟通?</h3><h3 id="两周上线座舱-demo-但知识库未齐，怎么排优先级"><a href="#两周上线座舱-demo-但知识库未齐，怎么排优先级" class="headerlink" title="两周上线座舱 demo 但知识库未齐，怎么排优先级?"></a>两周上线座舱 demo 但知识库未齐，怎么排优先级?</h3><h3 id="算法侧要加一步-LLM-调用提准确率，怎么核算成本-延迟-失败率并决策"><a href="#算法侧要加一步-LLM-调用提准确率，怎么核算成本-延迟-失败率并决策" class="headerlink" title="算法侧要加一步 LLM 调用提准确率，怎么核算成本&#x2F;延迟&#x2F;失败率并决策?"></a>算法侧要加一步 LLM 调用提准确率，怎么核算成本&#x2F;延迟&#x2F;失败率并决策?</h3><h3 id="HR-常规-薪资-加班-职业规划-挫折-成就-为什么本公司-离职原因-稳定性-——-模板清单，不逐题写"><a href="#HR-常规-薪资-加班-职业规划-挫折-成就-为什么本公司-离职原因-稳定性-——-模板清单，不逐题写" class="headerlink" title="HR 常规(薪资&#x2F;加班&#x2F;职业规划&#x2F;挫折&#x2F;成就&#x2F;为什么本公司&#x2F;离职原因&#x2F;稳定性)—— 模板清单，不逐题写"></a>HR 常规(薪资&#x2F;加班&#x2F;职业规划&#x2F;挫折&#x2F;成就&#x2F;为什么本公司&#x2F;离职原因&#x2F;稳定性)—— 模板清单，不逐题写</h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://cwp0.github.io">cwp0</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://cwp0.github.io/posts/20003.html">https://cwp0.github.io/posts/20003.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/Agent%E5%BC%80%E5%8F%91/">Agent开发</a><a class="post-meta__tags" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.JPG" target="_blank"><img class="post-qr-code-img" src="/img/wechat.JPG" alt="wechat"/ loading='lazy'></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.JPG" target="_blank"><img class="post-qr-code-img" src="/img/alipay.JPG" alt="alipay"/ loading='lazy'></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/20002.html" title="Agent开发知识点总结"><img class="cover" src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post" loading='lazy'><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Agent开发知识点总结</div></div><div class="info-2"><div class="info-item-1"> 本文档分三段：第〇部分是术语速查表（按主题分组）；第一部分是核心知识体系（10 章主体面试题）；第二部分是框架与生态（Java&#x2F;Spring 栈）。新增内容请按主题归位到对应章节末尾。   第〇部分：术语速查上下文窗口上下文窗口 是指AI模型每次处理时能”看到”和记住的最大文本长度限制，超出这个范围的内容就会被”遗忘”。 tokenToken 是AI模型处理文本的基本单位，大约对应一个单词或几个汉字，模型的计费和上下文长度都以token数量来衡量。  一个汉字约1.5-2 token，一个英文单词约1 token。  KV Cache&#x2F;Prompt Caching模型在推理时，会把已经计算过的 Token 的中间结果（Key-Value 矩阵）缓存起来，下次遇到相同前缀时直接复用不需要重新计算。  好处：  减少重复计算，提升推理速度 减少成本。模型对命中KV Cache的token收费更低(1&#x2F;10)   温度&#x2F;Temperature控制模型输出随机性的参数，范围0-2，值越大，模型越随机。一般Agent的temperature设置为0...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/20001.html" title="Agent开发面经"><img class="cover" src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" alt="cover" loading='lazy'><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-22</div><div class="info-item-2">Agent开发面经</div></div><div class="info-2"><div class="info-item-1">自我介绍面试官您好，我叫陈温鹏，硕士毕业于南京理工大学软件工程专业，目前在阿里巴巴菜鸟集团担任 全栈开发工程师，这次应聘的是 Agent &#x2F; 全栈 &#x2F; Java &#x2F; 服务端开发岗位 。 在菜鸟工作的一年多期间，我主要负责 核心人事系统与薪酬系统的迭代开发和稳定性保障  在 AI 工程化方面，我们团队做了很多 AI 方向的工作:除了传统项目开发外，我参与了企业级员工助理 Agent 与薪酬 AI 质检平台两个AI Native项目，并独立搭建了薪酬&amp;社保域 AI 研发助手——把域知识与研发 SOP 沉淀为技能，编排数据库、日志、监控等研发工具，覆盖答疑、排查、交付全链路，钉钉落地服务全组。我个人的 AI Coding 采纳率稳定在 95% 以上，从去年到今年实现了个人月需求吞吐量翻倍。除此之外，我熟练掌握 Java 基础、并发编程、熟练在日常开发中使用 Vibe Coding、SDD等 AI 编程范式，熟练使用MCP、Skill用于排查日常问题；另外，我对Agent开发相关知识也有一定了解。 最后感谢贵公司给我这次面试机会，我也十分希望能加入团...</div></div></div></a><a class="pagination-related" href="/posts/20002.html" title="Agent开发知识点总结"><img class="cover" src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" alt="cover" loading='lazy'><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-22</div><div class="info-item-2">Agent开发知识点总结</div></div><div class="info-2"><div class="info-item-1"> 本文档分三段：第〇部分是术语速查表（按主题分组）；第一部分是核心知识体系（10 章主体面试题）；第二部分是框架与生态（Java&#x2F;Spring 栈）。新增内容请按主题归位到对应章节末尾。   第〇部分：术语速查上下文窗口上下文窗口 是指AI模型每次处理时能”看到”和记住的最大文本长度限制，超出这个范围的内容就会被”遗忘”。 tokenToken 是AI模型处理文本的基本单位，大约对应一个单词或几个汉字，模型的计费和上下文长度都以token数量来衡量。  一个汉字约1.5-2 token，一个英文单词约1 token。  KV Cache&#x2F;Prompt Caching模型在推理时，会把已经计算过的 Token 的中间结果（Key-Value 矩阵）缓存起来，下次遇到相同前缀时直接复用不需要重新计算。  好处：  减少重复计算，提升推理速度 减少成本。模型对命中KV Cache的token收费更低(1&#x2F;10)   温度&#x2F;Temperature控制模型输出随机性的参数，范围0-2，值越大，模型越随机。一般Agent的temperature设置为0...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div><div class="comment-switch"><span class="first-comment">Valine</span><span id="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/assets/%E5%A4%B4%E5%83%8F.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="author-info-name">cwp0</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">32</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cwp0"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/cwp0" target="_blank" title="Github"><i class="fab fa-github" style="color: #9F9F9F;"></i></a><a class="social-icon" href="mailto:wenpengchen@njust.edu.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: 9F9F9F;"></i></a><a class="social-icon" href="/img/alipay.JPG" target="_blank" title="QQ"><i class="fa-brands fa-qq" style="color: #9F9F9F;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This site is under construction...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Agent%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">1.</span> <span class="toc-text">Agent开发知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Agent%E8%8C%83%E5%BC%8F%E4%B8%8E%E6%9E%B6%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">Agent范式与架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFAIAgent-%E4%B8%8E%E4%BC%A0%E7%BB%9FLLM%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是AIAgent?与传统LLM区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84%E7%BB%84%E6%88%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">Agent的基本架构组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Workflows%E4%B8%8E%E8%87%AA%E4%B8%BBAgent%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.3.</span> <span class="toc-text">Workflows与自主Agent区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Todo%E5%B7%A5%E5%85%B7%E5%9C%A8Agent%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.4.</span> <span class="toc-text">Todo工具在Agent中的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ReAct%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.5.</span> <span class="toc-text">ReAct框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Plan-Execute%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.6.</span> <span class="toc-text">Plan-Execute框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reflexion%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.7.</span> <span class="toc-text">Reflexion框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Self-Refine%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.8.</span> <span class="toc-text">Self-Refine框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CoT%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.9.</span> <span class="toc-text">CoT框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ToT%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.10.</span> <span class="toc-text">ToT框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ReAct-Plan-Execute-Reflexion-Self-Refine-CoT-ToT%E5%AF%B9%E6%AF%94"><span class="toc-number">1.1.11.</span> <span class="toc-text">ReAct&#x2F;Plan-Execute&#x2F;Reflexion&#x2F;Self-Refine&#x2F;CoT&#x2F;ToT对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFAgent-Loop"><span class="toc-number">1.1.12.</span> <span class="toc-text">什么是Agent Loop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%86%99%E6%9C%80%E5%B0%8F%E5%8F%AF%E7%94%A8Agent%E5%BE%AA%E7%8E%AF"><span class="toc-number">1.1.13.</span> <span class="toc-text">手写最小可用Agent循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent%E5%AE%8C%E6%95%B4%E6%89%A7%E8%A1%8C%E9%93%BE%E8%B7%AF"><span class="toc-number">1.1.14.</span> <span class="toc-text">Agent完整执行链路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E8%BD%AELLM%E8%B0%83%E7%94%A8%E7%9A%84%E9%A2%84%E5%A4%84%E7%90%86%E5%92%8C%E5%90%8E%E7%BD%AE%E6%A0%A1%E9%AA%8C"><span class="toc-number">1.1.15.</span> <span class="toc-text">每轮LLM调用的预处理和后置校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent%E4%BB%BB%E5%8A%A1%E7%8A%B6%E6%80%81%E6%9C%BA%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.1.16.</span> <span class="toc-text">Agent任务状态机怎么设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%8C%87%E4%BB%A4%E4%B8%8D%E6%98%8E%E7%A1%AE%E6%97%B6Agent%E5%A6%82%E4%BD%95%E8%87%AA%E4%B8%BB%E6%8B%86%E4%BB%BB%E5%8A%A1%E8%A1%A5%E5%85%A8%E4%BF%A1%E6%81%AF"><span class="toc-number">1.1.17.</span> <span class="toc-text">用户指令不明确时Agent如何自主拆任务补全信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E6%9C%89%E5%87%A0%E4%B8%AA%E7%8E%AF%E8%8A%82"><span class="toc-number">1.1.18.</span> <span class="toc-text">Agent 开发流程有几个环节?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0-Agent-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E7%A9%BA%E8%BD%AC-%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3"><span class="toc-number">1.1.19.</span> <span class="toc-text">本地 Agent 为什么会空转?怎么解决?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Planner%E5%92%8CCritic%E7%9A%84%E5%88%86%E5%B7%A5-Critic%E5%A6%82%E4%BD%95%E8%AF%86%E5%88%AB%E5%B9%BB%E8%A7%89%E5%92%8C%E5%B7%A5%E5%85%B7%E6%97%A0%E6%95%88%E7%BB%93%E6%9E%9C"><span class="toc-number">1.1.20.</span> <span class="toc-text">Planner和Critic的分工?Critic如何识别幻觉和工具无效结果?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%AF%89%E6%B1%82%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%86%E4%B8%8E%E8%B0%83%E7%94%A8%E6%8B%86%E5%88%86%E5%8F%96%E8%88%8D"><span class="toc-number">1.1.21.</span> <span class="toc-text">多诉求任务拆分与调用拆分取舍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E6%85%A2%E4%BB%BB%E5%8A%A1%E5%85%BC%E5%AE%B9-%E5%AF%B9%E8%AF%9D%E5%BC%8F%E5%BF%AB%E4%BB%BB%E5%8A%A1-vs-%E5%A4%8D%E6%9D%82%E6%85%A2%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.1.22.</span> <span class="toc-text">快慢任务兼容(对话式快任务 vs 复杂慢任务)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Workflow-%E9%A6%96%E4%BB%BB%E5%8A%A1%E9%94%99%E8%AF%AF%E6%94%BE%E5%A4%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.23.</span> <span class="toc-text">Workflow 首任务错误放大问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B%E4%B8%8E%E8%AE%B0%E5%BF%86"><span class="toc-number">1.2.</span> <span class="toc-text">上下文工程与记忆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E2%80%9D%E8%AE%B0%E5%BF%86%E2%80%9D%E5%AF%B9Agent%E8%87%B3%E5%85%B3%E9%87%8D%E8%A6%81"><span class="toc-number">1.2.1.</span> <span class="toc-text">为什么”记忆”对Agent至关重要</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%87%E5%A6%82%E8%AE%A9%E4%BD%A0%E8%AE%BE%E8%AE%A1%E8%AE%B0%E5%BF%86%E7%AE%A1%E7%90%86%E4%BD%A0%E4%BC%9A%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.2.2.</span> <span class="toc-text">假如让你设计记忆管理你会如何设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%BA%A2%E5%87%BA-%E5%88%86%E5%B1%82%E8%AE%B0%E5%BF%86-Compaction"><span class="toc-number">1.2.3.</span> <span class="toc-text">上下文溢出&#x2F;分层记忆&#x2F;Compaction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFContextRot-%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2"><span class="toc-number">1.2.4.</span> <span class="toc-text">什么是ContextRot?如何防止</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8E%8B%E7%BC%A9%E6%94%BE%E5%9C%A8loop%E5%93%AA%E4%B8%80%E6%AD%A5-%E8%A7%A6%E5%8F%91%E6%9C%BA%E5%88%B6-%E5%85%B7%E4%BD%93%E7%AD%96%E7%95%A5"><span class="toc-number">1.2.5.</span> <span class="toc-text">上下文压缩放在loop哪一步?触发机制?具体策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%BD%AE%E5%AF%B9%E8%AF%9D%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E8%AE%B0%E5%BF%86%E4%B8%80%E8%87%B4%E6%80%A7%E3%80%81%E9%81%BF%E5%85%8D%E5%89%8D%E5%90%8E%E7%9F%9B%E7%9B%BE-%E4%BF%A1%E6%81%AF%E4%B8%A2%E5%A4%B1"><span class="toc-number">1.2.6.</span> <span class="toc-text">多轮对话如何保证记忆一致性、避免前后矛盾&#x2F;信息丢失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B0%E5%BF%86%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3"><span class="toc-number">1.2.7.</span> <span class="toc-text">记忆覆盖问题如何解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%BF%E6%9C%9FMemory%E5%BA%94%E8%AF%A5%E5%9C%A8%E4%BB%80%E4%B9%88%E6%9D%A1%E4%BB%B6%E4%B8%8B%E5%86%99%E5%85%A5"><span class="toc-number">1.2.8.</span> <span class="toc-text">长期Memory应该在什么条件下写入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E5%9C%A8Agent%E7%B3%BB%E7%BB%9F%E9%87%8C%E5%AD%98%E4%BB%80%E4%B9%88-%E4%BC%9A%E8%AF%9D%E7%8A%B6%E6%80%81-%E7%BC%93%E5%AD%98-%E8%AE%B0%E5%BF%86-checkpoint-%E9%99%90%E6%B5%81%E6%80%8E%E4%B9%88%E5%8C%BA%E5%88%86"><span class="toc-number">1.2.9.</span> <span class="toc-text">Redis在Agent系统里存什么?会话状态&#x2F;缓存&#x2F;记忆&#x2F;checkpoint&#x2F;限流怎么区分?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E7%94%A8%E6%88%B7%E9%AB%98%E5%B9%B6%E5%8F%91%E6%97%B6%E4%BC%9A%E8%AF%9D%E9%9A%94%E7%A6%BB%E5%92%8C%E8%AE%B0%E5%BF%86%E9%9A%94%E7%A6%BB%E6%80%8E%E4%B9%88%E5%81%9A"><span class="toc-number">1.2.10.</span> <span class="toc-text">多用户高并发时会话隔离和记忆隔离怎么做?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B0%E5%BF%86%E5%BA%93%E6%8C%81%E7%BB%AD%E8%86%A8%E8%83%80%E3%80%81%E6%A3%80%E7%B4%A2%E7%B2%BE%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%80%8E%E4%B9%88%E8%BF%AD%E4%BB%A3"><span class="toc-number">1.2.11.</span> <span class="toc-text">记忆库持续膨胀、检索精度下降怎么迭代?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E6%B2%89%E6%B7%80%E9%83%A8%E9%97%A8%E7%BA%A7%E8%AE%B0%E5%BF%86-%E7%9F%A5%E8%AF%86%E5%BA%93-%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%E2%80%9D%E7%BB%8F%E9%AA%8C%E9%9A%8F%E4%BA%BA%E8%B5%B0%E2%80%9D"><span class="toc-number">1.2.12.</span> <span class="toc-text">怎么沉淀部门级记忆&#x2F;知识库?怎么解决”经验随人走”?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Skill%E5%92%8CMemory%E7%9A%84%E6%B2%89%E6%B7%80%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.2.13.</span> <span class="toc-text">Skill和Memory的沉淀怎么设计?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9AAgent%E9%97%B4%E4%B8%8A%E4%B8%8B%E6%96%87%E4%BC%A0%E9%80%92%EF%BC%9A%E5%85%A8%E9%87%8F%E8%BF%98%E6%98%AF%E6%A0%B8%E5%BF%83%E7%BB%93%E8%AE%BA-%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E6%80%8E%E4%B9%88%E9%81%BF%E5%85%8D%E4%BF%A1%E6%81%AF%E9%94%99%E4%B9%B1"><span class="toc-number">1.2.14.</span> <span class="toc-text">多Agent间上下文传递：全量还是核心结论?状态同步怎么避免信息错乱?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent%E4%BC%9A%E8%AF%9D%E4%B8%8A%E4%B8%8B%E6%96%87%E6%80%8E%E4%B9%88%E5%AD%98%E5%82%A8-MySQL%E7%93%B6%E9%A2%88%E6%80%8E%E4%B9%88%E4%BC%98%E5%8C%96-Redis%E4%BC%9A%E8%AF%9D%E4%B8%A2%E5%A4%B1%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-number">1.2.15.</span> <span class="toc-text">Agent会话上下文怎么存储?MySQL瓶颈怎么优化?Redis会话丢失怎么办?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%99%90%E5%88%B6%E4%B8%8A%E4%B8%8B%E6%96%87%E9%95%BF%E5%BA%A6-%E9%95%BF%E6%96%87%E6%A1%A3%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96"><span class="toc-number">1.2.16.</span> <span class="toc-text">为什么限制上下文长度?长文档如何优化?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Memory%E4%B8%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="toc-number">1.2.17.</span> <span class="toc-text">Memory与上下文工程的边界</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B0%E5%BF%86%E6%9C%89%E6%95%88%E6%80%A7%E4%B8%8E%E8%B4%A8%E9%87%8F-%E4%BA%8B%E5%AE%9Evs%E6%8E%A8%E6%96%AD-%E5%99%AA%E5%A3%B0%E8%BF%87%E6%BB%A4"><span class="toc-number">1.2.18.</span> <span class="toc-text">记忆有效性与质量(事实vs推断&#x2F;噪声过滤)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B0%E5%BF%86%E6%B3%A8%E5%85%A5%E4%B8%8E%E6%A3%80%E7%B4%A2%E9%87%8D%E6%8E%92%E6%9C%BA%E5%88%B6"><span class="toc-number">1.2.19.</span> <span class="toc-text">记忆注入与检索重排机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BF%86%E5%A4%8D%E7%94%A8%E9%99%8D%E6%9C%AC"><span class="toc-number">1.2.20.</span> <span class="toc-text">历史记忆复用降本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.</span> <span class="toc-text">工具与协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-Calling-MCP%E5%8C%BA%E5%88%AB"><span class="toc-number">1.3.1.</span> <span class="toc-text">Function Calling&#x2F;MCP区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tool-Calling%E7%9A%84JSONSchema%E8%AE%BE%E8%AE%A1%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">1.3.2.</span> <span class="toc-text">Tool Calling的JSONSchema设计最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tool-Handler-%E5%B7%A5%E5%85%B7%E8%B0%83%E5%BA%A6%E5%99%A8-%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="toc-number">1.3.3.</span> <span class="toc-text">Tool Handler(工具调度器)的设计原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%A4%B1%E8%B4%A5%E5%90%8E%E5%A6%82%E4%BD%95%E9%99%8D%E7%BA%A7"><span class="toc-number">1.3.4.</span> <span class="toc-text">工具调用失败后如何降级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81ToolCalling%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="toc-number">1.3.5.</span> <span class="toc-text">如何保证ToolCalling的可靠性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E9%99%B7%E5%85%A5%E6%AD%BB%E5%BE%AA%E7%8E%AF-%E5%A6%82%E4%BD%95%E6%A3%80%E6%B5%8B%E5%92%8C%E8%A7%A3%E5%86%B3"><span class="toc-number">1.3.6.</span> <span class="toc-text">Agent为什么会陷入死循环?如何检测和解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP-Tools-Skills%E5%9C%A8Context%E4%B8%AD%E7%9A%84%E5%BC%95%E5%85%A5%E9%A1%BA%E5%BA%8F"><span class="toc-number">1.3.7.</span> <span class="toc-text">MCP&#x2F;Tools&#x2F;Skills在Context中的引入顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP%E7%9A%84OAuth2-1%E6%8E%88%E6%9D%83%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.8.</span> <span class="toc-text">MCP的OAuth2.1授权流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP%E7%94%9F%E6%80%81%E7%9A%84Prompt-Injection%E4%B8%8E%E5%B7%A5%E5%85%B7%E6%8F%8F%E8%BF%B0%E6%B1%A1%E6%9F%93"><span class="toc-number">1.3.9.</span> <span class="toc-text">MCP生态的Prompt Injection与工具描述污染</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP-A2A%E5%8C%BA%E5%88%AB"><span class="toc-number">1.3.10.</span> <span class="toc-text">MCP&#x2F;A2A区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP-2026-07-28%E8%A7%84%E8%8C%83%E6%A0%B8%E5%BF%83%E5%8F%98%E5%8C%96-%E6%97%A0%E7%8A%B6%E6%80%81%E5%8C%96"><span class="toc-number">1.3.11.</span> <span class="toc-text">MCP 2026-07-28规范核心变化(无状态化)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Skills%E6%B8%90%E8%BF%9B%E5%BC%8F%E6%8A%AB%E9%9C%B2"><span class="toc-number">1.3.12.</span> <span class="toc-text">Skills渐进式披露</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9A%84SKILL-md-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E8%A7%81%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.3.13.</span> <span class="toc-text">如何设计高质量的SKILL.md?有哪些常见反模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0Skill%E7%9A%84%E5%8A%A8%E6%80%81%E5%8F%91%E7%8E%B0%E4%B8%8E%E7%BC%96%E6%8E%92"><span class="toc-number">1.3.14.</span> <span class="toc-text">Agent系统中如何实现Skill的动态发现与编排</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#skill%E5%92%8Ctool%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.3.15.</span> <span class="toc-text">skill和tool的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-Calling-%E5%AE%8C%E6%95%B4%E6%89%A7%E8%A1%8C%E9%93%BE%E8%B7%AF-%E6%A8%A1%E5%9E%8B%E8%BE%93%E5%87%BA-JSON-%E4%B8%8D%E8%A7%84%E8%8C%83-%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%E6%80%8E%E4%B9%88%E5%85%9C%E5%BA%95"><span class="toc-number">1.3.16.</span> <span class="toc-text">Function Calling 完整执行链路?模型输出 JSON 不规范&#x2F;解析失败怎么兜底?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%8D%81%E5%A4%9A%E4%B8%AA%E5%B7%A5%E5%85%B7%E6%97%B6%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E6%A8%A1%E5%9E%8B%E9%80%89%E9%94%99-%E8%AF%AF%E8%B0%83%E7%94%A8-%E6%80%8E%E4%B9%88%E4%BF%9D%E9%9A%9C%E6%8C%89%E9%9C%80%E8%B0%83%E7%94%A8"><span class="toc-number">1.3.17.</span> <span class="toc-text">配置十多个工具时如何避免模型选错&#x2F;误调用?怎么保障按需调用?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E6%98%AF%E6%80%8E%E4%B9%88%E9%80%89%E6%8B%A9%E5%B7%A5%E5%85%B7%E7%9A%84"><span class="toc-number">1.3.18.</span> <span class="toc-text">Agent 是怎么选择工具的?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FC%E3%80%81MCP%E3%80%81Skill%E3%80%81Rules-%E7%9A%84%E5%8C%BA%E5%88%AB-MCP-%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.19.</span> <span class="toc-text">FC、MCP、Skill、Rules 的区别?MCP 解决什么问题&#x2F;使用场景?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E7%9A%84%E5%8A%A8%E6%80%81%E6%B3%A8%E5%86%8C%E6%80%8E%E4%B9%88%E5%81%9A-Coding-Agent-%E6%9C%80%E5%88%9D%E5%A6%82%E4%BD%95%E6%8C%82%E8%BD%BD%E5%B7%A5%E5%85%B7"><span class="toc-number">1.3.20.</span> <span class="toc-text">工具的动态注册怎么做?Coding Agent 最初如何挂载工具?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%A0%A1%E9%AA%8C%E6%80%8E%E4%B9%88%E5%81%9A-%E6%9D%83%E9%99%90%E8%A7%84%E5%88%99%E6%98%AF%E7%A1%AC%E7%BC%96%E7%A0%81%E7%9A%84%E5%90%97"><span class="toc-number">1.3.21.</span> <span class="toc-text">权限校验怎么做?权限规则是硬编码的吗?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E4%B8%8D%E5%81%9A%E9%99%90%E5%88%B6%E6%9C%89%E4%BB%80%E4%B9%88%E9%A3%8E%E9%99%A9-%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C-%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5-SSRF-%E6%80%8E%E4%B9%88%E9%98%B2"><span class="toc-number">1.3.22.</span> <span class="toc-text">工具调用不做限制有什么风险?参数校验&#x2F;命令注入&#x2F;SSRF 怎么防?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E9%87%8F%E6%97%A0%E6%95%88%E8%B0%83%E7%94%A8%E6%8B%89%E9%AB%98%E6%88%90%E6%9C%AC%E6%8B%96%E6%85%A2QPS%EF%BC%9A%E9%99%90%E6%B5%81%E5%92%8C%E6%8B%A6%E6%88%AA%E6%80%8E%E4%B9%88%E5%81%9A"><span class="toc-number">1.3.23.</span> <span class="toc-text">大量无效调用拉高成本拖慢QPS：限流和拦截怎么做?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86%E6%A8%A1%E5%9E%8B%E8%BE%93%E5%87%BA%E9%97%AE%E9%A2%98%E4%B8%8E%E4%B8%8B%E6%B8%B8%E5%B7%A5%E5%85%B7-%E6%8E%A5%E5%8F%A3%E9%97%AE%E9%A2%98%EF%BC%8C%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8D%E6%A0%B9%E5%9B%A0"><span class="toc-number">1.3.24.</span> <span class="toc-text">如何区分模型输出问题与下游工具&#x2F;接口问题，快速定位根因?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA%E6%98%AF%E4%BB%80%E4%B9%88-%E6%80%8E%E4%B9%88%E5%81%9A"><span class="toc-number">1.3.25.</span> <span class="toc-text">Agent 结构化输出是什么&#x2F;怎么做?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6%E6%9B%B4%E6%96%B0%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D-Agent-%E8%B0%83%E7%94%A8%E8%BF%87%E6%9C%9F%E5%B7%A5%E5%85%B7%E3%80%81%E8%BE%93%E5%87%BA%E8%BF%87%E6%97%B6%E4%BF%A1%E6%81%AF"><span class="toc-number">1.3.26.</span> <span class="toc-text">数据实时更新时，如何避免 Agent 调用过期工具、输出过时信息?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E7%90%86%E8%A7%A3-RAG%E3%80%81MCP%E3%80%81FC%E3%80%81Skills-%E5%9B%9B%E8%80%85%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.3.27.</span> <span class="toc-text">怎么理解 RAG、MCP、FC、Skills 四者的关系?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Skill-%E8%87%AA%E8%BF%9B%E5%8C%96%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.3.28.</span> <span class="toc-text">Skill 自进化流水线与生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E5%8A%A8%E6%80%81%E5%88%86%E5%8F%91%E4%B8%8E%E7%BB%93%E6%9E%9C%E5%90%88%E5%B9%B6"><span class="toc-number">1.3.29.</span> <span class="toc-text">工具动态分发与结果合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LLM-%E8%B0%83%E7%94%A8%E9%99%90%E6%B5%81-RPM-TPM-%E5%8F%8C%E4%BB%A4%E7%89%8C%E6%A1%B6-%E4%B8%8E%E4%BB%BB%E5%8A%A1%E6%8E%92%E9%98%9F"><span class="toc-number">1.3.30.</span> <span class="toc-text">LLM 调用限流(RPM&#x2F;TPM&#x2F;双令牌桶)与任务排队</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RAG-%E4%B8%8E%E7%9F%A5%E8%AF%86%E5%BA%93"><span class="toc-number">1.4.</span> <span class="toc-text">RAG 与知识库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%A4%E4%BA%86%E9%98%BF%E9%87%8C%E5%86%85%E9%83%A8%E7%9A%84%E5%90%91%E9%87%8F%E5%BA%93%EF%BC%8C%E4%BD%A0%E8%BF%98%E4%BA%86%E8%A7%A3%E5%93%AA%E4%BA%9BRAG%E5%90%91%E9%87%8F%E5%BA%93-%E5%A6%82%E4%BD%95%E9%80%89%E5%9E%8B"><span class="toc-number">1.4.1.</span> <span class="toc-text">除了阿里内部的向量库，你还了解哪些RAG向量库?如何选型?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-RAG%E5%92%8C%E4%BC%A0%E7%BB%9FRAG%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.4.2.</span> <span class="toc-text">Graph RAG和传统RAG的区别是什么?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RAG%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">1.4.3.</span> <span class="toc-text">RAG的局限性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E6%94%AF%E6%8C%81%E7%99%BE%E4%B8%87%E7%BA%A7%E6%96%87%E6%A1%A3%E3%80%81%E6%A3%80%E7%B4%A2%E5%BB%B6%E8%BF%9F"><span class="toc-number">1.4.4.</span> <span class="toc-text">如何设计一个支持百万级文档、检索延迟&lt;200ms的RAG系统?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87-Chunking-%E7%AD%96%E7%95%A5"><span class="toc-number">1.4.5.</span> <span class="toc-text">文档切片(Chunking)策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E6%A0%BC-PDF-%E5%9B%BE%E7%89%87%E7%AD%89%E9%9D%9E%E7%BB%93%E6%9E%84%E5%8C%96%E6%96%87%E6%A1%A3%E5%A6%82%E4%BD%95%E5%81%9ARAG"><span class="toc-number">1.4.6.</span> <span class="toc-text">表格&#x2F;PDF&#x2F;图片等非结构化文档如何做RAG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E6%A3%80%E7%B4%A2-HybridRetrieval-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.4.7.</span> <span class="toc-text">混合检索(HybridRetrieval)是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E6%A3%80%E7%B4%A2%E5%88%B0%E6%97%A0%E5%85%B3%E7%89%87%E6%AE%B5%E5%AF%BC%E8%87%B4%E5%9B%9E%E7%AD%94%E8%B7%91%E5%81%8F"><span class="toc-number">1.4.8.</span> <span class="toc-text">如何避免检索到无关片段导致回答跑偏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%BD%AE%E5%AF%B9%E8%AF%9D%E4%B8%AD%E5%A6%82%E4%BD%95%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91%E6%A3%80%E7%B4%A2"><span class="toc-number">1.4.9.</span> <span class="toc-text">多轮对话中如何自动触发检索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Rerank-%E9%87%8D%E6%8E%92%E5%BA%8F-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81"><span class="toc-number">1.4.10.</span> <span class="toc-text">Rerank(重排序)&#x2F;为什么需要</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E2%80%9D%E9%95%BF%E6%96%87%E6%A1%A3%E4%B8%AD%E9%97%B4%E4%B8%A2%E5%A4%B1%E2%80%9D%E9%97%AE%E9%A2%98"><span class="toc-number">1.4.11.</span> <span class="toc-text">什么是”长文档中间丢失”问题?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E5%BA%93%E5%86%85%E5%AE%B9%E9%A2%91%E7%B9%81%E6%9B%B4%E6%96%B0%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.4.12.</span> <span class="toc-text">知识库内容频繁更新如何保证一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RAG-%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.13.</span> <span class="toc-text">RAG 整体流程?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agentic-RAG-%E5%92%8C%E4%BC%A0%E7%BB%9F-RAG-%E7%9A%84%E5%8C%BA%E5%88%AB-Agent-%E5%A6%82%E4%BD%95%E8%87%AA%E4%B8%BB%E5%88%A4%E6%96%AD%E6%A3%80%E7%B4%A2%E6%AC%A1%E6%95%B0%E3%80%81%E5%8A%A8%E6%80%81%E6%94%B9%E5%86%99-query-%E4%B8%BA%E4%BD%95%E5%81%9A%E6%88%90%E6%A3%80%E7%B4%A2%E7%AD%96%E7%95%A5-%E6%94%BE%E7%9F%A5%E8%AF%86%E5%BA%93%E8%BF%98%E6%98%AF%E4%B8%8A%E5%B1%82"><span class="toc-number">1.4.14.</span> <span class="toc-text">Agentic RAG 和传统 RAG 的区别?Agent 如何自主判断检索次数、动态改写 query?为何做成检索策略&#x2F;放知识库还是上层?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AC%E5%9B%9E%E6%97%B6%E5%88%86%E7%89%87%E4%B8%8D%E5%AE%8C%E6%95%B4%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-number">1.4.15.</span> <span class="toc-text">召回时分片不完整怎么办?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Embedding-%E9%80%89%E5%9E%8B%EF%BC%9ABGE-%E8%BF%98%E6%98%AF%E8%87%AA%E8%AE%AD-%E7%BB%B4%E5%BA%A6%E5%A4%9A%E5%B0%91-%E5%BE%AE%E8%B0%83%E8%B4%9F%E6%A0%B7%E6%9C%AC%E6%80%8E%E4%B9%88%E9%87%87"><span class="toc-number">1.4.16.</span> <span class="toc-text">Embedding 选型：BGE 还是自训?维度多少?微调负样本怎么采?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E5%8D%87-RAG-%E6%A3%80%E7%B4%A2%E8%B4%A8%E9%87%8F%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="toc-number">1.4.17.</span> <span class="toc-text">提升 RAG 检索质量的技术?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AC%E5%9B%9E%E4%B8%8D%E7%90%86%E6%83%B3%E4%BC%98%E5%85%88%E6%8E%92%E6%9F%A5%E5%93%AA%E4%BA%9B%E7%8E%AF%E8%8A%82"><span class="toc-number">1.4.18.</span> <span class="toc-text">召回不理想优先排查哪些环节?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8E%E8%B4%A8-Query-%E6%A8%A1%E7%B3%8A%E8%AF%89%E6%B1%82%E6%80%8E%E4%B9%88%E9%81%BF%E5%85%8D%E7%A9%BA%E5%8F%AC%E5%9B%9E%E9%94%99%E5%8F%AC%E5%9B%9E"><span class="toc-number">1.4.19.</span> <span class="toc-text">低质 Query&#x2F;模糊诉求怎么避免空召回错召回?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E5%BA%93%E6%95%B0%E6%8D%AE%E9%9A%94%E7%A6%BB%EF%BC%9A%E7%89%A9%E7%90%86-vs-%E9%80%BB%E8%BE%91-%E5%AF%B9%E7%B4%A2%E5%BC%95%E5%92%8C%E6%A3%80%E7%B4%A2%E6%80%A7%E8%83%BD%E5%BD%B1%E5%93%8D"><span class="toc-number">1.4.20.</span> <span class="toc-text">知识库数据隔离：物理 vs 逻辑?对索引和检索性能影响?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E7%9F%A5%E8%AF%86%E5%BA%93-vs-%E4%B8%9A%E5%8A%A1%E5%AE%9A%E5%88%B6-%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E8%83%BD%E5%8A%9B%E5%81%9A%E6%88%90%E5%B9%B3%E5%8F%B0%E8%BF%98%E6%98%AF%E4%BA%A4%E7%BB%99%E4%B8%9A%E5%8A%A1-%E4%BC%9A%E4%B8%8D%E4%BC%9A%E8%A2%AB%E6%88%90%E7%86%9F%E5%BC%80%E6%BA%90%E4%BA%A7%E5%93%81%E6%9B%BF%E4%BB%A3"><span class="toc-number">1.4.21.</span> <span class="toc-text">通用知识库 vs 业务定制?怎么判断能力做成平台还是交给业务?会不会被成熟开源产品替代?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E5%BA%93%E8%BF%98%E5%8F%AF%E4%BB%A5%E7%94%A8%E5%9C%A8%E5%93%AA%E4%BA%9B%E5%9C%BA%E6%99%AF-%E9%99%A4%E6%96%87%E6%A1%A3%E6%A3%80%E7%B4%A2"><span class="toc-number">1.4.22.</span> <span class="toc-text">知识库还可以用在哪些场景(除文档检索)?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RAG-vs-%E5%A1%9E-Prompt-RAG-vs-%E5%BE%AE%E8%B0%83%E7%9A%84%E9%80%89%E5%9E%8B"><span class="toc-number">1.4.23.</span> <span class="toc-text">RAG vs 塞 Prompt &#x2F; RAG vs 微调的选型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%91%E7%AB%AF-RAG-vs-%E7%AB%AF%E4%BE%A7-RAG-%E5%B7%AE%E5%BC%82"><span class="toc-number">1.4.24.</span> <span class="toc-text">云端 RAG vs 端侧 RAG 差异</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81-%E8%A7%86%E9%A2%91%E7%9F%A5%E8%AF%86%E5%BA%93%E5%A4%84%E7%90%86%E9%93%BE%E8%B7%AF"><span class="toc-number">1.4.25.</span> <span class="toc-text">多模态 &#x2F; 视频知识库处理链路</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A-Agent"><span class="toc-number">1.5.</span> <span class="toc-text">多 Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81Multi-Agent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.5.1.</span> <span class="toc-text">常见Multi-Agent协作模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9AAgent%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81%E5%85%B6%E6%AF%94%E5%8D%95Agent%E5%BC%BA"><span class="toc-number">1.5.2.</span> <span class="toc-text">多Agent怎么保证其比单Agent强</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%95%E6%97%B6%E7%94%A8%E5%A4%9AAgent%E6%AF%94%E5%8D%95Agent%E6%9B%B4%E5%90%88%E7%90%86"><span class="toc-number">1.5.3.</span> <span class="toc-text">何时用多Agent比单Agent更合理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%A4%9AAgent%E7%9A%84%E2%80%9D%E6%97%A0%E9%99%90%E5%BE%AA%E7%8E%AF%E2%80%9D%E6%88%96%E2%80%9D%E9%80%9A%E4%BF%A1%E5%86%97%E4%BD%99%E2%80%9D"><span class="toc-number">1.5.4.</span> <span class="toc-text">如何解决多Agent的”无限循环”或”通信冗余”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9AAgent%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E8%8C%83%E5%BC%8F"><span class="toc-number">1.5.5.</span> <span class="toc-text">多Agent系统设计范式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.5.6.</span> <span class="toc-text">设计一个多Agent协作系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E5%A4%9AAgent%E8%BE%A9%E8%AE%BA%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.5.7.</span> <span class="toc-text">设计一个多Agent辩论系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%9AAgent%E7%8A%B6%E6%80%81%E6%B5%81%E8%BD%AC%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.5.8.</span> <span class="toc-text">分布式多Agent状态流转设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFSubagent-%E5%AD%90%E6%99%BA%E8%83%BD%E4%BD%93-%E6%A8%A1%E5%BC%8F-%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-number">1.5.9.</span> <span class="toc-text">什么是Subagent(子智能体)模式?解决了什么问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90-Agent-%E5%A4%B1%E8%B4%A5%E6%95%B4%E4%BD%93%E6%80%8E%E4%B9%88%E5%85%9C%E5%BA%95-%E9%87%8D%E8%AF%95-%E9%99%8D%E7%BA%A7-%E8%BE%93%E5%87%BA%E7%BB%93%E8%AE%BA%E5%86%B2%E7%AA%81%E6%80%8E%E4%B9%88%E4%BB%B2%E8%A3%81"><span class="toc-number">1.5.10.</span> <span class="toc-text">子 Agent 失败整体怎么兜底&#x2F;重试&#x2F;降级?输出结论冲突怎么仲裁?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A-Agent-%E4%BA%89%E6%8A%A2%E5%93%AA%E4%BA%9B%E8%B5%84%E6%BA%90-%E6%80%8E%E4%B9%88%E9%9A%94%E7%A6%BB"><span class="toc-number">1.5.11.</span> <span class="toc-text">多 Agent 争抢哪些资源?怎么隔离?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%B7%E9%87%8F%E4%BB%BB%E5%8A%A1%E4%B8%8B%E5%A4%9A-Agent-%E5%88%86%E7%89%87%E3%80%81%E5%B9%B6%E5%8F%91%E8%B0%83%E5%BA%A6%E3%80%81%E9%81%BF%E5%85%8D%E6%8A%A2%E5%8D%A0"><span class="toc-number">1.5.12.</span> <span class="toc-text">海量任务下多 Agent 分片、并发调度、避免抢占?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A-Agent-%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E8%B4%A3%E4%BB%BB%E8%BF%BD%E6%BA%AF-%E9%94%99%E8%AF%AF%E8%83%BD%E5%90%A6%E5%AE%9A%E4%BD%8D%E5%88%B0%E5%85%B7%E4%BD%93%E8%8A%82%E7%82%B9%E5%92%8C%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8"><span class="toc-number">1.5.13.</span> <span class="toc-text">多 Agent 怎么实现责任追溯?错误能否定位到具体节点和工具调用?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A-Agent-%E6%88%90%E6%9C%AC%E6%80%8E%E4%B9%88%E6%8E%A7-token-%E9%A2%84%E7%AE%97%E8%B6%85%E9%99%90%E5%85%88%E7%A0%8D%E8%AE%B0%E5%BF%86%E3%80%81%E6%A3%80%E7%B4%A2%E8%BF%98%E6%98%AF%E8%A7%84%E5%88%92"><span class="toc-number">1.5.14.</span> <span class="toc-text">多 Agent 成本怎么控?token 预算超限先砍记忆、检索还是规划?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A-Agent-%E4%B9%8B%E9%97%B4%E5%A6%82%E4%BD%95%E9%80%9A%E4%BF%A1"><span class="toc-number">1.5.15.</span> <span class="toc-text">多 Agent 之间如何通信?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB-Agent-%E4%B8%8E%E5%AD%90-Agent-%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%88%86%E9%85%8D"><span class="toc-number">1.5.16.</span> <span class="toc-text">主 Agent 与子 Agent 的模型分配</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%84%E4%BC%B0%E4%B8%8E%E8%B4%A8%E9%87%8F"><span class="toc-number">1.6.</span> <span class="toc-text">评估与质量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1%E8%AF%84%E4%BB%B7-Agent-%E7%B3%BB%E7%BB%9F%E5%A5%BD%E5%9D%8F%E7%9A%84%E6%8C%87%E6%A0%87%E4%BD%93%E7%B3%BB-%E4%B8%9A%E5%8A%A1%E6%8C%87%E6%A0%87%E5%92%8C%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87-%E4%BB%BB%E5%8A%A1%E5%AE%8C%E6%88%90%E7%8E%87-%E5%B7%A5%E5%85%B7%E5%87%86%E7%A1%AE%E7%8E%87-%E5%B9%BB%E8%A7%89%E7%8E%87%E6%80%8E%E4%B9%88%E9%87%8F%E5%8C%96"><span class="toc-number">1.6.1.</span> <span class="toc-text">怎么设计评价 Agent 系统好坏的指标体系?业务指标和技术指标?任务完成率&#x2F;工具准确率&#x2F;幻觉率怎么量化?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E6%B5%8B%E9%9B%86%E5%92%8C-Ground-Truth-%E6%80%8E%E4%B9%88%E6%9E%84%E9%80%A0-%E5%A6%82%E4%BD%95%E4%BB%8E%E6%B5%B7%E9%87%8F%E7%BA%BF%E4%B8%8A%E6%97%A5%E5%BF%97%E6%9E%84%E5%BB%BA%E6%9C%89%E9%99%90%E7%A6%BB%E7%BA%BF%E8%AF%84%E6%B5%8B%E9%9B%86"><span class="toc-number">1.6.2.</span> <span class="toc-text">评测集和 Ground Truth 怎么构造?如何从海量线上日志构建有限离线评测集?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E6%B5%8B%E6%98%AF%E4%BA%BA%E5%B7%A5%E8%BF%98%E6%98%AF%E6%9C%BA%E5%99%A8"><span class="toc-number">1.6.3.</span> <span class="toc-text">评测是人工还是机器?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LLM-as-a-Judge-%E7%9A%84%E4%BD%8D%E7%BD%AE%E5%81%8F%E8%A7%81-%E9%95%BF%E5%BA%A6%E5%81%8F%E8%A7%81%E6%80%8E%E4%B9%88%E8%A7%84%E9%81%BF"><span class="toc-number">1.6.4.</span> <span class="toc-text">LLM-as-a-Judge 的位置偏见&#x2F;长度偏见怎么规避?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E4%B8%8A%E5%A4%A7%E9%87%8F%E7%94%A8%E6%88%B7%E5%8F%8D%E9%A6%88%E4%BB%BB%E5%8A%A1%E5%A4%B1%E8%B4%A5%EF%BC%8C%E6%80%8E%E4%B9%88%E6%8E%92%E6%9F%A5%E5%92%8C%E8%BF%AD%E4%BB%A3-bad-case-%E6%80%8E%E4%B9%88%E5%9B%9E%E6%B5%81"><span class="toc-number">1.6.5.</span> <span class="toc-text">线上大量用户反馈任务失败，怎么排查和迭代?bad case 怎么回流?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B9%BB%E8%A7%89%E7%9A%84%E6%88%90%E5%9B%A0-%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3"><span class="toc-number">1.6.6.</span> <span class="toc-text">大模型幻觉的成因?怎么解决?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%AE%E4%BF%A1%E5%BA%A6%E9%80%9A%E8%BF%87%E4%BB%80%E4%B9%88%E8%A7%84%E5%88%99%E5%88%A4%E6%96%AD-%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%BA%8C%E6%AC%A1%E7%A1%AE%E8%AE%A4%E7%94%A8%E6%88%B7"><span class="toc-number">1.6.7.</span> <span class="toc-text">置信度通过什么规则判断?什么情况二次确认用户?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prompt-%E8%B0%83%E4%BC%98%E5%88%B0%E7%93%B6%E9%A2%88%E5%90%8E%EF%BC%8C%E9%99%8D%E5%B9%BB%E8%A7%89%E7%9A%84%E4%BC%98%E5%8C%96%E4%BC%98%E5%85%88%E7%BA%A7%E6%80%8E%E4%B9%88%E6%8E%92"><span class="toc-number">1.6.8.</span> <span class="toc-text">Prompt 调优到瓶颈后，降幻觉的优化优先级怎么排?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B-Prompt-%E8%BF%AD%E4%BB%A3%E5%90%8E%E6%80%8E%E4%B9%88%E5%9F%BA%E7%BA%BF%E5%AF%B9%E6%AF%94%E5%92%8C%E7%81%B0%E5%BA%A6%E9%AA%8C%E8%AF%81-%E7%89%88%E6%9C%AC%E8%BF%AD%E4%BB%A3%E6%80%8E%E4%B9%88%E4%BF%9D%E7%A8%B3%E5%AE%9A"><span class="toc-number">1.6.9.</span> <span class="toc-text">模型&#x2F;Prompt 迭代后怎么基线对比和灰度验证?版本迭代怎么保稳定?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Eval%E3%80%81Trace%E3%80%81Guardrail-%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AA%E9%9D%A0-Prompt-%E4%BC%98%E5%8C%96%E4%B8%8D%E8%A1%8C"><span class="toc-number">1.6.10.</span> <span class="toc-text">Eval、Trace、Guardrail 分别解决什么问题?为什么只靠 Prompt 优化不行?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81-Agent-%E4%BA%A7%E5%87%BA%E8%BE%BE%E5%88%B0%E4%B9%8B%E5%89%8D%E4%BA%BA%E5%B7%A5%E5%88%B6%E4%BD%9C%E7%9A%84%E8%B4%A8%E9%87%8F"><span class="toc-number">1.6.11.</span> <span class="toc-text">怎么保证 Agent 产出达到之前人工制作的质量?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%AF%84%E4%BC%B0%E5%B0%8F%E6%A8%A1%E5%9E%8B%E6%8A%BD%E5%8F%96%E7%BB%93%E6%9E%9C-%E5%A4%8D%E6%9D%82%E6%A0%B7%E6%9C%AC%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86"><span class="toc-number">1.6.12.</span> <span class="toc-text">如何评估小模型抽取结果?复杂样本怎么处理?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%87%E7%A8%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E8%B4%A1%E7%8C%AE%E5%BD%92%E5%9B%A0%E5%88%86%E6%9E%90"><span class="toc-number">1.6.13.</span> <span class="toc-text">过程评估与贡献归因分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%9B%9E%E6%B5%81%E4%B8%8E%E8%87%AA%E8%BF%AD%E4%BB%A3"><span class="toc-number">1.6.14.</span> <span class="toc-text">数据回流与自迭代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E7%A8%8B%E8%B4%A8%E9%87%8F%E6%8F%90%E5%8D%87%E6%89%8B%E6%AE%B5-%E6%97%A0%E5%BE%AE%E8%B0%83%E9%AB%98%E5%87%86%E7%A1%AE%E7%8E%87-AI-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F"><span class="toc-number">1.6.15.</span> <span class="toc-text">工程质量提升手段(无微调高准确率 &#x2F; AI 代码质量)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%AE%89%E5%85%A8"><span class="toc-number">1.7.</span> <span class="toc-text">生产工程与安全</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Human-in-the-Loop%E4%B8%AD%E6%96%AD%E7%82%B9%E4%B8%8E%E5%8F%AF%E6%81%A2%E5%A4%8D%E6%89%A7%E8%A1%8C"><span class="toc-number">1.7.1.</span> <span class="toc-text">Human-in-the-Loop中断点与可恢复执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E9%98%B2%E6%B3%A8%E5%85%A5%E7%9A%84Prompt%E7%BB%93%E6%9E%84"><span class="toc-number">1.7.2.</span> <span class="toc-text">如何设计防注入的Prompt结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96Token%E5%BB%B6%E8%BF%9F%E5%92%8C%E6%95%B4%E4%BD%93%E5%90%9E%E5%90%90%E9%87%8F%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96"><span class="toc-number">1.7.3.</span> <span class="toc-text">首Token延迟和整体吞吐量如何优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%B8%B8%E8%A7%81%E6%89%8B%E6%AE%B5"><span class="toc-number">1.7.4.</span> <span class="toc-text">Agent性能优化常见手段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%87%8F%E5%B0%91Token%E6%B6%88%E8%80%97"><span class="toc-number">1.7.5.</span> <span class="toc-text">如何减少Token消耗</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Token%E6%B6%88%E8%80%97%E6%88%90%E6%9C%AC%E5%A6%82%E4%BD%95%E6%8E%A7%E5%88%B6"><span class="toc-number">1.7.6.</span> <span class="toc-text">Token消耗成本如何控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2%E6%81%B6%E6%84%8F%E5%88%B7Token"><span class="toc-number">1.7.7.</span> <span class="toc-text">如何防止恶意刷Token</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%9B%91%E6%8E%A7Agent%E7%9A%84Token%E6%B6%88%E8%80%97"><span class="toc-number">1.7.8.</span> <span class="toc-text">如何监控Agent的Token消耗</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent%E5%BC%80%E5%8F%91%E4%B8%AD%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E5%A6%82%E4%BD%95%E9%98%B2%E6%B3%84%E9%9C%B2"><span class="toc-number">1.7.9.</span> <span class="toc-text">Agent开发中敏感信息如何防泄露</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E7%94%A8%E6%88%B7%E9%AB%98%E5%B9%B6%E5%8F%91%E4%BB%BB%E5%8A%A1%E5%A0%86%E7%A7%AF-%E5%8D%A1%E6%AD%BB-%E8%B5%84%E6%BA%90%E8%80%97%E5%B0%BD%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.7.10.</span> <span class="toc-text">多用户高并发任务堆积&#x2F;卡死&#x2F;资源耗尽怎么设计?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E4%BF%83%E9%AB%98%E5%B3%B0%E5%92%A8%E8%AF%A2%E6%9A%B4%E5%A2%9E%EF%BC%8C%E6%89%B9%E9%87%8F%E4%BB%BB%E5%8A%A1%E5%A0%86%E7%A7%AF%E5%8D%A1%E9%A1%BF%E6%80%8E%E4%B9%88%E4%BC%98%E5%8C%96%E8%B0%83%E5%BA%A6-%E5%93%AA%E4%BA%9B%E5%9C%BA%E6%99%AF%E5%BC%BA%E5%88%B6%E5%88%87%E8%A7%84%E5%88%99%E9%93%BE%E8%B7%AF"><span class="toc-number">1.7.11.</span> <span class="toc-text">大促高峰咨询暴增，批量任务堆积卡顿怎么优化调度?哪些场景强制切规则链路?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSE-%E5%A6%82%E4%BD%95%E8%BE%B9%E7%94%9F%E6%88%90%E8%BE%B9%E6%8E%A8%E9%80%81-SSE-vs-WebSocket"><span class="toc-number">1.7.12.</span> <span class="toc-text">SSE 如何边生成边推送?SSE vs WebSocket?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E6%B2%99%E7%AE%B1%E6%9C%BA%E5%88%B6%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1-E2B-%E4%BA%86%E8%A7%A3%E5%90%97"><span class="toc-number">1.7.13.</span> <span class="toc-text">Agent 沙箱机制怎么设计?E2B 了解吗?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Checkpoint-%E5%BA%95%E5%B1%82%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0-MemorySaver-vs-PostgresSaver-%E7%8A%B6%E6%80%81%E5%BA%8F%E5%88%97%E5%8C%96%E7%89%88%E6%9C%AC%E5%85%BC%E5%AE%B9-%E5%AD%98%E9%87%8F%E4%BC%9A%E8%AF%9D%E8%BF%81%E7%A7%BB"><span class="toc-number">1.7.14.</span> <span class="toc-text">Checkpoint 底层怎么实现?MemorySaver vs PostgresSaver?状态序列化版本兼容&#x2F;存量会话迁移?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Coding-Agent-%E8%BF%90%E8%A1%8C%E4%B8%AD%E7%94%A8%E6%88%B7%E5%8F%91%E6%B6%88%E6%81%AF%E6%89%93%E6%96%AD%EF%BC%8C%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86"><span class="toc-number">1.7.15.</span> <span class="toc-text">Coding Agent 运行中用户发消息打断，怎么处理?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E5%AE%9E%E4%BE%8B%E6%B1%A0%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1-%E5%8D%83%E7%BA%A7-Agent-%E6%89%A9%E5%AE%B9%E3%80%81%E4%BA%B2%E5%92%8C%E8%B7%AF%E7%94%B1%E3%80%81%E5%AE%9E%E4%BE%8B%E6%B7%98%E6%B1%B0%E9%87%8D%E5%BB%BA"><span class="toc-number">1.7.16.</span> <span class="toc-text">Agent 实例池怎么设计?千级 Agent 扩容、亲和路由、实例淘汰重建?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E5%A4%9A%E7%A7%9F%E6%88%B7%E9%9A%94%E7%A6%BB%E6%80%8E%E4%B9%88%E5%81%9A"><span class="toc-number">1.7.17.</span> <span class="toc-text">Agent 多租户隔离怎么做?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AI-%E4%BB%A3%E7%A0%81%E5%B7%A5%E7%A8%8B%E5%8C%96%EF%BC%9A%E5%8D%95%E6%B5%8B%E7%94%9F%E6%88%90-%E8%A1%A5%E4%B8%81%E5%BA%94%E7%94%A8-%E6%B2%99%E7%AE%B1%E6%89%A7%E8%A1%8C-%E7%89%88%E6%9C%AC%E5%9B%9E%E6%BB%9A%E5%93%AA%E6%AD%A5%E6%9C%80%E6%98%93%E5%87%BA%E7%94%9F%E4%BA%A7%E4%BA%8B%E6%95%85-%E6%80%8E%E4%B9%88%E9%98%B2%E6%8E%A7"><span class="toc-number">1.7.18.</span> <span class="toc-text">AI 代码工程化：单测生成&#x2F;补丁应用&#x2F;沙箱执行&#x2F;版本回滚哪步最易出生产事故?怎么防控?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%BA%BF%E4%B8%8A%E7%A8%B3%E5%AE%9A%E6%80%A7%E4%BF%9D%E9%9A%9C%E7%9A%84%E8%90%BD%E5%9C%B0%E6%80%9D%E8%B7%AF-%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6%E4%BD%93%E7%B3%BB"><span class="toc-number">1.7.19.</span> <span class="toc-text">系统线上稳定性保障的落地思路?监控告警体系?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ZSet-%E9%99%90%E6%B5%81%E7%93%B6%E9%A2%88"><span class="toc-number">1.7.20.</span> <span class="toc-text">ZSet 限流瓶颈?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E5%8F%AF%E7%94%A8-vs-Demo-%E7%9A%84%E5%88%A4%E6%96%AD%E6%A0%87%E5%87%86"><span class="toc-number">1.7.21.</span> <span class="toc-text">生产可用 vs Demo 的判断标准</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%86%E6%9E%B6%E4%B8%8E-Harness"><span class="toc-number">1.8.</span> <span class="toc-text">框架与 Harness</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#LangChain"><span class="toc-number">1.8.1.</span> <span class="toc-text">LangChain</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LangGraph"><span class="toc-number">1.8.2.</span> <span class="toc-text">LangGraph</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LangChain-vs-LangGraph-vs-LlamaIndex"><span class="toc-number">1.8.3.</span> <span class="toc-text">LangChain vs LangGraph vs LlamaIndex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Harness-Engineering"><span class="toc-number">1.8.4.</span> <span class="toc-text">Harness Engineering</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SDD-Spec-Driven-Development"><span class="toc-number">1.8.5.</span> <span class="toc-text">SDD&#x2F;Spec-Driven Development</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E7%A0%94-vs-OpenAI-SDK-vs-LangGraph-AutoGen-CrewAI-OpenManus-%E6%80%8E%E4%B9%88%E9%80%89-%E8%AE%B2%E6%B8%85-trade-off-%E4%B8%8D%E7%94%A8%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%94%9F%E5%86%99%E8%BF%87%E5%90%97"><span class="toc-number">1.8.6.</span> <span class="toc-text">自研 vs OpenAI SDK vs LangGraph&#x2F;AutoGen&#x2F;CrewAI&#x2F;OpenManus 怎么选?讲清 trade-off?不用框架原生写过吗?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LangGraph-%E5%AD%90%E5%9B%BE%E5%A4%8D%E7%94%A8-%E5%8A%A8%E6%80%81%E5%AD%90Agent%E6%B3%A8%E5%86%8C-%E7%83%AD%E6%9B%B4%E6%96%B0%E5%9B%BE%E5%AE%9A%E4%B9%89"><span class="toc-number">1.8.7.</span> <span class="toc-text">LangGraph 子图复用&#x2F;动态子Agent注册&#x2F;热更新图定义?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prompt-Context-Harness-Engineering-%E4%B8%89%E8%80%85%E5%85%B3%E7%B3%BB"><span class="toc-number">1.8.8.</span> <span class="toc-text">Prompt&#x2F;Context&#x2F;Harness Engineering 三者关系?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Claude-Code-Codex-%E7%B1%BB-harness-%E7%9A%84%E6%89%A7%E8%A1%8C%E6%80%9D%E8%B7%AF-agent-md%E3%80%81skills-%E6%96%87%E4%BB%B6%E6%80%8E%E4%B9%88%E8%90%BD%E5%9C%B0-Claude-Code-%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">1.8.9.</span> <span class="toc-text">Claude Code&#x2F;Codex 类 harness 的执行思路?agent.md、skills 文件怎么落地?Claude Code 上下文管理优缺点?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AI-%E4%BB%A3%E7%A0%81%E5%8A%A9%E6%89%8B%E6%80%8E%E4%B9%88%E9%AB%98%E6%95%88%E8%BE%93%E5%85%A5%E6%95%B4%E4%B8%AA%E4%BB%93%E5%BA%93%E4%B8%8A%E4%B8%8B%E6%96%87-%E5%85%A8%E9%87%8F%E7%81%8C%E8%BF%98%E6%98%AF%E5%88%86%E5%B1%82%E6%A3%80%E7%B4%A2"><span class="toc-number">1.8.10.</span> <span class="toc-text">AI 代码助手怎么高效输入整个仓库上下文?全量灌还是分层检索?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%AF%E5%90%A6-fork-%E8%BF%87-deep-agent-upstream-%E5%86%B2%E7%AA%81%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86"><span class="toc-number">1.8.11.</span> <span class="toc-text">是否 fork 过 deep-agent?upstream 冲突怎么处理?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LangChain-Trace-%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA"><span class="toc-number">1.8.12.</span> <span class="toc-text">LangChain Trace 链路追踪</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB"><span class="toc-number">1.9.</span> <span class="toc-text">模型与意图识别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%A8%A1%E5%9E%8B%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.9.1.</span> <span class="toc-text">多模型调度策略如何设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-SystemPrompt%E7%9A%84%E6%9C%80%E4%BD%B3%E7%BB%93%E6%9E%84%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.9.2.</span> <span class="toc-text">Agent SystemPrompt的最佳结构是什么?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prompt-Template%E5%9C%A8%E7%94%9F%E4%BA%A7%E4%B8%AD%E7%9A%84%E5%AE%9E%E8%B7%B5"><span class="toc-number">1.9.3.</span> <span class="toc-text">Prompt Template在生产中的实践?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB%EF%BC%9A%E8%A7%84%E5%88%99%E3%80%81%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8B%E3%80%81LLM-%E4%B8%89%E7%A7%8D%E6%96%B9%E6%A1%88%E6%80%8E%E4%B9%88%E5%8F%96%E8%88%8D-%E8%BD%BB%E9%87%8F%E6%A8%A1%E5%9E%8B%E5%92%8C%E8%A7%84%E5%88%99%E6%80%8E%E4%B9%88%E5%8D%8F%E5%90%8C"><span class="toc-number">1.9.4.</span> <span class="toc-text">意图识别：规则、分类模型、LLM 三种方案怎么取舍?轻量模型和规则怎么协同?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE%E6%AD%A7%E4%B9%89-%E7%BD%AE%E4%BF%A1%E5%BA%A6%E4%BD%8E%E7%9A%84%E5%85%9C%E5%BA%95-%E7%BB%93%E5%90%88%E7%9C%9F%E5%AE%9E-bad-case"><span class="toc-number">1.9.5.</span> <span class="toc-text">意图歧义&#x2F;置信度低的兜底?结合真实 bad case</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE%E6%A8%A1%E5%9E%8B%E7%BA%BF%E4%B8%8A%E6%BC%82%E7%A7%BB%E6%80%8E%E4%B9%88%E5%8F%91%E7%8E%B0-bad-case-%E6%80%8E%E4%B9%88%E5%9B%9E%E6%B5%81-%E5%9C%A8%E7%BA%BF%E8%92%B8%E9%A6%8F"><span class="toc-number">1.9.6.</span> <span class="toc-text">意图模型线上漂移怎么发现?bad case 怎么回流?在线蒸馏?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E4%BA%86%E8%A7%A3%E5%A4%9A%E5%B0%91-Transformer-attention"><span class="toc-number">1.9.7.</span> <span class="toc-text">对大模型底层原理了解多少(Transformer&#x2F;attention)?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Text-to-SQL-%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81-SQL-%E5%87%86%E7%A1%AE"><span class="toc-number">1.9.8.</span> <span class="toc-text">Text-to-SQL 怎么保证 SQL 准确?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.9.9.</span> <span class="toc-text">信息抽取适合什么模型?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E4%BA%91%E5%8D%8F%E5%90%8C%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1-%E5%93%AA%E4%BA%9B%E4%BB%BB%E5%8A%A1%E6%94%BE%E7%AB%AF%E4%BE%A7%E5%93%AA%E4%BA%9B%E4%B8%8A%E4%BA%91"><span class="toc-number">1.9.10.</span> <span class="toc-text">端云协同怎么设计?哪些任务放端侧哪些上云?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E9%AB%98%E8%B4%A8%E9%87%8F%E6%95%B0%E6%8D%AE%E9%9B%86%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81%E8%B4%A8%E9%87%8F"><span class="toc-number">1.9.11.</span> <span class="toc-text">构建高质量数据集怎么保证质量?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agentic-RL-%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83-RL-loss-GRPO-GSPO-OPD-SFT-rollout"><span class="toc-number">1.9.12.</span> <span class="toc-text">Agentic RL 与模型训练(RL loss &#x2F; GRPO &#x2F; GSPO &#x2F; OPD &#x2F; SFT &#x2F; rollout)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%8E%A5%E5%85%A5%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%8E%A8%E7%90%86%E5%BC%BA%E5%BA%A6%E6%8E%A7%E5%88%B6"><span class="toc-number">1.9.13.</span> <span class="toc-text">模型接入协议与推理强度控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ASR-%E9%80%89%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="toc-number">1.9.14.</span> <span class="toc-text">ASR 选型评估</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%E9%A2%98"><span class="toc-number">1.10.</span> <span class="toc-text">场景设计题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%97%85%E6%B8%B8%E5%92%A8%E8%AF%A2-Agent%EF%BC%9A%E6%9C%BA%E7%A5%A8-%E9%80%80%E6%94%B9-%E9%85%92%E5%BA%97-%E6%94%BB%E7%95%A5%E6%B7%B7%E5%90%88%E6%8F%90%E9%97%AE%EF%BC%8C%E6%80%8E%E4%B9%88%E6%8B%86%E5%A4%9A%E6%84%8F%E5%9B%BE%E3%80%81%E5%B9%B6%E8%A1%8C%E8%B0%83%E5%BA%A6%E3%80%81%E8%81%9A%E5%90%88%E7%BB%93%E6%9E%9C"><span class="toc-number">1.10.1.</span> <span class="toc-text">设计旅游咨询 Agent：机票&#x2F;退改&#x2F;酒店&#x2F;攻略混合提问，怎么拆多意图、并行调度、聚合结果?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E5%B0%8F%E7%88%B1%E4%B8%AA%E4%BA%BA%E5%8A%A9%E7%90%86%EF%BC%9A%E6%97%A5%E7%A8%8B-%E5%A4%A9%E6%B0%94-%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6-%E5%A4%9A%E8%BD%AE-SSE-%E5%A4%9A%E7%A7%9F%E6%88%B7%EF%BC%8C%E7%AB%AF%E4%BA%91%E5%8D%8F%E5%90%8C%E6%9E%B6%E6%9E%84%E4%B8%8E%E9%9A%BE%E7%82%B9"><span class="toc-number">1.10.2.</span> <span class="toc-text">设计小爱个人助理：日程&#x2F;天气&#x2F;本地文件&#x2F;多轮&#x2F;SSE&#x2F;多租户，端云协同架构与难点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1-AI-%E9%9D%A2%E8%AF%95%E5%8A%A9%E6%89%8B%EF%BC%9A%E4%B8%8A%E4%BC%A0%E7%AE%80%E5%8E%86%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98%E5%B9%B6%E6%A8%A1%E6%8B%9F%E9%9D%A2%E8%AF%95"><span class="toc-number">1.10.3.</span> <span class="toc-text">设计 AI 面试助手：上传简历自动生成问题并模拟面试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8-AI-%E5%81%9A%E6%B8%B8%E6%88%8F-UI-%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.10.4.</span> <span class="toc-text">用 AI 做游戏 UI 自动化测试怎么设计?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%94%AE%E5%90%8E-Agent-%E5%AF%B9%E6%8E%A5%E8%AE%A2%E5%8D%95-%E7%89%A9%E6%B5%81-%E9%80%80%E6%AC%BE%E5%A4%9A%E5%B7%A5%E5%85%B7%EF%BC%8C%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81%E5%A4%9A%E6%AD%A5%E9%AA%A4%E9%97%AD%E7%8E%AF%E4%B8%8D%E9%81%97%E6%BC%8F"><span class="toc-number">1.10.5.</span> <span class="toc-text">售后 Agent 对接订单&#x2F;物流&#x2F;退款多工具，怎么保证多步骤闭环不遗漏?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%A3%80%E7%B4%A2%E5%B7%A5%E5%85%B7%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1-%E6%A8%A1%E7%B3%8A%E6%97%B6%E9%97%B4%E6%80%8E%E4%B9%88%E8%A7%84%E8%8C%83%E5%8C%96"><span class="toc-number">1.10.6.</span> <span class="toc-text">时间检索工具怎么设计?模糊时间怎么规范化?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E6%98%93%E6%B5%81%E7%A8%8B%E6%9C%80%E6%A0%B8%E5%BF%83%E5%85%B3%E6%B3%A8%E5%93%AA%E4%BA%9B%E7%82%B9-%E5%AF%B9%E6%8E%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E6%94%AF%E4%BB%98%E8%BF%98%E6%98%AF%E7%BB%9F%E4%B8%80%E5%B0%81%E8%A3%85"><span class="toc-number">1.10.7.</span> <span class="toc-text">交易流程最核心关注哪些点?对接第三方支付还是统一封装?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%B1%E8%A7%86%E4%BA%8C%E5%88%9B%E9%AB%98%E5%85%89%E7%89%87%E6%AE%B5-Agent-%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.10.8.</span> <span class="toc-text">影视二创高光片段 Agent 设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E9%9B%B6%E8%AE%BE%E8%AE%A1%E4%BC%81%E4%B8%9A%E7%BA%A7-AI-Agent-%E5%BA%94%E7%94%A8-%E5%85%A8%E6%A8%A1%E5%9D%97"><span class="toc-number">1.10.9.</span> <span class="toc-text">从零设计企业级 AI Agent 应用(全模块)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E5%AE%A2%E6%9C%8D%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.10.10.</span> <span class="toc-text">智能客服机器人设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E6%94%BE%E9%A2%98%E4%B8%8EHR"><span class="toc-number">1.11.</span> <span class="toc-text">开放题与HR</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vibe-Coding"><span class="toc-number">1.11.1.</span> <span class="toc-text">Vibe Coding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E8%A1%8C%E4%B8%9A%E6%A6%82%E5%BF%B5%E6%B3%A1%E6%B2%AB-%E7%9C%9F%E5%AE%9E%E8%90%BD%E5%9C%B0%E4%BB%B7%E5%80%BC%E5%92%8C%E7%93%B6%E9%A2%88"><span class="toc-number">1.11.2.</span> <span class="toc-text">Agent 行业概念泡沫?真实落地价值和瓶颈?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E5%8C%96%E8%B6%8A%E9%AB%98%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%E8%B6%8A%E5%BC%BA%EF%BC%8C%E6%80%8E%E4%B9%88%E5%B9%B3%E8%A1%A1%E6%99%BA%E8%83%BD%E6%80%A7%E5%92%8C%E4%B8%9A%E5%8A%A1%E5%8F%AF%E6%8E%A7%E6%80%A7"><span class="toc-number">1.11.3.</span> <span class="toc-text">智能化越高不确定性越强，怎么平衡智能性和业务可控性?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%9B%B4%E7%9C%8B%E5%A5%BD%E5%B7%A5%E7%A8%8B%E8%90%BD%E5%9C%B0%E8%BF%98%E6%98%AF%E6%A8%A1%E5%9E%8B%E8%83%BD%E5%8A%9B%E5%8D%87%E7%BA%A7"><span class="toc-number">1.11.4.</span> <span class="toc-text">未来更看好工程落地还是模型能力升级?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">1.11.5.</span> <span class="toc-text">Agent 的局限性?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%8E%E5%90%8E%E7%AB%AF-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%BD%AC-Agent"><span class="toc-number">1.11.6.</span> <span class="toc-text">为什么从后端&#x2F;深度学习转 Agent?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E6%8A%80%E6%9C%AF%E5%88%A4%E6%96%AD%E5%8A%9B-%E6%B2%A1%E6%88%90%E7%86%9F%E7%BB%8F%E9%AA%8C%E6%97%B6%E4%BE%9D%E6%8D%AE%E4%BB%80%E4%B9%88%E4%BF%A1%E5%8F%B7%E5%86%B3%E5%AE%9A%E6%8A%95%E5%85%A5"><span class="toc-number">1.11.7.</span> <span class="toc-text">怎么建立技术判断力?没成熟经验时依据什么信号决定投入?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%91%E5%8D%8A%E5%B9%B4%E6%B7%B1%E8%80%95%E7%9A%84%E6%9C%80%E9%9A%BE%E8%AE%BA%E6%96%87-%E5%BC%80%E6%BA%90%E6%BA%90%E7%A0%81"><span class="toc-number">1.11.8.</span> <span class="toc-text">近半年深耕的最难论文&#x2F;开源源码?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E7%9C%8B-AI-%E5%8F%91%E5%B1%95%E9%98%B6%E6%AE%B5-%E5%AF%B9%E5%B7%A5%E4%BD%9C%E4%BA%A7%E5%93%81%E7%9A%84%E5%BD%B1%E5%93%8D-%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%9B%A2%E9%98%9F%E5%81%9A%E5%88%B0%E4%BB%80%E4%B9%88%E7%A8%8B%E5%BA%A6%E6%89%8D%E4%BF%A1%E4%BB%BB-AI"><span class="toc-number">1.11.9.</span> <span class="toc-text">怎么看 AI 发展阶段&#x2F;对工作产品的影响?基础架构团队做到什么程度才信任 AI?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E6%96%B0%E9%A2%86%E5%9F%9F%E7%9A%84%E6%96%B9%E6%B3%95-%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E6%8A%80%E6%9C%AF%E5%80%BC%E5%BE%97%E6%B7%B1%E5%AD%A6%E8%BF%98%E6%98%AF%E4%BA%86%E8%A7%A3"><span class="toc-number">1.11.10.</span> <span class="toc-text">学习新领域的方法?怎么判断技术值得深学还是了解?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E8%AF%81%E6%98%8E%E4%BD%A0%E6%80%9D%E8%80%83%E6%B7%B1%E5%BA%A6%E6%AF%94%E5%88%AB%E4%BA%BA%E6%B7%B1-AI-%E6%97%B6%E4%BB%A3%E7%9A%84%E6%BD%9C%E5%8A%9B%E6%80%8E%E4%B9%88%E5%AE%9A%E4%B9%89"><span class="toc-number">1.11.11.</span> <span class="toc-text">怎么证明你思考深度比别人深?AI 时代的潜力怎么定义?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%9C%80%E5%A4%A7%E7%BC%BA%E9%99%B7-%E9%87%8D%E6%9E%84%E6%80%8E%E4%B9%88%E6%94%B9-%E4%B8%9A%E5%8A%A1%E6%8C%87%E6%A0%87%E9%95%BF%E6%9C%9F%E4%B8%8D%E6%8F%90%E5%8D%87%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-number">1.11.12.</span> <span class="toc-text">项目最大缺陷?重构怎么改?业务指标长期不提升怎么办?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E5%92%8C%E5%90%8E%E7%AB%AF%E5%90%8C%E5%AD%A6%E5%AF%B9-Agent-%E8%BE%B9%E7%95%8C%E8%AE%A4%E7%9F%A5%E4%B8%8D%E4%B8%80%E8%87%B4%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86-%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E5%92%8C%E4%B8%9A%E5%8A%A1%E6%96%B9%E5%88%86%E6%AD%A7%E6%80%8E%E4%B9%88%E6%B2%9F%E9%80%9A"><span class="toc-number">1.11.13.</span> <span class="toc-text">算法和后端同学对 Agent 边界认知不一致怎么处理?技术方案和业务方分歧怎么沟通?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A4%E5%91%A8%E4%B8%8A%E7%BA%BF%E5%BA%A7%E8%88%B1-demo-%E4%BD%86%E7%9F%A5%E8%AF%86%E5%BA%93%E6%9C%AA%E9%BD%90%EF%BC%8C%E6%80%8E%E4%B9%88%E6%8E%92%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.11.14.</span> <span class="toc-text">两周上线座舱 demo 但知识库未齐，怎么排优先级?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E4%BE%A7%E8%A6%81%E5%8A%A0%E4%B8%80%E6%AD%A5-LLM-%E8%B0%83%E7%94%A8%E6%8F%90%E5%87%86%E7%A1%AE%E7%8E%87%EF%BC%8C%E6%80%8E%E4%B9%88%E6%A0%B8%E7%AE%97%E6%88%90%E6%9C%AC-%E5%BB%B6%E8%BF%9F-%E5%A4%B1%E8%B4%A5%E7%8E%87%E5%B9%B6%E5%86%B3%E7%AD%96"><span class="toc-number">1.11.15.</span> <span class="toc-text">算法侧要加一步 LLM 调用提准确率，怎么核算成本&#x2F;延迟&#x2F;失败率并决策?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HR-%E5%B8%B8%E8%A7%84-%E8%96%AA%E8%B5%84-%E5%8A%A0%E7%8F%AD-%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92-%E6%8C%AB%E6%8A%98-%E6%88%90%E5%B0%B1-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%AC%E5%85%AC%E5%8F%B8-%E7%A6%BB%E8%81%8C%E5%8E%9F%E5%9B%A0-%E7%A8%B3%E5%AE%9A%E6%80%A7-%E2%80%94%E2%80%94-%E6%A8%A1%E6%9D%BF%E6%B8%85%E5%8D%95%EF%BC%8C%E4%B8%8D%E9%80%90%E9%A2%98%E5%86%99"><span class="toc-number">1.11.16.</span> <span class="toc-text">HR 常规(薪资&#x2F;加班&#x2F;职业规划&#x2F;挫折&#x2F;成就&#x2F;为什么本公司&#x2F;离职原因&#x2F;稳定性)—— 模板清单，不逐题写</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/20003.html" title="Agent开发知识点"><img src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Agent开发知识点"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/20003.html" title="Agent开发知识点">Agent开发知识点</a><time datetime="2026-10-08T09:16:00.000Z" title="Created 2026-10-08 17:16:00">2026-10-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20001.html" title="Agent开发面经"><img src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Agent开发面经"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/20001.html" title="Agent开发面经">Agent开发面经</a><time datetime="2026-06-22T14:43:58.000Z" title="Created 2026-06-22 22:43:58">2026-06-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20002.html" title="Agent开发知识点总结"><img src="https://s2.loli.net/2024/05/27/6wWObXhdZL13pqo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Agent开发知识点总结"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/20002.html" title="Agent开发知识点总结">Agent开发知识点总结</a><time datetime="2026-06-22T14:43:58.000Z" title="Created 2026-06-22 22:43:58">2026-06-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17782.html" title="学车小记"><img src="https://s2.loli.net/2025/03/19/eVRF7JMl4yjrzhQ.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="学车小记"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/17782.html" title="学车小记">学车小记</a><time datetime="2025-03-19T07:04:48.000Z" title="Created 2025-03-19 15:04:48">2025-03-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/17781.html" title="华为笔试/手撕"><img src="https://s2.loli.net/2025/03/19/kAcZ5yKPDwizuMN.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="华为笔试/手撕"/ loading='lazy'></a><div class="content"><a class="title" href="/posts/17781.html" title="华为笔试/手撕">华为笔试/手撕</a><time datetime="2024-11-15T03:51:23.000Z" title="Created 2024-11-15 11:51:23">2024-11-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By cwp0</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional and Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nfRxTBEmIAeb6gP2K0LOdLqw-gzGzoHsz',
+      appKey: 'vmeDN8k58dVdPv5Yz7NEkvSN',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('/js/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/posts/20003.html'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'https://cwp0.github.io/posts/20003.html'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = 'Agent开发知识点'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=&api_key=&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Valine' === 'Disqus' || !true) {
+    if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      GLOBAL_CONFIG_SITE.pageType === 'post' && getCount()
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
