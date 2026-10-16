@@ -750,6 +750,22 @@ RAG 召回的知识切片(chunk)来自不同的原始文档，而不同文档有
 
 
 
+### 和菜小蜜闲聊会走哪条链路
+
+菜小蜜没有专门的“闲聊链路”。闲聊和业务问题走的是同一条主干，只是因为知识库里召回到空、命中兜底关键词，最后拐进了通识问答（联网）这一步。完整路径是:
+
+1. **入口。** 钉钉 Stream 长连接回调 `handleRobotMessage`，同步调 `cxmAiEngine.execute(RobotMessage)`。
+2. **前置工具链**（`executeToolForRobot`，顺序短路）:`specialCommandTool`（特殊指令，如 new chat）、`onlineSupportTool`（转人工）、`similarQuestionTool`（预置相似问/问答卡片）——普通闲聊三个都不命中，返回 null，进入路由。
+3. **路由**（`aiRouting`）:`aiRoutingForTool` 用 `qwen3.7-flash` 从工具清单里选技能。清单里没有“闲聊/通识”这种技能，所以闲聊要么被路由到某个业务技能，要么选出的 operationId 找不到执行器 → 抛异常 → catch 兜底成 `caixiaomiKnowledgeQA`。落点都是知识问答技能 `CxmKnowledgeQATool`。
+4. **知识问答内部**（`doKnowledgeQA` → `answerWithFallback`）:先照常走一遍 RAG（多知识库并发检索 + reRank + `qwen3.7-plus` 生成，不联网）。闲聊在制度知识库里基本召回不到切片，模型对着空/弱知识生成，通常吐出“内部资料暂时没有相关内容”这类话术；`answerWithFallback` 累积第一轮回答，命中 Diamond 配的 `ragFallbackKeywords` 就 `concatWith` 拼一轮 `answerWithGeneralLLM`——用 `qwen3.7-plus` 开启联网搜索、不依赖知识库自由回答。两轮流对下游透明拼接，机制细节见本节“讲一下RAG失败时如何进行兜底”。
+5. **收尾。** 答案经钉钉卡片流式推送，`updateChatLogAfterExecution` 落库。异步打标时闲聊属于 `PromptAiMarkRule` 的“非业务提问”（纯闲聊/寒暄/无意义输入），直接判 true，不进 bad case 闭环。
+
+几个值得点出来的取舍:
+
+- **闲聊是“先检索、后兜底”，不是“先识别、再分流”。** 系统没在路由阶段把它识别成闲聊走轻量分支，而是让它走完整 RAG 主干，靠 RAG 答不出 → 关键词触发通识兜底。代价是每条闲聊都白跑一遍多知识库检索，多一次召回延迟和 Token。
+- **兜底触发是关键词 `contains` 匹配第一轮 RAG 回答，不是意图判断，比较脆。** 代码注释自己也写了“后续可将关键词 contains 判断替换为 LLM 判断”。如果模型对某句闲聊硬编了一个不含关键词的回答，就不会触发通识兜底。
+- **联网只在通识兜底这一步开。** RAG 生成是 `search=false`，通识问答是 `search=true`；这也是为什么打标规则把“以‘内部资料暂时没有相关内容’开头”的回答认定为来自联网搜索。
+
 ### RPA+定时任务双链路知识同步✅
 - RPA + 定时任务双联路知识同步:主链路定时任务扫描钉钉空间做diff检测变更，通过 RPA 自动抓取协同文档变更增量同步至百炼向量库；辅以定时任务处理 RPA 无法覆盖的 FAQ 同步与文档删除场景，上传百炼自动完成切片向量化，保障知识库实时性与完整性。
 
