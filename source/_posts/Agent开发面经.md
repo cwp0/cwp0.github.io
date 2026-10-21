@@ -160,6 +160,29 @@ abcjs:
 
 **熟悉但非我主导**：流式推送、Prompt 工程化与LLM As a Judge评估体系由其他同学主导，我全程参与方案评审和联调；因为我的知识源要和其他源做并发编排与统一 Rerank，整体多源架构（三层线程池隔离、3s 熔断）我很熟；
 
+### 菜小蜜中是否涉及到Harness相关内容
+Harness 是什么：Harness（脚手架 / 挽具）是围绕大模型构建的整套工程基础设施——模型本身只负责”推理”，Harness 负责推理之外的一切：工具注册与调用、上下文组装与管理、状态持久化、错误恢复、安全防护、可观测性、评测体系。形象地说，大模型是引擎，Harness 是底盘、变速箱、方向盘、刹车和安全气囊。
+
+菜小蜜几乎整套工程就是一个围绕 qwen 模型搭的 Harness。模型只负责“推理”那一下，其余全是 Harness——用引擎和车的比喻，模型是引擎，菜小蜜的路由、上下文、持久化、兜底、鉴权、埋点、评测才是底盘、变速箱、方向盘、刹车和气囊。按 Harness 的七个维度对照:
+
+| Harness 维度 | 菜小蜜对应实现 |
+|---|---|
+| 工具注册与调用 | `ToolExecutor` + `ToolExecutorRegistry`（按 `operationId` 注册）；`aiRouting` 用 `qwen3.7-flash` + `PromptToolRouting` 从 Diamond 的 Tool Schema 选工具、`crowdRuleId` 圈人过滤；`@alibaba/mcp-lite` 的 `@Tool` 对外暴露 MCP Server |
+| 上下文组装与管理 | `ToolExecuteInfo` 贯穿全链路（session/employee/userInfo/ragQueryMap/filterCode/category/aiChatLogId）；`CxmSessionHelper` 管会话延续；三路 Query Rewrite + 翻译；RAG prompt 用 SYSTEM + TOOL role 分层拼装 |
+| 状态持久化 | `AiChatLog`（问题/答案/切片/TimeRecord/traceId）、`MessageMark`（打标 + follow_status）、`DingDocChangeLog`（RPA 任务态）、`cxm_answer_score`（离线评测）、Redis、`ReplayProcessor` 1 分钟回放 |
+| 错误恢复 | 路由 catch 兜底 `caixiaomiKnowledgeQA`；RAG→通识兜底（`answerWithFallback`）；鉴权 fail-close + 3s 预算；六路路由字段级降级；`DingTalkRateLimitAspect` 被动重试；RPA `taskFail` 重试 <3 |
+| 安全防护 | 文档级后置鉴权 `authSlice` + `filterTags` 粗筛；`callStream` 非安全场景 content 脱敏；`ToolController` HMAC-SHA256 签名 + 10 分钟窗口；`CxmRequestValidator` 校验；内部菜鸟RPA 避免数据外泄 |
+| 可观测性 | EagleEye trace + traceId 落库；`TimeRecordEnum` 全链路埋点（支撑 TTFT 分析）；`DingDocMonitorProcessor` 积压告警（`rpaWebhook`）；1.5s 中间态提示 |
+| 评测体系 | 在线打标（`MessageAiMarker` + `qwen3.7-plus` Judge + 确定性覆盖 + follow_status 闭环）；离线评测（`CxmAnswerScoreProcessor` + `deepseek-v3` + 0.85 阈值）；周报准确率 SQL |
+
+所以问“菜小蜜有没有 Harness”，答案是它本身就是一个 Harness，模型只是被它包起来的一次调用。这个视角能把路由、RAG、鉴权、TTFT、打标、RPA 这些散点一句话串起来——我做的核心是“模型之外的那层工程基础设施”。
+
+三个边界要交代清楚，避免被追问翻车:
+
+1. 菜小蜜是**领域 Harness，而且它自己也站在别人的 Harness 上**:百炼（检索/切片/embedding/rerank/模型服务）、Diamond（配置/Prompt/Tool Schema 热更新）、钉钉 Stream（入口）、SchedulerX（调度）都是更底层的平台 Harness，菜小蜜是在其上做业务编排层，不是从空白自研通用 Agent runtime。
+2. 可观测性里的 Sunfire/SLS、限流里的钉钉接口配额属于**集团/平台能力，不在菜小蜜仓库**，不能说成自己实现的。
+3. 这套 Harness 是“**编排 + 治理**”型（路由/工具/RAG/鉴权/评测/降级），没有自研通用 Agent 那套 planning + 分层 memory 的 runtime——记忆和规划主要靠会话上下文 + 外部知识。
+
 ### 一次普通对话的具体流程是怎样的
 以最常见的知识问答场景为例，一次对话从用户发消息到收到回答，完整流转经过 7 个环节:
 
@@ -786,6 +809,43 @@ RAG 召回的知识切片(chunk)来自不同的原始文档，而不同文档有
 
 因此采用 **"各取所长"的双链路设计**:RPA 负责普通文档内容抓取，Java 侧 `DingDocScanProcessor` 负责变更检测，`DingDocSyncProcessor` 负责 FAQ 导出、删除任务和状态处理，两者通过 `ToolController` 的 HTTP 接口衔接，形成完整的知识同步闭环。
 
+### 你们的RPA具体是怎么实现的
+
+菜小蜜用的是**菜鸟内部的 RPA 产品**，不是自己写的浏览器自动化脚本。整体是“菜鸟RPA 负责下载、cn-work 后端负责任务调度和入库”的**拉取式协作**，而且 RPA **只做“钉文档下载”这一件事**，扫描、状态管理、百炼上传全由 Java 实现——这是刻意的扬长避短，因为 RPA 慢又不稳，能用后端/API 做的绝不交给 RPA。
+
+RPA 侧的运行形态是“三件套 + ECS”:
+
+- **RPA 设计器**（Windows 软件）:拖拉拽搭工作流，开发态用。
+- **RPA 机器人**（Windows 软件）:正式运行端，轻量带监控，部署在阿里云 **ECS** 上长期跑。
+- **RPA 控制器**（在线网页）:像 Schedule 平台一样配定时任务，由它定时唤醒机器人去拉活。
+
+Java 侧与 RPA 的协作是典型的“外部 worker 从 broker 拉活”，两边不共享进程，只通过一张任务表 `ding_doc_change_log` 和三个 HTTP 接口（`ToolController`，HMAC-SHA256 签名 + 时间戳鉴权）衔接:
+
+1. `DingDocScanProcessor` 定时扫描钉文档空间、和百炼文件 diff，产出 ADD/MODIFY/DELETE 任务，状态 `PENDING`；
+2. RPA 控制器定时唤醒机器人，机器人用**自写的 Python** 轮询 `takeDingDocSyncTask` 领一条任务（返回 `doc_key/doc_url/doc_type`）；
+3. 机器人在已登录的浏览器里打开文档、下载成文件；
+4. 成功调 `commitDingDocSyncTask`（multipart 回传文件）→ cn-work 存 `/tmp`、`uploadDingDoc` 打 tag 传百炼（MODIFY 先删旧文件）、状态置 `SUCCESS`；失败调 `commitDingDocSyncTaskFail` → `taskFail` 累加重试次数，`<3` 置 `RETRYING` 等下轮、`≥3` 置 `FAILED` 出局。
+
+任务状态机（代码实证）:`PENDING/RETRYING` →（`takeNextTask` 只 SELECT 不改状态，即**无锁领取**）→ 下载中 →（commit）`SUCCESS` /（fail）`RETRYING(<3)` 或 `FAILED(≥3)`；领取 SQL 按 `retry_count、doc_type、id` 排序、`LIMIT 1`。因为领取不加锁（`ProcessedStatus` 定义了 `PROCESSING` 但全代码无写入点），推测实际是**单机器人串行拉取**；好处是机器人中途崩了任务仍是 `PENDING`，下轮会被重新投递，不需要锁超时回收。
+
+几个实现细节:
+
+- **为什么用 Python 回传**:RPA 自带的“post 请求”组件不支持文件上传，所以自己写了 Python 调 HTTP 回传文件。
+- **登录怎么解决**:钉文档网页端不给账号密码登录，常规要“开阿里钉输账密 → 验阿里郎临时密钥（只能人工）→ 点头像”三步且易卡；改成申请“阿里钉部门公共账号”让 ECS 长期保持登录后，压成一步（点“在浏览器中打开”）。
+- **耗时**:单次下载同步约 25s，触发登录额外 +60s，所以靠提高定时频率把任务分散。
+- **监控**:RPA 天然不稳定，应用层告警是自建的——`DingDocMonitorProcessor` 定时比对同步任务是否长时间未被消费，积压就通过 `rpaWebhook` 推告警群。
+
+### RPA怎么模拟浏览器操作?鼠标移动和按钮点击具体怎么做
+
+先纠正一个常见误解:菜鸟RPA 点按钮**不是靠“把鼠标从屏幕左上角绝对坐标移到某个位置再点”**，而是**元素级定位**——先认出“这是哪个按钮元素”，再对它触发点击。这一点实践文档里能证实:
+
+- **元素选择器**:在设计器里选中钉文档上某个按钮会生成一个“元素选择器”，它默认还带上“网页 title”的限制，不取消勾选的话打开别的钉文档就命中不了同一个按钮——说明它认的是 DOM 元素特征，不是屏幕坐标。
+- **UI 一变流程就得改**:钉钉某次改版把“在浏览器中打开”按钮从最外层挪进了“┇”更多菜单，RPA 流程随即失效、需要同步调整。这正是元素选择器方案的典型脆弱点:依赖页面结构，结构一变选择器就找不到元素，靠运行报错或卡住的节点来发现。
+- **能走接口就不硬模拟**:下载组件默认输入方式是“模拟输入”（逐个字符敲）太慢，实测后改用“后台接口”模式，更稳更快。同一个动作优先用更接近接口的方式，而不是纯 UI 模拟。
+
+至于“鼠标移动”:在元素级方案里它是被抽象掉的——你在流程里写“点击下载按钮”，引擎内部才把元素解析成位置并派发点击；即便底层真发坐标事件，坐标也是按元素位置算的，不是人肉写死绝对坐标。绝对坐标点击、找图/OCR 只是拿不到元素时的兜底，稳定性差，不是主用方式。
+
+> **补充·关于 OCR/找图**:菜小蜜这条钉文档下载流程走的是 DOM 元素选择器 + 下载组件“后台接口”模式，菜鸟RPA**平台本身具备找图/OCR/机器视觉能力，只是这个流程没选用它**。原因是优先级和稳定性:钉文档是标准网页、DOM 可及，元素选择器比截图找图/OCR 更精确更稳（找图/OCR 会受分辨率、渲染、主题、缩放影响），能用元素选择器就不用视觉识别；找图/OCR 一般是兜底，用在 DOM/控件都拿不到的场景（canvas、远程桌面、老客户端、纯图片按钮等）。一句话:“元素选择器 > 找图/OCR”是稳定性和优先级上的主动选择，不是平台没这个能力。
 
 ### 为什么RPA无法处理导出和文档删除操作
 RPA 本质是模拟人在浏览器/客户端上的点击操作。它擅长有明确 UI 交互流程的操作(如打开文档→下载)。但有两类操作 RPA 做不了:① **FAQ 导出**——钉钉 FAQ 文档是 able 表格格式，没有"下载"按钮，需要通过钉钉开放平台 API 编程导出；② **文档删除**——删除百炼向量库中的文件需要调用百炼 API(bailianClient.deleteFile())，这是后端 API 操作而非前端 UI 操作。所以这两个场景由 Java 定时任务通过编程方式直接调用 API 处理。

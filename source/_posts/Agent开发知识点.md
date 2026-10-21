@@ -1687,6 +1687,53 @@ RAG（Retrieval-Augmented Generation，检索增强生成）的核心思路：**
 
 **RAG 场景怎么选**：绝大多数 RAG 系统（百万级文档、在线低延迟）默认用 HNSW，因为召回率和延迟更好；数据量特别大（十亿级）或内存紧张时考虑 IVF-PQ。Milvus、Qdrant、Weaviate、pgvector 都默认 HNSW；FAISS 里 IVF 是经典实现。
 
+### 文档切片(Chunking)策略
+
+切片（Chunking）是把长文档切分成若干个检索单元的过程。切片的本质问题是：**检索单元多大才合适**——单元是召回的最小粒度，切大了噪声多，切小了上下文碎。
+
+**两个核心参数**：
+
+- **chunk_size（块大小）**：单个 chunk 的 token 数。块小（100~300）检索精准、但语义不完整，回答问题需要跨块拼装；块大（800~1500）上下文完整、但容易混入无关内容，向量化的语义也容易被稀释。经验甜区是 300~800 token；
+- **overlap（重叠量）**：相邻 chunk 之间重叠的 token 数（通常为 chunk_size 的 10%~20%）。重叠是为了防止关键信息恰好落在切分边界上被切断——比如"xxx 的退货政策如下：<边界> 7 天内可退款"，不重叠的话"政策内容"和"政策主题"就分到了两个块里。
+
+**切片的本质矛盾**：
+
+- 块越小 → 召回越准（相似度打分更聚焦），但单块语义不完整，需要召回更多块才能拼出完整答案；
+- 块越大 → 上下文越完整，但召回噪声多（大块里大部分内容和 query 无关，向量相似度被稀释）。
+
+解决这个矛盾的高级手段：
+
+- **父子切片**：检索用小块（精准匹配），返回给 LLM 时用父块（完整上下文）；
+- **句子窗口**：按句子检索，注入时扩展到前后 N 句；
+- **多粒度索引**：同一文档建两套索引——小粒度索引用于精确检索，大粒度索引用于全局问题。
+
+**怎么验证切片质量**：建一个检索评测集（query → 应命中的 chunk），跑 Recall@K。切块策略改一版就重新评测，用数据说话而不是凭感觉。切片策略对召回质量的影响往往比换向量库、换 embedding 模型更大——这是 RAG 优化里性价比最高的一环。
+
+**常见策略:**
+
+| 策略 | 做法 | 优点 | 缺点 |
+|------|------|------|------|
+| **固定长度** | 按 Token 数切(如 500) | 简单 | 容易切断句子/语义 |
+| **滑动窗口** | 固定长度 + Overlap(如 50) | 减少边界丢失 | 内容冗余 |
+| **按段落/标题** | 跟随文档结构切 | 保留语义 | 长短不均 |
+| **递归切片** | 先按章节、再按段落、再按句子 | 兼顾结构和长度 | 实现复杂 |
+| **语义切片** | 用 Embedding 判断断点 | 语义最完整 | 计算开销大 |
+| **Late Chunking** | 先 Embed 整文，再切块共享上下文 | 上下文信息保留好 | 需特定模型支持 |
+
+**如何选择**:
+
+| 文档类型 | 推荐策略 | 块大小 |
+|---------|---------|--------|
+| FAQ / 短问答 | 每条一块 | 100-300 token |
+| 技术文档 | 递归(章节→段落) | 500-1000 token |
+| 论文 / 合同 | 语义切片 + Overlap | 800-1500 token |
+| 代码 | 按函数/类切 | 视代码而定 |
+| 表格 | 整表 + 文字说明 | 不切散 |
+
+> 经验法则:**块越小召回越准但上下文越碎；块越大上下文越全但召回噪声多**。一般 300-800 token 是甜区。
+
+
+
 ### 除了阿里内部的向量库，你还了解哪些RAG向量库?如何选型?
 
 常见方案不全是“向量数据库”，还包括搜索引擎的向量能力、传统数据库扩展和本地向量索引库。选型时主要看数据规模、混合检索、元数据过滤、运维成本、数据一致性和部署方式。
@@ -1995,31 +2042,6 @@ RAG 不是万能药，已知局限:
 - **索引重建**：embedding 模型升级或大规模数据清洗时全量重建，用双索引切换（蓝绿部署），新索引 ready 后原子切流量，零停机。
 
 **扩展性设计**：向量库水平分片（按租户或 hash），查询并行下发、结果合并；embedding 服务和 rerank 服务独立部署、可独立扩容；整体链路无状态，可以水平扩展查询节点。
-
-### 文档切片(Chunking)策略
-
-切片质量决定 RAG 召回质量。常见策略:
-
-| 策略 | 做法 | 优点 | 缺点 |
-|------|------|------|------|
-| **固定长度** | 按 Token 数切(如 500) | 简单 | 容易切断句子/语义 |
-| **滑动窗口** | 固定长度 + Overlap(如 50) | 减少边界丢失 | 内容冗余 |
-| **按段落/标题** | 跟随文档结构切 | 保留语义 | 长短不均 |
-| **递归切片** | 先按章节、再按段落、再按句子 | 兼顾结构和长度 | 实现复杂 |
-| **语义切片** | 用 Embedding 判断断点 | 语义最完整 | 计算开销大 |
-| **Late Chunking** | 先 Embed 整文，再切块共享上下文 | 上下文信息保留好 | 需特定模型支持 |
-
-**如何选择**:
-
-| 文档类型 | 推荐策略 | 块大小 |
-|---------|---------|--------|
-| FAQ / 短问答 | 每条一块 | 100-300 token |
-| 技术文档 | 递归(章节→段落) | 500-1000 token |
-| 论文 / 合同 | 语义切片 + Overlap | 800-1500 token |
-| 代码 | 按函数/类切 | 视代码而定 |
-| 表格 | 整表 + 文字说明 | 不切散 |
-
-> 经验法则:**块越小召回越准但上下文越碎；块越大上下文越全但召回噪声多**。一般 300-800 token 是甜区。
 
 
 ### 表格/PDF/图片等非结构化文档如何做RAG
@@ -3121,7 +3143,7 @@ app = graph.compile()
 
 **适用场景**：需要精确控制 Agent 流程（多步推理、有分支、有循环、需要人工审批、需要断点续跑）的生产级系统。简单 RAG 或单步工具调用不需要 LangGraph。
 
-### LangChain vs LangGraph
+### LangChain/LangGraph
 
 
 两者不是替代关系，是不同层次的抽象——**LangChain 管"怎么调 LLM 和工具"，LangGraph 管"Agent 流程怎么编排"**。理解这个分层是正确使用两者的前提。
@@ -3150,6 +3172,97 @@ LangGraph（编排层）
 **迁移路径**：不用一次性全改。可以把 AgentExecutor 整体包装成 LangGraph 的一个 Node，先跑起来，再逐步把内部逻辑拆成多个 Node。
 
 **一句话总结**：LangChain 是"积木块"（LLM 调用、工具、检索），LangGraph 是"搭积木的图纸"（流程编排）。两者配合使用，各司其职。
+
+### LangGraph的CheckPoint原理
+LangGraph 的 Checkpoint（检查点）机制是其实现**状态持久化、容错恢复、时间旅行调试和 Human-in-the-loop** 的核心基础设施。
+
+**解决什么问题**：
+Agent 长任务会遇到三类中断——进程崩溃、网络断开、人工介入（Human-in-the-Loop）。没有 CheckPoint 就只能从头跑；有了 CheckPoint，可以从最近的"稳定状态"继续。LangGraph 把 CheckPoint 做成框架级自动机制，开发者不用手写"存盘逻辑"——这是它和大多数 Agent 框架的核心差别。
+
+**核心架构：**
+```
+┌─────────────────────────────────────────────┐
+│                   LangGraph                  │
+│                                              │
+│   Node A ──→ Node B ──→ Node C ──→ ...      │
+│       │           │           │              │
+│       ▼           ▼           ▼              │
+│   ┌──────────────────────────────┐           │
+│   │     Checkpointer (Saver)     │           │
+│   │                              │           │
+│   │  save(config, checkpoint,    │           │
+│   │       metadata, writes)      │           │
+│   │                              │           │
+│   │  get(config) → checkpoint    │           │
+│   │  list(config) → checkpoints  │           │
+│   └──────────┬───────────────────┘           │
+│              │                               │
+└──────────────┼───────────────────────────────┘
+               │
+    ┌──────────▼──────────┐
+    │   Storage Backend   │
+    │                     │
+    │ • MemorySaver       │
+    │ • SqliteSaver       │
+    │ • PostgresSaver     │
+    │ • RedisSaver        │
+    └─────────────────────┘
+```
+
+---
+
+
+**Checkpoint（检查点）**：
+
+每次图执行完一个步骤（SuperStep），都会生成一个 Checkpoint，记录：
+
+```python
+@dataclass
+class Checkpoint:
+    v: int                          # 版本号
+    id: str                         # checkpoint 唯一ID (UUID)
+    ts: str                         # 时间戳 (ISO 8601)
+    channel_values: dict            # 各 Channel 的当前值（即图的 State）
+    channel_versions: dict          # 各 Channel 的版本号
+    versions_seen: dict             # 每个节点看到的各 Channel 版本
+    pending_sends: list             # 待发送的消息（Send API）
+```
+**关键数据结构（每个都有具体作用）**：
+
+- `thread_id`：会话/任务标识，所有 CheckPoint 按 thread 隔离——多租户基础；
+- `checkpoint_id`：某 thread 内某 CheckPoint 的 UUID；
+- `parent_id`：指向上一个 CheckPoint，串成执行历史链（Fork 时新分支的 parent 就是 fork 源）；
+- `channel_values`：真正被快照的内容——所有 channel 的当前值；
+- `channel_versions`：每个 Channel 最后一次被更新的版本号，每次 Reducer 写入 +1（判断"channel 最近有没有变过"的依据）；
+- `versions_seen`：每个节点上次看到的 channel 版本号——LangGraph 用 `channel_versions[X] > versions_seen[node][X]` 判断"Node 是否该被重新触发"，这是调度核心，也是恢复后"哪些 Node 跳过、哪些重跑"的判断依据。
+
+
+**具体原理**（四个小问题串起来）：
+
+**(1) 一份 CheckPoint 到底存了什么？**
+把所有 channel 的当前值打个"全量快照"，连同几个元数据（`checkpoint_id` 标识自己、`parent_id` 指向上一份、`thread_id` 标识会话、`channel_versions` 记录每个 channel 的版本号、`versions_seen` 记录每个 Node 上次看到的版本号）一起写到磁盘。**关键点**：它存的是"数据长什么样"，不是"跑到哪一步了"——"跑到哪一步"靠版本号差值推算出来。
+
+**(2) 为什么每个 superstep 末尾就是"稳定状态"？**
+打个比方：superstep(步骤) 就像一轮"集体交作业"。每个 Node 自己不直接改 channel，只把"我想改的部分"写在小纸条上交上去；等所有 Node 都交完，由 Reducer（相当于老师）统一把小纸条应用到 channel。老师改完那一刻，所有 channel 都是"干净的"——没有 Node 改到一半、没有并发冲突。这正是快照的最佳时机。反过来，如果你的 State 是个大杂烩 dict（消息、工具结果、内部变量混在一起），Node 直接往 dict 里写，你永远不知道 dict 是不是改了一半，根本找不到"稳定快照点"。
+
+**(3) 恢复时怎么知道哪些 Node 要重跑、哪些跳过？**
+靠两组版本号对比：`channel_versions[X]`（"X channel 现在是第几版"）和 `versions_seen[N][X]`（"N 节点上次跑时看到的是第几版"）。如果某个 channel 的版本号 > 节点上次看到的版本号，说明这个 channel 自从该节点上次跑过之后又变过，这个节点得重跑；否则跳过。一句话：**channel变过、且这个Node还没看过新版本→触发重跑** ，其他情况全部跳过。这就是崩溃恢复后"断点续跑"的真正实现。
+
+**(4) 存到哪里去？**
+LangGraph 用 `BaseCheckpointSaver` 抽象把"存盘动作"和"存到哪"解耦——接口只有 4 个方法（存、取、列表、追加）。官方内置 4 种后端：`MemorySaver`（内存，开发用，进程退出就丢）、`SqliteSaver`（单机文件）、`AsyncSqliteSaver`（异步单机）、`PostgresSaver`（生产，多 worker 共享）。自己实现一个 backend 只要覆写这 4 个方法就行，业务代码一行不用动。
+
+**核心能力**：
+
+- **任意节点恢复（Crash Recovery）**：进程崩了重启后，用同一个 `thread_id` 加载最近 CheckPoint，从那个 superstep 之后继续跑；`channel_versions` vs `versions_seen` 保证已跑过的 Node 不重跑、没跑过的会触发。
+- **时间旅行（Time Travel）**：加载任意历史 `checkpoint_id` 的 channel_values 查看当时状态——调试神器，可"回放"到出问题的 superstep，定位是 State 错了还是 Node 逻辑错了。
+- **分支派生（Fork / Branching）**：`update_state` 修改某个历史 CheckPoint 的 channel_values 后继续跑，新 CheckPoint 链从那个点分叉，原链不受影响——A/B 测试、人工修正后继续的核心实现。
+
+**什么时候存**：
+
+- **默认**：每个 superstep 结束、Reducer 应用完、下一轮开始前自动存；
+- **显式暂停**：通过 `interrupt_before` / `interrupt_after` 在某些 Node 前后显式暂停，等人工输入再继续——这是 Human-in-the-Loop 的基础；
+- **每个 CheckPoint 都有 `checkpoint_id` 和 `parent_id`**，串成链表构成执行历史——时间旅行和分支派生的数据基础。
+
 
 ### LangChain Trace链路追踪
 
@@ -3225,7 +3338,7 @@ LangGraph 的图是 compile 时确定的，运行期不能改拓扑结构（加�
 - **重量方案**：重新 compile 一个新图，用蓝绿部署切换。旧图处理完正在跑的请求后下线，新图接管后续请求；
 - **真正需要热更新拓扑的场景很少**：如果发现需要频繁改图结构，通常说明图的设计不够抽象——应该把变化的部分做成配置驱动的 Node，而不是硬编码在图里。
 
-### 什么是Harness，为什么大模型需要Harness
+### 什么是Harness,为什么大模型需要Harness
 
 **Harness 是什么**：Harness（脚手架 / 挽具）是围绕大模型构建的整套工程基础设施——模型本身只负责"推理"，Harness 负责推理之外的一切：工具注册与调用、上下文组装与管理、状态持久化、错误恢复、安全防护、可观测性、评测体系。形象地说，大模型是引擎，Harness 是底盘、变速箱、方向盘、刹车和安全气囊。
 
@@ -3272,18 +3385,381 @@ Harness Engineering（Agent 整体运行框架）
 
 ## Claude等源码解析
 
-### Claude中的bash tool实现原理
-
 ### 有了解过Claude中的工具吗
 
-### Claude harness的执行思路?agent.md、skills 文件怎么落地
+**核心设计信条**：Agent 能做什么完全由工具集决定，没有后门——读文件用 `FileReadTool`，写文件用 `FileEditTool`，跑命令用 `BashTool`，派生子 agent 用 `AgentTool`。新增能力 = 新增工具。这个约束带来三个好处：可审计（每个操作都有记录）、可控（权限系统只需拦截工具调用这一个入口）、可扩展（加能力就是加工具）。Claude Code 内建 40+ 工具，大致分四类：文件操作（Read/Edit/Write/Glob/Grep）、Shell（Bash）、Agent 编排（Agent/TeamCreate/SendMessage）、外部能力（MCP `mcp__*`）。
 
-### Claude上下文管理优缺点
+**Tool 接口的六个功能组**：`Tool` 类型是一个 30+ 方法的泛型接口，可分成：基础元信息（name/description/inputSchema）、执行（call/validate）、并发与只读声明（isConcurrencySafe/isReadOnly/isDestructive）、权限（checkPermissions/userFacingName）、UI 渲染（renderToolUseMessage/renderToolResultMessage）、Prompt 注入（prompt/toolUseGuidelines）。每个工具用 `buildTool` 工厂函数构建，默认值体现 fail-closed：`isConcurrencySafe: false`、`isReadOnly: false`，并发冲突和误写由工具自己负责；`checkPermissions: allow` 默认放行，权限由外层多层防御兜底。这两个默认值的不对称很微妙——并发/只读是工具内部问题必须自己负责，权限有外层体系兜底所以可以宽松。
+
+**ToolUseContext——工具的运行时环境**：`call()` 接收的上下文有 40+ 字段，因为工具不是纯函数。关键字段：
+- `readFileState` 让 `FileEditTool` 拒绝编辑未读过的文件；
+- `abortController` 让 BashTool 支持用户中断；
+- `setToolJSX` 给 BashTool 渲染实时进度条；
+- `agentId` 区分主线程和子 agent，影响权限与 CWD；
+- `contentReplacementState` 做 token 预算控制；
+- `updateFileHistoryState` 支持 `/rewind` 撤销。
+
+工具返回的 `ToolResult` 里有个精妙的 `contextModifier` 字段：某些工具执行后需要修改后续工具的上下文（比如 BashTool 的 `cd` 改变 cwd），但不能让它直接改全局状态——`contextModifier` 提供受控方式，且只对非并发安全工具生效，并发执行的工具不能互相修改上下文，这是避免并行分区里出现顺序依赖。
+如执行命令 `cd /tmp/workdir && ls`， BashTool 拆成两个子命令时（假设它没合并成链式），第一个是 cd /tmp/workdir，第二个是 ls。如果 cd 只在自己子进程里跑（子进程结束后 cwd 就丢了），下一个 ls 还是在原目录执行的，结果完全不对。
+
+**FileEditTool——搜索替换的安全不变量**：
+- 核心约束是 `old_string` 必须在文件中唯一匹配，多处匹配直接失败并要求提供更多上下文——看似严格，但避免了"编辑了错误位置"的灾难性错误。
+- 另一个是"不能编辑未读过的文件"，`readFileState` 缓存跟踪哪些文件被 `FileReadTool` 读过，模型试图编辑未读文件会被拒并提示先读取。这防止模型"凭记忆"编辑文件，必须先看到当前状态。
+- 对比 OpenAI 的 `file_editor` 工具用的是 line-number-based edit，Claude 选 search-replace 的原因是行号会因前一次编辑而偏移，search-replace 天然是幂等的。
+
+**AgentTool——统一的多 Agent 入口**：所有多 agent 协作（Subagent / Team / Coordinator）都通过同一个 `AgentTool` 触发，模型只需要学一个工具，靠参数组合（`agent_type`、`prompt`、`background`、`resume`）路由到不同模式。这降低了模型的认知负担，也让 harness 只需要维护一套权限/生命周期逻辑。
+
+**MCP 工具的透传机制**：MCP 工具以 `mcp__<server>__<tool>` 三段命名接入，`inputSchema` 从 MCP server 的 `tools/list` 拉取后直接注入到模型的 tools 列表里，调用时 harness 透传到对应 server。MCP 工具在子 agent 的工具过滤里始终放行（`tool.name.startsWith('mcp__') → true`），因为它们是外部能力扩展，不应被 agent 类型限制。
+
+**工具加载三策略**：Claude Code 的 40+ 工具不是每次会话都全量加载，而是按"编译时 / 启动时 / 运行时"三个阶段分层筛选：
+
+- **Feature gate（编译时）**：功能没发布？打包器直接把它从产物里删掉。用 Bun 的 `feature()` 宏做编译时死代码消除（DCE），flag 关闭时整段 `require()` 分支在构建阶段就被移除——代码根本进不了 bundle，包体积和启动开销都省下来。
+- **条件 `require()`（启动时）**：功能发布了但当前环境不适用？运行时判断要不要加载。之所以用 `require()` 而不是 `import`，是因为 ES 模块的 `import` 是静态的，必须打包，没办法用 `if (isUsingIterm2())` 这种条件控制；`require()` 可以放在任意条件分支里，满足条件才加载。典型场景：环境检测（是否在 tmux / VSCode 里）、平台判断（macOS 才加载 sandbox-exec 相关工具）。
+- **MCP 工具（运行时）**：外部服务提供的工具？运行时从 server 拉 schema，透传调用。启动时连接 MCP server，调 `tools/list` 拿到 inputSchema，包装成 `mcp__<server>__<tool>` 名字注册到工具池；工具代码完全在外部，Claude Code 只负责调用时透传参数。
+
+`assembleToolPool` 组装时采用**分区排序**——内建工具在前按名称排序，MCP 工具在后按名称排序，两组绝不混合。原因是服务端 prompt cache 在**最后一个内建工具之后**放缓存断点，只有"内建工具段"的字节永远稳定（MCP 工具增删不影响它），cache 才能一直命中；如果 MCP 工具插到内建工具中间，任何一次 MCP 工具变更都会让断点前字节变化，整个 cache 失效，每次调用都按全价算输入 token。
+
+**并发执行模型**：`StreamingToolExecutor` 把连续的 `isConcurrencySafe=true` 工具组成一个并行分区，遇到 false 就开新分区；分区间串行、分区内并行。`isConcurrencySafe` 抛异常默认视为不安全——宁可串行降性能也不冒并发冲突风险，这是 fail-closed 的体现。`FileRead` 是并发安全的（只读无副作用），`FileEdit` 不是（两个并行编辑可能编辑同一文件的不同位置导致行号偏移冲突）。
+
+
+### Claude的BashTool实现原理
+**核心矛盾**：Shell 命令表达力几乎无限，但安全约束必须严格。BashTool 在 Claude Code 里横跨 18 个文件（`src/tools/BashTool/`），是整个工具系统最复杂的单一工具，本质是在解一个"如何在给模型最大自由的同时不让它把系统搞崩"的工程问题。
+
+**整体执行链路（从 tool_use 到子进程）**：模型输出 `tool_use` 块 → `StreamingToolExecutor` 边接收边调度 → `BashTool.call()` → 输入校验（schema + 参数归一化）→ **权限评估管线**（`canUseTool`）→ **安全检测管线**（注入/危险命令）→ **沙箱装配**（`SandboxManager` 加读写/网络约束）→ spawn 子进程（带 env、cwd、timeout）→ 流式回传 stdout/stderr → 超时/`abortController` 中断 → 输出截断与脱敏 → 返回 `ToolResult`。
+
+**权限匹配管线（BashTool 专属）**：模型每次要执行命令都会走一条严格有序的匹配链：(1) 精确匹配 `npm install`；(2) 前缀匹配 `npm:*`（遗留语法）；(3) 通配符匹配 `git commit *`（转成正则，结尾 ` *` 会让尾部可选，所以 `git *` 既匹配 `git add` 也匹配裸 `git`）。规则有三档动作：`allow` / `deny` / `ask`，管线里 `deny` 优先于 `allow`，`ask` 在最外层——任意一条 `deny` 命中直接拒。用户显式配置的 `ask` 规则即使在 `bypassPermissions` 模式下也会弹确认（"用户的显式意图永远优先"）。敏感路径硬编码免疫 bypass：`.git/`、`.claude/`、`.vscode/`、`.bashrc`、`.zshrc` 这些文件的写入不管什么模式都要确认，因为它们是开发环境的"信任根"。
+
+**复合命令隔离（tree-sitter AST 拆分）**：像 `cd /tmp && python3 evil.py` 这种链式命令，单纯用前缀规则 `cd:*` 整条放行就是灾难。BashTool 用 tree-sitter 的 bash grammar 解析整条命令的 AST，把每个 `SimpleCommand` 节点抽出来独立跑权限检查，任意一个子命令被 deny 整条就被 deny。子命令数量上限 50，超过直接要求用户确认——这是一个防御性上限，防止 ReDoS 和事件循环饥饿（恶意输入可以构造几千个子命令拖垮解析器）。
+
+> **术语补充：AST 是什么**
+> AST（Abstract Syntax Tree，抽象语法树）是源代码的树状结构化表示——把"一串字符"变成"一棵树"，让程序能按语义结构操作代码而不是按字符做正则。比如 `cd /tmp && python3 evil.py | tee log` 这条命令，正则很难拆清"几条命令、`|` 是不是管道"，但 AST 直接给出一棵树，每个叶子节点是一条独立的 `SimpleCommand`（`cd /tmp`、`python3 evil.py`、`tee log`），可以逐个校验。AST 解析能正确处理转义、引号、变量替换这些正则搞不定的边界。
+
+**只读白名单的 flag 级验证**：不止检查命令名，还校验每个 flag 的值类型（`none`/`number`/`string`/枚举值）。经典例子是 `xargs -I` vs `-i`：两者表面相似，但 GNU `xargs` 的 `-i` 有可选参数语义，可被利用执行任意命令，白名单必须精确到 flag 粒度才能挡住 flag 注入。`find`、`grep`、`ls` 这种纯只读命令在 allow 列表里，但每个 flag 都有类型约束，防止模型用 `--exec` 或 `-exec` 这种变体绕过只读语义。
+
+> **术语补充：白名单是什么、flag 是什么**
+> **白名单**是一份"被允许执行的命令清单"。Claude Code 里有两份：可写命令白名单（如 `git commit`、`npm install`）和只读命令白名单（如 `ls`、`grep`、`find`，约 500 行配置，默认放行）。
+> **flag** 是命令里以 `-` 或 `--` 开头的参数，用来改命令行为——比如 `ls -la --color=auto /tmp` 里 `-l`、`-a`、`--color=auto` 都是 flag，`/tmp` 是位置参数。
+> **为什么要校验 flag 的值类型**：只看命令名不够，flag 能彻底改变命令性质。例如 `find` 本身只读，但 `-exec` flag 能让它执行任意命令（`find /tmp -name "*.txt" -exec rm -rf / {} \;`）；所以 `find` 白名单里只登记 `-name`、`-type` 这些只读 flag，不登记 `-exec`、`-delete`。校验粒度到 flag 级别，相当于"看工牌放人进大楼"升级到"每开一扇门都查权限"。
+
+**命令注入检测（bashSecurity.ts）**：25+ 种检查项，按攻击面分类：(a) 替换类——`$()`、反引号命令替换、`<()` 进程替换、`${}` 参数替换；(b) 危险命令类——Zsh 的 `zmodload`（动态加载模块）、`syswrite`（直接写 fd）；(c) 字符类——控制字符、Unicode 空白（`U+200B` 零宽空格这种视觉上看不见的字符，可被用来拼接绕过正则）；(d) 特殊结构——Here-string、数组赋值、`eval`/`exec` 包裹。这一层是 AST 之后的兜底，万一 tree-sitter 漏掉某个结构也能挡。
+
+**沙箱（SandboxManager）**：在 macOS 上用 sandbox-exec 配置 profile 限制文件读写路径（只允许工作目录、`/tmp`、指定白名单）、网络访问主机（默认 deny 全部，白名单放行）、Unix socket。沙箱是"安全网"而非"免死金牌"——命令即使没匹配任何 allow 规则，在沙箱里也能执行；但 `deny` / `ask` 规则仍然优先于沙箱，沙箱不能豁免显式拒绝。
+
+**超时与中断**：每个 BashTool 调用绑定一个 `abortController`，用户在 UI 上点取消会调 `.abort()`，子进程收到 SIGTERM；还有硬超时（默认 2 分钟，可配置），超时后 SIGKILL。长命令的输出会被流式截断，避免一次性把几 MB 日志塞回上下文拖垮窗口。
+
+**八层安全决策管线（纵览）**：下面这张图把上面所有机制串成一条完整管线——模型每次请求执行命令，都要从上到下穿过 8 层，任意一层给出 `deny`/`ask` 就短路返回；只有全部放行才走到沙箱执行。符号约定：`[规则匹配]` 是粉色规则层，`<权限/白名单>` 是黄色权限层，`{检测/沙箱}` 是蓝色兜底层。
+
+![Claude BashTool原理](./image/Agent-dev-knowledges/Claude-BashTool.png)
+
+**读图要点**：
+
+- **前 4 层（`[规则匹配]`）是规则匹配**：严格按 deny > ask > allow 优先级，任一层命中 deny 直接短路；这就是为什么"用户的显式 ask 规则优先于 bypass"——bypass 只影响第 5 层，前 4 层 ask 照样弹确认。
+- **第 5、6 层（`<权限/白名单>`）是权限/白名单**：`acceptEdits` 模式下第 5 层直接放行文件操作；第 6 层是 ~500 行的只读命令白名单，每个 flag 都要校验值类型。
+- **第 7、8 层（`{检测/沙箱}`）是兜底**：前面全部放行的命令，第 7 层做最后一道注入检测（防 tree-sitter 漏判），第 8 层装配沙箱 profile 后执行。AST 解析失败时直接跳到第 7 层走降级路径。
+- **任意子命令被 deny 整条就被 deny**：这是 AST 拆分的核心意义——`cd /tmp && rm -rf /` 里的 `rm -rf /` 会在第 3 层被拦下，整条命令失败。
+
+BashTool 把安全检查做成了多层管线——规则匹配 → AST 拆分 → flag 校验 → 注入检测 → 沙箱——每一层针对一种攻击面，任意一层漏掉都有下一层兜底。这种纵深防御比依赖单条正则可靠得多，也是它为什么需要 18 个文件。
+
+
+### Claude harness的思路
+
+**总览**：Claude Code 的 harness（脚手架）是围绕大模型搭建的整套工程基础设施，模型只负责推理，其他一切由 harness 兜底。读完 51 万行源码，可以提炼出 6 条贯穿始终的核心思路，下面按"执行流 → 错误恢复 → 并发控制 → 资源兜底 → 安全 → 多 Agent"的顺序展开：
+
+1. **两层 Agent Loop（QueryEngine + queryLoop）+ AsyncGenerator 连接** —— 把"会话管理"和"单轮执行"解耦成生产者-消费者；
+2. **隐式状态机 + State 结构体** —— 用 `while(true)` + `Continue`/`Terminal` + TypeScript 类型强制，把 7 条恢复路径和 10 种终止条件管住；
+3. **消息扣留（withholding）** —— 中间错误不暴露给 SDK 消费方，避免"恢复循环还在跑但已经没人在听了"；
+4. **流式工具执行 + 并发安全分区** —— API 边收边跑工具，`isConcurrencySafe` 声明决定并行/串行；
+5. **AutoCompact 断路器** —— 昂贵的 LLM 摘要调用加"连续失败 3 次就停"的熔断，避免小概率异常烧掉巨额资源；
+6. **权限体系当免疫系统 + 多 Agent 生命周期** —— 六档信任刻度盘 + 远程 killswitch + 子 agent 8 项清理操作，把安全和资源精确管住。
+
+下面逐个展开。
+
+**【1】整体骨架：两层 Agent Loop + AsyncGenerator**：Claude Code 的 harness 核心是一个两层 Agent Loop——`QueryEngine`（1295 行）负责会话管理（多轮状态、transcript 持久化、SDK 协议适配、usage 累积），`queryLoop`（1729 行）负责单轮执行（API 调用、工具执行、错误恢复）。两者用 **AsyncGenerator** 连成一个"生产者-消费者"管道。
+
+> **什么是 AsyncGenerator**
+> AsyncGenerator 是 JS/TS 的一种函数形态（`async function*` + `yield`），可以理解为"能暂停、能异步吐值的迭代器"：函数每跑一段就 `yield` 出一个值并暂停，等外部要下一个才继续；外部可以用 `for await (const x of gen)` 一条条消费，也可以调 `.return()` 让整个 generator 提前结束。
+
+连接方式用伪代码表达最直观：
+
+```typescript
+// 内层 queryLoop：生产者，边跑边吐
+async function* queryLoop() {
+  while (true) {
+    const resp = await callLLM(messages);
+    for await (const chunk of resp.stream) yield chunk;   // 流式吐 token
+    const results = await runTools(resp.toolCalls);
+    yield results;                                        // 吐工具结果
+    if (shouldStop(resp)) return;                         // 终止
+  }
+}
+// 外层 QueryEngine：消费者，一条条拿走做会话层的事
+for await (const msg of queryLoop()) {
+  persist(msg);   emit(msg);   accumulateUsage(msg);
+}
+```
+
+选 AsyncGenerator 而不是 callback 或 Observable，是因为三个特性都恰好命中这个场景：
+
+- **背压（backpressure）**：`yield` 是阻塞的——内层吐出一条消息后必须等外层拿走，才会继续跑下一步。外层处理多慢，内层就跑多慢，不会出现"模型吐得飞快、持久化跟不上、消息堆积爆内存"的情况。
+- **中断语义（cancellation）**：用户在 UI 上点取消时，外层调 `generator.return()`，这个信号会沿着 `yield*` 链条一路传到底——父 agent、嵌套的子 agent、还在跑的流式调用，全部一起停掉。不用手写 `isCancelled` flag，也不用逐个清理子任务。
+- **流式组合（composition）**：子 agent 的 `runAgent()` 也是 AsyncGenerator，父 agent 里一句 `yield* runAgent(...)` 就能把子 agent 的每条消息直接透传给外层消费方，不需要手写"子 agent 收到消息就调父 agent 的 onMessage"那种转发代码。
+
+这三个特性加在一起，callback 需要手写一堆 flag 和队列才能做到，Observable 虽然支持取消和组合但 API 更啰嗦；AsyncGenerator 是语法级别的方案，代码最干净。
+
+**【2】隐式状态机 + State 结构体**：`queryLoop` 是一个 `while(true)` 循环，每次迭代 = 一次"API 调用 + 工具执行"。它没有用常见的 `enum + switch` 显式状态机写法（每个状态是一个 enum 值，`switch` 分发），而是把状态"藏"在 `if` 分支和 `continue` 里——所以叫"隐式"。退出靠两种返回类型决定：
+
+- **`Continue`** （"别结束，用新状态再跑一轮"）：某个分支要重试时 return `{ type: "Continue", next: newState }`，外层把 `state = next` 后 `continue` 回到循环顶部；
+- **`Terminal`** （"真的结束了"）：return `{ type: "Terminal", reason: "..." }`，循环退出并把终止原因透传给外层。
+
+整个循环一共定义了 7 条 Continue 路径（正常继续、reactive compact 重试、media 剥离重试、max_output_tokens 恢复、token budget nudge 注入、工具错误重试、权限拒绝后回退）和 10 种 Terminal 原因（end_turn、用户中断、预算耗尽、不可恢复错误、拒绝熔断等）。
+
+**State 是一个打包了所有循环状态的结构体**，关键字段有：`messages`（对话历史）、`toolUseContext`（工具运行时上下文）、`autoCompactTracking`（AutoCompact 失败计数，断路器用）、`maxOutputTokensRecoveryCount`（截断恢复次数）、`hasAttemptedReactiveCompact`（是否尝试过响应式压缩）、`turnCount`（轮次计数，防无限循环）、`transition`（上次 continue 的原因）。
+
+**为什么用结构体不用 enum + 多个独立变量**：每次 continue 都要给一整套"下一轮的初始状态"。如果用 10 个独立变量，漏赋值一个只会运行时出错（甚至不出错，只是行为诡异），全靠人眼检查；用结构体后，`next: State` 这个类型签名要求所有字段都给齐，**漏一个 TypeScript 编译直接报错**。这是把"状态完整性"的检查从运行期提前到编译期——用编译器代替人肉检查。
+
+**七条恢复路径（每条都有真实场景）**：
+
+- 正常 continue（工具执行完进入下一轮）；
+- `reactiveCompact` 重试（`prompt-too-long` 错误时扣留错误、压缩消息后重试，避免直接暴露给 SDK 消费者）；
+- media 剥离重试（`media-size` 错误时把过大的图片从消息里剥掉再发）；
+- `max_output_tokens` 恢复（模型输出被截断时注入"请继续"提示让模型续写，恢复次数受 `maxOutputTokensRecoveryCount` 限制）；
+- token budget nudge 注入（模型自然 end_turn 但预算未用完时注入"继续工作"提示）；
+- 工具错误重试（工具执行失败时把错误信息作为 tool_result 喂回模型让它换方案）；
+- 权限拒绝后回退（模型请求被拒时把拒绝原因注入上下文让它绕开被拒操作）。
+
+**十种终止条件**：`end_turn`（模型自然停止）、用户中断（UI 点取消）、`abortController` 触发、预算耗尽（input/output tokens 超限）、不可恢复错误（如 API 鉴权失败）、拒绝熔断（auto 模式连续拒绝 3 次 / 累计 20 次后降级终止）、子 agent 超预算、`bypassPermissionsKillswitch` 远程降级、`autoModeCircuitBroken` 熔断、headless 模式达到 ask 限制抛 `AbortError`。
+
+**【3】消息扣留（withholding）机制**：并非所有从 API 收到的消息都立即传递给调用方。三类消息会被"扣留"：`prompt-too-long`、`media-size`、`max_output_tokens` 错误。
+
+**解决什么问题**：Claude Code 的 SDK 契约是"看到 error 字段就终止会话"——上层消费方（desktop app、cowork、bridge 客户端）拿到 error 就下线。但 queryLoop 内部对这三类错误都有恢复路径：prompt 太长可以做 reactive compact 压缩后重试、media 太大可以剥掉图片重试、输出截断可以注入"请继续"让模型续写。如果把这些错误直接吐出去，消费方会终止，但 harness 的恢复循环还在跑——变成"恢复循环还在跑但已经没人在听了"。
+
+**扣留-恢复-回放流程**（以 prompt-too-long 为例）：
+
+1. API 返回 `prompt_too_long` 错误 → 扣留，不 emit 给 SDK 消费方；
+2. queryLoop 内部触发 `reactiveCompact`：调一次 LLM 把旧消息压缩成摘要；
+3. 用压缩后的 messages 重新调 API；
+4. 如果成功 → 把正常结果 emit 出去，消费方看到的是"模型正常回答"，根本不知道中间出过错；
+5. 如果连续失败 3 次（断路器触发）→ 把最后一次错误作为 Terminal 退出，这时才暴露给消费方。
+
+**工程决策**：这是把"中间状态"和"最终状态"严格分离——中间错误是 harness 自己的事（自己消化掉做恢复），最终错误才是 SDK 的事（透传出去让消费方终止）。这种"错误分级 + 扣留恢复"的思路可以广泛用在任何对外暴露 error 契约的系统里。
+
+**【4】流式 vs 批量执行 + 并发安全分区**：
+
+**两种执行模式对比**：假设模型一次性输出 3 个 `tool_use` block（比如读 3 个文件 `FileRead(a)`, `FileRead(b)`, `FileRead(c)`）：
+
+- **批量模式**：等 API 流式接收完全结束（3 个 block 都收完），再按顺序执行。第一个 Read 要等最后一个 block 接收完才开始，总延迟 = 接收耗时 + 3 × 执行耗时；
+- **流式模式（默认）**：API 还在接收中，每收到一个完整 block 就立刻开始执行。`FileRead(a)` 的 IO 等待可以和 `FileRead(b)` 的接收重叠，总延迟大幅缩短（源码注释提到典型场景 30-50%）。
+
+**并发安全分区算法**：流式执行不是无脑并行，靠 `isConcurrencySafe(input)` 声明做分区控制：
+
+1. 按接收顺序扫描每个 tool_use；
+2. 连续的 `isConcurrencySafe = true` 放进同一个"并行分区"，分区内并行执行；
+3. 遇到 `isConcurrencySafe = false` 就开新分区，且这个不安全工具必须等前面分区全部完成才能跑；
+4. 分区间串行，分区内并行。
+
+**典型分类**：`FileRead`、`Glob`、`Grep` 是并发安全的（只读无副作用），连续多个可以并行；`FileEdit` 不是（两个并行编辑可能编辑同一文件的不同位置导致行号偏移冲突），会触发分区边界；`BashTool` 也不是（任何 bash 命令都可能改环境）。
+
+**Fail-closed 默认值**：`isConcurrencySafe` 抛异常（比如输入解析失败）默认视为不安全——宁可串行降性能也不冒并发冲突风险。`buildTool` 工厂函数的默认值是 `false`，新工具不显式声明就自动串行，安全兜底。
+
+**【5】AutoCompact 断路器**：
+
+**AutoCompact 是什么**：当上下文接近模型窗口上限时，harness 自动发起一次特殊的 LLM 调用，让模型把旧对话历史生成一段摘要，再用摘要替换掉原始消息——这就是"自动压缩"。它解决的是"长会话把窗口撑爆"的问题，让 agent 可以继续工作。
+
+**为什么昂贵**：两方面——(a) **钱贵**：一次完整 LLM 调用，按 token 计费，且压缩本身需要把全部旧消息作为输入，动辄几万 token；(b) **信息损失**：摘要是"结论性"信息，早期对话里的具体代码片段、用户强调的微妙语气、精确数字都可能被丢掉——长会话后期模型"忘记"早期关键约束，根源常常是 AutoCompact。
+
+**触发阈值**：`有效上下文窗口 = 模型窗口 - max(max_output_tokens, 20000)`；`触发阈值 = 有效上下文窗口 - 13000`。对 200k 模型，大约 167k tokens 时触发。之所以留 13000 的余量，是为了给模型留够"思考空间"生成摘要本身。
+
+**断路器机制**：连续失败 3 次就停止重试 AutoCompact，不再调用 LLM。源码注释引用真实数据："1,279 sessions had 50+ consecutive failures (up to 3,272), wasting ~250K API calls/day globally"——大规模部署中小概率异常（比如某种消息结构导致摘要 LLM 反复报错）会烧掉巨额资源，断路器是必须的。
+
+**断路器触发后的状态**：会话不会崩，但后续每次 LLM 调用都可能撞 `prompt-too-long`，只能靠更廉价的 Context Collapse（本地裁剪，不调 API）苟延残喘——这是降级运行，质量下降但不会失控烧钱。
+
+**在消息预处理管线中的位置**：Context Collapse（本地轻量裁剪）→ AutoCompact（昂贵的 LLM 摘要）。之所以这个顺序，是"能用便宜操作释放空间就不用贵的"——日常会话靠 Context Collapse 就够，不会触发 AutoCompact。
+
+**【6-a】权限体系当免疫系统**：
+
+**六档信任刻度盘**（从最严到最松）：
+
+- `plan`：AI 只能规划，不能执行任何写操作（代码审查、探索分析用）；
+- `default`（默认）：每个工具调用都需要用户确认；
+- `acceptEdits`：工作目录内的文件编辑自动允许，其他操作仍需确认；
+- `auto`：AI 分类器自动判断操作安全性（高信任场景）；
+- `bypassPermissions`：跳过所有权限检查（除硬编码底线），紧急修复用；
+- `dontAsk`：把所有 `ask` 转为 `deny`，AI 自主运行遇到需确认的直接跳过（CI/CD 用）。
+
+为什么不是简单的开/关？因为不同场景需要不同信任级别，连续刻度盘让用户能精确控制舒适区。
+
+**每次工具调用的多层评估管线**：
+
+1. 检查用户显式规则（`allow`/`deny`/`ask` 配置）；
+2. 检查 `bypassPermissions` 模式是否启用；
+3. 检查敏感路径（`.git/`、`.claude/`、`.vscode/`、shell 配置如 `.bashrc`、`.zshrc`）——**硬编码免疫 bypass**，不管什么模式都要确认；
+4. 检查用户显式 `ask` 规则——**优先于 bypass**（"用户的显式意图永远优先"：bypass 是"我信任 AI 的一般判断"，ask 是"这个特定操作我要亲自确认"）；
+5. 模式特定的分类器（如 `auto` 模式下用 LLM 判断安全性）；
+6. 最终放行或弹确认。
+
+**远程 killswitch**：即使本地用户选了 `bypassPermissions`，Anthropic 仍保留远程降级能力。`bypassPermissionsKillswitch.ts` 通过 Statsig 特性门控实现"紧急刹车"——发现严重安全漏洞时，可以远程把所有用户的 bypass 降级回 default。`auto` 模式也有类似的 `autoModeCircuitBroken` 熔断器（连续拒绝 3 次 / 累计 20 次后降级）。
+
+**【6-b】多 Agent 生命周期**：
+
+**每个子 agent 都是完整的执行环境**：创建子 agent 不是简单地"调用一个函数"，而是实例化一整套运行环境；销毁时对应的清理阶段要做 8 项操作，每一项都对应真实的资源占用：
+
+1. MCP 连接断开（每个子 agent 可以有自己的 MCP server）；
+2. Session hooks 清除（注册的生命周期回调）；
+3. Prompt cache 清理（子 agent 专属的缓存断点）；
+4. 文件状态缓存释放（readFileState 等）；
+5. Perfetto 追踪注销（性能追踪条目）；
+6. Transcript 映射清除（会话记录索引）；
+7. 孤儿 todo 清除（未完成的待办项）；
+8. 后台 bash 终止（未跑完的子进程）。
+
+**内存防护**：源码里有个 `TEAMMATE_MESSAGES_UI_CAP = 50` 的上限，注释里提到真实案例——一个"鲸鱼会话"在 2 分钟内启动了 292 个 agent，内存飙到 36.8GB。消息上限和精确的清理阶段都是对这种极端场景的防御。
+
+**Fork subagent 的优化**：正因为常规子 agent 的创建/销毁开销大，Claude Code 引入了 fork subagent——**共享父 agent 的完整对话历史和 system prompt**，只加一个短指令。好处：
+
+- 跳过大部分清理操作（没有自己的 MCP、没有专属 cache 断点）；
+- 字节级共享 prompt cache 前缀，多个 fork 并行启动时 cache 命中率接近 100%；
+- 适合"分多个视角并行分析同一段代码"这种需要上下文的轻量委派。
+
+代价：fork 保留父 agent 的 AgentTool（为了 cache-identical 工具定义），但要加两重防递归检查（`querySource` 标记 + 消息扫描 `<fork-boilerplate>` 标签），避免 fork 套 fork 把上下文吃爆。
+
+**核心启发**：把上面 6 条串起来看，Claude Code 的 harness 设计哲学是一句话：**模型只负责推理，其他一切由 harness 兜底**——会话、状态、并发、错误恢复、安全、子 agent 生命周期，全部是工程系统的事，模型根本不感知。面试时可以拿它和 LangGraph 做对比收尾：LangGraph 把状态机**显式化**（节点 + 边 + 编译时确定拓扑），优点是可视化和调试友好；Claude Code 把状态机**隐藏在 `while(true)` + State 结构体里**，换来更细粒度的恢复路径（7 条 Continue × 10 种 Terminal）和更灵活的错误处理，代价是理解和调试门槛更高。两种风格对应两种产品形态——LangGraph 适合需要可视化的业务流，Claude Code 这种隐式方案更适合面向开发者、对恢复粒度要求极高的 coding agent。
+
+### CLAUDE.md,Claude的skills文件是怎么落地的,有什么值得借鉴和学习的
+
+**一句话回答**：CLAUDE.md 是 always-on 的项目约定（分层加载），skills 是 on-demand 的专业知识（按需注入），两者都是 markdown + 运行时组装。**最值得借鉴的是 6 条设计原则**，下面逐条讲。
+
+**1. 分层加载（Hierarchical Loading）**：CLAUDE.md 按 `~/.claude/CLAUDE.md`（全局用户偏好）→ 项目根 `CLAUDE.md` → 子目录 `CLAUDE.md` 逐层叠加，不覆盖。值得借鉴：让不同层级的约定各自生效（"全局偏好"和"项目约定"不冲突），是支持"个人工作流 + 团队规范"共存的最小成本方案。
+
+**2. 长度控制（Budget-aware Injection）**：CLAUDE.md 一般控制在 200 行以内，太长会被上下文压缩吃掉，反而失效。值得借鉴：上下文注入不是"塞得越多越好"，要有显式预算意识；可以在自己的 harness 里加一个"CLAUDE.md 超长警告"。
+
+**3. CWD-based 作用域隔离**：子目录 CLAUDE.md 只对该目录下启动的会话生效，不是全量塞进去。值得借鉴：按需注入比全量注入省 token，且不污染其他模块的上下文。适合大型仓库里"前端 / 后端 / 工具脚本"各有约定的场景。
+
+**4. 优先级覆盖链（企业级必备）**：`built-in < plugin < userSettings < projectSettings < flagSettings < policySettings`，企业管理员通过 `policySettings` 可以强制覆盖任何层，配合 `allowManagedPermissionRulesOnly=true` 实现"锁定模式"。值得借鉴：任何要卖给企业的 Agent 产品都需要这个机制——员工的本地配置不能绕过合规约束。
+
+**5. Rules vs Skills 的本质区分**：Rules 是 always-on 的"硬约束"（禁用操作、commit 约定、架构边界），Skills 是 on-demand 的"软知识"（PDF 生成流程、Excel 处理陷阱）。Rules 改行为边界，Skills 改能力集。值得借鉴：这是最容易被忽视的设计——很多 Agent 系统把所有东西都塞进 System Prompt，导致每次都加载用不上的知识，浪费 token 且稀释真正重要的约束。反模式：把 Skill 内容硬写进 CLAUDE.md。
+
+**6. Description-first 设计（SKILL.md 的核心哲学）**：
+
+- SKILL.md 的 frontmatter 里 `description` 是触发词富集区（"Generates PDF reports from markdown. Use when..."），harness 的 skill router 靠它判断是否注入；
+- **description 写得比正文更重要**——触发词不准，正文再好也用不上；触发词准了，正文差点也能帮上忙；
+- 正文标准结构：Steps（步骤）+ Pitfalls（陷阱）+ Verification（验证清单）+ Examples（示例）；
+- 完整生命周期：install（marketplace / 手写）→ discover（触发词命中）→ inject（拼进 System Prompt 后段）→ execute（模型按步骤调用工具）→ cleanup（子 agent 清理阶段释放相关缓存）。
+
+值得借鉴：任何想让 Agent "按需想起专业知识"的系统都应该抄这套——核心是"命中才注入，不命中不进上下文"的渐进式披露。
+
+**7. 自定义 Agent 作为 Skill 的高级形态**：`CustomAgentDefinition` 里包含 11 个字段——类型标识符、使用场景描述（注入到 `AgentTool` 的 prompt 里帮模型选择）、工具白名单/黑名单、system prompt 生成函数、模型选择、权限模式覆盖、持久记忆范围、隔离模式（worktree / default）、生命周期钩子、专属 MCP 服务器。值得借鉴：把"Agent 定义"当成"Skill 的升级版"来设计，让模型靠"描述"选择 Agent，比让模型学多个工具更友好。
+
+**总结：最值得抄的三件事**
+
+- **关注点分离**：Rules（约束）/ Skills（能力）/ Custom Agents（执行环境）三类，不混着用；
+- **Description-first**：触发词 / 描述比正文更重要，是 Agent "按需想起知识"的关键；
+- **企业可控性**：优先级覆盖链 + policySettings 锁定模式，是企业级 Agent 产品的标配。
+
+### Claude上下文管理原理优缺点
+
+**核心哲学**：Context Engineering > Prompt Engineering——不是写一段 prompt 告诉模型"你是谁"，而是在每轮对话中精心组装完整的上下文环境（分段缓存、动态注入、多层压缩）。模型的表现上限不取决于参数量，而取决于喂给它的上下文质量。面试时可以把 Claude Code 的上下文管理拆成七个小机制逐个讲，再汇总优缺点。
+
+**机制 1：Prompt Cache 分段（cache breakpoint）**：Claude 的 prompt cache 通过消息中的 `cache_control` 字段显式标记断点，命中缓存时首 token 延迟和 token 单价都大幅下降。Claude Code 把断点放在两个关键位置：System Prompt 末尾、内建工具定义末尾。MCP 工具故意和内建工具分区排序（内建在前按名称排序，MCP 在后按名称排序，两组不混合），因为 MCP 工具是动态变化的——如果 MCP 插在内建工具中间，每次 MCP 工具增删都会让前面的 cache 前缀失效，整个断点作废。这个分区策略是用"工具顺序"换"cache 命中率"。
+- 优点：Cache 命中率高，Anthropic 官方数字是首 token 延迟降 85%、输入 token 成本降 90%，长会话里这个收益是数量级的；
+- 缺点：对工具顺序敏感，MCP 工具插入内建工具之间会让缓存失效，运维容易踩坑，需要靠团队规范兜底（"内建在前、MCP 在后"不能乱）。
+
+**机制 2：消息预处理管线（从轻到重）**：每次 API 调用前走多阶段——本地轻量操作在前、需要 API 调用的重操作在后。顺序是：Token 计数 → 本地裁剪（Context Collapse）→ AutoCompact → 系统提示与工具定义注入。原则是"能用便宜操作释放空间就不用贵的"，因为 AutoCompact 本身是一次完整的 LLM 调用，既花钱又丢细粒度信息。
+- 优点：能用便宜操作释放空间就不用贵的，日常会话绝大多数情况下靠 Context Collapse（本地裁剪）就够，不会触发昂贵的 AutoCompact；
+- 缺点：管线本身有 7 条恢复路径 × 10 种终止条件 × 多层压缩，整体复杂度高，理解和调试门槛高，新人上手可能要一周。
+
+**机制 3：Context Collapse（纯本地压缩）**：在 AutoCompact 之前运行，不调 API，做纯本地的操作——相邻同角色消息合并、过长 tool_result 截断（保留头尾去中间）、重复 system 提示去重、旧 assistant 消息里的 tool_use/tool_result 配对压缩。目标是尽可能推迟昂贵的 AutoCompact 触发，保留更多原始上下文。这是被很多人忽略的一层，但它承担了绝大多数"日常会话"的上下文瘦身工作。
+- 优点：不调 API、零成本，承担了绝大多数"日常会话"的上下文瘦身工作，是被很多人忽略但实际贡献最大的一层；
+- 缺点：本地裁剪也会丢信息，尤其是截断长 tool_result 时可能把关键错误信息砍掉，模型因此"看不到"它本应看到的报错细节。
+
+**机制 4：AutoCompact + 断路器**：阈值 = 模型窗口 - max(max_output_tokens, 20000) - 13000；200k 模型大约 167k tokens 触发。触发后走一次完整 LLM 调用，让模型把旧消息生成一段摘要替换掉原始对话。这会丢失细粒度上下文（早期对话的具体代码片段、用户的微妙语气、精确数字），只保留"结论性"信息。带断路器：连续失败 3 次停止重试。源码注释引用真实数据："1,279 sessions had 50+ consecutive failures (up to 3,272), wasting ~250K API calls/day globally"——大规模部署中小概率异常路径会烧掉巨额资源，断路器是必须的。断路器触发后会话不会崩，但后续每次调用都可能撞 prompt-too-long，只能靠 Context Collapse 苟延残喘。
+- 优点：断路器机制避免异常路径持续烧资源，源码注释的真实数据（1,279 sessions 连续失败 50+ 次、全球每天浪费 ~250K 次 API 调用）证明必要性；
+- 缺点：AutoCompact 本身是一次完整 API 调用，昂贵（按 token 计费）且会丢失细粒度上下文——一旦被反复触发成本飙升，长会话后期模型可能"忘记"早期强调过的关键约束。断路器只能止损不能恢复，触发后整段会话的上下文质量下降且无法回滚。
+
+**机制 5：Fork Subagent 的 cache 优化**：Fork 是实验性功能，代表一种全新子 agent 模式——继承父 agent 完整对话历史和 system prompt，只加一个短指令。消息构建策略是：保留父 agent 完整的 assistant message（所有 tool_use blocks），为每个 tool_use 生成相同的占位 tool_result，最后追加一个 per-child 的指令文本块。字节级结果是：只有最后一个文本块因 child 而异，前面所有内容字节相同。多个 fork 并行启动时共享同一个 prompt cache 前缀，命中率接近 100%。防递归有两重检查——`querySource` 标记（compaction-resistant）和消息扫描 `<fork-boilerplate>` 标签（fallback）。
+- 优点：多个 fork 并行启动时共享同一个 prompt cache 前缀，命中率接近 100%，是"分多个视角并行分析同一段代码"场景的性能神器；
+- 缺点：只在多 fork 并行时收益明显，单 fork 收益有限；引入的防递归两重检查（`querySource` 标记 + 消息扫描 `<fork-boilerplate>` 标签）增加维护成本。
+
+**机制 6：Token Budget + Nudge + 递减收益检测**：模型自然 end_turn 但 token 预算未用完时，harness 注入一条 nudge 消息（"你还有预算，请继续完成未完成的工作"）让模型继续。这解决了一个实际问题：复杂任务（如大规模重构）可能需要模型输出超过默认 max_output_tokens 的内容。**递减收益检测**防无限循环：如果连续 3 次检查每次增量都 < 500 tokens，说明模型已经没有实质性工作要做了，停止注入。子 agent 不参与 token budget（避免子 agent 无限运行），只有主线程 agent 可以使用——这是显式的资源隔离。
+- 优点：递减收益检测让 token budget 不会陷入无限循环，子 agent 隔离避免资源雪崩；
+- 缺点：启发式阈值（连续 3 次增量 < 500 tokens）是经验值，对某些"需要长时间沉默思考"的任务可能误判为"没事可做"而提前停止。
+
+**机制 7：消息扣留（withholding）**：并非所有从 API 收到的消息都立即传递给调用方。三类消息会被"扣留"：`prompt-too-long`（扣留走 reactive compact 重试）、`media-size`（扣留走媒体剥离重试）、`max_output_tokens`（扣留等恢复循环决定能否续写）。扣留的动机是 API 契约考量：SDK 消费者看到 error 字段就会终止会话，但 queryLoop 内部可能还有恢复路径——如果过早暴露中间错误，恢复循环还在跑但已经没人在听了。这是把"中间状态"和"最终状态"严格分离的工程决策。
+- 优点：扣留中间错误避免 SDK 消费方被虚假终止，用户体验更稳；
+- 缺点：可能让真实错误延迟暴露，如果 reactive compact 本身失败，用户看到的错误信息已经是二次加工过的，定位问题更麻烦。
+
+**整体可组合性（贯穿所有机制）**
+- 优点：子 agent 复用主 agent 的 `query()` 函数，上下文管理逻辑不重复实现，是"可组合性"的极致体现；
+- 缺点：每个子 agent 都需要精确的 8 项清理操作，生命周期管理复杂，少做一项都可能造成资源泄漏。
+
+**落地启发（自己的 Agent 系统怎么借鉴）**：
+
+- **从轻到重的压缩管线**是通用思路：规则裁剪 → 小模型摘要 → 大模型摘要，把昂贵操作放在最后兜底；
+- **断路器**是任何远程调用都该有的，不止 AutoCompact，所有 LLM 调用、RAG 检索都应该加；
+- **Cache 分区策略**可以直接抄：稳定内容（system prompt、内建工具）在前，动态内容（MCP、用户偏好）在后，断点放在稳定区末尾；
+- **不必照搬 AutoCompact**：可以用更廉价的本地摘要（按角色裁剪、按工具类型过滤、规则抽取"结论性消息"）挡在前面，把昂贵的 LLM 摘要当最后兜底；
+- **递减收益检测**这种简单启发式（连续 N 次增量 < 阈值就停）可以广泛用在任何"让模型继续"的场景里，是防无限循环的最小成本方案。
+
+
+### CheckPoint
+
+**Claude 中没有 CheckPoint 吗？原理是什么？**
+
+**一句话回答**：Claude Code 没有 LangGraph 那种"显式 CheckPoint（每个节点快照整个 State）"的机制，但有 4 种等价的能力——分别解决"会话恢复"、"文件回滚"、"跨会话记忆"、"并行执行隔离"四类问题。
+
+**机制 1：Transcript 持久化（对应"会话恢复"）**
+
+`QueryEngine` 会把每条消息 append 到磁盘的 transcript 文件（JSONL 格式），这是隐式的"追加式 CheckPoint"：
+
+- 用户关闭 CLI 后下次启动，会话可以自动 resume；
+- 实现极简：append-only，不需要序列化整个 State；
+- 代价：只能线性恢复（从最后一条继续），不能"回滚到第 N 轮"。
+
+**机制 2：`/rewind` 命令 + 文件状态快照（对应"文件回滚"）**
+
+`ToolUseContext.updateFileHistoryState` 在每个修改文件的工具执行后，把文件的旧版本记录下来；用户输入 `/rewind` 时，可以按历史点回滚文件到某个时间点的状态：
+
+- 这是 coding agent 专属的 CheckPoint 形态——coding agent 最关键的副作用就是改文件，文件状态能回滚就等于 80% 的 CheckPoint 价值；
+- 实现：每次 `FileEditTool` / `Write` 执行前把原文件存到 `fileHistory`，`/rewind` 时从 `fileHistory` 恢复；
+- 代价：只快照文件，不快照模型的内部 State（messages、turnCount 这些不回滚）。
+
+**机制 3：DreamTask（自动记忆整理，对应"跨会话语义 CheckPoint"）**
+
+`DreamTask` 是一个特殊的后台任务，系统在空闲时自动运行子 agent，回顾最近的会话并整理记忆文件（`~/.claude/memory/*.md`）：
+
+- 不是状态级 CheckPoint，而是**语义级 CheckPoint**——把"这次会话学到了什么"沉淀下来供下次会话复用；
+- 它的 `kill()` 方法会回滚锁的 mtime，让下次会话可以重试被中断的整理；
+- 这是跨会话的"经验 CheckPoint"，解决"上次会话的发现能在下次被想起"的问题。
+
+**机制 4：Fork Subagent 隐式 CheckPoint（对应"并行执行隔离"）**
+
+Fork 子 agent 继承父 agent 在 fork 时刻的完整对话历史和 system prompt：
+
+- fork 时刻就是父 agent 的一个"隐式 CheckPoint"，子 agent 从这个快照出发独立执行；
+- 子 agent 的修改不影响父 agent（隔离性），等于"从一个 CheckPoint 派生出一个沙盒"；
+- 这是并行执行场景里 CheckPoint 的一种轻量形态。
+
+**对比 LangGraph 的 CheckPoint**
+
+| 维度 | Claude Code | LangGraph |
+|---|---|---|
+| CheckPoint 形态 | 隐式（transcript 追加 + 文件快照） | 显式（每个节点快照整个 State） |
+| 存储 | JSONL transcript + fileHistory | Checkpointer 插件（SqliteSaver / PostgresSaver 等） |
+| 恢复粒度 | 线性（最后一条继续）+ 文件可回滚 | 任意节点恢复，支持 time travel 调试 |
+| 跨会话 | DreamTask 做语义级 CheckPoint | 靠 thread_id 串联，不做语义整理 |
+| 实现成本 | 低（append-only，无需序列化整个 State） | 高（每节点快照） |
+
+**面试怎么讲**：Claude Code 用"轻量级、追加式"的 CheckPoint 策略（transcript append + 文件状态快照）替代了 LangGraph 那种"每节点完整快照"的重型策略，换来实现简单、开销小，代价是不能做任意节点恢复和 time travel 调试。这是两种产品形态的取舍——LangGraph 适合需要可视化和调试的业务流，Claude Code 这种轻量策略更适合面向开发者、主要需求是"会话恢复"和"文件回滚"的 coding agent。
+
+**落地启发（自己的 Agent 系统怎么借鉴）**：
+
+- **Transcript 持久化**是任何 Agent 系统都该有的最小 CheckPoint——append-only JSONL，崩溃恢复时不丢历史；
+- **文件状态快照**是 coding agent 必备——改文件是最常见的副作用，能回滚就覆盖了 80% 的 CheckPoint 价值；
+- **DreamTask 这种"跨会话语义 CheckPoint"** 思路值得抄——比传统的 State 快照更适合"知识沉淀"场景，可以用更轻量的"定时跑一个小模型整理历史"实现。
 
 
 ## 场景设计题
 
-### 设计旅游咨询Agent：机票/退改/酒店/攻略混合提问，怎么拆多意图/并行调度/聚合结果
+### 设计旅游咨询Agent：机票/退改/酒店/攻略混合提问,怎么拆多意图/并行调度/聚合结果
 
 ### 设计AI面试助手：上传简历自动生成问题并模拟面试
 
@@ -3299,7 +3775,7 @@ Harness Engineering（Agent 整体运行框架）
 
 ## 开放题与HR
 
-### Agent 行业概念泡沫?真实落地价值和瓶颈
+### Agent行业概念泡沫?真实落地价值和瓶颈
 
 ### 智能化越高不确定性越强，怎么平衡智能性和业务可控性
 
@@ -3309,11 +3785,11 @@ Harness Engineering（Agent 整体运行框架）
 
 ### 为什么从后端/深度学习转 Agent
 
-### 怎么建立技术判断力?没成熟经验时依据什么信号决定投入?
+### 怎么建立技术判断力?没成熟经验时依据什么信号决定投入
 
 ### 近半年深耕的最难论文/开源源码?
 
-### 怎么看 AI 发展阶段/对工作产品的影响?基础架构团队做到什么程度才信任 AI?
+### 怎么看AI发展阶段/对工作产品的影响?基础架构团队做到什么程度才信任AI
 
 ### 学习新领域的方法?怎么判断技术值得深学还是了解?
 
@@ -3321,12 +3797,12 @@ Harness Engineering（Agent 整体运行框架）
 
 ### 项目最大缺陷?重构怎么改?业务指标长期不提升怎么办?
 
-### 算法和后端同学对 Agent 边界认知不一致怎么处理?技术方案和业务方分歧怎么沟通?
+### 算法和后端同学对Agent边界认知不一致怎么处理?技术方案和业务方分歧怎么沟通?
 
-### 两周上线座舱 demo 但知识库未齐，怎么排优先级?
+### 两周上线座舱demo但知识库未齐，怎么排优先级?
 
 ### 算法侧要加一步 LLM 调用提准确率，怎么核算成本/延迟/失败率并决策?
 
-### HR 常规(薪资/加班/职业规划/挫折/成就/为什么本公司/离职原因/稳定性)—— 模板清单，不逐题写
+### HR 常规(薪资/加班/职业规划/挫折/成就/为什么本公司/离职原因/稳定性)—— 模板清单,不逐题写
 
 
