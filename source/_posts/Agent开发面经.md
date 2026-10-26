@@ -43,6 +43,54 @@ abcjs:
 
 最后感谢贵公司给我这次面试机会，我也十分希望能加入团队，在新的业务场景中学习，与团队共同成长！
 
+### 为什么换工作
+其实我入职时有点小插曲：当时面试的是国内快递部门，但入职时那个部门临时撤销，我被调到了 CPO 这边做人事薪酬。虽然和最初预期不一样，但我还是决定沉下来把事情做好——这几年也确实在菜小蜜这类项目里，积累了比较扎实的 AI 工程化和 RAG 实战经验。
+
+不过从我的长期职业规划看，我一直更希望向 电商、物流等ToC领域、AI 等领域发展。现在这次机会正好契合，所以想换个环境，把这几年沉淀的工程化能力用到更匹配长期方向的赛道上。
+
+### 现阶段需求的开发流程
+
+我们现在的开发流程是人机协同、人做判断、AI 做执行，具体分六步，分成三个阶段：
+
+🧭 需求理解与方案阶段
+
+1. 人工理解需求。产品在神盾创建需求后，我先过一遍，建立基本的业务上下文。
+2. AI 产出技术方案初稿。Agent 通过 MCP 读取需求平台拉取需求原文，调研相关代码、数据库表结构、调用链，产出技术方案文档，并把方案里不确定的点列为待确认项。
+3. 人工评审并闭环待确认项。我逐条确认或驳回，如果方案有问题，反复让 AI 迭代修改，直到方案收敛。这一步人必须深度参与，AI 不替我做方案决策。
+
+🔨 开发与验证阶段
+
+4. AI 执行开发。调用 quick-dev skill 一条龙完成——创建工作项、拉分支、关联工作项、改代码推送、创建变更单、发起代码评审并指定评审人、部署到预发。整个过程是幂等脚本化的，不会漏步骤。
+5. 多手段验证灰度。预发环境造数据、拉业务同学创建真实单据，确认链路通；需要灰度的走灰度放量。
+
+🚀 发布阶段
+
+6. 按发布窗口上线。走神盾的发布流程，发布完归档方案到知识库。
+   底层能力支撑： 这套流程能跑通依赖两类基础设施：
+   - 结构化路由（配置在 Agent 的 CLAUDE.md 里）：把薪酬社保域的 15+ 个代码仓库、6+ 个数据库、Sunfire 应用名做成映射表，AI 调研时能快速定位，不用全局扫描。
+   - Skill 和 MCP 集成：quick-dev 封装开发流程、case-investigate 封装排查流程；神盾、代码平台、DMS、Sunfire 等都通过 MCP 接入，让 AI 能直接操作研发平台而不是只会写代码。
+   核心思想：AI 承担可脚本化、可幂等的执行工作（调研、模板代码、流程操作），人聚焦不可委托的判断（方案拍板、评审、灰度决策、发布节奏）。
+
+### SDD是什么/开发中如何使用
+
+SDD 全称 Spec-Driven Development，规约驱动开发。核心思想是：让规约（Spec）成为第一公民，而不是代码——需求、设计、验收标准先沉淀成结构化的规约文档，然后 AI 基于这份规约去生成代码、测试、发布清单，所有产物都从同一份规约派生，保证可追溯、可验证。这和传统开发反过来——传统是「代码为准、文档补齐」，SDD 是「规约为准、代码派生」。我拿最近一个真实需求来讲：HIHR 社保结算自有付款新增"打款说明/付款备注"两个字段，链路横跨 5 个改动面（cn-payroll、cn-insurance、前端列表、宜搭审批流模板、Diamond 配置），下游对接资金侧，这种多系统需求不先立规约根本没法保证语义一致。
+
+1. 规约先行。拿到需求后，我先让 AI 产出一份结构化的技术方案（spec），里面明确几件事：业务规则（比如"退款金额为空时的处理策略"）、数据/接口/配置契约（入参、出参、错误码）、验收用例（Given/When/Then 格式的关键场景）、发布清单与安全红线
+2. spec 评审。人工 review 这份 spec，把所有待确认项闭环——这一步是整个流程里最该花时间的。
+3. AI 从 spec 派生实现。代码、单元测试、集成测试、接口文档都从同一份 spec 生成，保证三者语义一致。
+4. spec 变更即测试变更。需求迭代时先改 spec，AI 自动把受影响的测试列出来并同步更新，防止测试和实现失焦。
+
+### 测试环节的SDD实践
+
+第一，**用 spec 的映射表生成测试矩阵**。AI 把 spec 里的 Given/When/Then 场景拆解成测试用例，再按边界值 + 等价类 + 异常路径三个维度自动扩展。
+第二，**用 spec 的数据契约驱动造数**。AI 根据 spec 定义的字段约束（必填/枚举/格式）自动生成测试数据，正例反例成对出现，比手工造数快很多。
+第三，**用 spec diff 圈定回归范围**。每次需求迭代，AI 对比新旧 spec 的 diff，自动识别"行为改变"vs"行为新增"vs"行为不变"，把回归测试范围精确缩小到行为改变的部分，不用全量回归。
+第四，**测试结果反向校验 spec**。试跑完如果某条用例一直失败且反复确认代码正确，就倒推 spec 本身写错了——这时候是 spec 迭代，不是改代码。
+
+验收上我坚持**多源证据链对 spec 断言**：DB 落库值、SLS 里提交审批的 formData JSON、资金侧接口响应截图三方交叉核对，任何一源和 spec 不符就不算通过。
+
+一句话总结：SDD 让 spec 成为代码、测试、配置、发布物的共同源头，AI 的价值不是替人写代码，而是维护这几份产物之间的语义一致性；在测试环节，它让用例矩阵从映射表机械派生、造数有契约可依、回归范围由 spec diff 精确圈定，而测试失败还能反向驱动 spec 迭代——我在真实生产需求里完整跑通了这个闭环，也踩过"spec 事实性错误"的坑，所以更强调规约必须用线上证据校验。
+
 ## 工作经历
 
 公司:阿里巴巴-菜鸟集团
@@ -478,6 +526,25 @@ ToolExecutorRegistry 是"技能注册中心"。Spring 启动时，会自动发�
 ### 文档鉴权讲一下
 鉴权逻辑本质是策略模式——`AbstractKnowledgeRetrievalStrategy` 只定义抽象方法 `authSlice(workNo, empNo, documentName)`，每个知识源子类各自实现，直接代理调用该文档"原始归属系统"自己的权限校验接口(制度中心/Athena/知识平台/钉钉)，而不是我们自己重新设计一套鉴权规则去重复判断——这样才能保证"AI 助理里能看到的文档权限"和"原系统里能看到的文档权限"永远一致，不会出现绕过原系统权限体系泄露信息的问题。只有钉钉文档这一路是真正调用的钉钉开放 API，其余几路都是各业务系统自己的权限服务。
 
+### 为什么要拆分成三层并发线程池,这样做的原因是什么
+
+分三层不是为了“多开线程”，而是这条链路天然是**嵌套阻塞**的三层扇出，三层的量级、IO 对象和稳定性又各不相同。三层分别是:
+
+- **外层 `RAG_STRATEGY_POOL`**:`answerWithRag` 把每个知识源 strategy 提交成一个任务并发跑、请求线程 `.join()` 等结果，一个 strategy 一个任务；
+- **中层 `RAG_RETRIEVE_POOL`**:strategy 内部调 `BailianClient.retrieve`，把 `indexId × query` 的多个百炼召回再并发提交并等待；
+- **内层 `KNOWLEDGE_AUTH_POOL`**:召回切片按文档名去重后并发调各原始系统鉴权，`allOf().get(3s)` 卡慢尾预算。
+
+分三层主要考虑四个因素:
+
+1. **防线程饥饿死锁（最关键，是必须分池的硬约束）。** 策略池里的任务体本身不干重活，它做的是“向检索池提交子任务 → 阻塞等结果 → 再向鉴权池提交子任务 → 阻塞等结果”。一旦外层和内层共用同一个池，并发一高，外层任务会把核心线程全部占住并进入等待，内层子任务只能在队列里排队、永远等不到线程被消费，形成典型的**线程饥饿死锁**。拆池准则很简单:**谁会阻塞等待谁，这两层就绝不能共用线程池**（`ThreadPoolUtil` 注释明确写了策略池不能与检索池共用）。
+2. **三层扇出量级差一个数量级，要独立配比。** 单请求走到每层的扇出大约是:策略层 = 策略数、检索层 ≈ 9（3 候选问题 × 3 知识库）、鉴权层 ≈ 60（去重后文档数），量级递增，所以 core 也按 30 → 100 → 200 递增（扇出 × 5～10 倍经验余量）。一个池没法同时匹配三种量级，具体推法见『三个线程池具体参数』『核心参数依据』两题。
+3. **故障与慢尾隔离（舱壁效应）。** 中层打百炼召回，内层打钉钉 API / 制度中心 / 知识平台等外部权限系统，后者最慢最不可控。分池 + 鉴权单独 3s 预算，鉴权慢尾不会占死召回线程、某个源召回慢也不会拖垮鉴权；任一层被打满触发 `AbortPolicy` 拒绝时，影响被隔离在该层，不会级联占满整条链路。
+4. **队列按层差异化。** 策略层任务粒度最粗、耗时最长，队列只给 50（宁可拒绝降级也不堆积）；检索/鉴权层是大量短 IO，队列给 500 缓冲削峰。
+
+一句话:三层 = **层级依赖必须隔离防死锁 + 各层扇出/IO 画像不同需独立配比 + 故障隔离**，是链路的嵌套结构决定的，不是拍脑袋开并发。路由阶段另有独立的 `AI_ROUTING_POOL`，同样是不与 RAG 混用的隔离思路。
+
+> 边界:注释里的“QPS=3”是设计估算基数、不是实测生产并发；core/max/queue 按它乘扇出再放大 5～10 倍定，真实流量上来后应按监控重新标定（现状缺线程池监控和动态调参，见『这套线程池参数现在有什么问题』）。
+
 ### 三个线程池具体参数
 
 创建方式在 `ThreadPoolUtil.getThreadPool(PoolEnum)` 里统一实现:以线程池枚举值为 key，用双重检查锁 + `ConcurrentHashMap` 做懒加载单例(每种线程池全局只会被 `new` 一次)，底层就是标准的 `ThreadPoolExecutor`，队列用 `LinkedBlockingQueue(queueCapacity)`(有界队列)，线程命名用 `ThreadFactoryBuilder` 按枚举里配的格式统一命名(方便排查时看线程栈能一眼看出是哪个池子)，拒绝策略统一用 `AbortPolicy`(队列满了直接抛异常，不会静默丢任务)。三个线程池的参数(core / max / 队列容量 / 存活时间)都在 `PoolEnum` 枚举里硬编码好，口径是「单请求在这一层的并发扇出 × 5～10 倍经验余量，再取整」:
@@ -504,7 +571,7 @@ ToolExecutorRegistry 是"技能注册中心"。Spring 启动时，会自动发�
 扇出的好处是它不用猜——每一层拆多少个任务都能在代码里一行行数出来，是可以被评审和复算的确定值。定完扇出之后，`corePoolSize` 就是在扇出上乘一个 5～10 倍的经验余量再取整(策略池取 30、检索池 9 × 10 取 100、鉴权池 60 × 3 取 200)，`maxPoolSize` 留 50% 左右作为队列打满后的溢出保护，最后配有界队列 + `AbortPolicy` 保证过载时快速失败而不是无限堆积。这个 5～10 倍余量同时承担了两件事:覆盖同一时刻打进来的多个并发请求，以及吸收单次 IO 调用 RT 的长尾抖动。
 
 
-比参数本身更重要的是**这三个池必须物理隔离**:策略池里的任务体本身不干活，它执行的是「向检索池提交子任务 → 阻塞等结果 → 再向鉴权池提交子任务 → 阻塞等结果」。一旦外层和内层共用同一个池，外层任务会把核心线程全部占住并进入等待，内层子任务只能在队列里排队，而队列永远等不到被消费，形成典型的**线程饥饿死锁**。所以拆池的判断准则很简单:谁会阻塞等待谁，这两者就绝不能共用线程池。
+比参数本身更重要的是**这三个池必须物理隔离**——策略池任务会阻塞等待检索池、鉴权池的子任务，共用一个池就会线程饥饿死锁。完整的拆池理由（嵌套阻塞、扇出量级、舱壁隔离）见前面『为什么多源RAG要分成三层并发线程池』一题，这里不重复。
 
 ### 为什么不用通用公式来算线程数
 
@@ -1049,6 +1116,26 @@ MCP(Model Context Protocol)是 Anthropic 提出的一套标准协议，用于 LL
 7. finally：`ToolContextHolder.clear`。
 
 
+### MCP Server的鉴权怎么做?如何防止不是你的应用来调用
+
+分两层:一层管“哪个应用能调我”（应用级准入），一层管“这个人能不能用这个工具、看这些数据”（用户级授权）。两层分别在框架和业务代码里，边界要分清——这也是回答“如何防止别的应用乱调”的关键。
+
+**应用级准入（防止非授权应用调用）由 mcp-lite 框架做，不在业务代码里。** 菜小蜜的 MCP Server 本质是框架暴露的一个 HSF 服务（`LiteMcpServer`/`DefaultMcpHsfServer`），只有 `listTools`/`callTool` 两个方法。每次 `callTool` 的第一步就是框架的 `isAuthorizedCall`:从 HSF 上下文取调用方应用名（`RequestCtxUtil.getAppNameOfClient`）比对授权应用列表，不在白名单直接返回 `textError` 拒掉（完整调用顺序见『MCP Tool 从注册到调用的整体执行流程』）。框架内置放行 MCP 网关和运维应用，所以正常链路是“外部 Agent → MCP 网关 → 我的 HSF 服务”，网关在白名单内；别的应用想绕过网关直接 HSF 调 `callTool`，会因为应用名不在授权列表被挡在业务逻辑之前。也就是说“防止不是你的应用来调用”靠的是这道**框架级客户端应用白名单 + 经 MCP 网关收口**，我没有、也不应该在业务代码里再造一套 app 鉴权。
+
+**用户级身份 + 数据授权是我在 Tool 代码里做的。** 应用准入过了之后，`@McpContextAware` 环绕切面在方法体执行前从 HSF RpcContext 解析调用者、补全工号和租户，塞进 `McpContext`（ThreadLocal，方法结束 finally 清理）；业务代码用 `McpContext.getUser()` 拿到 empNo/workNo/name，再做三件事:
+
+- **RBAC 数据权限**:`queryCxmAiChatLogDetail` 校验——非超管（`cxmPermissionHelper.isAiAssistantAdmin`）且没有任何授权业务域（`queryAuthedCategoryCode`）或技能模块（`queryAuthedModuleCode`）的，直接返回“无查询权限，请联系管理员申请业务域权限”。
+- **按人过滤召回**:`knowledgeRecall` 用 empNo 走权限过滤召回，只返回该用户有权看的切片。
+- **审计与数据隔离**:`queryCxmQaRecordList`/`batchUpdateCxmQaRecordStatus` 把 operator 工号带进查询和更新，谁查谁改留痕。
+
+**要主动交代的边界和待改进:**
+
+- 用户级授权现在是**粗粒度**的:`queryCxmAiChatLogDetail` 的校验带着 TODO——目前只是“入口级、拦截零权限用户”，还没做“记录级精准校验”（拿 `message_mark` 的 categoryCode/moduleCode 跟授权列表逐条比对）。所以只有部分业务域权限的人，理论上仍可能越权看到别的域记录，这是明确的待补项。
+- 三套 ThreadLocal（框架 `ToolContextHolder`、身份 `McpContext`、业务 `TenantContext`）都必须在 finally 清理，漏清会在 HSF 线程复用下串身份、串租户。
+- 应用白名单由框架/MCP 平台托管，具体授权了哪些 app、怎么维护在 mcp-lite 框架侧，业务仓库看不到实现，被追问要如实说明需查框架/平台配置。
+
+一句话:app-to-app 准入靠框架的 `isAuthorizedCall` 客户端白名单（且经 MCP 网关收口），user 级靠 `@McpContextAware` 注入身份 + 我在 Tool 里做的 RBAC 与审计；前者是平台能力、后者是我做的，且用户级授权仍是粗粒度、有精细化 TODO。
+
 ### Prompt工程化与质量闭环✅
 Prompt 与 Tool Schema 都外置到 Diamond 配置中心，可以热更新而不发版。质量验证分成两套:`message_mark` 面向真实流量做在线自动打标和周报统计，`cxm_answer_score` 面向标准 Q&A 做旧离线评测。前者回答“线上用户的问题答得怎么样”，后者回答“标准问题集上的答案与标准答案有多接近”，数据源、模型输出和统计口径都不能混用。
 
@@ -1419,6 +1506,17 @@ limit #{countLimit}
 
 真实案例:排查审批流角色解析异常，发现"供应链汇报线没有 CEO，需用 CPO 作顶点往下找"的域规则，结论连同处理指引自动写入项目层记忆，下次同类问题直接命中复用——Agent 越用越准。
 
+### 针对于记忆或者是Context管理有没有做过相关的优化
+
+做过，主要是四个方面：
+- 第一，分层存储，用检索成本换上下文成本。 我把知识分成三层：团队知识库、Agent 长期记忆、和不存。排查案例正文这类重内容放知识库，做向量化索引，靠语义检索按需取；长期记忆只放影响 Agent 行为的轻信息——用户偏好、协作规则、项目状态——案例类条目在记忆里只留一行指针。原因是记忆索引每次会话都要全量加载进上下文，容量必须严格控制。
+- 第二，记忆的容量和进出纪律。 记忆索引设硬上限，条目按反馈、用户、项目、引用四类管理，过期就更新或删除；知识库入库有门槛：排查闭环且根因确认才写，写前先检索去重，没证实的结论宁可丢弃也不入库——错误的知识比没有知识更污染上下文。
+- 第三，Skill 和参考资料按需加载。 我把 SOP 拆成主流程加参考文件，比如数据库路由表、知识库标签映射表单独放 references 目录，上下文里只装主流程，执行到对应步骤才去读参考文件，避免把整本手册一次性塞进上下文。
+- 第四，工具输出落盘、上下文只留摘要。 数据库和日志查询的原始结果由工具层落到本地文件，上下文里只读行数和关键字段摘要；超大输出先持久化再按需切片读取，防止单次查询把上下文打爆。
+- 效果：这套机制让 Agent 在薪酬社保域连续多个会话保持状态（比如记住某工单的排查进度、用户纠正过的操作习惯），同时单轮上下文占用可控，长排查链路不会中途丢失关键结论。
+
+如果总结成一句话：上下文是稀缺资源——每轮必看的放上下文，偶尔用的放检索，源头能读到的不存。
+
 ### 什么是"短结论"?为什么写入分层记忆
 
 短结论是排查闭环后提炼出的可复用结论/规则，与"完整案例"相对。完整案例(现象/根因/排查路径/修复)写入知识库成为一页；其中最精华的规则单独提炼入记忆——比如审批流问题排查后，入记忆的不是排查全过程，而是"审批流节点规则在 OA 设计器按部门定制，汇报线无 CEO 的部门用 CPO 作顶点"这一句。
@@ -1428,9 +1526,23 @@ limit #{countLimit}
 
 是演进来的。最初只有用户/反馈/项目三类有真实实例；后来建设案例库时出现了第一条 **reference 型记忆**——案例库指针，只存 KBase 案例库的索引位置(repo + 文件夹 nodeId + 页面 ID)，不存案例内容本身，这正是"指针型引用只存索引不存本体"的落地，目的是防上下文膨胀。至此四类齐全:用户(身份)、反馈(行为纠偏)、项目(排查结论/域规则)、引用(外部知识指针)。
 
+### Agent怎么知道一个结论要放入知识库还是长期记忆中
+
+我们的分层原则是按知识的受众和生命周期来路由，具体三条规则：
+- 第一，看受众。 如果这个结论是领域知识、以后团队里任何人碰到同类问题都能复用——比如一条排查案例的根因和证据链——就写入团队知识库，做向量化索引，支持语义检索；如果它只影响 Agent 自身的协作行为——比如用户纠正过的工作习惯、用户身份偏好——就写入 Agent 的长期记忆。
+- 第二，看门槛。 知识库有严格的入库条件：排查必须闭环、根因必须有证据链确认，写入前先检索去重，命中已有案例就追加而不是新建；根因没确认的结论宁可丢弃也不入库，避免污染知识库。长期记忆则按类型管理，分为反馈、用户、项目、引用四类。
+- 第三，看成本。 长期记忆的索引是每次会话全量加载进上下文的，容量有限，所以案例正文永远放知识库，记忆里只留一行指针；而代码和 git 里能直接读出来的内容两边都不写，防止副本过期。
+
+一句话概括：别人以后会搜的进知识库，Agent 以后该怎么做的进记忆，代码里有的不存，没证实的不存。
+
 ### 结构化知识路由✅
 
-**我做知识工程的第一原则是：把模型容易猜错的知识，全部变成它能查的表。具体三张：数据库路由表——哪类问题查哪个库、dev 还是 prod、有没有权限、逻辑库还是物理库；工程映射表——17 个工程、应用、模块、库四列互查；排查决策表——问题类型、首选工具、走什么步骤，全部预置。这样模型是查表做 O(1) 路由，而不是自己猜，幻觉和 token 消耗都压下来了。为什么不让模型自己探索？因为这个域里暗坑很多，比如社保库只有生产可查、人员档案库 dev 没权限——查错库浪费的不是 token，是整个结论跑偏。而且查表是可解释的：路由错了能定位到表，改一行表就生效，不用调模型。**
+> 我做知识工程的第一原则是：把模型容易猜错的知识，全部变成它能查的表。具体三张：
+> - 数据库路由表——哪类问题查哪个库、dev 还是 prod、有没有权限、逻辑库还是物理库；
+> - 工程映射表——17 个工程、应用、模块、库四列互查；
+> - 排查决策表——问题类型、首选工具、走什么步骤，全部预置。
+> 
+> 这样模型是查表做 O(1) 路由，而不是自己猜，幻觉和 token 消耗都压下来了。为什么不让模型自己探索？因为这个域里暗坑很多，比如社保库只有生产可查、人员档案库 dev 没权限——查错库浪费的不是 token，是整个结论跑偏。而且查表是可解释的：路由错了能定位到表，改一行表就生效，不用调模型。
 
 核心思想:**把模型容易猜错的知识，全部变成它能查的表**。三类路由知识:
 
@@ -1483,7 +1595,7 @@ limit #{countLimit}
 - Prompt 工程 SRE 化:prompt获取根据不同场景路由到专属systemPrompt，外置到配置中心，调用LLM前做长度下限 + 关键词白名单 lint 防空 Prompt 上线。
 
 
-### 介绍下项目，你在其中主要负责什么工作
+### 介绍下项目,你在其中主要负责什么工作
 
 面向集团薪酬全生命周期的 AI 驱动质检平台，用 LLM 把自然语言规则批量解析为 Groovy DSL 脚本，配合强弱卡控与异步执行引擎，把"人工抽检+发薪后修正"升级为"发薪前自动拦截"。我主要负责质检管理模块——规则的创建、编辑、启用/停用、版本管理，以及质检任务的创建、执行触发、状态流转、结果查询，涉及多租户数据隔离和分库分表场景下的非分片键查询优化；另外负责钉钉 AI 表格的异常分发链路——质检发现异常后自动复制协同表格模板、分页写入异常明细、触发工作流催办，对接钉钉开放平台 API 完成端到端落地。Self-Refine 自洽循环、异步执行引擎、Prompt SRE 化等核心模块是团队其他同学主导的，我全程参与了方案评审和联调，对实现细节比较了解。
 
@@ -1542,7 +1654,7 @@ limit #{countLimit}
 - **③ 跨仓反射加载**:DMC 仓的 Handler 通过 Class.forName() 反射加载，Handler 内部依赖的 Spring Bean 必须在 DMC 仓的 Spring 容器中正确注入，涉及三仓共享部署单元时的 ComponentScan 包路径配置，配错会导致运行时 NullPointerException。
 
 
-### 项目用的是什么规则引擎?为什么选 Groovy 而不是 QLExpress
+### 项目用的是什么规则引擎?为什么选Groovy而不是QLExpress
 
 用 Groovy。原因三方面:
 - **① 表达能力**:Groovy 语法与 Java 完全兼容，可直接用 BigDecimal 精确计算、LocalDate 日期处理等全部 Java 类库，QLExpress 内置函数有限，复杂逻辑需扩展操作符。
@@ -1551,7 +1663,7 @@ limit #{countLimit}
 
 代码中 `PrRule.execute()` 按 language 字段路由:GROOVY(AI 生成标准路径)、JAVA(早期手写硬编码规则)、JPATH(最轻量的 JSON 字段提取)。
 
-### Groovy 脚本有什么安全风险?怎么防护
+### Groovy脚本有什么安全风险?怎么防护
 
 Groovy 最大风险是可执行任意 Java 代码(Runtime.exec、System.exit、反射等)。三层防护:
 - **① Prompt 约束(生成端)**:System Prompt 通过输出契约限定脚本结构(必须是返回 Boolean 的闭包)和可用 API 白名单，明确禁止危险操作，给出正确示例和禁止清单。
@@ -1560,7 +1672,7 @@ Groovy 最大风险是可执行任意 Java 代码(Runtime.exec、System.exit、�
 - 没用 SecureASTCustomizer 沙箱是因为攻击面是"AI 意外生成危险代码"而非"用户恶意构造"，Prompt 约束已足够。另外 **Caffeine 缓存(MD5 去重，容量 1024)** 解决了 GroovyClassLoader 的 MetaClass 内存泄漏——每次 parseClass 创建新 Class 无法被 GC，缓存保证同一脚本只编译一次。
 
 
-### Token 成本大概多少?关闭深度思考省了多少
+### Token成本大概多少?关闭深度思考省了多少
 
 单条规则平均 2000-3000 token(system prompt ~1500 + user message ~500 + AI 输出 ~500)。开启深度思考时 reasoning_content 额外消耗 3000-5000 token，关闭后每条省 60%-70%。批量 50 条规则从约 25 万 token 降到约 10 万 token。
 
@@ -1575,21 +1687,17 @@ Groovy 最大风险是可执行任意 Java 代码(Runtime.exec、System.exit、�
 
 入口 `submitBatchParse` 生成 taskId 后先用 `jedisCluster.setex` 写一份 PROCESSING 初始状态到 Redis，再用 `CompletableFutureUtils.supplyAsync(..., excelValidateThreadPool)` 把整批解析甩到独立线程池异步跑，接口立即返回 taskId，不阻塞请求线程。异步编排在 `executeBatchParse` 中展开:先 `new Semaphore(BATCH_CONCURRENCY=10)` 控制同时打到百炼 AI 的请求数；`AtomicInteger parsedCount` 供多线程安全累加完成数，`AtomicBoolean done` 标记整批终态；`startProgressFlusher` 起一个独立 daemon 线程，每秒把当前进度 flush 到 Redis，`done=true` 后立刻退出避免覆盖最终状态；结果容器用 `Collections.synchronizedList` 包装的 `List<ParsedRuleVO>`，各子任务按下标 `results.set(idx, ...)` 并发写入，规避普通 ArrayList 在多线程下的可见性和结构性问题。`submitParseTasks` 给每条规则单独提交一个 `CompletableFuture`，子任务内先做基于 `startTime` 的超时短路判断——整批一旦超时，还没轮到的任务直接标失败不再浪费一次 AI 调用。最后 `awaitAndFinalize` 用 `CompletableFuture.allOf(futures).get(BATCH_TIMEOUT_MINUTES, TimeUnit.MINUTES)` 统一收口，超时抛 `TimeoutException` 后 `futures.forEach(f -> f.cancel(true))` 主动打断未完成任务，并把最终 SUCCESS/FAILED 状态写回 Redis。
 
-### CompletableFuture.allOf().get(timeout) 为什么能抛出超时异常
-`allOf(futures)` 把一批子 Future 聚合成一个新的 `CompletableFuture<Void>`，只有全部输入 Future 都完成(无论成功还是异常)它才完成，本身不阻塞。真正的超时能力来自 `Future.get(timeout, unit)` 这个 JDK 标准接口方法——限时阻塞等待，到点还没 complete 就主动抛 `TimeoutException`，而不是无限等待。不加这个 timeout，只要有一条规则的 AI 调用卡死不响应，整批任务就会永远停在处理中，前端轮询也永远等不到终态；加上后能保证批次有确定的结束时间点，抛出的 `TimeoutException` 会被外层 catch 住触发 `cancel(true)` 和落终态逻辑。
-
-### 为什么结果数组要用Collections.synchronizedList，而不是普通ArrayList或ConcurrentHashMap
+### 为什么结果数组要用synchronizedList，而不是普通ArrayList或ConcurrentHashMap
 多个解析子任务是并发执行的，且各自只按自己的下标 `set(idx, ...)`，天然没有写冲突，但普通 `ArrayList` 在多线程下没有同步保障，可能出现可见性问题(一个线程写的结果对另一个线程不可见)。用 `Collections.synchronizedList` 包装后，对该 List 的每个方法调用都会隐式加锁，保证跨线程可见性和安全性，成本比 `CopyOnWriteArrayList` 低(不需要每次写都整体复制数组)，也不需要像 `ConcurrentHashMap` 那样引入额外的 key 映射，因为下标本身就是天然的 key。
 
-### 独立daemon进度线程和子任务是怎么协同退出的
-`startProgressFlusher` 起的线程是一个 `while (!done.get() && !isInterrupted())` 循环，每秒 `sleep(1000)` 后 flush 一次进度。主流程在 `executeBatchParse` 的 `finally` 块里先 `done.set(true)` 再 `progressFlusher.interrupt()`，双重保障:`done` 标志让线程下一轮循环判断时自然退出，`interrupt()` 则是为了打断可能卡在 `sleep` 中的线程，避免它在最终状态已经写入后又多等 1 秒才醒来做一次多余的(但无害的)flush。
-
-### Collections.synchronizedList是怎么解决可见性问题的
+### synchronizedList是怎么解决可见性问题的
 可见性问题指一个线程对共享变量的写，另一个线程不一定能立刻看到(CPU 缓存和指令重排导致，跟是否有写冲突无关)。
 
 `Collections.synchronizedList` 给每个方法调用都加上同一把锁，根据 Java 内存模型的 happens-before 规则:线程 A 在锁内写完并释放锁，这次写会被强制刷回主内存；线程 B 后续通过同一把锁进入时，保证能看到 A 释放锁之前的所有写入。也就是靠锁的释放-获取关系建立内存可见性的传递链，而不是依赖 CPU 缓存碰巧同步，这是它比普通 ArrayList 更可靠的根本原因。
 
 
+### 独立daemon进度线程和子任务是怎么协同退出的
+`startProgressFlusher` 起的线程是一个 `while (!done.get() && !isInterrupted())` 循环，每秒 `sleep(1000)` 后 flush 一次进度。主流程在 `executeBatchParse` 的 `finally` 块里先 `done.set(true)` 再 `progressFlusher.interrupt()`，双重保障:`done` 标志让线程下一轮循环判断时自然退出，`interrupt()` 则是为了打断可能卡在 `sleep` 中的线程，避免它在最终状态已经写入后又多等 1 秒才醒来做一次多余的(但无害的)flush。
 
 
 ### Self-Refine自洽循环✅
@@ -1605,7 +1713,7 @@ Groovy 最大风险是可执行任意 Java 代码(Runtime.exec、System.exit、�
 
 LLM 能据此精确定位并修正问题，而不是随机重试。这是 **Generator-Verifier-Feedback 三元组**:LLM 生成、编译器验证(确定性、零成本)、错误回流驱动修正。不用 Spring Retry 是因为标准重试框架没有在重试间传递和转化上下文状态的能力。
 
-### 如果做第二期，Self-Refine你会怎么改进
+### 如果做第二期,Self-Refine你会怎么改进
 三个方向:① **AST 安全扫描**——预编译通过后用 SecureASTCustomizer 做白名单检查，目前只靠 Prompt 约束；② **动态 Few-shot**——根据规则类目从历史成功规则中检索相似的作为示例注入 Prompt，提高首轮成功率；③ **运行时 dry-run**——预编译通过后用 mock 数据执行一轮，把 NPE 等运行时错误也拦截在生成阶段。
 
 ### 为什么是非流式接口
@@ -1619,6 +1727,23 @@ LLM 能据此精确定位并修正问题，而不是随机重试。这是 **Gene
 
 在发起质检的时候先保存任务并生成 `batchId`(QC_TASK_ + `taskId`)，再通过 `PrTaskX.execute()` 把 `handlerContext`(租户上下文等业务数据)和 `QualityCheckTaskHandler.class`(类引用)一起落库到 TaskX 任务表，接口立即拿到 `taskId` 返回，无需等待质检完成。TaskX 是独立的调度/消费进程，轮到这条任务时反序列化出之前落库的 `handlerContext`，再反射找到 `QualityCheckTaskHandler`(实现了 `Handler<QualityCheckHandlerContext>` 接口)对应的 Spring Bean，调用其 `handle(context, anonymousId)` 方法把 context 传入——这一步才是真正的异步执行入口。Handler 在 `TenantContext` 中加载规则、统计数据量、清理同 `batchId` 的历史结果(避免结果重复)，再按 `offset/limit` 每页读取 500 条基础数据，随后逐行执行全部 Groovy 规则，更新进度条等内容。单条规则异常会被转换为该规则的质检错误，不影响当前行的其他规则和后续数据继续执行。
 
+### 通过数据分批来避免OOM具体是如何做的
+分批避免 OOM 的核心思路是 **"不要一次性把所有待质检数据加载进堆内存"** ，而是用"分页拉取 + 二次分批校验 + 校验完就放掉"的三级流水线，把任意时刻的活跃对象集控制在固定上限内（一页 1000 条 + 一校验批 200 条），这样无论任务总量是 1 万还是 100 万，峰值内存占用基本一样。
+
+代码实现在 `QualityCheckAsyncTask.doExecute()` 中，分两层：
+- **第一层是数据库分页拉取**（`PAGE_SIZE = 1000`）。外层是一个 `while(true)` 循环，每次只从 `pr_base_data` 读 1000 条到 `pageData`，处理完后引用在下一轮被重新赋值覆盖——而不是累加到一个大 List 里。
+- **第二层是校验批拆分**（`VALIDATE_BATCH_SIZE = 200`）。一页拿到后，还要 `Lists.partition(validationDataList, 200)` 拆成 5 小批，每一小批才送进 `validationService.validateByRules()`。Groovy 脚本执行时会产生 Binding、中间计算对象、`ValidationResult` 等，拆成 200 条就让这些"执行期临时对象"的峰值也被控制住。
+
+两层组合起来，内存里同时存在的大对象上限大致是：1000 个 `QualityCheckBaseDataDTO`（拉取层）+ 200 个 `ValidationObject` + 200 个 `Binding` + 若干规则对象（校验层），跟任务总量无关。
+
+结合 JVM 内存来看，堆从大到小是 Eden → Survivor → Old Gen，OOM 通常有两种成因：
+- **一次性大对象把 Old Gen 撑爆**。如果不用分批，假设一次质检 10 万条数据，每条 DTO 含工号、账期、几十个薪资字段约 2 ~ 5KB，一次性加载就是 200 ~ 500MB 的 DTO 数组，再加上每行跑 Groovy 产生的 Binding 和中间 BigDecimal，峰值可能到 GB 级。这些对象寿命长（整个任务期间都被引用），会直接晋升到 Old Gen；Old Gen 空间有限且 Full GC STW 长、回收代价高，很容易 `java.lang.OutOfMemoryError: Java heap space`。分批后每页 1000 条大约 2~5MB，整个生命周期都在 Young Gen 里完成"创建→使用→死亡"，根本进不到 Old Gen。
+- **GC 来不及回收造成 OOM**。分批的关键不只是"单次少加载"，而是**上一批的引用在下一批开始前就释放了**：外层循环每轮 `pageData` 变量被重新赋值，上一页的 List 立刻不可达；内层 `Lists.partition(...).forEach(...)` 每个 batch 是 lambda 作用域，执行完 batch 局部变量就出栈。Young Gen 的 Minor GC 是复制算法、速度很快，这些"短命对象"在下一次 Minor GC 时被整体清空，Eden 周转得过来，就不会触发 Full GC，更不会 OOM。
+
+另外还有一层与数据分批互补的 OOM 防护：**GroovyClassLoader 的 MetaClass 累积**。每编译一个脚本会产生一个 Class 和对应 MetaClass，类不卸载 MetaClass 就常驻。项目里用 Caffeine（按脚本 MD5 去重，容量 1024）做缓存，保证同一脚本只编译一次，MetaClass 不会随数据量线性增长。
+
+收尾一句话：分批的 OOM 防护原理是**让单次加载的数据量恒定，使活跃对象始终能被 Young Gen 容纳、被 Minor GC 快速回收，从而避免长寿命大对象进入 Old Gen 撑爆堆**。
+
 ### TaskX框架异步原理
 提交阶段只传两样东西:`handlerContext`(租户上下文等业务数据)和 `handler`(`Class<? extends Handler>` 类引用，不是函数指针也不是已实例化对象)，还有一个 `requestId`(`"QC_TASK_"+taskId`，平台侧幂等键)，一并交给 `batchApiClient.execute(request)` 落库到 TaskX 自己的任务表，`execute()` 立即返回，不做任何同步执行。TaskX 是独立的调度/消费进程，轮到这条任务时，从自己任务表反序列化出之前存的 `handlerContext`，再反射找到 `QualityCheckTaskHandler`(实现了 `Handler<QualityCheckHandlerContext>` 接口)对应的 Spring Bean，调用其 `handle(context, anonymousId)` 方法，把反序列化出的 context 作为参数传入。本质是“落库即提交 + 类引用反射回调 + 状态持久化”，不是注册回调函数；且这里提交时也没有接收 `execute()` 的返回值(TaskX 自己的任务id)，业务完全靠自己的 `taskId`/`batchId` 体系闭环。应用进程重启后，SchedulerX 会扫描任务表中未完成的记录重新调度，保证不丢任务。
 
@@ -1629,7 +1754,6 @@ LLM 能据此精确定位并修正问题，而不是随机重试。这是 **Gene
 - **第一步：状态悬停。** 节点在反射调用 `handle()` 中途宕机，线程销毁，但 TaskX 任务表里这条记录的状态会停留在 `RUNNING`，推不到终态。
 - **第二步：超时扫描。** 因为提交时只传了类引用和上下文，没维持长连接。SchedulerX 靠心跳超时感知节点挂了，随后扫描任务表里超时的 `RUNNING` 记录，重置为待调度。
 - **第三步：反序列化重放。** 调度器把任务派给其他存活节点（或重启后的节点），从库里反序列化出之前存的 `handlerContext`，通过存的 `handler` Class 引用去 Spring 容器拿到 Bean，重新调用 `handle()`。
-
 
 因为是“至少执行一次”，中途宕机可能导致业务数据写了一半又重跑，所以我们在 `handle()` 内部一定会利用提交时带的那个 `requestId`（"QC_TASK_"+taskId）做幂等校验，保证重复执行不出错。
 
@@ -1649,8 +1773,79 @@ Redis 保障进度展示的实时性，每处理完一页就写入 `qc:progress:
 ### 任务失败或被重新调度时如何避免结果重复
 每次正式处理前都会调用 `removeByBatchId(batchId)` 删除该批次历史结果，再逐条写入本轮异常结果，所以重跑采用的是“先清理、再重建”，不是数据库 upsert。这样可以避免重复结果，但清理和重建不是一个大事务；中途失败时可能暂时留下部分结果，因此只有任务状态为 SUCCESS 时结果才应被视为完整。
 
+### 异步质检任务在检索任务表时如何设计数据库索引
+
+我设计索引的思路比较朴素，就是**先把这张表在线上会被怎么查列出来，每条 SQL 对应给它一个专用索引**，不去搞"大而全"的宽索引。因为任务表本身写多读少、行数也就万级，多建几个窄索引的维护成本比查询收益小得多。
+
+表上一共 5 个索引：1 个主键 + 1 个唯一索引 + 2 个联合索引 + 1 个单列索引。
+
+```sql
+PRIMARY KEY (`id`),
+UNIQUE KEY `uk_batch_id` (`batch_id`),
+KEY `idx_tenant_status`        (`tenant`, `status`),
+KEY `idx_pay_group_bill_cycle` (`pay_group_id`, `bill_cycle`),
+KEY `idx_creator`              (`creator`)
+```
+
+每个索引分别干嘛：
+
+- **`uk_batch_id(batch_id)`** ——唯一索引，同时是业务外键。任务跑完要往 `validation_result` 写结果，靠 `batch_id` 把任务和结果串起来；导出也要按 `batch_id` 查。业务上 `batch_id` 必须全局唯一，所以直接用唯一键——既当了约束又当了索引，省掉一次"业务层判重"的查询，并发下也不会出重复。草稿态 `batchId` 还没定下来，为了绕开唯一约束冲突，代码里先塞一个 `QC-DRAFT-UUID` 占位，insert 成功后再回填成正式的 `QC-{id}`。
+- **`idx_tenant_status(tenant, status)`** ——联合索引，承担两条 SQL：一是列表页分页查询（几乎所有查询都会带 `tenant`，大多数还会带 `status`）；二是异步任务启动前的租户级并发控制——我们要 `count(*)` 当前租户有几个 PROCESSING 任务，超过 2 个就直接拒绝。这条 count 走的就是这个联合索引的最左前缀，不会扫全表。`tenant` 放前面有两个原因：一是它区分度比 `status` 高（status 就 4 个枚举值），二是"按租户隔离"是比"按状态过滤"更硬的等值条件。
+- **`idx_pay_group_bill_cycle(pay_group_id, bill_cycle)`** ——联合索引，支撑"按薪资组 + 账期"筛选。`pay_group_id` 是等值条件、区分度高，放前面；`bill_cycle` 是 YYYYMM 的范围查询（用户一般看最近 12 个月），放后面。如果反过来把账期放前面，同账期下所有薪资组都混在一起，前缀过滤就失效了。
+- **`idx_creator(creator)`** ——单列索引，支撑"只看我自己"这个快捷筛选。creator 是全公司员工工号，单列区分度就够了，没必要和 tenant 拼一起——tenant 本来就是常量过滤，MySQL 自己会做索引合并。
+
+几个刻意**没建**的索引（面试官追问时讲）：
+
+- **没建 `bill_cycle` 单列索引**：几乎没有"只按账期查"的场景，账期基本都和薪资组或租户一起出现，已经被联合索引覆盖了。
+- **没建 `data_usage`、`employee_type`、`check_step` 这些索引**：枚举值就两三个，区分度太低，建了也几乎不减少扫描行数，反而增加写入负担和索引体积。它们在 SQL 里都是配合 tenant/status 出现的，走 `idx_tenant_status` 后回表过滤就行。
+- **没建 `gmt_create` 索引**：列表排序用的是 `ORDER BY id DESC`，id 是自增主键，和创建时间严格单调同序，直接走主键倒序扫就够了，没必要再建一个时间索引。
+
+上线前拿 `CustomQualityCheckTaskMapper.xml` 里两条核心 SQL（`selectByQuery`、`countByQuery`），拼上真实参数跑 EXPLAIN，看走的是哪个索引、type 是不是 ref、扫描行数是不是符合预期。如果发现某条 SQL 没走预期索引，再判断是改写 SQL 让条件对齐最左前缀，还是补建一个更窄的专用索引。
+
+面试收尾一句话：`pr_quality_check_task` 的索引是**按查询场景倒推设计**的——1 个唯一索引承担业务外键 + 约束，2 个联合索引覆盖"租户+状态""薪资组+账期"，1 个单列索引覆盖"创建人"，列顺序按"等值优先、区分度优先"排，低基数字段刻意不建索引避免写成本和索引膨胀。
 
 
+
+
+### 一个质检任务怎么保证只在一台机器上执行,任务分配的机制是什么
+
+保证"一个质检任务只在一台机器上执行"靠**两层机制**：主保证是 TaskX 平台的分布式调度（任务表记录作为逻辑锁，调度器保证同一时刻只把一条任务派给一个消费者），业务侧再加一道 Redis 分布式锁做**租户级并发控制**（限制同一租户同时跑的质检任务数，防止打爆分片库）。两层职责不同，不能互相替代。
+
+**第一层：TaskX 平台的分布式调度（主保证）**
+
+提交阶段只传三样东西给 `PrTaskX.execute()`：`requestId`（`"QC_TASK_" + taskId`，幂等键）、`handlerContext`（租户上下文等业务数据，会序列化）、`handler`（`QualityCheckAsyncTask` 的 Class 引用，不是实例），一起通过 `batchApiClient.execute()` 落库到 TaskX 自己的任务表，接口立刻返回。
+
+TaskX 是独立的调度进程，不是应用进程内的线程池。它接管任务后，内部走的是**分布式调度器的经典模型**：任务表里每条记录有一个状态机（PENDING → RUNNING → SUCCESS/FAIL），调度器在做派单时通过数据库行锁保证"同一时刻只有一条任务记录能被一个 worker 抢到"——抢到后状态翻成 RUNNING，其他 worker 就看不到这条任务了。具体实现靠 SchedulerX 底层的一致性协议或分布式锁，这部分不在业务代码里，我们只消费平台能力。
+
+被派到的 worker 节点从任务表反序列化出 `handlerContext`，通过存的 Handler Class 引用去 Spring 容器拿到 Bean，反射调用 `handle()` 方法——`QualityCheckAsyncTask` 就是在这里真正跑起来的。
+
+这里有两个关键点保证"单机执行"：
+- **任务记录本身是逻辑锁**：状态从 PENDING 翻到 RUNNING 是靠数据库原子操作，其他 worker 看到状态已经是 RUNNING 就不会再抢。
+- **`requestId` 幂等**：即使业务侧重复提交（比如用户连点两次"发起质检"），`requestId = "QC_TASK_" + taskId` 是固定的，TaskX 收到相同的 requestId 会直接复用已有任务记录，不会创建第二条。
+
+**第二层：业务侧 Redis 分布式锁（补充保护）**
+
+这一层在 `QualityCheckAsyncTask.tryAcquireConcurrency()` 里做，但它解决的不是"同一任务被多台机器抢"的问题（那个已经被 TaskX 解决了），而是 **"同一租户同时跑的质检任务太多会把分片库打爆"** 的问题。
+
+代码里：
+
+```java
+String lockKey = CONCURRENCY_KEY_PREFIX + task.getTenant() + ":" + task.getId();
+if (!tryAcquireConcurrency(task.getTenant(), lockKey, lockValue)) {
+    taskRepository.markFail(task.getId());
+    return;
+}
+```
+
+`tryAcquireConcurrency` 做两件事：先 `SELECT count(*) WHERE tenant = ? AND status = 'PROCESSING'` 看当前租户有几个在跑，超过 `MAX_CONCURRENT_PER_TENANT = 2` 直接拒绝；再 `SET NX EX` 拿一把 Redis 分布式锁（过期 30 分钟，和任务超时对齐），锁住"这个 taskId 由这个 worker 在处理"。锁释放用 Tair 的 `cad`（Compare-And-Delete），只有持有者能释放，避免误删别人的锁。
+
+这一层的好处是：即使 TaskX 的调度因为某种原因出现双派（极端情况，理论上不应该发生），业务侧也能兜住——两个 worker 同时进入 `doExecute()`，只有一个能抢到 Redis 锁，另一个会走 `markFail` 快速退出。但要注意，这只是兜底，**主保证仍然是 TaskX 的调度器**。
+
+**任务宕机/重调度场景下怎么办**
+
+如果执行任务的 worker 节点挂了，TaskX 靠心跳超时感知节点死亡，随后把这条任务状态从 RUNNING 重置为可调度，其他 worker 会重新抢到它、反序列化 context、反射调用 `handle()` 重跑。因为是"至少执行一次"语义，业务侧必须做幂等——我们在 `handle()` 入口处先 `removeByBatchId(batchId)` 清理该批次的历史结果，再重新写入，保证重跑不会叠加历史数据。
+
+面试收尾一句话："一个质检任务只在一台机器执行"的主保证是 **TaskX 平台用任务表记录状态做分布式调度**——同一时刻只把 PENDING 任务派给一个 worker、`requestId` 幂等防重复提交；业务侧再加一道 **Redis 分布式锁做租户级并发控制**（同租户最多 2 个 PROCESSING），顺便兜底极端的双派场景。两层职责不同：平台保"任务只在一台跑"，业务保"一个租户不会被自己的任务打爆"。
 
 
 ### Prompt工程SRE化✅

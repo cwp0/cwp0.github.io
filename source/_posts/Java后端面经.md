@@ -1003,6 +1003,202 @@ react、Antd、Flask、mongodb
 
 最让我有感触的是，让我学会了 任何时候，都要对自己有信心，不要怀疑自己的能力，相信自己可以做到。这点在我后面的大学学习、跨专业保研中起到了很重要的作用。
 
+## 通用全栈
+
+### 用户登录后,每次请求如何做认证和权限校验？主流使用Token还是Session？
+用户登录成功后，后续每次请求通常都要经过“提取凭证、验证身份、加载上下文、校验权限”四个步骤。
+
+请求进入网关、Filter、Interceptor 或 Spring Security 过滤器链后，服务端先从 Cookie 或 `Authorization`请求头中提取 SessionId、Access Token 等凭证，再按凭证类型验证：SessionId需要查询服务端会话是否存在、有效；JWT需要验签并校验过期时间、签发方、受众等 Claims；不透明 Token通常需要查询 Redis 或调用认证中心的内省接口。认证通过后得到当前用户身份，并放入当前请求的安全上下文；接着根据接口要求校验角色、权限和数据范围，请求结束后再清理线程上下文，避免线程池复用导致用户信息串号。
+
+认证和授权是两个阶段：认证解决“你是谁”，授权解决“你能做什么”。常见授权模型是 RBAC，即用户关联角色、角色关联权限；复杂场景还会结合部门、数据归属、资源状态等属性做 ABAC 或数据权限校验。前端隐藏按钮只能改善交互，真正的权限判断必须由服务端完成。
+
+Session 方式是在登录成功后由服务端创建会话，把用户身份和登录状态保存在服务端内存或 Redis 中，再通过 Cookie 将 SessionId 返回给浏览器。后续请求只携带 SessionId，服务端根据它查找会话。它的优点是容易实现强制下线、权限实时生效和会话撤销；缺点是服务端需要保存状态，分布式部署时通常还要共享 Session。
+
+Token 方式是在登录成功后签发 Access Token，客户端后续一般通过请求头携带：
+
+```http
+Authorization: Bearer <access_token>
+```
+
+Token 可以是 JWT，也可以是不透明随机字符串。JWT 通过签名和 Claims 自包含部分身份信息；不透明 Token 则需要到 Redis 或认证中心查询对应用户。Token 更适合前后端分离、移动端、开放 API 和微服务，但“使用 Token”不等于服务端一定完全无状态，系统通常仍会保存 Refresh Token、设备会话、注销名单和风控状态，用于续期、撤销和强制下线。
+
+目前不是 Token 完全取代 Session，而是根据场景选择。传统服务端 Web 和内部管理系统仍常使用 Cookie + Session；前后端分离、App 和开放 API 更常使用 Token；大型系统通常采用 OAuth 2.0/OIDC，加上短期 Access Token、长期 Refresh Token 和服务端会话状态。对于浏览器应用，Token 也可以放在 `HttpOnly`、`Secure`、`SameSite` Cookie 中，Cookie 是凭证的传输载体，并不等同于 Session。Cookie 会被浏览器自动随请求携带，因此仍要通过 `SameSite`、CSRF Token、校验 `Origin/Referer`等方式防范 CSRF；`HttpOnly`只能降低凭证被 XSS 脚本直接读取的风险，不能阻止 XSS 代替用户发起请求。
+
+权限信息如果频繁变化，不宜把完整角色和权限长期写死在 JWT 中。重要接口通常会结合服务端最新的角色、权限、租户和数据范围再次校验，或者通过短有效期 Token 限制旧权限继续生效的时间。
+
+### 用户侧有Session吗？
+严格来说，Java Web 中的 `HttpSession`及其会话数据保存在服务端，用户侧没有完整的 Session 对象。浏览器通常只保存一个包含 SessionId 的 Cookie：
+
+```text
+浏览器：SESSION=abc123
+服务端或Redis：abc123 -> 用户身份、登录状态、会话数据
+```
+
+浏览器请求时会自动携带对应域名下的 Cookie，服务端根据 SessionId 找到 Session。因此，“用户带着 Session 请求”并不严谨，更准确的说法是“用户携带 SessionId，服务端据此恢复会话”。
+
+浏览器中的 `sessionStorage`虽然名字里也有 Session，但它只是当前标签页的前端存储，与 Java Web 的 `HttpSession`不是同一个概念，也不会自动随请求发送给服务端。
+
+如果系统采用 JWT 或其他 Token，服务端可能不创建 `HttpSession`，用户侧只保存并携带 Token。但从产品角度看，用户仍然有一次登录会话，只是技术上的会话凭证从 SessionId 变成了 Token。Token 可以保存在内存、Cookie 或其他客户端安全存储中。放在 `localStorage`或`sessionStorage`中的 Token不会被浏览器自动随请求发送，传统 CSRF 风险较低，但 JavaScript 可以直接读取，更容易被 XSS 窃取，因此浏览器场景通常不建议在那里长期保存敏感 Token。
+
+一言以蔽之，SessionId和 Token才是后续请求携带的登录凭证：SessionId是服务端 Session 的索引，Token可以自包含身份信息，也可以作为服务端状态的索引。无论采用哪种方式，每次请求都必须先验证凭证，再执行接口权限和数据权限校验。
+
+### Session/Cookie区别
+- 存储位置不同：Cookie 存储在客户端，Session 存储在服务端。
+- 存储容量不同：单个Cookie保存的数据<=4KB，一个站点最多保存20个Cookie。Session 存储在服务端，一般没有存储容量限制，但考虑服务器性能，一般会设置 Session 的有效期和存储容量。
+- 安全性不同：Cookie 存储在客户端，容易被篡改，不安全。Session 存储在服务端，相对安全。
+- 生命周期不同：Cookie 有过期时间，可以设置长期有效的 Cookie。Session 一般保存在内存中，会话结束后会被销毁。
+- 作用范围不同：Cookie 的作用范围是整个域名，Session 的作用范围是当前会话。
+- 传输方式不同：Cookie 会随着 HTTP 请求一起发送到服务端，Session 保存在服务端，客户端只会收到 Session ID。
+
+
+### 单点登录SSO原理
+单点登录(Single Sign-On, SSO)是一种身份验证的解决方案，它允许用户在多个应用间共享身份信息，也就是说，用户只需要登录一次，就可以在多个系统或者应用之间无缝访问。这大大提高了用户体验和安全性。
+
+每种需要SSO的app需要先在SSO系统中进行注册。注册流程：
+1. 注册应用：app和app2作为客户端应用程序，需要提供应用的名称、回调URL(用于接收SSO系统的重定向)、以及其他必要的配置信息。
+2. 获取`clientID`和`clientSecret`：注册成功后，SSO系统会为每个应用生成一个唯一的`clientID`(客户端标识)和`clientSecret`(客户端密钥)。`clientID`用来标识应用，而`clientSecret`则用于确保请求的合法性和安全性。
+
+SSO流程：
+1. 用户第一次访问app，系统会触发一个302的重定向请求，转到SSO登录系统。SSO系统发现当前用户没用登录app，就弹出用户登录页面，用户在这个页面填写用户名和密码，那么SSO系统就会进行一个验证，验证成功以后，把登录状态写入到SSO的`session`里面，浏览器也会写入SSO域下的`cookie`。 SSO系统登录完成以后，系统会生成一个ST(Service Ticket)，然后跳转到app系统，同时把ST作为参数传递给app系统。app系统拿到ST以后，从后台向SSO发送请求，验证ST是否有效。验证通过以后，app系统把登录状态写入到`session`中，并设置app域下的`cookie`，这样，跨域的单点登录就完成了。后面在访问app系统的时候，app就是一个登录状态。
+2. 当用户访问app2系统，app2没有登录会跳转到SSO，但此时SSO在访问app的时候已经是登录态了(SSO系统通过检查SSO域下的`cookie`，识别出该用户已经有了有效的登录会话)，所以不用重新输入账号密码。此时SSO也会生成一个ST，浏览器会跳转到app2系统，把ST作为参数传递给app2。 app2拿到ST以后，后台访问SSO验证ST是否有效，如果验证成功，那么app2会把登录状态写入到`session`，并在app2的域下写入一个`cookie`。这样，app2系统不需要再走登录流程，就已经是一个登录状态了。SSO、app、app2不同域，它们之间的`session`不共享，也没有任何问题。
+
+SSO的具体实现因为技术栈不同会有所不同，比如OAuth2.0和OpenID Connect经常被用作于实现SSO的标准协议，
+
+### OAuth 2.0原理
+https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2
+
+OAuth2.0是一个授权框架，使应用程序(如Github)能够获得对 HTTP 服务上的用户帐户的有限访问权限。它的工作原理是将用户身份验证委托给托管用户帐户的服务，并授权第三方应用程序访问该用户帐户。OAuth2.0 为 Web 和桌面应用程序以及移动设备提供授权流程。
+
+定义了4种角色：
+
+- 用户(资源所有者)：资源所有者是授权应用程序访问其帐户的用户。应用程序对用户帐户的访问仅限于授予的授权范围。
+- 应用程序(客户端)：客户端是想要访问用户帐户信息的应用程序。在执行此操作之前，必须获得用户的授权，并且该授权必须由授权服务器进行验证。
+- 资源服务器：资源服务器托管受保护的用户帐户的资源。
+- 授权服务器：授权服务器验证用户的身份，然后向应用程序颁发访问令牌。
+
+步骤：
+1. 应用程序(可以是Casdoor)向用户请求访问服务器资源的授权。应用程序请求参数如下：
+   - `client_id`：客户端应用的`clientID`。
+   - `redirect_uri`：授权成功后的重定向URI。
+   - `response_type`：通常为`code`，表示请求一个授权码。
+   - `scope`：请求的权限范围(可选)。
+   - `state`：防止CSRF攻击的随机字符串(可选)。
+2. 如果用户授权该请求，授权服务器会生成授权准许(`Authorization Grant`)，并重定向到重定向URI(重定向URI包含`Authorization Grant`)。应用程序通过重定向URI获取授权准许(`Authorization Grant`)。
+3. 应用程序通过提供其自身的身份验证(包含`clientID`和`clientSecret`)和授权准许(`Authorization Grant`)来向授权服务器请求访问令牌(`access_token`)。应用程序请求参数如下：
+   - `grant_type`：通常为`authorization_code`。
+   - `code`：在前一步收到的授权准许(`Authorization Grant`)
+   - `redirect_uri`：与授权请求中使用的`redirect_uri`相同。
+   - `client_id`：客户端的`clientID`。
+   - `client_secret`：客户端的`clientSecret`。
+4. 授权服务器验证应用程序的`Authorization Grant`、`clientID`、`clientSecret`和`redirect_uri`。如果应用程序通过验证且授权准许(`Authorization Grant`)有效，则授权服务器向应用程序颁发访问令牌(`access_token`)。授权完成。
+5. 应用程序从资源服务器请求资源并提供访问令牌(`access_token`)进行身份验证。
+6. 如果访问令牌(`access_token`)有效，则资源服务器向应用程序提供资源。
+
+授权准许(`Authorization Grant`)的类型取决于应用程序请求授权所使用的方法以及 API 支持的授权类型。 OAuth2.0 定义了三种主要准许(grant)类型，每种类型在不同情况下都有用：
+1. 授权码(`Authorization Code`)：与服务器端应用程序一起使用。
+2. 客户端凭证(`Client Credentials`)：与具有 API 访问权限的应用程序一起使用。
+3. 设备代码(`Device Code`)：用于缺少浏览器或有输入限制的设备。
+
+### PKCE
+PKCE(`Proof Key for Code Exchange, PKCE`)是一种用于保护OAuth 2.0授权码授权流程的机制，主要目的是防止授权码拦截攻击(Authorization Code Interception Attack)。
+
+原理：
+PKCE通过在OAuth 2.0授权码请求和令牌交换过程中引入一个随机生成的`code_challenge`和`code_verifier`来增强安全性。具体来说，PKCE引入了两个新参数：
+- `code_verifier`：一个高熵的随机字符串，客户端在请求`code`(授权码)时生成并保存。
+- `code_challenge`：由`code_verifier`生成的一个变体，发送给授权服务器。可以是`code_verifier`本身，或者是`code_verifier`的SHA256哈希值。
+
+流程：
+1. 客户端生成一个随机的`code_challenge`和`code_verifier`，`code_verifier`可以是明文(`plain`)SHA256哈希值(`s256`)。
+2. 客户端将`code_challenge`和`code_challenge_method`(`plain`或`s256`)发送给授权服务器。
+   - 如：`GET /authorize?response_type=code&client_id=CLIENT_ID&redirect_uri=REDIRECT_URI&scope=SCOPE&state=STATE&code_challenge=CODE_CHALLENGE&code_challenge_method=S256`
+3. 用户在授权服务器进行身份验证，同意授权，授权服务器通过重定向URI将`code`(授权码)返回给客户端。
+4. 客户端将`code`(授权码)和`code_verifier`发送给授权服务器，以获取`access_token`(访问令牌)。
+   - 如：`POST /token?grant_type=authorization_code&code=AUTHORIZATION_CODE&redirect_uri=REDIRECT_URI&client_id=CLIENT_ID&code_verifier=CODE_VERIFIER`
+5. 授权服务器收到客户端发送的`code`(授权码)和`code_verifier`后，使用之前保存的`code_challenge`进行验证。
+   - 如果`code_challenge_method`是`plain`，则直接比较`code_verifier`和`code_challenge`。
+   - 如果`code_challenge_method`是`s256`，则比较`code_verifier`的SHA256哈希值和`code_challenge`。
+6. 如果验证通过，授权服务器返回`access_token`(访问令牌)给客户端。
+
+这样，即使`code`(授权码)在传输过程中被拦截，攻击者也无法使用该`code`(授权码)，因为缺少正确的`code_verifier`。
+
+### 2FA
+两因素认证(`Two-Factor Authentication, 2FA)`是一种安全系统，用于确保用户登录到账户或访问资源时，需要通过两种不同类型的验证方式。这种方法比仅依靠密码更安全，因为它增加了额外的验证层，使得即使密码被泄露，攻击者仍然难以访问用户账户。
+
+身份验证因素：2FA通常结合两种不同的验证因素，分三类：
+- 知识因素(Something you know)：用户知道的东西，例如密码、PIN码、回答安全问题等。
+- 持有因素(Something you have)：用户拥有的物品，例如手机、硬件令牌、智能卡等。
+- 固有因素(Something you are)：用户自身的特征，例如指纹、面部识别、声音识别等生物特征。
+
+验证过程：
+- 第一步：输入用户名和密码：用户首先输入他们的用户名和密码(知识因素)。
+- 第二步：额外验证：系统会要求用户进行第二步验证。这可以是：
+   - 一次性密码(OTP)：通过短信、电子邮件或专用应用程序(如Google Authenticator、Authy)生成并发送给用户的随机密码。
+   - 硬件令牌：用户插入或展示硬件令牌生成的代码。
+   - 生物特征识别：用户通过指纹、面部识别等方式进行验证。
+
+验证成功：如果两步验证都通过，用户将获得访问权限。
+验证失败：如果任何一步失败，访问将被拒绝。
+
+### OTP/TOTP/HOTP
+OTP (One-Time Password) 是一种一次性有效的密码，通常用于两因素身份验证(2FA)。每次使用 OTP 进行身份验证后，这个密码便失效，无法再使用。OTP 提高了安全性，因为即使密码被截获或暴力破解，也不能再次使用。OTP 生成和使用的方式有很多种，包括基于时间的(TOTP)和基于事件的(HOTP)。
+
+**TOTP(基于时间的一次性密码)**
+TOTP (Time-Based One-Time Password) 是 OTP 的一种，它基于当前时间生成密码。TOTP 是 HOTP 的扩展，结合了时间元素来提高安全性。TOTP 的工作原理如下：
+1. 共享密钥：用户和服务器共享一个密钥，这个密钥用于生成和验证 TOTP。
+2. 时间段：TOTP 使用当前时间的一个窗口(通常是 30 秒)来生成密码。每个时间段内生成的密码是唯一的。
+3. 算法：TOTP 使用 HMAC-SHA1 算法和共享密钥以及当前时间戳来生成密码。
+
+**生成和验证**
+- 生成 TOTP：用户的设备(如手机上的 Google Authenticator 应用)使用共享密钥和当前时间生成 TOTP。
+- 验证 TOTP：服务器使用同样的共享密钥和当前时间计算 TOTP，并与用户提供的 TOTP 进行对比。如果匹配，则验证成功。
+
+**优点**
+- 安全性高：每个密码只能使用一次，有效时间短，降低了被攻击的风险。
+- 易于使用：用户只需要输入一次性密码，而不需要记住复杂的密码。
+- 灵活性：适用于各种应用场景，如登录、交易验证等。
+
+**缺点**
+- 时间同步：TOTP 依赖于设备和服务器时间的同步，如果时间不同步，可能会导致验证失败。
+- 设备依赖：需要用户拥有生成 OTP 或 TOTP 的设备，如智能手机。
+
+**HOTP(基于事件的一次性密码)**
+HOTP (HMAC-Based One-Time Password) 是一种基于事件的 OTP(一次性密码)生成方法。HOTP 的生成与验证基于 HMAC-SHA1 算法及一个计数器，确保每次生成的密码都是唯一的。HOTP 的工作原理如下：
+1. 共享密钥：用户和服务器共享一个密钥，这个密钥用于生成和验证 HOTP。
+2. 计数器：用户和服务器都维护一个计数器，计数器初始值相同，每次生成或验证 OTP 时都会增加计数器的值。
+3. HMAC-SHA1 算法：HOTP 使用 HMAC-SHA1 算法，将共享密钥和计数器作为输入，生成一个哈希值。
+4. 生成 OTP：从哈希值中提取部分数据(通常是取哈希值的后几位)，将其转换为一个短数字串，即 OTP。
+
+**生成和验证**
+- 生成 HOTP：用户的设备使用共享密钥和计数器生成 HOTP。
+- 验证 HOTP：服务器使用同样的共享密钥和计数器计算 HOTP，并与用户提供的 OTP 进行对比。如果匹配，则验证成功，并增加计数器的值。
+
+**优点**
+- 无时间依赖：HOTP 不依赖于设备和服务器时间的同步，避免了时间不同步带来的问题。
+- 安全性高：每个密码只能使用一次，降低了密码被截获或重复使用的风险。
+- 灵活性：适用于各种应用场景，如登录、交易验证等。
+
+**缺点**
+- 计数器同步：用户和服务器必须保持计数器的同步，否则会导致验证失败。如果计数器不同步，需要有机制进行重新同步。
+- 复杂性：相较于静态密码，HOTP 的实现和维护相对复杂。
+
+**使用场景**
+- 银行和金融服务：TOTP/HOTP 经常用于网上银行和金融交易中，以确保只有授权用户才能进行操作。
+- 企业安全：企业系统常使用 TOTP/HOTP 进行多因素身份验证，以保护敏感数据和资源。
+- 社交媒体和电子邮件：为了防止账户被黑客入侵，许多社交媒体和电子邮件服务提供商都提供 TOTP/HOTP 作为额外的安全措施。
+
+### TOTP中如果用户与服务器时间不同步怎么办？
+如果用户端和服务器端的时间不同步，TOTP 会出现以下问题：
+- 验证失败：TOTP算法依赖于当前时间来生成密码，如果用户端和服务器端的时间不一致，生成的密码就会不同。即使用户输入正确的密码，服务器端由于时间不同步，会生成和用户端不同的密码，从而导致验证失败。
+- 用户体验问题：用户可能会反复输入密码，但由于时间不同步，导致总是验证失败，进而影响用户体验，甚至导致用户无法完成登录或其他需要验证的操作。
+
+解决方案：
+1. 时间容差窗口：允许服务器在验证 TOTP 时，检查当前时间前后一定范围内的密码。通常，这个时间窗口设置为 30 秒到 1 分钟。这意味着服务器会验证多个时间点的密码，而不仅仅是当前时间对应的密码。这种方法能够解决小范围的时间偏差。
+2. 自动时间同步：定期使用网络时间协议(NTP)等方式同步用户设备和服务器的时间，确保两者的时间保持一致。这可以大大减少时间不同步的问题。
+3. 用户手动时间同步：如果用户的设备时间与标准时间偏差较大，应用程序可以提醒用户手动调整时间，或者提供一键同步时间的功能。
+4. 使用服务器端生成并发送 TOTP：由服务器生成 TOTP 并通过短信或电子邮件发送给用户。这样即使用户设备时间不准确，用户仍然可以收到正确的 TOTP。
+
+
+
 ## Java基础
 
 ### Java优势
@@ -1016,6 +1212,18 @@ react、Antd、Flask、mongodb
 - 大型企业支持：许多大型企业都使用Java作为其主要的开发语言，如Google、Amazon、Oracle等。这些企业的支持使得Java在技术和市场上都得到了广泛的认可和应用。
 - 良好的可扩展性和可维护性：由于Java的面向对象特性和丰富的库支持，Java程序通常具有良好的可扩展性和可维护性。这使得Java成为开发大型、复杂系统的理想选择。
 - 广泛的应用领域：Java不仅限于Web开发，还广泛应用于企业级应用、移动应用开发、大数据处理(Hadoop)、云计算(如AWS、Azure等)等多个领域。这种广泛的应用领域使得Java成为了一种非常有用的编程语言。
+
+### Java存在哪些缺点
+Java通过 JVM、垃圾回收和丰富的运行时能力，换来了跨平台、安全性和开发效率，但也带来了一些代价。这些缺点会随着 JDK 版本、垃圾收集器和部署方式变化，不能完全套用早期 Java 的结论。
+
+1. **内存开销相对较高**：Java 对象除了业务字段，还包含对象头和对齐填充；JVM 还需要堆、元空间、线程栈、代码缓存和 GC 数据结构。因此同样的业务逻辑，Java 进程的内存占用通常高于直接编译为机器码的程序，容器配置也不能只考虑 `-Xmx`。
+2. **GC 可能造成停顿和性能抖动**：自动垃圾回收降低了手动管理内存的复杂度，但部分 GC 阶段需要 STW。G1、ZGC 等收集器已经显著降低停顿，而且 GC 也可以调优，但 Java 通常难以提供硬实时系统要求的确定性延迟。
+3. **启动和预热成本较高**：JVM 启动时要完成类加载、验证和初始化，运行过程中还要通过解释执行、性能采样和 JIT 编译逐步优化热点代码。应用刚启动时，JIT、缓存和连接池都没有充分预热，因此性能通常不如稳定运行后，在微服务扩容和 Serverless 冷启动场景中更加明显。
+4. **泛型采用类型擦除**：Java 泛型主要在编译期生效，运行时很多类型信息会被擦除，因此不能直接 `new T()`、不能创建泛型数组，部分反射和序列化场景还需要借助 `TypeToken`等方式保留泛型类型。
+5. **受检异常容易增加样板代码**：受检异常能强制调用方关注错误，但在调用链较深时容易产生大量 `throws`、捕获和包装代码。有些项目最后只是机械地把它转换为运行时异常，因此它的收益一直存在争议。
+6. **不适合直接控制底层内存和硬实时场景**：Java 不提供像 C/C++ 那样的指针和确定性析构，不便精确控制内存布局、CPU 指令和堆对象回收时机。文件、连接等外部资源仍可通过 `try-with-resources`或显式 `close()`及时释放；如果需要调用原生能力，也可以使用 JNI 或 Foreign Function & Memory API，但会增加开发、部署和排障复杂度。
+
+现代 JDK 已经通过虚拟线程、低延迟垃圾收集器、类数据共享和 AOT 缓存等技术缓解了部分问题，GraalVM Native Image 等方案还可以进一步改善特定场景的启动速度和内存占用。因此更准确的评价是：Java 用一定的运行时和资源成本，换取了跨平台、自动内存管理和成熟生态，适合大多数企业应用，但不适合硬实时、极度资源受限以及需要直接控制底层硬件的场景。
 
 ### Java和C++的区别
 Java 和 C++ 都是面向对象的语言，都支持封装、继承和多态，但还是有很多不同的地方：
@@ -2833,6 +3041,57 @@ pool.invoke(new RecursiveTask<Void>() {
 - `DiscardOldestPolicy`：丢弃最早的未处理的任务请求。
 - `DiscardPolicy`：不处理新任务，直接丢弃掉。
 
+#### 如何自定义线程池的拒绝策略
+自定义拒绝策略需要实现 `RejectedExecutionHandler`接口，重写 `rejectedExecution(Runnable task, ThreadPoolExecutor executor)`方法，再通过线程池构造方法的 `handler`参数或 `setRejectedExecutionHandler()`注册。它不仅会在线程池和队列饱和、无法接收新任务时触发，也会在线程池关闭后继续提交任务时触发。
+
+方法中的 `task`是被拒绝的任务，`executor`是拒绝它的线程池，可以据此记录线程池状态、拒绝次数和队列长度，再根据业务要求决定抛异常、降级或交给其他有容量的执行通道。普通 `ThreadPoolExecutor`的拒绝回调在提交任务的调用线程中执行，并不是交给某个工作线程处理，因此拒绝策略不能执行无界等待或耗时重试。
+
+例如，可以自定义“记录拒绝日志并抛出异常”的策略，让调用方明确知道任务没有被接收：
+
+```java
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.logging.Logger;
+
+public class LogAndAbortPolicy implements RejectedExecutionHandler {
+    private static final Logger LOGGER =
+        Logger.getLogger(LogAndAbortPolicy.class.getName());
+
+    @Override
+    public void rejectedExecution(Runnable task, ThreadPoolExecutor executor) {
+        String message = "任务被拒绝：shutdown=" + executor.isShutdown()
+            + ", poolSize=" + executor.getPoolSize()
+            + ", activeCount=" + executor.getActiveCount()
+            + ", queueSize=" + executor.getQueue().size();
+
+        LOGGER.warning(message);
+        throw new RejectedExecutionException(message);
+    }
+}
+```
+
+在创建线程池时指定该策略：
+
+```java
+ThreadPoolExecutor executor = new ThreadPoolExecutor(
+    4,
+    8,
+    60,
+    TimeUnit.SECONDS,
+    new ArrayBlockingQueue<>(100),
+    Executors.defaultThreadFactory(),
+    new LogAndAbortPolicy()
+);
+
+// 也可以为已有线程池设置策略：
+executor.setRejectedExecutionHandler(new LogAndAbortPolicy());
+```
+
+调用方应捕获 `execute()`或`submit()`直接抛出的 `RejectedExecutionException`，按业务要求返回“系统繁忙”、限流或降级；使用 `submit()`时，任务被拒绝的异常不需要等到 `Future.get()`才处理。示例中的线程数和队列容量只用于展示注册方式，不是通用生产配置；高频拒绝时日志也应采样或限频，并配合拒绝计数告警。
+
+不要在拒绝策略中直接调用同一个线程池的 `execute(task)`无限重试，否则可能递归拒绝；也不要用 `queue.put(task)`无限阻塞，否则可能卡住请求线程，甚至在池内任务提交子任务时造成线程池饥饿死锁。如果业务允许丢弃，而被拒绝的任务是 `Future`，还应明确取消它或完成对应结果，避免调用方的 `get()`一直等待。需要持久化补偿时，应保存可重放的业务数据，而不是直接把任意 `Runnable`对象存入数据库或消息队列，并设计幂等、重试上限和故障降级。
+
 #### CallerRunsPolicy策略风险及解决方案
 **风险**
 `CallerRunsPolicy` 保证任何一个任务请求都要被执行，但这非常耗时，且如果提交任务的线程是主线程，可能会导致主线程阻塞，影响程序的正常运行。
@@ -3879,25 +4138,6 @@ Java内存区域划分的目的是为了提高性能和管理复杂性。程序�
 ### 一句话简单了解堆和方法区
 堆和方法区是所有线程共享的资源，其中堆是进程中最大的一块内存，主要用于存放新创建的对象 (几乎所有对象都在这里分配内存)，方法区主要用于存放已被加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。
 
-### 一个Java应用配了最大堆和最小堆都是2个G，但运行一段时间后通过top发现其内存已经占了4个G，什么原因？
-Java应用使用的内存不仅仅包括堆内存，还可能涉及以下几个方面，会导致内存占用超过配置的堆大小：
-1. 非堆内存：
-   - Java虚拟机还会为方法区和代码缓存分配非堆内存，主要存储类信息、常量池、JIT编译后的代码等。
-   - 通过参数`-XX:MaxMetaspaceSize`可以限制方法区的最大内存占用。
-2. 本地内存分配：
-   - Java应用可能会通过JNI(Java Native Interface)或本地库进行本地内存的分配，这些内存不计入堆内存，但依然占用系统内存。
-   - 如果使用了大量的JNI调用或本地资源，比如图形库、数据库驱动等，可能会导致额外的内存消耗。
-3. 线程栈：
-   - 每个Java线程都会有自己的栈内存，其大小可以通过`-Xss`参数设置。大量线程或较大的栈大小会消耗更多内存。
-   - 如果应用中有很多线程，线程栈的内存消耗也会很显著。
-4. 内存碎片：
-   - 在堆和非堆内存区域中，随着内存的分配和释放，可能会产生内存碎片。这些碎片化的内存可能会导致实际使用的内存远超分配给堆的大小。
-
-**建议的排查步骤**
-1. 使用`jmap`、`jstat`或`jvisualvm`工具来分析堆外内存的使用情况。
-2. 检查是否有大量线程创建，或者栈空间设置得较大。
-3. 使用`-XX:+PrintFlagsFinal`来检查JVM参数的实际配置，看看是否有额外的非堆内存配置。
-
 ### OOM和GC频繁
 OOM 表示 JVM 无法继续为某类资源分配内存，或者操作系统资源限制导致分配失败，原因不一定是 Java 堆不足；GC 频繁则表示内存回收压力较大，也不一定最终会发生 OOM。排查时应先根据异常信息和 GC 日志确认问题属于哪块内存，再选择对应工具。
 
@@ -3964,6 +4204,37 @@ jstat -gccause <PID> 1000
 ```
 
 CMS 的 `concurrent mode failure`、碎片和相关调优参数只适用于使用 CMS 的旧版本 JVM；G1 等收集器应结合自身的并发标记、Mixed GC、Humongous Region 和回收失败日志分析。
+
+### 集团内部如何排查Full GC
+
+集团内部主要通过 监控平台(Sunfire) 观察 JVM 指标、业务指标、发布变更和 GC 日志。我的排查思路可以概括为四步：确认影响、定位实例与内存趋势、关联业务和变更、用日志及对象证据确认根因。监控平台负责缩小范围，GC 日志和 JVM 现场负责给出最终证据。
+
+1. **确认 Full GC 是否真的异常**：我会先固定告警或接口抖动发生的时间窗，看 GC 次数、停顿时间、回收前后内存以及接口 P99、错误率和吞吐量是否同时恶化。Sunfire 中的 Full GC 指标只能作为告警和趋势线索，不同采集口径可能把老年代回收统计进来，最终要以 GC 日志中的事件类型和 GC Cause 为准。尤其使用 CMS 时，正常 CMS 周期虽然包含 Initial Mark、Remark 等 STW 阶段，但并不等于 Full GC；`concurrent mode failure`、晋升失败或显式 GC 等情况才可能触发 Full GC。
+
+2. **定位异常实例和内存趋势**：在 Sunfire 中把 GC、堆使用率和各内存池曲线按实例拆开看。所有实例同时异常，优先考虑流量、发布、批处理或公共依赖；只有一台异常，则优先检查流量倾斜、单机缓存、定时任务、实例规格和 JVM 参数差异。接着看回收后的内存水位：如果多轮回收后老年代最低点持续升高，倾向于内存泄漏或常驻对象增加；如果每次都能明显回落，但很快再次涨满，更像是分配过快、晋升过多或容量不足；如果老年代不高仍然 Full GC，则检查元空间、显式 `System.gc()`和收集器失败。
+
+3. **关联业务指标和发布变更**：把 GC 与 CPU、QPS、接口 RT、错误率和线程数放在同一时间线上。QPS 上涨、GC 同比例增加，但停顿和 RT 稳定，可能只是正常流量增长；QPS 没变而 GC 突然增加，则重点检查大对象、大查询、批量任务、缓存刷新和序列化逻辑。还要查看异常点附近是否有代码发布、配置或开关变更、JVM 参数和容器规格调整。这里也要注意因果关系：有时是下游变慢导致请求对象堆积，随后才出现 GC 压力，GC 只是结果而不是起因。
+
+4. **用 GC 日志和对象证据确认根因**：GC 日志重点看 GC Cause、单次 Pause、各内存区域回收前后的变化、晋升量，以及 `concurrent mode failure`、`promotion failed`、`Metadata GC Threshold`、`System.gc()`、`to-space exhausted`等信息。定位到异常实例后，再确认实际 JVM 参数、堆结构和对象分布。怀疑泄漏时先看对象数量和占用趋势，必要时在评估 STW、磁盘空间和 IO 风险后获取 Heap Dump，通过 MAT 的 Dominator Tree 和 Path to GC Roots 查找错误引用。修复后再灰度比较相同负载下的 Full GC 频率、停顿时间和回收后内存基线。
+
+总结来说，我不会看到 Full GC 频繁就直接扩大堆或调整阈值，而是先用 Sunfire 确定异常时间、实例和业务影响，再用 GC 日志确认触发原因，最后通过对象和引用链证据定位根因。
+
+#### 常见GC现象与根因映射
+
+| 现象 | 可能原因 | 排查重点 |
+|---|---|---|
+| Young GC 频繁，但停顿短且老年代稳定 | 流量或对象分配率升高、新生代偏小 | 对比 QPS、分配速率和新生代容量 |
+| Young GC 频繁且单次停顿变长 | 存活对象增多、新生代过大、CPU 限流 | Survivor 使用率、对象年龄、CPU 和晋升量 |
+| Young GC 后老年代快速上涨 | 对象晋升过快、Survivor 放不下、大对象较多 | 晋升量、对象年龄分布、大对象分配 |
+| Full GC 后老年代仍然很高 | 内存泄漏、无界缓存、静态集合或长期存活对象过多 | Histogram、Dominator Tree、Path to GC Roots |
+| Full GC 后下降明显，但很快再次涨满 | 分配速率过高、批量任务或堆容量不足 | QPS、分配速率、大查询、批处理和堆大小 |
+| 老年代不高却频繁 Full GC | 元空间不足、显式 `System.gc()`或收集器失败 | GC Cause、元空间、调用方和失败日志 |
+| CMS 出现 `concurrent mode failure` | CMS 启动过晚，回收速度赶不上老年代增长 | CMS 触发阈值、晋升速度、CPU 和老年代余量 |
+| 出现 `promotion failed` | 老年代剩余空间或连续空间不足 | 晋升量、老年代空间和内存碎片 |
+| G1 出现大量 Humongous Object | 大数组、大字符串或批量序列化对象 | Humongous Region、对象大小和批处理方式 |
+| G1 出现 `to-space exhausted`或 Evacuation Failure | 可用 Region 不足或存活对象复制压力过大 | 堆余量、Region 使用、晋升和大对象 |
+| Full GC 与发布或配置变更时间一致 | 新代码增加对象分配或持有，参数和容量发生变化 | 发布 Diff、配置变更及发布前后指标对比 |
+| 堆使用稳定但进程内存持续上涨 | 直接内存、线程栈、JNI 或其他 Native Memory 增长 | NMT、线程数、直接内存和容器 RSS |
 
 ### 内存泄漏怎么定位
 Java 内存泄漏是指对象在业务上已经不再需要，但仍然存在从 GC Roots 到该对象的强引用链，导致 GC 无法回收。定位时应先确认是否真的存在泄漏，再查找错误的引用关系。
